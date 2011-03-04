@@ -1,0 +1,302 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7D1F98921320CF720059EBBB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98911320CF720059EBBB /* UIKit.framework */; };
+		7D1F98941320CF720059EBBB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98931320CF720059EBBB /* Foundation.framework */; };
+		7D1F98961320CF720059EBBB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98951320CF720059EBBB /* CoreGraphics.framework */; };
+		7D1F989C1320CF720059EBBB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D1F989A1320CF720059EBBB /* InfoPlist.strings */; };
+		7D1F989F1320CF720059EBBB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1F989E1320CF720059EBBB /* main.m */; };
+		7D1F98A21320CF720059EBBB /* OrangeyAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1F98A11320CF720059EBBB /* OrangeyAppDelegate.m */; };
+		7D1F98A51320CF720059EBBB /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D1F98A31320CF720059EBBB /* MainWindow.xib */; };
+		7D1F98A81320CF720059EBBB /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1F98A71320CF720059EBBB /* FirstViewController.m */; };
+		7D1F98AB1320CF720059EBBB /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1F98AA1320CF720059EBBB /* SecondViewController.m */; };
+		7D1F98AE1320CF720059EBBB /* FirstView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D1F98AC1320CF720059EBBB /* FirstView.xib */; };
+		7D1F98B11320CF720059EBBB /* SecondView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D1F98AF1320CF720059EBBB /* SecondView.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7D1F988D1320CF720059EBBB /* Orangey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Orangey.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D1F98911320CF720059EBBB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		7D1F98931320CF720059EBBB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		7D1F98951320CF720059EBBB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		7D1F98991320CF720059EBBB /* Orangey-Info.plist */ = {isa = PBXFileReference; path = "Orangey-Info.plist"; sourceTree = "<group>"; };
+		7D1F989B1320CF720059EBBB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D1F989D1320CF720059EBBB /* Orangey-Prefix.pch */ = {isa = PBXFileReference; path = "Orangey-Prefix.pch"; sourceTree = "<group>"; };
+		7D1F989E1320CF720059EBBB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		7D1F98A01320CF720059EBBB /* OrangeyAppDelegate.h */ = {isa = PBXFileReference; path = OrangeyAppDelegate.h; sourceTree = "<group>"; };
+		7D1F98A11320CF720059EBBB /* OrangeyAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrangeyAppDelegate.m; sourceTree = "<group>"; };
+		7D1F98A41320CF720059EBBB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		7D1F98A61320CF720059EBBB /* FirstViewController.h */ = {isa = PBXFileReference; path = FirstViewController.h; sourceTree = "<group>"; };
+		7D1F98A71320CF720059EBBB /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		7D1F98A91320CF720059EBBB /* SecondViewController.h */ = {isa = PBXFileReference; path = SecondViewController.h; sourceTree = "<group>"; };
+		7D1F98AA1320CF720059EBBB /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		7D1F98AD1320CF720059EBBB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FirstView.xib; sourceTree = "<group>"; };
+		7D1F98B01320CF720059EBBB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SecondView.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7D1F988A1320CF720059EBBB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D1F98921320CF720059EBBB /* UIKit.framework in Frameworks */,
+				7D1F98941320CF720059EBBB /* Foundation.framework in Frameworks */,
+				7D1F98961320CF720059EBBB /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7D1F98821320CF720059EBBB = {
+			isa = PBXGroup;
+			children = (
+				7D1F98971320CF720059EBBB /* Orangey */,
+				7D1F98901320CF720059EBBB /* Frameworks */,
+				7D1F988E1320CF720059EBBB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7D1F988E1320CF720059EBBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7D1F988D1320CF720059EBBB /* Orangey.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7D1F98901320CF720059EBBB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7D1F98911320CF720059EBBB /* UIKit.framework */,
+				7D1F98931320CF720059EBBB /* Foundation.framework */,
+				7D1F98951320CF720059EBBB /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7D1F98971320CF720059EBBB /* Orangey */ = {
+			isa = PBXGroup;
+			children = (
+				7D1F98A01320CF720059EBBB /* OrangeyAppDelegate.h */,
+				7D1F98A11320CF720059EBBB /* OrangeyAppDelegate.m */,
+				7D1F98A31320CF720059EBBB /* MainWindow.xib */,
+				7D1F98A61320CF720059EBBB /* FirstViewController.h */,
+				7D1F98A71320CF720059EBBB /* FirstViewController.m */,
+				7D1F98A91320CF720059EBBB /* SecondViewController.h */,
+				7D1F98AA1320CF720059EBBB /* SecondViewController.m */,
+				7D1F98AC1320CF720059EBBB /* FirstView.xib */,
+				7D1F98AF1320CF720059EBBB /* SecondView.xib */,
+				7D1F98981320CF720059EBBB /* Supporting Files */,
+			);
+			path = Orangey;
+			sourceTree = "<group>";
+		};
+		7D1F98981320CF720059EBBB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7D1F98991320CF720059EBBB /* Orangey-Info.plist */,
+				7D1F989A1320CF720059EBBB /* InfoPlist.strings */,
+				7D1F989D1320CF720059EBBB /* Orangey-Prefix.pch */,
+				7D1F989E1320CF720059EBBB /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7D1F988C1320CF720059EBBB /* Orangey */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7D1F98B41320CF720059EBBB /* Build configuration list for PBXNativeTarget "Orangey" */;
+			buildPhases = (
+				7D1F98891320CF720059EBBB /* Sources */,
+				7D1F988A1320CF720059EBBB /* Frameworks */,
+				7D1F988B1320CF720059EBBB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Orangey;
+			productName = Orangey;
+			productReference = 7D1F988D1320CF720059EBBB /* Orangey.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7D1F98841320CF720059EBBB /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 7D1F98871320CF720059EBBB /* Build configuration list for PBXProject "Orangey" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7D1F98821320CF720059EBBB;
+			productRefGroup = 7D1F988E1320CF720059EBBB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7D1F988C1320CF720059EBBB /* Orangey */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7D1F988B1320CF720059EBBB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D1F989C1320CF720059EBBB /* InfoPlist.strings in Resources */,
+				7D1F98A51320CF720059EBBB /* MainWindow.xib in Resources */,
+				7D1F98AE1320CF720059EBBB /* FirstView.xib in Resources */,
+				7D1F98B11320CF720059EBBB /* SecondView.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7D1F98891320CF720059EBBB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D1F989F1320CF720059EBBB /* main.m in Sources */,
+				7D1F98A21320CF720059EBBB /* OrangeyAppDelegate.m in Sources */,
+				7D1F98A81320CF720059EBBB /* FirstViewController.m in Sources */,
+				7D1F98AB1320CF720059EBBB /* SecondViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		7D1F989A1320CF720059EBBB /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D1F989B1320CF720059EBBB /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7D1F98A31320CF720059EBBB /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D1F98A41320CF720059EBBB /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		7D1F98AC1320CF720059EBBB /* FirstView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D1F98AD1320CF720059EBBB /* en */,
+			);
+			name = FirstView.xib;
+			sourceTree = "<group>";
+		};
+		7D1F98AF1320CF720059EBBB /* SecondView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D1F98B01320CF720059EBBB /* en */,
+			);
+			name = SecondView.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7D1F98B21320CF720059EBBB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		7D1F98B31320CF720059EBBB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		7D1F98B51320CF720059EBBB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Orangey/Orangey-Prefix.pch";
+				INFOPLIST_FILE = "Orangey/Orangey-Info.plist";
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		7D1F98B61320CF720059EBBB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Orangey/Orangey-Prefix.pch";
+				INFOPLIST_FILE = "Orangey/Orangey-Info.plist";
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7D1F98871320CF720059EBBB /* Build configuration list for PBXProject "Orangey" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7D1F98B21320CF720059EBBB /* Debug */,
+				7D1F98B31320CF720059EBBB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7D1F98B41320CF720059EBBB /* Build configuration list for PBXNativeTarget "Orangey" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7D1F98B51320CF720059EBBB /* Debug */,
+				7D1F98B61320CF720059EBBB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7D1F98841320CF720059EBBB /* Project object */;
+}
