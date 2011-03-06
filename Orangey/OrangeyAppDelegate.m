@@ -7,81 +7,72 @@
 //
 
 #import "OrangeyAppDelegate.h"
+#import "SubmissionListController.h"
+#import "ProfileController.h"
+
+#import "HNKit.h"
 
 @implementation OrangeyAppDelegate
 
-
-@synthesize window=_window;
-
-@synthesize tabBarController=_tabBarController;
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    // Override point for customization after application launch.
-    // Add the tab bar controller's current view as a subview of the window
-    self.window.rootViewController = self.tabBarController;
-    [self.window makeKeyAndVisible];
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    tabBarController = [[UITabBarController alloc] init];
+    [window setRootViewController:tabBarController];
+    
+    SubmissionListController *home = [[[SubmissionListController alloc] initWithSource:[[[HNEntryList alloc] initWithIdentifier:kHNEntryListTypeNews] autorelease]] autorelease];
+    [home setTitle:@"Hacker News"];
+    [home setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Home" image:[UIImage imageNamed:@"home.png"] tag:0] autorelease]];
+    
+    SubmissionListController *new = [[[SubmissionListController alloc] initWithSource:[[[HNEntryList alloc] initWithIdentifier:kHNEntryListTypeNew] autorelease]] autorelease];
+    [new setTitle:@"New Submissions"];
+    [new setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"New" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
+    
+    ProfileController *profile = [[[ProfileController alloc] initWithSource:[[[HNUser alloc] initWithIdentifier:@"daeken"] autorelease]] autorelease];
+    [profile setTitle:@"Profile"];
+    [profile setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"profile.png"] tag:0] autorelease]];
+    
+    UIViewController *more = [[[UIViewController alloc] init] autorelease];
+    [more setTitle:@"More"];
+    [more setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:0] autorelease]];
+    
+    NSMutableArray *items = [NSMutableArray arrayWithObjects:home, new, profile, more, nil];
+    for (int i = 0; i < [items count]; i++) {
+        UIViewController *item = [items objectAtIndex:i];
+        UINavigationController *navigation = [[[UINavigationController alloc] initWithRootViewController:item] autorelease];
+        [[navigation navigationBar] setTintColor:[UIColor colorWithRed:0.9f green:0.3 blue:0.0f alpha:1.0f]];
+        [items replaceObjectAtIndex:i withObject:navigation];
+    }
+    [tabBarController setViewControllers:items];
+    
+    [window makeKeyAndVisible];
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    /*
-     Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-     Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-     */
+- (void)applicationWillResignActive:(UIApplication *)application {
+
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    /*
-     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-     If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-     */
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    /*
-     Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-     */
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    /*
-     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-     */
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    /*
-     Called when the application is about to terminate.
-     Save data if appropriate.
-     See also applicationDidEnterBackground:.
-     */
+- (void)applicationWillTerminate:(UIApplication *)application {
+
 }
 
-- (void)dealloc
-{
-    [_window release];
-    [_tabBarController release];
+- (void)dealloc {
+    [window release];
+    [tabBarController release];
+
     [super dealloc];
 }
-
-/*
-// Optional UITabBarControllerDelegate method.
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
-{
-}
-*/
-
-/*
-// Optional UITabBarControllerDelegate method.
-- (void)tabBarController:(UITabBarController *)tabBarController didEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed
-{
-}
-*/
 
 @end
