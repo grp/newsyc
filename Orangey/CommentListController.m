@@ -42,31 +42,30 @@
 - (void)finishedLoading {
     if ([source isKindOfClass:[HNEntry class]]) {
         headerContainerView = [[HeaderContainerView alloc] initWithEntry:(HNEntry *) source widthWidth:[[self view] bounds].size.width];
+        [headerContainerView setClipsToBounds:YES];
+        [headerContainerView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
         [[headerContainerView entryActionsView] setDelegate:self];
         [[headerContainerView detailsHeaderView] setDelegate:self];
         
-        UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [headerContainerView bounds].size.height, [[self view] bounds].size.width + 100.0f, 30.0f)];
-        CALayer *layer = [separator layer];
+        UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [headerContainerView bounds].size.height, [[self view] bounds].size.width + 100.0f, 1.0f)];
+        CALayer *layer = [shadow layer];
         [layer setShadowOffset:CGSizeMake(0, -2.0f)];
         [layer setShadowRadius:5.0f];
         [layer setShadowColor:[[UIColor blackColor] CGColor]];
         [layer setShadowOpacity:1.0f];
-        [separator setBackgroundColor:[UIColor lightGrayColor]];
-        [separator setClipsToBounds:NO];
-        
-        [headerContainerView setClipsToBounds:YES];
-        [headerContainerView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
+        [shadow setBackgroundColor:[UIColor grayColor]];
+        [shadow setClipsToBounds:NO];
         
         UIView *container = [[UIView alloc] initWithFrame:[headerContainerView bounds]];
         [container setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [container setBackgroundColor:[UIColor clearColor]];
         [container addSubview:headerContainerView];
-        [container addSubview:[separator autorelease]];
-        [container setClipsToBounds:YES];
+        [container addSubview:[shadow autorelease]];
+        [container setClipsToBounds:NO];
         
         [tableView setTableHeaderView:[container autorelease]];
         
-        suggestedHeaderHeight = [headerContainerView frame].size.height;
+        suggestedHeaderHeight = [headerContainerView bounds].size.height;
     }
 
     [super finishedLoading];
@@ -123,7 +122,7 @@
     
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
     [controller setTitle:@"Comments"];
-    [[self navigationController] pushViewController:controller animated:YES];
+    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
 @end

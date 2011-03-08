@@ -12,6 +12,14 @@
 
 @implementation CommentDetailsHeaderView
 
+- (id)initWithFrame:(CGRect)frame {
+    if ((self = [super initWithFrame:frame])) {
+        [self setBackgroundColor:[UIColor whiteColor]];
+    }
+    
+    return self;
+}
+
 + (CGSize)offsets {
     return CGSizeMake(8.0f, 4.0f);
 }
@@ -36,7 +44,7 @@
     NSString *date = [entry posted];
     NSString *points = [entry points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [entry points]];
     
-    [[UIColor whiteColor] set];
+    [[self backgroundColor] set];
     UIRectFill([self bounds]);
     
     CGRect titlerect;
@@ -49,12 +57,21 @@
     [title drawInRect:titlerect withFont:[[self class] titleFont]];
     
     [[UIColor grayColor] set];
-    CGFloat subtitleOffset = bounds.height - offsets.height;
-    CGSize dateSize = [date sizeWithFont:[[self class] subtleFont]];
-    CGSize pointsSize = [points sizeWithFont:[[self class] subtleFont]];
-    [points drawAtPoint:CGPointMake(offsets.width, subtitleOffset - pointsSize.height) withFont:[[self class] subtleFont]];
-    [date drawAtPoint:CGPointMake(bounds.width - offsets.width - dateSize.width, subtitleOffset - dateSize.height) withFont:[[self class] subtleFont]];
+    CGRect pointsrect;
+    pointsrect.size.width = bounds.width / 2 - (offsets.width * 2);
+    pointsrect.size.height = [points sizeWithFont:[[self class] subtleFont]].height;
+    pointsrect.origin.x = offsets.width;
+    pointsrect.origin.y = bounds.height - offsets.height - pointsrect.size.height;
+    [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     
+    [[UIColor grayColor] set];
+    CGRect daterect;
+    daterect.size.width = bounds.width / 2 - (offsets.width * 2);
+    daterect.size.height = [date sizeWithFont:[[self class] subtleFont]].height;
+    daterect.origin.x = bounds.width / 2 + offsets.width;
+    daterect.origin.y = bounds.height - offsets.height - daterect.size.height;
+    [date drawInRect:daterect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
+     
     [super drawRect:rect];
 }
 

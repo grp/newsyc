@@ -55,7 +55,7 @@
         [label setBackgroundColor:[UIColor clearColor]];
         [label setTextColor:[UIColor grayColor]];
         [label setTextAlignment:UITextAlignmentCenter];
-        [tableView addSubview:label];
+        [tableView addSubview:[label autorelease]];
         [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     }
 }

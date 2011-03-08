@@ -41,7 +41,7 @@
     
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
     [controller setTitle:@"Comments"];
-    [[self navigationController] pushViewController:controller animated:YES];
+    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
 @end

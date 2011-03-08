@@ -23,7 +23,7 @@
         
         Class headerViewClass = nil;
         if ([entry destination] != nil) headerViewClass = [SubmissionDetailsHeaderView class];
-        else [CommentDetailsHeaderView class];
+        else headerViewClass = [CommentDetailsHeaderView class];
         
         CGRect headerrect;
         headerrect.size.width = width;

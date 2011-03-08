@@ -23,7 +23,7 @@
     if ((self = [super initWithFrame:frame])) {
         [self setClipsToBounds:YES];
         
-        submitterButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        submitterButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
         CGFloat buttonWidth = [self bounds].size.width * 0.385f;
         [submitterButton setFrame:CGRectMake([self bounds].size.width - buttonWidth - 15.0f, -2.0f, buttonWidth + 30.0f, [self bounds].size.height + 4.0f)];
         [self addSubview:submitterButton];
@@ -47,6 +47,7 @@
 - (void)dealloc {
     [submitterButton release];
     [toolbarContainer release];
+    
     [super dealloc];
 }
 
