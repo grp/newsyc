@@ -19,11 +19,13 @@
 #import "CommentDetailsHeaderView.h"
 #import "EntryActionsView.h"
 #import "ProfileController.h"
+#import "BrowserController.h"
 
 @implementation CommentListController
 
 - (void)submissionDetailsViewWasTapped:(UIView *)view {
-    [[UIApplication sharedApplication] openURL:[(HNEntry *) source destination]];
+    BrowserController *controller = [[BrowserController alloc] initWithURL:[(HNEntry *) source destination]];
+    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
 - (void)entryActionsView:(EntryActionsView *)eav didSelectItem:(EntryActionsViewItem)item {
@@ -73,10 +75,13 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat offset = [scrollView contentOffset].y;
-    CGRect frame = [headerContainerView frame];
-    frame.origin.y = offset;
-    frame.size.height = suggestedHeaderHeight - offset;
-    [headerContainerView setFrame:frame];
+    if (suggestedHeaderHeight < 280.0f || offset > suggestedHeaderHeight - 280.0f) {
+        CGRect frame = [headerContainerView frame];
+        if (suggestedHeaderHeight - 280.0f > 0) offset -= suggestedHeaderHeight - 280.0f;
+        frame.origin.y = offset;
+        frame.size.height = suggestedHeaderHeight - offset;
+        [headerContainerView setFrame:frame];
+    }
 }
 
 - (void)loadView {

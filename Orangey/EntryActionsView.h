@@ -15,11 +15,11 @@ typedef enum {
 } EntryActionsViewItem;
 
 @protocol EntryActionsViewDelegate;
-@class HNEntry;
+@class HNEntry, SolidToolbar;
 @interface EntryActionsView : UIView {
     HNEntry *entry;
     UIButton *submitterButton;
-    UIView *toolbarContainer;
+    SolidToolbar *toolbar;
     id<EntryActionsViewDelegate> delegate;
 }
 

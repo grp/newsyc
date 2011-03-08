@@ -13,6 +13,7 @@
 
 @interface LoadingController : UIViewController {
     LoadingIndicatorView *indicator;
+    BOOL loaded;
     HNObject *source;
 }
 

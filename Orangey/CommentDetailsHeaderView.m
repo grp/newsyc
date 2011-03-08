@@ -14,14 +14,9 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-        [self setBackgroundColor:[UIColor whiteColor]];
     }
     
     return self;
-}
-
-+ (CGSize)offsets {
-    return CGSizeMake(8.0f, 4.0f);
 }
 
 + (UIFont *)titleFont {
@@ -33,19 +28,18 @@
 }
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {
-    return [self offsets].height + [[entry body] sizeWithFont:[self titleFont] constrainedToSize:CGSizeMake(width - ([self offsets].width * 2), 400.0f) lineBreakMode:UILineBreakModeWordWrap].height + 30.0f + [self offsets].height;
+    return [self offsets].height + [[entry body] sizeWithFont:[self titleFont] constrainedToSize:CGSizeMake(width - ([self offsets].width * 2), 2000.0f) lineBreakMode:UILineBreakModeWordWrap].height + 30.0f + [self offsets].height;
 }
 
 - (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    
     CGSize bounds = [self bounds].size;
     CGSize offsets = [[self class] offsets];
     
     NSString *title = [entry body];
     NSString *date = [entry posted];
     NSString *points = [entry points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [entry points]];
-    
-    [[self backgroundColor] set];
-    UIRectFill([self bounds]);
     
     CGRect titlerect;
     titlerect.origin.y = offsets.height + 8.0f;
@@ -71,8 +65,6 @@
     daterect.origin.x = bounds.width / 2 + offsets.width;
     daterect.origin.y = bounds.height - offsets.height - daterect.size.height;
     [date drawInRect:daterect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
-     
-    [super drawRect:rect];
 }
 
 @end

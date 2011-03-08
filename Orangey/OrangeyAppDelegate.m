@@ -8,6 +8,7 @@
 
 #import "OrangeyAppDelegate.h"
 #import "SubmissionListController.h"
+#import "CommentListController.h"
 #import "ProfileController.h"
 
 #import "HNKit.h"
@@ -31,7 +32,7 @@
     [profile setTitle:@"Profile"];
     [profile setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"profile.png"] tag:0] autorelease]];
     
-    UIViewController *more = [[[UIViewController alloc] init] autorelease];
+    UIViewController *more = [[[CommentListController alloc] initWithSource:[[[HNEntry alloc] initWithURL:[NSURL URLWithString:@"http://news.ycombinator.com/item?id=2297488"]] autorelease]] autorelease];//[[[UIViewController alloc] init] autorelease];
     [more setTitle:@"More"];
     [more setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:0] autorelease]];
     

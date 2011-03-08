@@ -43,20 +43,28 @@
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
 }
 
+- (void)addLabelWithTitle:(NSString *)title {
+    CGRect frame = CGRectZero;
+    frame.size.width = [tableView bounds].size.width;
+    frame.size.height = [tableView bounds].size.height - [[tableView tableHeaderView] bounds].size.height;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:frame];
+    [label setText:title];
+    [label setFont:[UIFont boldSystemFontOfSize:17.0f]];
+    [label setBackgroundColor:[UIColor clearColor]];
+    [label setTextColor:[UIColor grayColor]];
+    [label setTextAlignment:UITextAlignmentCenter];
+    [tableView setTableFooterView:[label autorelease]];
+    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+}
+
 - (void)finishedLoading {
     [tableView reloadData];
-    if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
-        CGRect frame = [tableView bounds];
-        frame.origin.y += [[tableView tableHeaderView] bounds].size.height;
-        frame.size.height -= [[tableView tableHeaderView] bounds].size.height;
-        UILabel *label = [[UILabel alloc] initWithFrame:frame];
-        [label setText:@"No items."];
-        [label setFont:[UIFont boldSystemFontOfSize:17.0f]];
-        [label setBackgroundColor:[UIColor clearColor]];
-        [label setTextColor:[UIColor grayColor]];
-        [label setTextAlignment:UITextAlignmentCenter];
-        [tableView addSubview:[label autorelease]];
-        [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    
+    if (![source loaded]) {
+        [self addLabelWithTitle:@"Error loading."];
+    } else if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
+        [self addLabelWithTitle:@"No items."];
     }
 }
 

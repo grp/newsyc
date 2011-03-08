@@ -49,8 +49,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    if ([source loaded]) [self finishedLoading];
 }
 
 - (void)viewDidUnload {
@@ -60,10 +58,16 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (![source loaded]) {
-        [[self view] addSubview:indicator];
-        [indicator setFrame:[[self view] bounds]];
-        [source beginLoadingWithTarget:self action:@selector(sourceDidFinishLoading:)];
+    if (!loaded) {
+        loaded = YES;
+        
+        if (![source loaded]) {
+            [[self view] addSubview:indicator];
+            [indicator setFrame:[[self view] bounds]];
+            [source beginLoadingWithTarget:self action:@selector(sourceDidFinishLoading:)];
+        } else {
+            [self finishedLoading];
+        }
     }
 }
 

@@ -39,6 +39,8 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    
     CGSize bounds = [self bounds].size;
     CGSize offsets = [[self class] offsets];
     
@@ -46,9 +48,10 @@
     NSString *date = [entry posted];
     NSString *points = [entry points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [entry points]];
     
-    if ([self isHighlighted]) [[UIColor colorWithWhite:0.85f alpha:1.0f] set];
-    else [[UIColor whiteColor] set];
-    UIRectFill([self bounds]);
+    if ([self isHighlighted]) {
+        [[UIColor colorWithWhite:0.85f alpha:1.0f] set];
+        UIRectFill([self bounds]);
+    }
     
     [[UIColor blackColor] set];
     CGRect titlerect;
@@ -73,8 +76,6 @@
     daterect.origin.x = bounds.width / 2 + offsets.width;
     daterect.origin.y = bounds.height - offsets.height - daterect.size.height;
     [date drawInRect:daterect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
-                      
-    [super drawRect:rect];
 }
 
 @end

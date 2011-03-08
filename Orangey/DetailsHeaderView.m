@@ -13,7 +13,7 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-        // Initialization code
+        [self setBackgroundColor:[UIColor whiteColor]];
     }
     
     return self;
@@ -28,6 +28,10 @@
     entry = [entry_ retain];
     
     [self setNeedsDisplay];
+}
+
+- (void)drawRect:(CGRect)rect {
+    
 }
 
 - (void)setHighlighted:(BOOL)highlighted {
