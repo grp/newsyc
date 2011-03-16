@@ -7,6 +7,7 @@
 //
 
 #import "BrowserController.h"
+#import "InstapaperAPI.h"
 
 @implementation BrowserController
 
@@ -117,7 +118,7 @@
         [pasteboard setURL:[[webview request] URL]];
         [pasteboard setString:[[[webview request] URL] absoluteString]];
     } else if (buttonIndex == first + 2) {
-        // XXX: instapaper
+        [[InstapaperAPI sharedInstance] addItemWithURL:[[webview request] URL]];
     }
 }
 

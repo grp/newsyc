@@ -7,61 +7,96 @@
 //
 
 #import "NSURL+Parameters.h"
+#import "NSDictionary+Parameters.h"
 
 #import "HNKit.h"
 #import "HNObject.h"
 
 @implementation HNObject
-@synthesize identifier, loaded, URL=url;
+@synthesize identifier, loaded, URL=url, type;
 
-+ (id)_parseParameters:(NSDictionary *)parameters {
++ (id)_parseParametersWithType:(HNPageType)type_ parameters:(NSDictionary *)parameters {
     return nil;
-}
-
-+ (id)_parseURL:(NSURL *)url_ {
-    NSDictionary *parameters = [url_ parameterDictionary];
-    return [self _parseParameters:parameters];
 }
 
 + (id)parseURL:(NSURL *)url_ {
     if (![[url_ scheme] isEqualToString:@"http"] && ![[url_ scheme] isEqualToString:@"https"]) return nil;
     if (![[url_ host] isEqualToString:kHNWebsiteHost]) return nil;
-    return [self _parseURL:url_];
+    
+    NSString *type_ = [url_ path];
+    id identifier_ = [self _parseParametersWithType:type_ parameters:[url_ parameterDictionary]];
+    return [NSDictionary dictionaryWithObjectsAndKeys:type_, @"type", identifier_, @"identifier", nil];
 }
 
-+ (NSURL *)generateURL:(id)identifier_ {
-    return nil;
++ (NSDictionary *)_generateParametersWithType:(HNPageType)type_ identifier:(id)identifier_ {
+    return [NSDictionary dictionary];
 }
 
-- (HNObject *)initWithIdentifier:(id)identifier_ URL:(NSURL *)url_ {
-    if (identifier_ != nil && url_ != nil && (self = [super init])) {
++ (NSURL *)generateURLWithType:(HNPageType)type_ identifier:(id)identifier_ {
+    NSDictionary *parameters = [self _generateParametersWithType:type_ identifier:identifier_];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/%@%@", kHNWebsiteHost, type_, [parameters queryString]]];
+}
+            
++ (NSURL *)generateURLWithType:(HNPageType)type_ {
+    return [self generateURLWithType:type_ identifier:nil];
+}
+
+- (id)initWithType:(HNPageType)type_ identifier:(id)identifier_ URL:(NSURL *)url_ {
+    if (type_ != nil && url_ != nil && (self = [super init])) {
         [self setURL:url_];
+        [self setType:type_];
         [self setIdentifier:identifier_];
     }
     
     return self;
 }
 
-- (HNObject *)initWithIdentifier:(id)identifier_ {
-    return [self initWithIdentifier:identifier_ URL:[[self class] generateURL:identifier_]];
+- (id)initWithType:(HNPageType)type_ identifier:(id)identifier_ {
+    return [self initWithType:type_ identifier:identifier_ URL:[[self class] generateURLWithType:type_ identifier:identifier_]];
+}
+            
+- (id)initWithType:(HNPageType)type_ {
+    return [self initWithType:type_ identifier:nil];
 }
 
-- (HNObject *)initWithURL:(NSURL *)url_ {
-    return [self initWithIdentifier:[[self class] parseURL:url_] URL:url_];
+- (id)initWithURL:(NSURL *)url_ {
+    NSDictionary *parsed = [[self class] parseURL:url_];
+    return [self initWithType:[parsed objectForKey:@"type"] identifier:[parsed objectForKey:@"identifier"] URL:url_];
+}
+            
+- (NSString *)_additionalDescription {
+    return @"";
+}
+            
+- (NSString *)description {
+    NSString *other = nil;
+    if (loaded) other = [self _additionalDescription];
+    else other = @"[not loaded]";
+    
+    NSString *identifier_ = [NSString stringWithFormat:@" identifier=%@", identifier];
+    if (identifier == nil) identifier_ = @"";
+    
+    return [NSString stringWithFormat:@"<%@:%p type=%@%@ %@>", [self class], self, type, identifier_, other];
 }
 
 - (void)didFinishLoadingWithError:(NSError *)error {    
-    if (error == nil) {
-        [self setLoaded:YES];
+    if (error == nil) [self setLoaded:YES];
         
-        [target performSelector:action withObject:self];
-        target = nil;
-        action = NULL;
-    }
+    [target performSelector:action withObject:self withObject:error];
+    target = nil;
+    action = NULL;
+}
+            
+- (void)finishLoadingWithResponse:(NSDictionary *)response {
+    // overridden in subclasses
 }
 
-- (void)didFinishLoading {
-    [self didFinishLoadingWithError:nil];
+- (void)request:(HNAPIRequest *)request completedWithResponse:(NSDictionary *)response error:(NSError *)error {
+    if (error == nil) [self finishLoadingWithResponse:response];
+    
+    [apiRequest autorelease];
+    apiRequest = nil;
+    [self didFinishLoadingWithError:error];
 }
 
 - (void)cancelLoading {
@@ -70,15 +105,12 @@
     apiRequest = nil;
 }
 
-- (void)_load {
-    // Overriden in subclasses.
-}
-
 - (void)beginLoadingWithTarget:(id)target_ action:(SEL)action_ {
     target = target_;
     action = action_;
     
-    [self _load];
+    apiRequest = [[HNAPIRequest alloc] initWithTarget:self action:@selector(request:completedWithResponse:error:)];
+    [apiRequest performRequestOfType:type withParameters:[[self class] _generateParametersWithType:type identifier:identifier]];
 }
 
 - (void)beginLoading {

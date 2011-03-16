@@ -12,6 +12,7 @@
 @class HeaderContainerView;
 @interface CommentListController : EntryListController <EntryActionsViewDelegate> {
     HeaderContainerView *headerContainerView;
+    UIView *containerContainer;
     CGFloat suggestedHeaderHeight;
 }
 

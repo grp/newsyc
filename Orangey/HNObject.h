@@ -16,27 +16,35 @@
     SEL action;
     
     HNAPIRequest *apiRequest;
+    HNPageType type;
 }
 
 @property (nonatomic, assign) BOOL loaded;
 @property (nonatomic, copy) id identifier;
 @property (nonatomic, copy) NSURL *URL;
+@property (nonatomic, copy) HNPageType type;
 
-- (id)initWithIdentifier:(id)identifier_ URL:(NSURL *)url_;
-- (id)initWithIdentifier:(id)identifier_;
++ (id)_parseParametersWithType:(HNPageType)type_ parameters:(NSDictionary *)parameters;
++ (id)parseURL:(NSURL *)url_;
+
++ (NSDictionary *)_generateParametersWithType:(HNPageType)type_ identifier:(id)identifier_;
++ (NSURL *)generateURLWithType:(HNPageType)type_ identifier:(id)identifier_;
++ (NSURL *)generateURLWithType:(HNPageType)type_;
+            
+- (id)initWithType:(HNPageType)type_ identifier:(id)identifier_ URL:(NSURL *)url_;
+- (id)initWithType:(HNPageType)type_ identifier:(id)identifier_;
+- (id)initWithType:(HNPageType)type_;
 - (id)initWithURL:(NSURL *)url_;
 
-// Overridden in subclasses.
-+ (id)_parseParameters:(NSDictionary *)parameters;
-+ (id)parseURL:(NSURL *)url_;
-+ (NSURL *)generateURL:(id)identifier_;
+- (NSString *)_additionalDescription;
+- (NSString *)description;
 
 - (void)beginLoadingWithTarget:(id)target_ action:(SEL)action_;
 - (void)beginLoading;
 
 - (void)cancelLoading;
 
+- (void)finishLoadingWithResponse:(NSDictionary *)response;
 - (void)didFinishLoadingWithError:(NSError *)error;
-- (void)didFinishLoading;
 
 @end

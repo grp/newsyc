@@ -43,28 +43,24 @@
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
 }
 
-- (void)addLabelWithTitle:(NSString *)title {
+- (void)showErrorWithTitle:(NSString *)title {
     CGRect frame = CGRectZero;
     frame.size.width = [tableView bounds].size.width;
-    frame.size.height = [tableView bounds].size.height - [[tableView tableHeaderView] bounds].size.height;
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:frame];
-    [label setText:title];
-    [label setFont:[UIFont boldSystemFontOfSize:17.0f]];
-    [label setBackgroundColor:[UIColor clearColor]];
-    [label setTextColor:[UIColor grayColor]];
-    [label setTextAlignment:UITextAlignmentCenter];
-    [tableView setTableFooterView:[label autorelease]];
+    CGFloat height =  [tableView bounds].size.height - [[tableView tableHeaderView] bounds].size.height;
+    frame.size.height = height >= 44.0f ? height : 44.0f;
+    [errorLabel setFrame:frame];
+
+    [errorLabel setBackgroundColor:[UIColor clearColor]];
+    [errorLabel setText:title];
+    [tableView setTableFooterView:errorLabel];
     [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
 - (void)finishedLoading {
     [tableView reloadData];
     
-    if (![source loaded]) {
-        [self addLabelWithTitle:@"Error loading."];
-    } else if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
-        [self addLabelWithTitle:@"No items."];
+    if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
+        [self showErrorWithTitle:@"No items."];
     }
 }
 
@@ -82,9 +78,8 @@
 
 - (void)tableView:(UITableView *)table willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([indexPath section] == [tableView numberOfSections] - 1 
-        && [indexPath row] == [tableView numberOfRowsInSection:[tableView numberOfSections] - 1]
-        && [source isKindOfClass:[HNEntryList class]]) {
-        // XXX: load more items?
+        && [indexPath row] == [tableView numberOfRowsInSection:[tableView numberOfSections] - 1]) {
+        // XXX: load more items? (if possible for this entry type?)
         // [source beginLoadingWithTarget:self action:@selector(sourceDidFinishLoading:)];
     }
 }

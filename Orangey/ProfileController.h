@@ -9,7 +9,7 @@
 #import "LoadingController.h"
 
 @class ProfileHeaderView;
-@interface ProfileController : LoadingController <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate> {
+@interface ProfileController : LoadingController <UITableViewDelegate, UITableViewDataSource> {
     UITableView *tableView;
     ProfileHeaderView *header;
 }

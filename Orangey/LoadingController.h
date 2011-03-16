@@ -11,8 +11,9 @@
 @class LoadingIndicatorView;
 @class HNObject;
 
-@interface LoadingController : UIViewController {
+@interface LoadingController : UIViewController <UIActionSheetDelegate> {
     LoadingIndicatorView *indicator;
+    UILabel *errorLabel;
     BOOL loaded;
     HNObject *source;
 }
@@ -21,5 +22,6 @@
 
 - (id)initWithSource:(HNObject *)source_;
 - (void)finishedLoading;
+- (void)showErrorWithTitle:(NSString *)title;
 
 @end

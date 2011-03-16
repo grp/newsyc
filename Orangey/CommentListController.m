@@ -37,12 +37,13 @@
 }
 
 - (void)dealloc {
+    [containerContainer release];
     [headerContainerView release];
     [super dealloc];
 }
 
 - (void)finishedLoading {
-    if ([source isKindOfClass:[HNEntry class]]) {
+    if ([(HNEntry *) source submitter] != nil) {
         headerContainerView = [[HeaderContainerView alloc] initWithEntry:(HNEntry *) source widthWidth:[[self view] bounds].size.width];
         [headerContainerView setClipsToBounds:YES];
         [headerContainerView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
@@ -58,14 +59,13 @@
         [shadow setBackgroundColor:[UIColor grayColor]];
         [shadow setClipsToBounds:NO];
         
-        UIView *container = [[UIView alloc] initWithFrame:[headerContainerView bounds]];
-        [container setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [container setBackgroundColor:[UIColor clearColor]];
-        [container addSubview:headerContainerView];
-        [container addSubview:[shadow autorelease]];
-        [container setClipsToBounds:NO];
-        
-        [tableView setTableHeaderView:[container autorelease]];
+        containerContainer = [[UIView alloc] initWithFrame:[headerContainerView bounds]];
+        [containerContainer setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+        [containerContainer setBackgroundColor:[UIColor clearColor]];
+        [containerContainer addSubview:headerContainerView];
+        [containerContainer addSubview:[shadow autorelease]];
+        [containerContainer setClipsToBounds:NO];
+        [tableView setTableHeaderView:containerContainer];
         
         suggestedHeaderHeight = [headerContainerView bounds].size.height;
     }
@@ -75,9 +75,9 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat offset = [scrollView contentOffset].y;
-    if (suggestedHeaderHeight < 280.0f || offset > suggestedHeaderHeight - 280.0f) {
+    if (suggestedHeaderHeight < 280.0f || (offset > suggestedHeaderHeight - 280.0f || offset <= 0)) {
         CGRect frame = [headerContainerView frame];
-        if (suggestedHeaderHeight - 280.0f > 0) offset -= suggestedHeaderHeight - 280.0f;
+        if (suggestedHeaderHeight - 280.0f > 0 && offset > 0) offset -= suggestedHeaderHeight - 280.0f;
         frame.origin.y = offset;
         frame.size.height = suggestedHeaderHeight - offset;
         [headerContainerView setFrame:frame];
@@ -88,24 +88,23 @@
     [super loadView];
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // Re-apply header if reloading after a view unload.
+    if (containerContainer != nil) [tableView setTableHeaderView:containerContainer];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
     return [source loaded] ? 1 : 0;
 }
 
 - (HNEntry *)entryAtIndexPath:(NSIndexPath *)indexPath {
-    if ([source isKindOfClass:[HNEntry class]]) {
-        return [[(HNEntry *) source children] objectAtIndex:[indexPath row]];
-    } else {
-        return [[(HNEntryList *) source entries] objectAtIndex:[indexPath row]];
-    }
+    return [[(HNEntry *) source entries] objectAtIndex:[indexPath row]];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([source isKindOfClass:[HNEntry class]]) {
-        return [[(HNEntry *) source children] count];
-    } else {
-        return [[(HNEntryList *) source entries] count];
-    }
+    return [[(HNEntry *) source entries] count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -125,7 +124,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     HNEntry *entry = [self entryAtIndexPath:indexPath];
     
-    CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
+    CommentListController *controller = [[CommentListController alloc] initWithSource:(HNObject *) entry];
     [controller setTitle:@"Comments"];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }

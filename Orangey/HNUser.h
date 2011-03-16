@@ -22,4 +22,6 @@
 @property (nonatomic, copy) NSString *created;
 @property (nonatomic, copy) NSString *about;
 
+- (id)initWithIdentifier:(id)identifier_;
+
 @end

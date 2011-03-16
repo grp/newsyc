@@ -63,7 +63,7 @@
     NSString *date = [submission posted];
     NSString *site = [[submission destination] host];
     NSString *point = [submission points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [submission points]];
-    NSString *comment = [submission numchildren] == 0 ? @"no comments" : [submission numchildren] == 1 ? @"1 comment" : [NSString stringWithFormat:@"%d comments", [submission numchildren]];
+    NSString *comment = [submission children] == 0 ? @"no comments" : [submission children] == 1 ? @"1 comment" : [NSString stringWithFormat:@"%d comments", [submission children]];
     NSString *points = [NSString stringWithFormat:@"%@ • %@", point, comment];
     NSString *title = [submission title];
     
@@ -79,19 +79,21 @@
     if (!([self isHighlighted] || [self isSelected])) [[UIColor blackColor] set];
     [title drawInRect:CGRectMake(offsets.width, offsets.height + 19.0f, bounds.width - (2 * offsets.width), bounds.height - 45.0f) withFont:[[self class] titleFont] lineBreakMode:UILineBreakModeWordWrap];
     
-    if (!([self isHighlighted] || [self isSelected])) [[UIColor lightGrayColor] set];
-    CGRect siterect;
-    siterect.size.height = [site sizeWithFont:[[self class] subtleFont]].height;
-    siterect.size.width = bounds.width / 2 - offsets.width * 2;
-    siterect.origin = CGPointMake(bounds.width / 2 + offsets.width, bounds.height - offsets.height - siterect.size.height);
-    [site drawInRect:siterect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];    
-    
     if (!([self isHighlighted] || [self isSelected])) [[UIColor grayColor] set];
     CGRect pointsrect;
     pointsrect.size.height = [points sizeWithFont:[[self class] subtleFont]].height;
-    pointsrect.size.width = bounds.width / 2 - offsets.width * 2;
+    pointsrect.size.width = (bounds.width / 2) * 1.1 - offsets.width * 2;
+    pointsrect.size.width = floorf(pointsrect.size.width);
     pointsrect.origin = CGPointMake(offsets.width, bounds.height - offsets.height - pointsrect.size.height);
     [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+    
+    if (!([self isHighlighted] || [self isSelected])) [[UIColor lightGrayColor] set];
+    CGRect siterect;
+    siterect.size.height = [site sizeWithFont:[[self class] subtleFont]].height;
+    siterect.size.width = (bounds.width / 2) * 0.9 - offsets.width * 2;
+    siterect.size.width = floorf(siterect.size.width);
+    siterect.origin = CGPointMake(bounds.width - offsets.width - siterect.size.width, bounds.height - offsets.height - siterect.size.height);
+    [site drawInRect:siterect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
 }
 
 - (void)dealloc {

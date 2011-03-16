@@ -9,15 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "JSON.h"
 
-typedef NSString *kHNRequestType;
-#define kHNRequestTypeSubmissions @"page"
-#define kHNRequestTypeSubmissionsByUser @"by"
-#define kHNRequestTypeCommentsByUser @"threads"
-#define kHNRequestTypeNewSubmissions @"new"
-#define kHNRequestTypeNewComments @"newcomments"
-#define kHNRequestTypeAsk @"ask"
-#define kHNRequestTypePost @"post"
-#define kHNRequestTypeUserProfile @"profile"
+
 
 
 @interface HNAPIRequest : NSObject {
@@ -25,15 +17,11 @@ typedef NSString *kHNRequestType;
     SEL action;
     NSMutableData *received;
     NSURLConnection *connection;
+    HNPageType type;
 }
 
 - (HNAPIRequest *)initWithTarget:(id)target_ action:(SEL)action_;
-
-- (void)performRequestOfType:(NSString *)type withParameters:(NSArray *)parameters;
-- (void)performRequestOfType:(NSString *)type withParameter:(NSString *)parameter1 withParameter:(NSString *)parameter2;
-- (void)performRequestOfType:(NSString *)type withParameter:(NSString *)parameter;
-- (void)performRequestOfType:(NSString *)type;
-
+- (void)performRequestOfType:(HNPageType)type_ withParameters:(NSDictionary *)parameters;
 - (void)cancelRequest;
 
 @end

@@ -7,32 +7,43 @@
 //
 
 #import "OrangeyAppDelegate.h"
+#import "InstapaperAPI.h"
 #import "SubmissionListController.h"
 #import "CommentListController.h"
 #import "ProfileController.h"
+#import "MoreController.h"
 
 #import "HNKit.h"
 
 @implementation OrangeyAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    [[InstapaperAPI sharedInstance] setDelegate:self];
+    [[InstapaperAPI sharedInstance] setUsername:[defaults objectForKey:@"instapaper-username"]];
+    [[InstapaperAPI sharedInstance] setPassword:[defaults objectForKey:@"instapaper-password"]];
+    
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     tabBarController = [[UITabBarController alloc] init];
     [window setRootViewController:tabBarController];
     
-    SubmissionListController *home = [[[SubmissionListController alloc] initWithSource:[[[HNEntryList alloc] initWithIdentifier:kHNEntryListTypeNews] autorelease]] autorelease];
+    HNEntry *homeEntry = [[[HNEntry alloc] initWithType:kHNPageTypeSubmissions] autorelease];
+    SubmissionListController *home = [[[SubmissionListController alloc] initWithSource:homeEntry] autorelease];
     [home setTitle:@"Hacker News"];
     [home setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Home" image:[UIImage imageNamed:@"home.png"] tag:0] autorelease]];
     
-    SubmissionListController *new = [[[SubmissionListController alloc] initWithSource:[[[HNEntryList alloc] initWithIdentifier:kHNEntryListTypeNew] autorelease]] autorelease];
+    HNEntry *newEntry = [[[HNEntry alloc] initWithType:kHNPageTypeNewSubmissions] autorelease];
+    SubmissionListController *new = [[[SubmissionListController alloc] initWithSource:newEntry] autorelease];
     [new setTitle:@"New Submissions"];
     [new setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"New" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
     
-    ProfileController *profile = [[[ProfileController alloc] initWithSource:[[[HNUser alloc] initWithIdentifier:@"daeken"] autorelease]] autorelease];
+    HNEntry *profileEntry = [[[HNUser alloc] initWithIdentifier:@"Xuzz"] autorelease];
+    ProfileController *profile = [[[ProfileController alloc] initWithSource:profileEntry] autorelease];
     [profile setTitle:@"Profile"];
     [profile setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"profile.png"] tag:0] autorelease]];
     
-    UIViewController *more = [[[CommentListController alloc] initWithSource:[[[HNEntry alloc] initWithURL:[NSURL URLWithString:@"http://news.ycombinator.com/item?id=2297488"]] autorelease]] autorelease];//[[[UIViewController alloc] init] autorelease];
+    MoreController *more = [[MoreController alloc] init];
     [more setTitle:@"More"];
     [more setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:0] autorelease]];
     
@@ -67,6 +78,26 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
 
+}
+
+- (void)handleStatusEventWithType:(StatusDelegateType)type message:(NSString *)message {
+    if (type == kStatusDelegateTypeNotice) {
+        NSLog(@"Notice: %@", message);
+    } else if (type == kStatusDelegateTypeWarning) {
+        // XXX: display unobtrusive notification
+    } else if (type == kStatusDelegateTypeError) {
+        UIAlertView *alert = [[UIAlertView alloc]
+            initWithTitle:@"Error"
+            message:message
+            delegate:self
+            cancelButtonTitle:nil
+            otherButtonTitles:@"Continue", nil
+        ];
+        
+        [[alert autorelease] show];
+    } else {
+        // XXX: that was bad. do something about it.
+    }
 }
 
 - (void)dealloc {

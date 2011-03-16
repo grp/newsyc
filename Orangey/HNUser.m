@@ -14,37 +14,28 @@
 @implementation HNUser
 @synthesize karma, average, created, about;
 
-+ (id)_parseParameters:(NSDictionary *)parameters {
+- (id)initWithIdentifier:(id)identifier_ {
+    return [self initWithType:kHNPageTypeUserProfile identifier:identifier_];
+}
+
++ (id)_parseParametersWithType:(HNPageType)type_ parameters:(NSDictionary *)parameters {
     return [parameters objectForKey:@"id"];
 }
 
-+ (NSURL *)generateURL:(id)identifier_ {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/user?id=%@", kHNWebsiteHost, identifier_]];
++ (NSDictionary *)_generateParametersWithType:(HNPageType)type_ identifier:(id)identifier_ {
+    if (identifier_ != nil) return [NSDictionary dictionaryWithObject:identifier_ forKey:@"id"];
+    else return [NSDictionary dictionary];
 }
 
-- (NSString *)description {
-    NSString *other = nil;
-    if (loaded) other = [NSString stringWithFormat:@"karma=%d average=%f created=%@ about=%@", karma, average, created, about];
-    else other = @"not loaded";
-    return [NSString stringWithFormat:@"<%@:%p id=%@ %@>", [self class], self, identifier, other];
+- (NSString *)_additionalDescription {
+    return [NSString stringWithFormat:@"karma=%d average=%f created=%@ about=%@", karma, average, created, about];
 }
 
-- (void)request:(HNAPIRequest *)request completedWithResponse:(NSDictionary *)response error:(NSError *)error {
-    if (error == nil && [response isKindOfClass:[NSDictionary class]]) {
-        [self setAbout:[response objectForKey:@"about"]];
-        [self setKarma:[[response objectForKey:@"karma"] intValue]];
-        [self setAverage:0.0f];
-        [self setCreated:[[response objectForKey:@"createdAgo"] stringByRemovingSuffix:@" ago"]];
-    }
-    
-    [apiRequest autorelease];
-    apiRequest = nil;
-    [self didFinishLoadingWithError:error];
-}
-
-- (void)_load {
-    apiRequest = [[HNAPIRequest alloc] initWithTarget:self action:@selector(request:completedWithResponse:error:)];
-    [apiRequest performRequestOfType:kHNRequestTypeUserProfile withParameter:identifier];
+- (void)finishLoadingWithResponse:(NSDictionary *)response {
+    [self setAbout:[response objectForKey:@"about"]];
+    [self setKarma:[[response objectForKey:@"karma"] intValue]];
+    [self setAverage:[[response objectForKey:@"average"] floatValue]];
+    [self setCreated:[[response objectForKey:@"created"] stringByRemovingSuffix:@" ago"]];
 }
 
 @end

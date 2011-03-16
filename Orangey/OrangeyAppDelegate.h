@@ -6,11 +6,12 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "StatusDelegate.h"
 
-@interface OrangeyAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
+@interface OrangeyAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, StatusDelegate> {
     UIWindow *window;
     UITabBarController *tabBarController;
+    NSArray *sessions;
 }
 
 @end
