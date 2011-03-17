@@ -11,6 +11,7 @@
 #import "CommentTableCell.h"
 
 #import "NSString+HTML.h"
+#import "NSString+Entities.h"
 
 @implementation CommentTableCell
 @synthesize comment;
@@ -37,7 +38,7 @@
 }
 
 + (NSString *)formatBodyText:(NSString *)bodyText {
-    return [[bodyText stringByRemovingXMLTags] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return [[[bodyText stringByRemovingHTMLTags] stringByDecodingHTMLEntities] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 + (UIFont *)bodyFont {

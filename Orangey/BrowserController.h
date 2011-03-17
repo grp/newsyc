@@ -10,6 +10,7 @@
     UIWebView *webview;
     UIToolbar *toolbar;
     NSURL *rootURL;
+    NSURL *currentURL;
     UIBarButtonItem *backItem;
     UIBarButtonItem *forwardItem;
     UIBarButtonItem *loadingItem;
@@ -17,6 +18,8 @@
     UIBarButtonItem *shareItem;
     UIBarButtonItem *spacerItem;
 }
+
+@property (nonatomic, copy) NSURL *currentURL;
 
 - (id)initWithURL:(NSURL *)url;
 

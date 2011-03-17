@@ -10,7 +10,7 @@
 
 @implementation NSString (HTML)
 
-- (NSString *)stringByRemovingXMLTags {
+- (NSString *)stringByRemovingHTMLTags {
     NSString *html = self;
     NSScanner *scanner = [NSScanner scannerWithString:html];
     NSString *text = nil;

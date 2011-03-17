@@ -38,7 +38,7 @@
 }
 
 - (void)addItemWithURL:(NSURL *)url title:(NSString *)title selection:(NSString *)selection {
-    if (username == nil) {
+    if (username == nil || [username length] == 0) {
         [delegate handleStatusEventWithType:kStatusDelegateTypeError message:@"You are not signed into Instapaper."];
         return;
     }

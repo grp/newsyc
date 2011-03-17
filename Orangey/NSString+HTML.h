@@ -10,6 +10,6 @@
 
 @interface NSString (HTML)
 
-- (NSString *)stringByRemovingXMLTags;
+- (NSString *)stringByRemovingHTMLTags;
 
 @end

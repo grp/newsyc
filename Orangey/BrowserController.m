@@ -10,10 +10,12 @@
 #import "InstapaperAPI.h"
 
 @implementation BrowserController
+@synthesize currentURL;
 
 - (id)initWithURL:(NSURL *)url {
     if ((self = [super init])) {
         rootURL = url;
+        [self setCurrentURL:url];
         [self setHidesBottomBarWhenPushed:YES];
     }
     
@@ -101,7 +103,6 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
     
-    rootURL = [[webview request] URL];
     [webview setDelegate:nil];
     [webview release];
     webview = nil;
@@ -115,10 +116,10 @@
         [[UIApplication sharedApplication] openURL:[[webview request] URL]];
     } else if (buttonIndex == first + 1) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        [pasteboard setURL:[[webview request] URL]];
-        [pasteboard setString:[[[webview request] URL] absoluteString]];
+        [pasteboard setURL:currentURL];
+        [pasteboard setString:[currentURL absoluteString]];
     } else if (buttonIndex == first + 2) {
-        [[InstapaperAPI sharedInstance] addItemWithURL:[[webview request] URL]];
+        [[InstapaperAPI sharedInstance] addItemWithURL:currentURL];
     }
 }
 
@@ -139,13 +140,8 @@
 }
 
 - (void)showShareMenu {
-    NSString *title = [[[webview request] URL] absoluteString];
-    if (title == nil || [title length] == 0) {
-        title = [rootURL absoluteString];
-    }
-    
     UIActionSheet *action = [[UIActionSheet alloc]
-        initWithTitle:title
+        initWithTitle:[currentURL absoluteString]
         delegate:self
         cancelButtonTitle:@"Cancel"
         destructiveButtonTitle:nil
@@ -167,6 +163,12 @@
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     [self updateToolbarItems];
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    [self setCurrentURL:[request URL]];
+    
+    return YES;
 }
 
 @end
