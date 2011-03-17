@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@interface NSString (HTML)
 
-@interface NSString (NSString_HTML)
+- (NSString *)stringByRemovingXMLTags;
 
 @end

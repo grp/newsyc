@@ -14,6 +14,7 @@
     HeaderContainerView *headerContainerView;
     UIView *containerContainer;
     CGFloat suggestedHeaderHeight;
+    CGFloat maximumHeaderHeight;
 }
 
 @end

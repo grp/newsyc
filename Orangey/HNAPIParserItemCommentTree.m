@@ -11,85 +11,95 @@
 
 @implementation HNAPIParserItemCommentTree
 
-- (int)depthFromWidth:(int)width {
-    return width / 40;
-}
-
-/*- (NSString *)extactTextFrom:(TFHppleElement *)e {
-    NSMutableString *m = [[[e content] stringByAppendingString:@"\n\n"] mutableCopy] ?: [@"" mutableCopy];
-    for (TFHppleElement *el in [e children]) {
-        [m appendFormat:@"%@\n\n", [self extactTextFrom:el]];
-    }
-    if ([m length] >= 2) [m deleteCharactersInRange:NSMakeRange([m length] - 2, 2)];
-    return m;
-}*/
-
 - (id)parseString:(NSString *)string options:(NSDictionary *)options {
     TFHpple *hpple = [[TFHpple alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
-    NSMutableArray *result = [NSMutableArray array];
     
+    NSMutableArray *result = [NSMutableArray array];
     NSMutableArray *lasts = [NSMutableArray array];
     
-    NSArray *depths = [hpple elementsMatchingPath:@"//table//table//tr//td[1]//img[@src='http://ycombinator.com/images/s.gif']"];
-    //NSArray *ups = [hpple elementsMatchingPath:@"//table//tr//td//table//tr//td//a[starts-with(@id,'up')]"];
-    //NSArray *downs = [hpple elementsMatchingPath:@"//table//tr//td//table//tr//td//a[starts-with(@id,'down')]"];
-    NSArray *bodies = [depths count] > 0 ? [hpple elementsMatchingPath:@"//table//table[last()]//span[@class='comment']"] : [hpple elementsMatchingPath:@"//table//table//span[@class='comment']"];
-    NSArray *users = [hpple elementsMatchingPath:@"//table//table//tr//td[@class!='title']//span[@class='comhead']//a[starts-with(@href,'user?id=')]"];
-    NSArray *links = [hpple elementsMatchingPath:@"//table//table//tr//td[@class!='title']//span[@class='comhead']//a[starts-with(@href,'item?id=')]"];
-    NSArray *agos = [hpple elementsMatchingPath:@"//table//table//tr//td[@class!='title']//span[@class='comhead']"];
-    NSArray *points = [hpple elementsMatchingPath:@"//table//table//tr//td[@class!='title']//span[@class='comhead']//span[starts-with(@id,'score')]"];
+    NSArray *comments = [hpple elementsMatchingPath:@"//table//tr[position()>1]//td//table//tr//table//tr"];
     
-    for (int i = 0; i < [bodies count]; i++) {
-        TFHppleElement *depth = [depths count] == 0 ? nil : [depths objectAtIndex:i];
-        TFHppleElement *body = [bodies objectAtIndex:i];
-        //TFHppleElement *up = [ups objectAtIndex:i];
-        //TFHppleElement *down = [downs objectAtIndex:i];
-        TFHppleElement *point = [points objectAtIndex:i];
-        TFHppleElement *user = [users objectAtIndex:i];
-        TFHppleElement *link = [links objectAtIndex:i];
-        TFHppleElement *ago = [agos objectAtIndex:i];
+    for (int i = 0; i < [comments count]; i++) {
+        TFHppleElement *comment = [comments objectAtIndex:i];
+        
+        NSNumber *depth = nil;
+        NSNumber *points = [NSNumber numberWithInt:0];
+        NSString *body = nil;
+        NSString *user = nil;
+        NSNumber *identifier = nil;
+        NSString *date = nil;
+        NSMutableArray *children = nil;
+        
+        for (TFHppleElement *element in [comment children]) {
+            if ([[element objectForKey:@"class"] isEqual:@"default"]) {
+                for (TFHppleElement *element2 in [element children]) {
+                    if ([[element2 tagName] isEqual:@"div"]) {
+                        for (TFHppleElement *element3 in [element2 children]) {
+                            if ([[element3 objectForKey:@"class"] isEqual:@"comhead"]) {
+                                NSString *content = [element3 content];
+                                
+                                // XXX: is there any better way of doing this?
+                                int start = [content rangeOfString:@"</a> "].location;
+                                if (start != NSNotFound) content = [content substringFromIndex:start + [@"</a> " length]];
+                                int end = [content rangeOfString:@" ago"].location;
+                                if (end != NSNotFound) date = [content substringToIndex:end];
+                                
+                                for (TFHppleElement *element4 in [element3 children]) {
+                                    NSString *content = [element4 content];
+                                    NSString *tag = [element4 tagName];
+                                    
+                                    if ([tag isEqual:@"a"]) {
+                                        NSString *href = [element4 objectForKey:@"href"];
+                                        
+                                        if ([href hasPrefix:@"user?id="]) {
+                                            user = content;
+                                        } else if ([href hasPrefix:@"item?id="]) {
+                                            identifier = [NSNumber numberWithInt:[[href substringFromIndex:[@"item?id=" length]] intValue]];
+                                        }
+                                    } else if ([tag isEqual:@"span"]) {
+                                        int end = [content rangeOfString:@" "].location;
+                                        if (end != NSNotFound) points = [NSNumber numberWithInt:[[content substringToIndex:end] intValue]];
+                                    }
+                                }
+                            }
+                        }
+                    } else if ([[element2 objectForKey:@"class"] isEqual:@"comment"]) {
+                        // XXX: strip out _reply_ link at the bottom.
+                        body = [element2 content];
+                    }
+                }
+            } else {
+                for (TFHppleElement *element2 in [element children]) {
+                    if ([[element2 tagName] isEqual:@"img"] && [[element2 objectForKey:@"src"] isEqual:@"http://ycombinator.com/images/s.gif"]) {
+                        // Yes, really: HN uses a 1x1 gif to indent comments. It's like 1999 all over again. :(
+                        int width = [[element2 objectForKey:@"width"] intValue];
+                        depth = [NSNumber numberWithInt:width / 40];
+                    }
+                }
+            }
+        }
+        
+        if (depth != nil) children = [NSMutableArray array];
         
         NSMutableDictionary *item = [NSMutableDictionary dictionary];
-        NSString *pointscontent = [point content];
-        NSNumber *numpoints = [NSNumber numberWithInt:[[pointscontent substringToIndex:[pointscontent rangeOfString:@" "].location] intValue]];
-        [item setObject:numpoints forKey:@"points"];
-        
-        [item setObject:[user content] forKey:@"user"];
-        
-        NSLog(@"body: %@", [body content]);
-        [item setObject:[body content] forKey:@"body"];
-        
-        NSString *identifiercontent = [[link objectForKey:@"href"] substringFromIndex:[@"item?id=" length]];
-   
-        [item setObject:[NSNumber numberWithInt:[identifiercontent intValue]] forKey:@"identifier"];
-        
-        int end = [[ago content] rangeOfString:@" ago"].location;
-        if (end != NSNotFound) {
-            NSString *agoval = [[ago content] substringToIndex:end];
-            [item setObject:agoval forKey:@"ago"];
-        }
-        
-        int level = [self depthFromWidth:[[depth objectForKey:@"width"] intValue]];
-        
-        if (depth != nil) {
-            NSArray *children = [NSMutableArray array];
-            [item setObject:children forKey:@"children"];
-        }
-        
-        if ([lasts count] >= level) [lasts removeObjectsInRange:NSMakeRange(level, [lasts count] - level)];
+        [item setObject:user forKey:@"user"];
+        [item setObject:body forKey:@"body"];
+        [item setObject:identifier forKey:@"identifier"];
+        [item setObject:date forKey:@"ago"];
+        [item setObject:points forKey:@"points"];
+        if (children != nil) [item setObject:children forKey:@"children"];
+
+        if ([lasts count] >= [depth intValue]) [lasts removeObjectsInRange:NSMakeRange([depth intValue], [lasts count] - [depth intValue])];
         [lasts addObject:item];
         
-        if (level == 0) [result addObject:item];
-        else {
-            NSMutableArray *ch = [[lasts objectAtIndex:level - 1] objectForKey:@"children"];
-            if (ch == nil) {
-                ch = [NSMutableArray array];
-                [[lasts objectAtIndex:level - 1] setObject:ch forKey:@"children"];
-            }
-            [ch addObject:item];
+        if ([depth intValue] == 0) {
+            [result addObject:item];
+        } else {
+            NSMutableArray *children = [[lasts objectAtIndex:[depth intValue] - 1] objectForKey:@"children"];
+            [children addObject:item];
         }
     }
-    
+        
     [hpple release];
     
     NSMutableDictionary *item = [NSMutableDictionary dictionary];

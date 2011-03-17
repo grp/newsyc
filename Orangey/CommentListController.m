@@ -68,6 +68,7 @@
         [tableView setTableHeaderView:containerContainer];
         
         suggestedHeaderHeight = [headerContainerView bounds].size.height;
+        maximumHeaderHeight = [tableView bounds].size.height - 44.0f;
     }
 
     [super finishedLoading];
@@ -75,9 +76,9 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat offset = [scrollView contentOffset].y;
-    if (suggestedHeaderHeight < 280.0f || (offset > suggestedHeaderHeight - 280.0f || offset <= 0)) {
+    if (suggestedHeaderHeight < maximumHeaderHeight || (offset > suggestedHeaderHeight - maximumHeaderHeight || offset <= 0)) {
         CGRect frame = [headerContainerView frame];
-        if (suggestedHeaderHeight - 280.0f > 0 && offset > 0) offset -= suggestedHeaderHeight - 280.0f;
+        if (suggestedHeaderHeight - maximumHeaderHeight > 0 && offset > 0) offset -= suggestedHeaderHeight - maximumHeaderHeight;
         frame.origin.y = offset;
         frame.size.height = suggestedHeaderHeight - offset;
         [headerContainerView setFrame:frame];

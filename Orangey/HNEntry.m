@@ -64,8 +64,8 @@
     }
     [self setEntries:comments];
     
-    if ([response objectForKey:@"numcomments"] != nil) {
-        [self setChildren:[[response objectForKey:@"numcomments"] intValue]];
+    if ([response objectForKey:@"numchildren"] != nil) {
+        [self setChildren:[[response objectForKey:@"numchildren"] intValue]];
     } else {
         int num = 0;
         for (HNEntry *child in [self entries]) num += [child children];

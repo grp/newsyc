@@ -10,6 +10,8 @@
 
 #import "CommentTableCell.h"
 
+#import "NSString+HTML.h"
+
 @implementation CommentTableCell
 @synthesize comment;
 
@@ -34,7 +36,11 @@
     [self setNeedsDisplay];
 }
 
-+ (UIFont *)titleFont {
++ (NSString *)formatBodyText:(NSString *)bodyText {
+    return [[bodyText stringByRemovingXMLTags] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
++ (UIFont *)bodyFont {
     return [UIFont systemFontOfSize:12.0f];
 }
 
@@ -51,7 +57,7 @@
 }
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {
-    CGSize titlesize = [[entry body] sizeWithFont:[self titleFont] constrainedToSize:CGSizeMake(width - 16.0f, 45.0f) lineBreakMode:UILineBreakModeWordWrap];
+    CGSize titlesize = [[self formatBodyText:[entry body]] sizeWithFont:[self bodyFont] constrainedToSize:CGSizeMake(width - 16.0f, 45.0f) lineBreakMode:UILineBreakModeWordWrap];
     return titlesize.height + 45.0f;
 }
 
@@ -63,7 +69,7 @@
     NSString *date = [comment posted];
     NSString *points = [comment points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [comment points]];
     NSString *comments = [comment children] == 0 ? @"" : [comment children] == 1 ? @"1 comment" : [NSString stringWithFormat:@"%d comments", [comment children]];
-    NSString *title = [comment body];
+    NSString *body = [[self class] formatBodyText:[comment body]];
     
     if ([self isHighlighted] || [self isSelected]) [[UIColor whiteColor] set];
     
@@ -75,12 +81,12 @@
     [date drawAtPoint:CGPointMake(bounds.width - datewidth - offsets.width, offsets.height) withFont:[[self class] dateFont]];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor blackColor] set];
-    CGRect titlerect;
-    titlerect.size.height = bounds.height - 45.0f;
-    titlerect.size.width = bounds.width - offsets.width * 2;
-    titlerect.origin.x = offsets.width;
-    titlerect.origin.y = offsets.height + 19.0f;
-    [title drawInRect:titlerect withFont:[[self class] titleFont] lineBreakMode:UILineBreakModeWordWrap | UILineBreakModeTailTruncation];
+    CGRect bodyrect;
+    bodyrect.size.height = bounds.height - 45.0f;
+    bodyrect.size.width = bounds.width - offsets.width * 2;
+    bodyrect.origin.x = offsets.width;
+    bodyrect.origin.y = offsets.height + 19.0f;
+    [body drawInRect:bodyrect withFont:[[self class] bodyFont] lineBreakMode:UILineBreakModeWordWrap | UILineBreakModeTailTruncation];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor grayColor] set];
     CGRect pointsrect;

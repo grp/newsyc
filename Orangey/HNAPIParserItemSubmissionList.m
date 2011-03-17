@@ -22,6 +22,9 @@
     // XXX: can this be done in a more change-friendly way?
     NSArray *submissions = [hpple elementsMatchingPath:@"//table//tr[position()>1]//td//table//tr"];
     
+    // Token for the next page of items.
+    NSString *more = nil;
+    
     // Three rows are used per submission.
     for (int i = 0; i + 1 < [submissions count]; i += 3) {
         TFHppleElement *first = [submissions objectAtIndex:i];
@@ -83,25 +86,33 @@
                         if (end != NSNotFound) points = [NSNumber numberWithInt:[[content substringToIndex:end] intValue]];
                     }
                 }
+            } else if ([[element objectForKey:@"class"] isEqual:@"title"] && [[element content] isEqual:@"More"]) {
+                more = [[element objectForKey:@"href"] substringFromIndex:[@"x?fnid=" length]];
             }
         }
         
-        // XXX: sanity checks (avoid crashes with nil values?)
-        NSMutableDictionary *item = [NSMutableDictionary dictionary];
-        [item setObject:user forKey:@"user"];
-        [item setObject:points forKey:@"points"];
-        [item setObject:title forKey:@"title"];
-        [item setObject:comments forKey:@"numchildren"];
-        [item setObject:href forKey:@"url"];
-        [item setObject:date forKey:@"ago"];
-        [item setObject:identifier forKey:@"identifier"];
-        [result addObject:item];
+        // XXX: better sanity checks?
+        if (user && title && identifier) {
+            NSMutableDictionary *item = [NSMutableDictionary dictionary];
+            [item setObject:user forKey:@"user"];
+            [item setObject:points forKey:@"points"];
+            [item setObject:title forKey:@"title"];
+            [item setObject:comments forKey:@"numchildren"];
+            [item setObject:href forKey:@"url"];
+            [item setObject:date forKey:@"ago"];
+            [item setObject:identifier forKey:@"identifier"];
+            [result addObject:item];
+        } else {
+            NSLog(@"something bad happened.");
+            NSLog(@"the nodes is: %@ %@", first, second);
+        }
     }
     
     [hpple release];
     
     NSMutableDictionary *item = [NSMutableDictionary dictionary];
     [item setObject:result forKey:@"children"];
+    if (more != nil) [item setObject:more forKey:@"more"];
     return item;
 }
 
