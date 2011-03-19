@@ -2,7 +2,6 @@
 
 #import "XMLDocument.h"
 #import "XMLElement.h"
-#import "XPathQuery.h"
 
 @implementation XMLDocument
 
