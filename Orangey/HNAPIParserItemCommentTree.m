@@ -7,20 +7,20 @@
 //
 
 #import "HNAPIParserItemCommentTree.h"
-#import "TFHpple.h"
+#import "XMLDocument.h"
 
 @implementation HNAPIParserItemCommentTree
 
 - (id)parseString:(NSString *)string options:(NSDictionary *)options {
-    TFHpple *hpple = [[TFHpple alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+    XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
     
     NSMutableArray *result = [NSMutableArray array];
     NSMutableArray *lasts = [NSMutableArray array];
     
-    NSArray *comments = [hpple elementsMatchingPath:@"//table//tr[position()>1]//td//table//tr//table//tr"];
+    NSArray *comments = [document elementsMatchingPath:@"//table//tr[position()>1]//td//table//tr//table//tr"];
     
     for (int i = 0; i < [comments count]; i++) {
-        TFHppleElement *comment = [comments objectAtIndex:i];
+        XMLElement *comment = [comments objectAtIndex:i];
         
         NSNumber *depth = nil;
         NSNumber *points = [NSNumber numberWithInt:0];
@@ -30,12 +30,12 @@
         NSString *date = nil;
         NSMutableArray *children = nil;
         
-        for (TFHppleElement *element in [comment children]) {
-            if ([[element objectForKey:@"class"] isEqual:@"default"]) {
-                for (TFHppleElement *element2 in [element children]) {
+        for (XMLElement *element in [comment children]) {
+            if ([[element attributeWithName:@"class"] isEqual:@"default"]) {
+                for (XMLElement *element2 in [element children]) {
                     if ([[element2 tagName] isEqual:@"div"]) {
-                        for (TFHppleElement *element3 in [element2 children]) {
-                            if ([[element3 objectForKey:@"class"] isEqual:@"comhead"]) {
+                        for (XMLElement *element3 in [element2 children]) {
+                            if ([[element3 attributeWithName:@"class"] isEqual:@"comhead"]) {
                                 NSString *content = [element3 content];
                                 
                                 // XXX: is there any better way of doing this?
@@ -44,12 +44,12 @@
                                 int end = [content rangeOfString:@" ago"].location;
                                 if (end != NSNotFound) date = [content substringToIndex:end];
                                 
-                                for (TFHppleElement *element4 in [element3 children]) {
+                                for (XMLElement *element4 in [element3 children]) {
                                     NSString *content = [element4 content];
                                     NSString *tag = [element4 tagName];
                                     
                                     if ([tag isEqual:@"a"]) {
-                                        NSString *href = [element4 objectForKey:@"href"];
+                                        NSString *href = [element4 attributeWithName:@"href"];
                                         
                                         if ([href hasPrefix:@"user?id="]) {
                                             user = content;
@@ -63,16 +63,16 @@
                                 }
                             }
                         }
-                    } else if ([[element2 objectForKey:@"class"] isEqual:@"comment"]) {
+                    } else if ([[element2 attributeWithName:@"class"] isEqual:@"comment"]) {
                         // XXX: strip out _reply_ link at the bottom.
                         body = [element2 content];
                     }
                 }
             } else {
-                for (TFHppleElement *element2 in [element children]) {
-                    if ([[element2 tagName] isEqual:@"img"] && [[element2 objectForKey:@"src"] isEqual:@"http://ycombinator.com/images/s.gif"]) {
+                for (XMLElement *element2 in [element children]) {
+                    if ([[element2 tagName] isEqual:@"img"] && [[element2 attributeWithName:@"src"] isEqual:@"http://ycombinator.com/images/s.gif"]) {
                         // Yes, really: HN uses a 1x1 gif to indent comments. It's like 1999 all over again. :(
-                        int width = [[element2 objectForKey:@"width"] intValue];
+                        int width = [[element2 attributeWithName:@"width"] intValue];
                         depth = [NSNumber numberWithInt:width / 40];
                     }
                 }
@@ -100,7 +100,7 @@
         }
     }
         
-    [hpple release];
+    [document release];
     
     NSMutableDictionary *item = [NSMutableDictionary dictionary];
     [item setObject:result forKey:@"children"];
