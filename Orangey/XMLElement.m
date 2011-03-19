@@ -1,4 +1,3 @@
-
 #import "XMLElement.h"
 #import "XMLDocument.h"
 
@@ -17,6 +16,9 @@ static int XMLElementOutputCloseCallback(void *context) {
 @implementation XMLElement
 
 - (void)dealloc {
+    [cachedChildren release];
+    [cachedAttributes release];
+    [cachedContent release];
     [document release];
     [super dealloc];
 }
@@ -70,12 +72,11 @@ static int XMLElementOutputCloseCallback(void *context) {
         list = list->next;
     }
     
-    cachedChildren = children;
+    cachedChildren = [children retain];
     return cachedChildren;
 }
 
-- (NSDictionary *) attributes
-{
+- (NSDictionary *)attributes {
     if (cachedAttributes != nil) return cachedAttributes;
     
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
@@ -96,7 +97,7 @@ static int XMLElementOutputCloseCallback(void *context) {
         list = list->next;
     }
 
-    cachedAttributes = attributes;
+    cachedAttributes = [attributes release];
     return cachedAttributes;
 }
 
