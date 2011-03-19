@@ -97,7 +97,7 @@ static int XMLElementOutputCloseCallback(void *context) {
         list = list->next;
     }
 
-    cachedAttributes = [attributes release];
+    cachedAttributes = [attributes retain];
     return cachedAttributes;
 }
 
