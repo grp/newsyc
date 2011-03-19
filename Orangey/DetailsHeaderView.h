@@ -15,7 +15,7 @@
 @property (nonatomic, assign) id delegate;
 @property (nonatomic, retain) HNEntry *entry;
 
-+ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width;
+- (CGFloat)suggestedHeightWithWidth:(CGFloat)width;
 + (CGSize)offsets;
 
 @end

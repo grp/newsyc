@@ -31,11 +31,13 @@
     return [NSString stringWithFormat:@"karma=%d average=%f created=%@ about=%@", karma, average, created, about];
 }
 
-- (void)finishLoadingWithResponse:(NSDictionary *)response {
-    [self setAbout:[response objectForKey:@"about"]];
-    [self setKarma:[[response objectForKey:@"karma"] intValue]];
-    [self setAverage:[[response objectForKey:@"average"] floatValue]];
-    [self setCreated:[[response objectForKey:@"created"] stringByRemovingSuffix:@" ago"]];
+- (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error {
+    if (error == nil) {
+        [self setAbout:[response objectForKey:@"about"]];
+        [self setKarma:[[response objectForKey:@"karma"] intValue]];
+        [self setAverage:[[response objectForKey:@"average"] floatValue]];
+        [self setCreated:[[response objectForKey:@"created"] stringByRemovingSuffix:@" ago"]];
+    }
 }
 
 @end

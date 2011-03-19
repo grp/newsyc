@@ -9,7 +9,7 @@
 #import "NSURL+Parameters.h"
 
 
-@implementation NSURL (QSParameters)
+@implementation NSURL (Parameters)
 - (NSArray *)parameterArray {
     
     if (![self query]) return nil;

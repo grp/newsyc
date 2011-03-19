@@ -113,7 +113,7 @@
                 [[cell detailTextLabel] setText:[NSString stringWithFormat:@"%d", [(HNUser *) source karma]]];
             } else if (row == 1) {
                 [[cell textLabel] setText:@"average"];
-                [[cell detailTextLabel] setText:[NSString stringWithFormat:@"%f", [(HNUser *) source average]]];
+                [[cell detailTextLabel] setText:[[NSNumber numberWithFloat:[(HNUser *) source average]] stringValue]];
             }
         }
     } else if ([indexPath section] == 1) {

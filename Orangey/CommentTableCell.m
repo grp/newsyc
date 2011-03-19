@@ -10,7 +10,7 @@
 
 #import "CommentTableCell.h"
 
-#import "NSString+HTML.h"
+#import "NSString+Tags.h"
 #import "NSString+Entities.h"
 
 @implementation CommentTableCell

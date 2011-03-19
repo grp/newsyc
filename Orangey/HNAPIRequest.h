@@ -23,5 +23,6 @@
 - (HNAPIRequest *)initWithTarget:(id)target_ action:(SEL)action_;
 - (void)performRequestOfType:(HNPageType)type_ withParameters:(NSDictionary *)parameters;
 - (void)cancelRequest;
+- (BOOL)isLoading;
 
 @end

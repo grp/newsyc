@@ -6,14 +6,24 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "DTAttributedTextView.h"
+#import "NSAttributedString+HTML.h"
+
 #import "HNKit.h"
 
 #import "CommentDetailsHeaderView.h"
 
 @implementation CommentDetailsHeaderView
 
+- (void)dealloc {
+    [textView release];
+    [super dealloc];
+}
+
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
+        textView = [[DTAttributedTextView alloc] init];
+        [self addSubview:textView];
     }
     
     return self;
@@ -27,8 +37,20 @@
     return [UIFont systemFontOfSize:11.0f];
 }
 
-+ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {
-    return [self offsets].height + [[entry body] sizeWithFont:[self titleFont] constrainedToSize:CGSizeMake(width - ([self offsets].width * 2), 2000.0f) lineBreakMode:UILineBreakModeWordWrap].height + 30.0f + [self offsets].height;
+- (CGFloat)suggestedHeightWithWidth:(CGFloat)width {
+    CGSize offsets = [[self class] offsets];
+    CGFloat height = [[textView contentView] sizeThatFits:CGSizeMake(width - offsets.width, 0)].height;
+    
+    return offsets.height + height + 16.0f + offsets.height;
+}
+
+- (void)setEntry:(HNEntry *)entry_ {
+    [super setEntry:entry_];
+    
+    NSString *body = [entry body];
+    NSData *data = [body dataUsingEncoding:NSUTF8StringEncoding];
+    NSAttributedString *attributed = [[NSAttributedString alloc] initWithHTML:data baseURL:kHNWebsiteURL documentAttributes:NULL];
+    [textView setAttributedString:[attributed autorelease]];
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -37,18 +59,15 @@
     CGSize bounds = [self bounds].size;
     CGSize offsets = [[self class] offsets];
     
-    NSString *title = [entry body];
     NSString *date = [entry posted];
     NSString *points = [entry points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [entry points]];
     
     CGRect titlerect;
-    titlerect.origin.y = offsets.height + 8.0f;
-    titlerect.origin.x = offsets.width;
-    titlerect.size.height = [[self class] heightForEntry:entry withWidth:bounds.width];
-    titlerect.size.width = bounds.width - (offsets.width * 2);
-    
-    [[UIColor blackColor] set];
-    [title drawInRect:titlerect withFont:[[self class] titleFont]];
+    titlerect.origin.y = offsets.height;
+    titlerect.origin.x = offsets.width / 2;
+    titlerect.size.width = bounds.width - offsets.width;
+    titlerect.size.height = [[textView contentView] sizeThatFits:CGSizeMake(titlerect.size.width, 0)].height;
+    [textView setFrame:titlerect];
     
     [[UIColor grayColor] set];
     CGRect pointsrect;

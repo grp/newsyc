@@ -17,6 +17,7 @@
 - (id)initWithSource:(HNObject *)source_ {
     if ((self = [super init])) {
         [self setSource:source_];
+        [source_ setDelegate:self];
     }
     
     return self;
@@ -24,7 +25,8 @@
 
 - (void)dealloc {
     [indicator release];
-    if (![source loaded]) [source cancelLoading];
+    if (![source isLoaded]) [source cancelLoading];
+    [source setDelegate:nil];
     [source release];
     
     [super dealloc];
@@ -40,14 +42,13 @@
     [errorLabel setFrame:[[self view] bounds]];
 }
 
-- (void)sourceDidFinishLoading:(HNObject *)source_ withError:(NSError *)error {
+- (void)object:(HNObject *)source_ failedToLoadWithError:(NSError *)error {
+    [self showErrorWithTitle:@"Error loading."];
+}
+
+- (void)objectFinishedLoading:(HNObject *)object; {
     [indicator removeFromSuperview];
-    
-    if (error == nil) {
-        [self finishedLoading];
-    } else {
-        [self showErrorWithTitle:@"Error loading."];
-    }
+    [self finishedLoading];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)index {
@@ -102,10 +103,10 @@
     if (!loaded) {
         loaded = YES;
         
-        if (![source loaded]) {
+        if (![source isLoaded]) {
             [[self view] addSubview:indicator];
             [indicator setFrame:[[self view] bounds]];
-            [source beginLoadingWithTarget:self action:@selector(sourceDidFinishLoading:withError:)];
+            [source beginLoading];
         } else {
             [self finishedLoading];
         }

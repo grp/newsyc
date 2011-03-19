@@ -43,7 +43,7 @@
 
 - (id)initWithAttributedString:(NSAttributedString *)attributedString width:(CGFloat)width
 {
-	if (self = [super initWithFrame:CGRectMake(0, 0, width, 0)])
+	if ((self = [super initWithFrame:CGRectMake(0, 0, width, 0)]))
 	{
 		[self setup];
 		

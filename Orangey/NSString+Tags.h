@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString (HTML)
+@interface NSString (Tags)
 
 - (NSString *)stringByRemovingHTMLTags;
 

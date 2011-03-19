@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSURL (QSParameters) 
+@interface NSURL (Parameters) 
 - (NSArray *)parameterArray;
 - (NSDictionary *)parameterDictionary;
 @end

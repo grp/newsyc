@@ -4,6 +4,7 @@
 #import "NSString+RemoveSuffix.h"
 
 #define kHNWebsiteHost @"news.ycombinator.com"
+#define kHNWebsiteURL [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/", kHNWebsiteHost]]
 
 typedef NSString *HNPageType;
 

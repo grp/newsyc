@@ -6,12 +6,10 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "HNKit.h"
 
 @class LoadingIndicatorView;
-@class HNObject;
-
-@interface LoadingController : UIViewController <UIActionSheetDelegate> {
+@interface LoadingController : UIViewController <UIActionSheetDelegate, HNObjectLoadingDelegate> {
     LoadingIndicatorView *indicator;
     UILabel *errorLabel;
     BOOL loaded;

@@ -31,6 +31,7 @@
 @property (nonatomic, retain) NSArray *entries;
 @property (nonatomic, copy) NSURL *destination;
 @property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *more;
 
 - (void)loadFromDictionary:(NSDictionary *)response;
 

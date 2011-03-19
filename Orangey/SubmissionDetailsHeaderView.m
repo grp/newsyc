@@ -34,8 +34,11 @@
     return [UIFont systemFontOfSize:11.0f];
 }
 
-+ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {
-    return [self offsets].height + [[entry title] sizeWithFont:[self titleFont] constrainedToSize:CGSizeMake(width - ([self offsets].width * 2), 400.0f) lineBreakMode:UILineBreakModeWordWrap].height + 30.0f + [self offsets].height;
+- (CGFloat)suggestedHeightWithWidth:(CGFloat)width {
+    CGSize offsets = [[self class] offsets];
+    CGFloat height = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(width - (offsets.width * 2), 400.0f) lineBreakMode:UILineBreakModeWordWrap].height;
+    
+    return offsets.height + height + 30.0f + offsets.height;
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -56,7 +59,7 @@
     [[UIColor blackColor] set];
     CGRect titlerect;
     titlerect.size.width = bounds.width - (offsets.width * 2);
-    titlerect.size.height = [[self class] heightForEntry:entry withWidth:bounds.width];
+    titlerect.size.height = [self suggestedHeightWithWidth:bounds.width];
     titlerect.origin.x = offsets.width;
     titlerect.origin.y = offsets.height + 8.0f;
     [title drawInRect:titlerect withFont:[[self class] titleFont]];

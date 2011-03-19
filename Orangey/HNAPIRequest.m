@@ -80,6 +80,10 @@
     [connection start];
 }
 
+- (BOOL)isLoading {
+    return connection != nil;
+}
+
 - (void)cancelRequest {
     if (connection != nil) {
         [connection cancel];

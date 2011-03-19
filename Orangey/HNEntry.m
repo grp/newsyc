@@ -12,7 +12,7 @@
 #import "HNEntry.h"
 
 @implementation HNEntry
-@synthesize points, children, submitter, body, posted, parent, title, destination, entries;
+@synthesize points, children, submitter, body, posted, parent, title, destination, entries, more;
 
 + (BOOL)typeUsesIdentifier:(HNPageType)type_ {
     return ([type_ isEqual:kHNPageTypeUserComments] ||
@@ -58,7 +58,7 @@
     for (NSDictionary *child in children_) {
         HNEntry *entry = [[HNEntry alloc] initWithType:kHNPageTypeItemComments identifier:[child objectForKey:@"identifier"]];
         [entry loadFromDictionary:child];
-        if ([child objectForKey:@"children"] != nil) [entry setLoaded:YES];
+        if ([child objectForKey:@"children"] != nil) [entry addLoadingState:kHNObjectLoadingStateLoaded];
         [entry setParent:self];
         [comments addObject:[entry autorelease]];
     }
@@ -73,8 +73,10 @@
     }
 }
 
-- (void)finishLoadingWithResponse:(NSDictionary *)response {
-    [self loadFromDictionary:response];
+- (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error {
+    if (error == nil) {
+        [self loadFromDictionary:response];
+    }
 }
 
 @end

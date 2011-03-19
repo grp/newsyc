@@ -347,7 +347,7 @@ CTParagraphStyleRef createParagraphStyle(CGFloat paragraphSpacingBefore, CGFloat
 	// base tag with font defaults
 	DTCoreTextFontDescriptor *defaultFontDescriptor = [[[DTCoreTextFontDescriptor alloc] initWithFontAttributes:nil] autorelease];
 	defaultFontDescriptor.pointSize = 12;
-	defaultFontDescriptor.fontFamily = @"Times New Roman";
+	defaultFontDescriptor.fontFamily = @"Helvetica";
 	NSDictionary *bodyTag = [NSDictionary dictionaryWithObjectsAndKeys:defaultFontDescriptor, @"FontDescriptor", @"black", @"color", nil];
 	[tagStack addObject:bodyTag];
 	
@@ -787,7 +787,7 @@ CTParagraphStyleRef createParagraphStyle(CGFloat paragraphSpacingBefore, CGFloat
 				if (tagOpen)
 				{
 					[currentTag setObject:[NSNumber numberWithFloat:12.0] forKey:@"ParagraphSpacing"];
-					
+
 					seenPreviousParagraph = YES;
 				}
 				
@@ -796,7 +796,16 @@ CTParagraphStyleRef createParagraphStyle(CGFloat paragraphSpacingBefore, CGFloat
 			{
 				immediatelyClosed = YES; 
 			}
-			
+            else if ([tagName isEqualToString:@"pre"] || [tagName isEqualToString:@"code"])
+            {
+                if (tagOpen)
+				{
+					[currentTag setObject:[NSNumber numberWithFloat:12.0] forKey:@"ParagraphSpacing"];
+                    currentFontDescriptor.fontFamily = @"Courier";
+                    
+					seenPreviousParagraph = YES;
+				}
+            }
 			
 			// convert CSS Styles into our own style
 			[self remapCSSStylesOnTagDictionary:currentTag];

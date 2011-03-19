@@ -23,7 +23,7 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-	if (self = [super initWithFrame:frame])
+	if ((self = [super initWithFrame:frame]))
 	{
 		[self setup];
 	}
@@ -41,7 +41,7 @@
 {
 	[super layoutSubviews];
 	
-	self.contentView; // Trigger adding if not happened
+	[self contentView]; // Trigger adding if not happened
 }
 
 - (void)awakeFromNib

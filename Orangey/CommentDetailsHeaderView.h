@@ -8,7 +8,9 @@
 
 #import "DetailsHeaderView.h"
 
+@class DTAttributedTextView;
 @interface CommentDetailsHeaderView : DetailsHeaderView {
+    DTAttributedTextView *textView;
 }
 
 @end

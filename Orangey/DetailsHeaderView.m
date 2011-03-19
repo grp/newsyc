@@ -40,7 +40,7 @@
     [self setNeedsDisplay];
 }
 
-+ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {
+- (CGFloat)suggestedHeightWithWidth:(CGFloat)width {
     return 0;
 }
 

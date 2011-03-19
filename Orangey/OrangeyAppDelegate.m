@@ -69,7 +69,11 @@
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [[InstapaperAPI sharedInstance] setUsername:[defaults objectForKey:@"instapaper-username"]];
+    [[InstapaperAPI sharedInstance] setPassword:[defaults objectForKey:@"instapaper-password"]];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

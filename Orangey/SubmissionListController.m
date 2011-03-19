@@ -14,6 +14,23 @@
 
 @implementation SubmissionListController
 
+- (void)loadView {
+    [super loadView];
+    
+    refreshView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - tableView.bounds.size.height, [self view].frame.size.width,tableView.bounds.size.height)];
+    [refreshView setDelegate:self];
+    [tableView addSubview:refreshView];
+}
+
+- (void)viewDidUnload {
+    [refreshView release];
+    [super viewDidUnload];
+}
+
+- (void)viewDidLoad {
+    [refreshView refreshLastUpdatedDate];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
     return 1;
 }
@@ -42,6 +59,31 @@
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
     [controller setTitle:@"Comments"];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+}
+
+- (void)finishedLoading {
+    [super finishedLoading];
+	[refreshView egoRefreshScrollViewDataSourceDidFinishedLoading:tableView];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{	
+	[refreshView egoRefreshScrollViewDidScroll:scrollView];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+	[refreshView egoRefreshScrollViewDidEndDragging:scrollView];
+}
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView *)view {
+	[source beginReloading];
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView *)view {
+	return [source isLoading];
+}
+
+- (NSDate *)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view {
+	return [NSDate date]; // should return date data source was last changed
 }
 
 @end

@@ -25,12 +25,13 @@
         if ([entry destination] != nil) headerViewClass = [SubmissionDetailsHeaderView class];
         else headerViewClass = [CommentDetailsHeaderView class];
         
-        CGRect headerrect;
-        headerrect.size.width = width;
-        headerrect.size.height = [headerViewClass heightForEntry:entry withWidth:width];
-        headerrect.origin = CGPointZero;
-        detailsHeaderView = [[headerViewClass alloc] initWithFrame:headerrect];
+        detailsHeaderView = [[headerViewClass alloc] initWithFrame:CGRectZero];
         [detailsHeaderView setEntry:entry];
+        CGRect headerrect;
+        headerrect.origin = CGPointZero;
+        headerrect.size.width = width;
+        headerrect.size.height = [detailsHeaderView suggestedHeightWithWidth:headerrect.size.width];
+        [detailsHeaderView setFrame:headerrect];
         [self addSubview:detailsHeaderView];
         
         CGRect actionsrect;

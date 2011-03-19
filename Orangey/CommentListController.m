@@ -97,7 +97,7 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
-    return [source loaded] ? 1 : 0;
+    return [source isLoaded] ? 1 : 0;
 }
 
 - (HNEntry *)entryAtIndexPath:(NSIndexPath *)indexPath {

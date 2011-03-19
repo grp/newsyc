@@ -6,9 +6,9 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "NSString+HTML.h"
+#import "NSString+Tags.h"
 
-@implementation NSString (HTML)
+@implementation NSString (Tags)
 
 - (NSString *)stringByRemovingHTMLTags {
     NSString *html = self;
