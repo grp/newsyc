@@ -158,6 +158,7 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     [self updateToolbarItems];
+    [self setCurrentURL:[[webView request] URL]];
     [[self navigationItem] setTitle:[webview stringByEvaluatingJavaScriptFromString:@"document.title"]];
 }
 
@@ -166,7 +167,11 @@
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-    [self setCurrentURL:[request URL]];
+    if (navigationType == UIWebViewNavigationTypeLinkClicked ||
+        navigationType == UIWebViewNavigationTypeFormSubmitted ||
+        navigationType == UIWebViewNavigationTypeFormResubmitted) {
+        [self setCurrentURL:[request URL]];
+    }
     
     return YES;
 }

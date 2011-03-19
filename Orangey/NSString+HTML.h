@@ -1,15 +1,24 @@
 //
 //  NSString+HTML.h
-//  Orangey
+//  CoreTextExtensions
 //
-//  Created by Grant Paul on 3/13/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Created by Oliver Drobnik on 1/9/11.
+//  Copyright 2011 Drobnik.com. All rights reserved.
 //
-
-#import <Foundation/Foundation.h>
 
 @interface NSString (HTML)
 
-- (NSString *)stringByRemovingHTMLTags;
+- (NSUInteger)integerValueFromHex;
+- (BOOL)isInlineTag;
+- (NSString *)stringByNormalizingWhitespace;
+- (BOOL)hasPrefixCharacterFromSet:(NSCharacterSet *)characterSet;
+- (BOOL)hasSuffixCharacterFromSet:(NSCharacterSet *)characterSet;
+- (NSString *)stringByReplacingHTMLEntities;
+
+// CSS
+- (NSDictionary *)dictionaryOfCSSStyles;
+- (CGFloat)pixelSizeOfCSSMeasureRelativeToCurrentTextSize:(CGFloat)textSize;
+- (NSArray *)arrayOfCSSShadowsWithCurrentTextSize:(CGFloat)textSize currentColor:(UIColor *)color;
+- (CGFloat)CSSpixelSize;
 
 @end
