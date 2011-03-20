@@ -43,7 +43,7 @@
 - (void)loadFromDictionary:(NSDictionary *)response {
     if ([response objectForKey:@"points"] != nil) [self setPoints:[[response objectForKey:@"points"] intValue]];
     if ([self body] == nil) [self setBody:[response objectForKey:@"body"]];
-    if ([self posted] == nil) [self setPosted:[response objectForKey:@"ago"]];
+    if ([self posted] == nil) [self setPosted:[response objectForKey:@"date"]];
     if ([self submitter] == nil && [response objectForKey:@"user"] != nil) [self setSubmitter:[[[HNUser alloc] initWithIdentifier:[response objectForKey:@"user"]] autorelease]];
     if ([self title] == nil) [self setTitle:[response objectForKey:@"title"]];
     if ([self destination] == nil) [self setDestination:[NSURL URLWithString:[response objectForKey:@"url"]]];

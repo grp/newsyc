@@ -92,14 +92,14 @@
         }
         
         // XXX: better sanity checks?
-        if (user && title && identifier) {
+        if (user != nil && title != nil && identifier != nil) {
             NSMutableDictionary *item = [NSMutableDictionary dictionary];
             [item setObject:user forKey:@"user"];
             [item setObject:points forKey:@"points"];
             [item setObject:title forKey:@"title"];
             [item setObject:comments forKey:@"numchildren"];
             [item setObject:href forKey:@"url"];
-            [item setObject:date forKey:@"ago"];
+            [item setObject:date forKey:@"date"];
             [item setObject:identifier forKey:@"identifier"];
             [result addObject:item];
         } else {

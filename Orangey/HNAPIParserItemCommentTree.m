@@ -81,14 +81,25 @@
         
         if (depth != nil) children = [NSMutableArray array];
         
+        if (user == nil && [body isEqual:@"[deleted]"]) {
+            // XXX: best way to handle deleted comments?
+            continue;
+            
+            identifier = [NSNumber numberWithInt:0];
+            user = @"[deleted]";
+            body = nil;
+            points = nil;
+        }
+        
+        // XXX: better sanity checking?
         NSMutableDictionary *item = [NSMutableDictionary dictionary];
-        [item setObject:user forKey:@"user"];
-        [item setObject:body forKey:@"body"];
-        [item setObject:identifier forKey:@"identifier"];
-        [item setObject:date forKey:@"ago"];
-        [item setObject:points forKey:@"points"];
+        if (user != nil) [item setObject:user forKey:@"user"];
+        if (body != nil) [item setObject:body forKey:@"body"];
+        if (date != nil) [item setObject:date forKey:@"date"];
+        if (points != nil) [item setObject:points forKey:@"points"];
         if (children != nil) [item setObject:children forKey:@"children"];
-
+        [item setObject:identifier forKey:@"identifier"];
+        
         if ([lasts count] >= [depth intValue]) [lasts removeObjectsInRange:NSMakeRange([depth intValue], [lasts count] - [depth intValue])];
         [lasts addObject:item];
         
