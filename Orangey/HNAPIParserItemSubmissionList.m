@@ -103,8 +103,7 @@
             [item setObject:identifier forKey:@"identifier"];
             [result addObject:item];
         } else {
-            NSLog(@"something bad happened.");
-            NSLog(@"the nodes is: %@ %@", first, second);
+            NSLog(@"Bug: Ignoring unparsable submission (more link?).");
         }
     }
     

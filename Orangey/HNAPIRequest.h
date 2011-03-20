@@ -6,11 +6,7 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "JSON.h"
-
-
-
 
 @interface HNAPIRequest : NSObject {
     id target;

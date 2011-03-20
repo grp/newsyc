@@ -14,7 +14,7 @@
 
 - (void)viewPressed:(SubmissionDetailsHeaderView *)view withEvent:(UIEvent *)event {
     if ([delegate respondsToSelector:@selector(submissionDetailsViewWasTapped:)]) {
-        [delegate submissionDetailsViewWasTapped:self];
+        [delegate performSelector:@selector(submissionDetailsViewWasTapped:) withObject:self];
     }
 }
 

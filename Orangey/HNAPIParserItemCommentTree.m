@@ -17,7 +17,7 @@
     NSMutableArray *result = [NSMutableArray array];
     NSMutableArray *lasts = [NSMutableArray array];
     
-    NSArray *comments = [document elementsMatchingPath:@"//table//tr[position()>1]//td//table//tr//table//tr"];
+    NSArray *comments = [document elementsMatchingPath:@"//table//tr[position()>1]//td//table//tr"];
     
     for (int i = 0; i < [comments count]; i++) {
         XMLElement *comment = [comments objectAtIndex:i];
@@ -83,6 +83,7 @@
         
         if (user == nil && [body isEqual:@"[deleted]"]) {
             // XXX: best way to handle deleted comments?
+            NSLog(@"Bug: Ignoring deleted comment.");
             continue;
             
             identifier = [NSNumber numberWithInt:0];
@@ -91,23 +92,25 @@
             points = nil;
         }
         
-        // XXX: better sanity checking?
-        NSMutableDictionary *item = [NSMutableDictionary dictionary];
-        if (user != nil) [item setObject:user forKey:@"user"];
-        if (body != nil) [item setObject:body forKey:@"body"];
-        if (date != nil) [item setObject:date forKey:@"date"];
-        if (points != nil) [item setObject:points forKey:@"points"];
-        if (children != nil) [item setObject:children forKey:@"children"];
-        [item setObject:identifier forKey:@"identifier"];
         
-        if ([lasts count] >= [depth intValue]) [lasts removeObjectsInRange:NSMakeRange([depth intValue], [lasts count] - [depth intValue])];
-        [lasts addObject:item];
+        if (user != nil && identifier != nil) {
+            NSMutableDictionary *item = [NSMutableDictionary dictionary];
+            [item setObject:user forKey:@"user"];
+            if (body != nil) [item setObject:body forKey:@"body"];
+            if (date != nil) [item setObject:date forKey:@"date"];
+            if (points != nil) [item setObject:points forKey:@"points"];
+            if (children != nil) [item setObject:children forKey:@"children"];
+            [item setObject:identifier forKey:@"identifier"];
         
-        if ([depth intValue] == 0) {
-            [result addObject:item];
-        } else {
-            NSMutableArray *children = [[lasts objectAtIndex:[depth intValue] - 1] objectForKey:@"children"];
-            [children addObject:item];
+            if ([lasts count] >= [depth intValue]) [lasts removeObjectsInRange:NSMakeRange([depth intValue], [lasts count] - [depth intValue])];
+            [lasts addObject:item];
+        
+            if ([depth intValue] == 0) {
+                [result addObject:item];
+            } else {
+                NSMutableArray *children = [[lasts objectAtIndex:[depth intValue] - 1] objectForKey:@"children"];
+                [children addObject:item];
+            }
         }
     }
         

@@ -49,7 +49,7 @@
     if (nodes == NULL) return nil;
     
     NSMutableArray *result = [NSMutableArray array];
-    for (NSInteger i = 0; i < nodes->nodeNr; i++) {
+    for (int i = 0; i < nodes->nodeNr; i++) {
         XMLElement *element = [[XMLElement alloc] initWithNode:nodes->nodeTab[i] inDocument:self];
         [result addObject:[element autorelease]];
     }
