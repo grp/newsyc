@@ -92,7 +92,11 @@
 
 - (void)viewDidUnload {
     [indicator release];
+    indicator = nil;
     [errorLabel release];
+    errorLabel = nil;
+    
+    loaded = NO;
     
     [super viewDidUnload];
 }

@@ -8,9 +8,11 @@
 
 #import "DetailsHeaderView.h"
 
-@class DTAttributedTextView;
-@interface CommentDetailsHeaderView : DetailsHeaderView {
+#import "DTAttributedTextView.h"
+
+@interface CommentDetailsHeaderView : DetailsHeaderView <UIActionSheetDelegate, DTAttributedTextViewDelegate> {
     DTAttributedTextView *textView;
+    NSURL *savedURL;
 }
 
 @end

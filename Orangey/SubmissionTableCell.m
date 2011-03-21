@@ -7,6 +7,7 @@
 //
 
 #import "HNKit.h"
+#import "NSString+Entities.h"
 
 #import "SubmissionTableCell.h"
 
@@ -66,7 +67,7 @@
     NSString *point = [submission points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [submission points]];
     NSString *comment = [submission children] == 0 ? @"no comments" : [submission children] == 1 ? @"1 comment" : [NSString stringWithFormat:@"%d comments", [submission children]];
     NSString *points = [NSString stringWithFormat:@"%@ • %@", point, comment];
-    NSString *title = [submission title];
+    NSString *title = [[submission title] stringByDecodingHTMLEntities];
     
     if ([self isHighlighted] || [self isSelected]) [[UIColor whiteColor] set];
     

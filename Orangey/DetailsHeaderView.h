@@ -6,16 +6,25 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+@protocol DetailsHeaderViewDelegate;
+
 @class HNEntry;
 @interface DetailsHeaderView : UIControl {
     HNEntry *entry;
-    id delegate;
+    id<DetailsHeaderViewDelegate> delegate;
 }
 
-@property (nonatomic, assign) id delegate;
+@property (nonatomic, assign) id<DetailsHeaderViewDelegate> delegate;
 @property (nonatomic, retain) HNEntry *entry;
 
 - (CGFloat)suggestedHeightWithWidth:(CGFloat)width;
 + (CGSize)offsets;
+
+@end
+
+@protocol DetailsHeaderViewDelegate<NSObject>
+@optional
+
+- (void)detailsHeaderView:(DetailsHeaderView *)header selectedURL:(NSURL *)url;
 
 @end

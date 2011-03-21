@@ -12,10 +12,9 @@
 
 @implementation DTLinkButton
 
-
 - (id)initWithFrame:(CGRect)frame
 {
-	if (self = [super initWithFrame:frame])
+	if ((self = [super initWithFrame:frame]))
 	{
 		self.userInteractionEnabled = YES;
 		self.enabled = YES;
@@ -23,8 +22,8 @@
 		UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, 0);
 		CGContextRef ctx = UIGraphicsGetCurrentContext();
 		
-		CGPathRef roundedRectPath = newPathForRoundedRect(self.bounds, 3.0, YES, YES);
-		[[UIColor colorWithHTMLName:@"#BBBBBB"] set];
+		CGPathRef roundedRectPath = newPathForRoundedRect(self.bounds, 2.0, YES, YES);
+		[[UIColor colorWithHTMLName:@"#AAAAAA"] set];
 		CGContextAddPath(ctx, roundedRectPath);
 		CGContextFillPath(ctx);
 		UIImage *background = UIGraphicsGetImageFromCurrentImageContext();
@@ -35,7 +34,6 @@
 		
 		UIGraphicsEndImageContext();
 	}
-	
 	
 	return self;
 }

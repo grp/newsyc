@@ -23,8 +23,8 @@
 
 @implementation CommentListController
 
-- (void)submissionDetailsViewWasTapped:(UIView *)view {
-    BrowserController *controller = [[BrowserController alloc] initWithURL:[(HNEntry *) source destination]];
+- (void)detailsHeaderView:(DetailsHeaderView *)header selectedURL:(NSURL *)url {
+    BrowserController *controller = [[BrowserController alloc] initWithURL:url];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 

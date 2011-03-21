@@ -7,14 +7,15 @@
 //
 
 #import "HNKit.h"
+#import "NSString+Entities.h"
 
 #import "SubmissionDetailsHeaderView.h"
 
 @implementation SubmissionDetailsHeaderView
 
 - (void)viewPressed:(SubmissionDetailsHeaderView *)view withEvent:(UIEvent *)event {
-    if ([delegate respondsToSelector:@selector(submissionDetailsViewWasTapped:)]) {
-        [delegate performSelector:@selector(submissionDetailsViewWasTapped:) withObject:self];
+    if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
+        [delegate detailsHeaderView:self selectedURL:[entry destination]];
     }
 }
 
@@ -47,7 +48,7 @@
     CGSize bounds = [self bounds].size;
     CGSize offsets = [[self class] offsets];
     
-    NSString *title = [entry title];
+    NSString *title = [[entry title] stringByDecodingHTMLEntities];
     NSString *date = [entry posted];
     NSString *points = [entry points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [entry points]];
     

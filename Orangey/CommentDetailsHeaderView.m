@@ -7,6 +7,7 @@
 //
 
 #import "DTAttributedTextView.h"
+#import "DTLinkButton.h"
 #import "NSAttributedString+HTML.h"
 
 #import "HNKit.h"
@@ -23,6 +24,7 @@
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         textView = [[DTAttributedTextView alloc] init];
+        [textView setTextDelegate:self];
         [self addSubview:textView];
     }
     
@@ -84,6 +86,62 @@
     daterect.origin.x = bounds.width / 2 + offsets.width;
     daterect.origin.y = bounds.height - offsets.height - daterect.size.height;
     [date drawInRect:daterect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
+}
+
+- (UIView *)attributedTextView:(DTAttributedTextView *)attributedTextView viewForAttributedString:(NSAttributedString *)string frame:(CGRect)frame {
+	NSDictionary *attributes = [string attributesAtIndex:0 effectiveRange:NULL];
+	NSURL *link = [attributes objectForKey:@"DTLink"];
+	
+	if (link != nil) {
+		DTLinkButton *button = [[[DTLinkButton alloc] initWithFrame:frame] autorelease];
+		[button setUrl:link];
+		[button setAlpha:0.4f];
+        
+		[button addTarget:self action:@selector(linkPushed:) forControlEvents:UIControlEventTouchUpInside];
+		UILongPressGestureRecognizer *longPress = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(linkLongPressed:)] autorelease];
+		[button addGestureRecognizer:longPress];
+        
+		return button;
+	}
+	
+	return nil;
+}
+
+- (void)linkPushed:(DTLinkButton *)button {
+	if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
+        [delegate detailsHeaderView:self selectedURL:[button url]];
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
+	if (index == [sheet cancelButtonIndex]) return;
+	
+    if (index == [sheet firstOtherButtonIndex]) {
+        [[UIApplication sharedApplication] openURL:savedURL];
+    } else if (index == [sheet firstOtherButtonIndex] + 1) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        [pasteboard setURL:savedURL];
+        [pasteboard setString:[savedURL absoluteString]];
+    }
+    
+    savedURL = nil;
+}
+
+- (void)linkLongPressed:(UILongPressGestureRecognizer *)gesture {
+	if (gesture.state == UIGestureRecognizerStateBegan) {
+		DTLinkButton *button = (id) [gesture view];
+        [button setHighlighted:NO];
+        savedURL = [button url];
+		
+        UIActionSheet *action = [[[UIActionSheet alloc]
+            initWithTitle:[[button url] absoluteString]
+            delegate:self
+            cancelButtonTitle:@"Cancel"
+            destructiveButtonTitle:nil
+            otherButtonTitles:@"Open in Safari", @"Copy Link", nil
+        ] autorelease];
+        [action showFromRect:[button frame] inView:[button superview] animated:YES];
+    }
 }
 
 @end

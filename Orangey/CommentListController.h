@@ -8,9 +8,10 @@
 
 #import "EntryListController.h"
 #import "EntryActionsView.h"
+#import "DetailsHeaderView.h"
 
 @class HeaderContainerView;
-@interface CommentListController : EntryListController <EntryActionsViewDelegate> {
+@interface CommentListController : EntryListController <EntryActionsViewDelegate, DetailsHeaderViewDelegate> {
     HeaderContainerView *headerContainerView;
     UIView *containerContainer;
     CGFloat suggestedHeaderHeight;

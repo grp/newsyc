@@ -6,16 +6,23 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+typedef enum {
+    kHNVoteDirectionDown,
+    kHNVoteDirectionUp
+} HNVoteDirection;
+
+typedef NSString *HNSessionToken;
+
 @class HNUser;
 @interface HNSession : NSObject {
-    NSString *token;
+    HNSessionToken token;
     HNUser *user;
 }
 
 @property (nonatomic, retain) HNUser *user;
 @property (nonatomic, copy) NSString *token;
 
-- (id)initWithUser:(HNUser *)user token:(NSString *)token;
+- (id)initWithUser:(HNUser *)user token:(HNSessionToken)token;
 - (id)initWithUser:(HNUser *)user password:(NSString *)password;
 
 @end
