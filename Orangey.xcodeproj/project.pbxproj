@@ -76,6 +76,7 @@
 		7DC9291C13343B3800AEEBB4 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC9291A13343B3800AEEBB4 /* blueArrow@2x.png */; };
 		7DC9292113347AD200AEEBB4 /* XMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC9291E13347AD200AEEBB4 /* XMLDocument.m */; };
 		7DC9292213347AD200AEEBB4 /* XMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC9292013347AD200AEEBB4 /* XMLElement.m */; };
+		7DD5565E13386DDE007346F7 /* HNSessionAuthenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5565D13386DDE007346F7 /* HNSessionAuthenticator.m */; };
 		7DDC36C0132CBB2000311955 /* NSDictionary+Parameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDC36BF132CBB2000311955 /* NSDictionary+Parameters.m */; };
 		7DDC36C4132CCE1700311955 /* NSString+Tags.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDC36C3132CCE1700311955 /* NSString+Tags.m */; };
 		7DDF84861331D26100FE1F5E /* NSString+Entities.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDF84851331D26100FE1F5E /* NSString+Entities.m */; };
@@ -224,6 +225,8 @@
 		7DC9291E13347AD200AEEBB4 /* XMLDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLDocument.m; sourceTree = "<group>"; };
 		7DC9291F13347AD200AEEBB4 /* XMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLElement.h; sourceTree = "<group>"; };
 		7DC9292013347AD200AEEBB4 /* XMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLElement.m; sourceTree = "<group>"; };
+		7DD5565C13386DDE007346F7 /* HNSessionAuthenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNSessionAuthenticator.h; sourceTree = "<group>"; };
+		7DD5565D13386DDE007346F7 /* HNSessionAuthenticator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNSessionAuthenticator.m; sourceTree = "<group>"; };
 		7DDC36BE132CBB2000311955 /* NSDictionary+Parameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Parameters.h"; sourceTree = "<group>"; };
 		7DDC36BF132CBB2000311955 /* NSDictionary+Parameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Parameters.m"; sourceTree = "<group>"; };
 		7DDC36C2132CCE1600311955 /* NSString+Tags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Tags.h"; sourceTree = "<group>"; };
@@ -445,6 +448,8 @@
 				7D1F98D81322216E0059EBBB /* HNAPIRequest.m */,
 				7D148E7B132DD8F0008FBF32 /* HNSession.h */,
 				7D148E7C132DD8F0008FBF32 /* HNSession.m */,
+				7DD5565C13386DDE007346F7 /* HNSessionAuthenticator.h */,
+				7DD5565D13386DDE007346F7 /* HNSessionAuthenticator.m */,
 			);
 			name = HNKit;
 			sourceTree = "<group>";
@@ -716,6 +721,7 @@
 				7D8A6606133339FD002012AA /* EGORefreshTableHeaderView.m in Sources */,
 				7DC9292113347AD200AEEBB4 /* XMLDocument.m in Sources */,
 				7DC9292213347AD200AEEBB4 /* XMLElement.m in Sources */,
+				7DD5565E13386DDE007346F7 /* HNSessionAuthenticator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,15 +9,28 @@
 #import "HNSession.h"
 #import "HNKit.h"
 
-@implementation HNSession
-@synthesize user, token;
+static HNSession *current = nil;
 
-- (id)initWithUser:(HNUser *)user token:(NSString *)token {
-    return nil;
+@implementation HNSession
+@synthesize user, token, loaded;
+
++ (id)currentSession {
+    return current;
 }
 
-- (id)initWithUser:(HNUser *)user password:(NSString *)password {
-    return nil;
++ (void)setCurrentSession:(HNSession *)session {
+    [current autorelease];
+    current = [session retain];
+}
+
+- (id)initWithUser:(HNUser *)user_ token:(NSString *)token_ {
+    if ((self = [super init])) {
+        [self setUser:user_];
+        [self setToken:token_];
+        [self setLoaded:YES];
+    }
+    
+    return self;
 }
 
 @end

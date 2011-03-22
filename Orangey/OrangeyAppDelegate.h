@@ -11,7 +11,6 @@
 @interface OrangeyAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, StatusDelegate> {
     UIWindow *window;
     UITabBarController *tabBarController;
-    NSArray *sessions;
 }
 
 @end

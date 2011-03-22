@@ -15,14 +15,18 @@ typedef NSString *HNSessionToken;
 
 @class HNUser;
 @interface HNSession : NSObject {
+    BOOL loaded;
     HNSessionToken token;
     HNUser *user;
 }
 
 @property (nonatomic, retain) HNUser *user;
 @property (nonatomic, copy) NSString *token;
+@property (nonatomic, assign, getter=isLoaded) BOOL loaded;
+
++ (id)currentSession;
++ (void)setCurrentSession:(HNSession *)session;
 
 - (id)initWithUser:(HNUser *)user token:(HNSessionToken)token;
-- (id)initWithUser:(HNUser *)user password:(NSString *)password;
 
 @end
