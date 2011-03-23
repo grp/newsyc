@@ -12,8 +12,11 @@
 #import "CommentListController.h"
 #import "ProfileController.h"
 #import "MoreController.h"
+#import "LoginController.h"
 
 #import "HNKit.h"
+
+#define kNavigationTintOrange [UIColor colorWithRed:0.9f green:0.3 blue:0.0f alpha:1.0f]
 
 @implementation OrangeyAppDelegate
 
@@ -51,7 +54,7 @@
     for (int i = 0; i < [items count]; i++) {
         UIViewController *item = [items objectAtIndex:i];
         UINavigationController *navigation = [[[UINavigationController alloc] initWithRootViewController:item] autorelease];
-        [[navigation navigationBar] setTintColor:[UIColor colorWithRed:0.9f green:0.3 blue:0.0f alpha:1.0f]];
+        [[navigation navigationBar] setTintColor:kNavigationTintOrange];
         [items replaceObjectAtIndex:i withObject:navigation];
     }
     [tabBarController setViewControllers:items];

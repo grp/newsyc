@@ -23,9 +23,11 @@ static HNSession *current = nil;
     current = [session retain];
 }
 
-- (id)initWithUser:(HNUser *)user_ token:(NSString *)token_ {
+- (id)initWithUsername:(HNUser *)username token:(NSString *)token_ {
     if ((self = [super init])) {
-        [self setUser:user_];
+        HNUser *user_ = [[HNUser alloc] initWithIdentifier:username];
+        
+        [self setUser:[user_ autorelease]];
         [self setToken:token_];
         [self setLoaded:YES];
     }

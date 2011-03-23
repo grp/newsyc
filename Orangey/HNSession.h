@@ -27,6 +27,6 @@ typedef NSString *HNSessionToken;
 + (id)currentSession;
 + (void)setCurrentSession:(HNSession *)session;
 
-- (id)initWithUser:(HNUser *)user token:(HNSessionToken)token;
+- (id)initWithUsername:(NSString *)username token:(HNSessionToken)token;
 
 @end

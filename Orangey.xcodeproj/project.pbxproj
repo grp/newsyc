@@ -61,6 +61,8 @@
 		7D394B111325D5F300926C11 /* upvote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D394B0B1325D5F300926C11 /* upvote@2x.png */; };
 		7D394B141325F1F600926C11 /* flag.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D394B121325F1F200926C11 /* flag.png */; };
 		7D394B151325F1F600926C11 /* flag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D394B131325F1F300926C11 /* flag@2x.png */; };
+		7D3B18771339AC2F00C626E0 /* LoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3B18761339AC2F00C626E0 /* LoginController.m */; };
+		7D3B187A1339C05000C626E0 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D3B18791339C05000C626E0 /* Icon.png */; };
 		7D4F647D13233A0300C9A548 /* EntryListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1F991E132335800059EBBB /* EntryListController.m */; };
 		7D876EB91329E51600904F68 /* InstapaperAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D876EB81329E51500904F68 /* InstapaperAPI.m */; };
 		7D876EC01329E9AF00904F68 /* NSString+URLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D876EBF1329E9AF00904F68 /* NSString+URLEncoding.m */; };
@@ -200,6 +202,9 @@
 		7D394B0B1325D5F300926C11 /* upvote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upvote@2x.png"; sourceTree = "<group>"; };
 		7D394B121325F1F200926C11 /* flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flag.png; sourceTree = "<group>"; };
 		7D394B131325F1F300926C11 /* flag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flag@2x.png"; sourceTree = "<group>"; };
+		7D3B18751339AC2F00C626E0 /* LoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginController.h; sourceTree = "<group>"; };
+		7D3B18761339AC2F00C626E0 /* LoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginController.m; sourceTree = "<group>"; };
+		7D3B18791339C05000C626E0 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		7D876EB71329E51500904F68 /* InstapaperAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperAPI.h; sourceTree = "<group>"; };
 		7D876EB81329E51500904F68 /* InstapaperAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperAPI.m; sourceTree = "<group>"; };
 		7D876EBB1329E69F00904F68 /* StatusDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusDelegate.h; sourceTree = "<group>"; };
@@ -358,6 +363,7 @@
 		7D1F98981320CF720059EBBB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7D3B18791339C05000C626E0 /* Icon.png */,
 				7D876EC31329EDC100904F68 /* Images */,
 				7D876EC11329EDB900904F68 /* Settings.bundle */,
 				7D1F98991320CF720059EBBB /* Orangey-Info.plist */,
@@ -422,6 +428,8 @@
 				7DEE29E51325FE9E002CC9FD /* BrowserController.m */,
 				7D8BDB8A13287A97007CA615 /* MoreController.h */,
 				7D8BDB8B13287A97007CA615 /* MoreController.m */,
+				7D3B18751339AC2F00C626E0 /* LoginController.h */,
+				7D3B18761339AC2F00C626E0 /* LoginController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -645,6 +653,7 @@
 				7DEE29EF1326105B002CC9FD /* forward@2x.png in Resources */,
 				7DC9291B13343B3800AEEBB4 /* blueArrow.png in Resources */,
 				7DC9291C13343B3800AEEBB4 /* blueArrow@2x.png in Resources */,
+				7D3B187A1339C05000C626E0 /* Icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -722,6 +731,7 @@
 				7DC9292113347AD200AEEBB4 /* XMLDocument.m in Sources */,
 				7DC9292213347AD200AEEBB4 /* XMLElement.m in Sources */,
 				7DD5565E13386DDE007346F7 /* HNSessionAuthenticator.m in Sources */,
+				7D3B18771339AC2F00C626E0 /* LoginController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

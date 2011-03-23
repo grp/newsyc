@@ -6,8 +6,30 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "HNSession.h"
+
+@protocol HNSessionAuthenticatorDelegate;
+
 @interface HNSessionAuthenticator : NSObject {
+    NSURLConnection *connection;
     
+    id<HNSessionAuthenticatorDelegate> delegate;
+    NSString *username;
+    NSString *password;
 }
+
+@property (nonatomic, assign) id<HNSessionAuthenticatorDelegate> delegate;
+
+- (id)initWithUsername:(NSString *)username password:(NSString *)password;
+- (void)beginAuthenticationRequest;
+
+@end
+
+@protocol HNSessionAuthenticatorDelegate <NSObject>
+
+// Success: we got a token.
+- (void)sessionAuthenticator:(HNSessionAuthenticator *)authenticator didRecieveToken:(HNSessionToken)token;
+// Failure: username or password invalid or network error.
+- (void)sessionAuthenticatorDidRecieveFailure:(HNSessionAuthenticator *)authenticator;
 
 @end

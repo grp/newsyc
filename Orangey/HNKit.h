@@ -31,3 +31,6 @@ typedef NSString *HNPageType;
 #import "HNAPIParserItemUserProfile.h"
 #import "HNAPIParserItemCommentTree.h"
 #import "HNAPIParserItemSubmissionList.h"
+#import "HNSession.h"
+#import "HNSessionAuthenticator.h"
+
