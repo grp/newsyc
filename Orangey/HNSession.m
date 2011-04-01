@@ -77,7 +77,6 @@ static HNSession *current = nil;
 }
 
 - (void)replyToEntry:(HNEntry *)entry withBody:(NSString *)body target:(id)target action:(SEL)action {
-    NSLog(@"reply: %@ %@", entry, body);
     HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeReply];
     [submission setBody:body];
     [submission setTarget:entry];
