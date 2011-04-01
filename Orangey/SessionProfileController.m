@@ -98,16 +98,20 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    // XXX: because this navigation item is shown for every tab, this is a gigantic hack:
+    // we are removing it and adding it manually as this view is shown/hidden :(
+    // maybe this should be a button in the table view instead?
     [[[self tabBarController] navigationItem] setLeftBarButtonItem:source != nil ? logoutItem : nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
+    // If you logged in somewhere else while this view wasn't visible,
+    // we should reflect that change once it does become visible.
     if (source == nil && [HNSession currentSession] != nil) {
         [self setSource:[[HNSession currentSession] user]];
-        [self performInitialLoadIfPossible];
     }
+    
+    [super viewWillAppear:animated];
 }
 
 - (void)loadView {
