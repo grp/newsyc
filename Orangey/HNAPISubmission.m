@@ -121,11 +121,12 @@
             }
         }
         
+        [document release];
         connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
         [connection start];
     } else if (loadingState == 2) {
         // Here we "simulate" the action on the locally cached items.
-        // XXX: This should really cause a reload action on this element (and it's parent?)
+        // XXX: This should really cause a reload action on this element (and it's parent?) 
         
         if ([submission type] == kHNSubmissionTypeVote) {
             if ([submission direction] == kHNVoteDirectionUp) {
