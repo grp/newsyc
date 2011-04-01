@@ -101,6 +101,15 @@
     [[[self tabBarController] navigationItem] setLeftBarButtonItem:source != nil ? logoutItem : nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if (source == nil && [HNSession currentSession] != nil) {
+        [self setSource:[[HNSession currentSession] user]];
+        [self performInitialLoadIfPossible];
+    }
+}
+
 - (void)loadView {
     [super loadView];
     
