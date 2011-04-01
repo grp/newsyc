@@ -69,7 +69,7 @@
     NSString *user = [[comment submitter] identifier];
     NSString *date = [comment posted];
     NSString *points = [comment points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [comment points]];
-    NSString *comments = [comment children] == 0 ? @"" : [comment children] == 1 ? @"1 comment" : [NSString stringWithFormat:@"%d comments", [comment children]];
+    NSString *comments = [comment children] == 0 ? @"" : [comment children] == 1 ? @"1 reply" : [NSString stringWithFormat:@"%d replies", [comment children]];
     NSString *body = [[self class] formatBodyText:[comment body]];
     
     if ([self isHighlighted] || [self isSelected]) [[UIColor whiteColor] set];
