@@ -20,6 +20,7 @@ static int XMLElementOutputCloseCallback(void *context) {
     [cachedAttributes release];
     [cachedContent release];
     [document release];
+    
     [super dealloc];
 }
 

@@ -11,7 +11,6 @@
 #import "HNKit.h"
 
 #import "EntryActionsView.h"
-#import "SolidToolbar.h"
 
 @implementation EntryActionsView
 @synthesize entry, delegate;
@@ -36,48 +35,24 @@
     [delegate entryActionsView:self didSelectItem:kEntryActionsViewItemSubmitter];
 }
 
+- (void)_updateItems {
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [self setItems:[NSArray arrayWithObjects:replyItem, flexibleSpace, upvoteItem, flexibleSpace, flagItem, flexibleSpace, downvoteItem, flexibleSpace, submitterItem, nil]];
+    [flexibleSpace release];
+}
+
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         [self setClipsToBounds:YES];
+        [self setTintColor:[UIColor colorWithRed:0.9f green:0.3 blue:0.0f alpha:1.0f]];
         
-        submitterButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
-        CGFloat buttonWidth = [self bounds].size.width * 0.385f;
-        [submitterButton setFrame:CGRectMake([self bounds].size.width - buttonWidth - 15.0f, -2.0f, buttonWidth + 30.0f, [self bounds].size.height + 4.0f)];
-        [self addSubview:submitterButton];
-        [submitterButton addTarget:self action:@selector(submitterTapped:) forControlEvents:UIControlEventTouchUpInside];
+        upvoteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"upvote.png"] style:UIBarButtonItemStylePlain target:self action:@selector(upvoteTapped:)];
+        replyItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reply.png"] style:UIBarButtonItemStylePlain target:self action:@selector(replyTapped:)];
+        flagItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"flag.png"] style:UIBarButtonItemStylePlain target:self action:@selector(flagTapped:)];
+        downvoteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"downvote.png"] style:UIBarButtonItemStylePlain target:self action:@selector(downvoteTapped:)];
+        submitterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"profile.png"] style:UIBarButtonItemStylePlain target:self action:@selector(submitterTapped:)];
         
-        UIButton *upvote = [UIButton buttonWithType:UIButtonTypeCustom];
-        [upvote setFrame:CGRectMake(0, 0, 21.0f, 18.0f)];
-        [upvote setImage:[UIImage imageNamed:@"upvote.png"] forState:UIControlStateNormal];
-        [upvote addTarget:self action:@selector(upvoteTapped:) forControlEvents:UIControlEventTouchUpInside];
-        UIBarButtonItem *upvoteItem = [[UIBarButtonItem alloc] initWithCustomView:upvote];
-        
-        UIButton *reply = [UIButton buttonWithType:UIButtonTypeCustom];
-        [reply setFrame:CGRectMake(0, 0, 25.0f, 20.0f)];
-        [reply setImage:[UIImage imageNamed:@"reply.png"] forState:UIControlStateNormal];
-        [reply addTarget:self action:@selector(upvoteTapped:) forControlEvents:UIControlEventTouchUpInside];
-        UIBarButtonItem *replyItem = [[UIBarButtonItem alloc] initWithCustomView:reply];
-        
-        UIButton *flag = [UIButton buttonWithType:UIButtonTypeCustom];
-        [flag setFrame:CGRectMake(0, 0, 25.0f, 20.0f)];
-        [flag setImage:[UIImage imageNamed:@"flag.png"] forState:UIControlStateNormal];
-        [flag addTarget:self action:@selector(flagTapped:) forControlEvents:UIControlEventTouchUpInside];
-        UIBarButtonItem *flagItem = [[UIBarButtonItem alloc] initWithCustomView:flag];
-        
-        UIButton *downvote = [UIButton buttonWithType:UIButtonTypeCustom];
-        [downvote setFrame:CGRectMake(0, 0, 21.0f, 18.0f)];
-        [downvote setImage:[UIImage imageNamed:@"downvote.png"] forState:UIControlStateNormal];
-        [downvote addTarget:self action:@selector(downvoteTapped:) forControlEvents:UIControlEventTouchUpInside];
-        UIBarButtonItem *downvoteItem = [[UIBarButtonItem alloc] initWithCustomView:downvote];
-        
-        UIBarButtonItem *padding1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
-        UIBarButtonItem *padding2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
-        UIBarButtonItem *padding3 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
-        
-        toolbar = [[SolidToolbar alloc] initWithFrame:CGRectMake(0, 0, [self bounds].size.width - buttonWidth, [self bounds].size.height)];
-        [toolbar setItems:[NSArray arrayWithObjects:[upvoteItem autorelease], [padding1 autorelease], [replyItem autorelease], [padding2 autorelease], [flagItem autorelease], [padding3 autorelease], [downvoteItem autorelease], nil]];
-        [toolbar setTintColor:[UIColor whiteColor]];
-        [self addSubview:toolbar];
+        [self _updateItems];
     }
     
     return self;
@@ -87,12 +62,15 @@
     [entry autorelease];
     entry = [entry_ retain];
     
-    [submitterButton setTitle:[[entry submitter] identifier] forState:UIControlStateNormal];
+    [self _updateItems];
 }
 
 - (void)dealloc {
-    [submitterButton release];
-    [toolbar release];
+    [upvoteItem release];
+    [replyItem release];
+    [flagItem release];
+    [downvoteItem release];
+    [submitterItem release];
     
     [super dealloc];
 }

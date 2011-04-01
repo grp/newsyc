@@ -57,7 +57,7 @@
     HNEntry *entry = [[(HNEntry *) source entries] objectAtIndex:[indexPath row]];
     
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [controller setTitle:@"Comments"];
+    [controller setTitle:@"Submission"];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 

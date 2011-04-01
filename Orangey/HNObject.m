@@ -24,6 +24,7 @@
     if (![[url_ host] isEqualToString:kHNWebsiteHost]) return nil;
     
     NSString *type_ = [url_ path];
+    if ([[type_ substringToIndex:1] isEqual:@"/"]) type_ = [type_ substringFromIndex:1];
     id identifier_ = [self _parseParametersWithType:type_ parameters:[url_ parameterDictionary]];
     return [NSDictionary dictionaryWithObjectsAndKeys:type_, @"type", identifier_, @"identifier", nil];
 }

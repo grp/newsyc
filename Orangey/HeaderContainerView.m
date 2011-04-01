@@ -15,7 +15,7 @@
 #import "EntryActionsView.h"
 
 @implementation HeaderContainerView
-@synthesize entryActionsView, detailsHeaderView, entry;
+@synthesize detailsHeaderView, entry;
 
 - (id)initWithEntry:(HNEntry *)entry_ widthWidth:(CGFloat)width {
     if ((self = [super init])) {
@@ -34,18 +34,9 @@
         [detailsHeaderView setFrame:headerrect];
         [self addSubview:detailsHeaderView];
         
-        CGRect actionsrect;
-        actionsrect.size.width = width;
-        actionsrect.size.height = 34.0f;
-        actionsrect.origin.x = 0;
-        actionsrect.origin.y = [detailsHeaderView bounds].size.height;
-        entryActionsView = [[EntryActionsView alloc] initWithFrame:actionsrect];
-        [entryActionsView setEntry:entry];
-        [self addSubview:entryActionsView];
-        
         CGRect selfrect;
         selfrect.size.width = width;
-        selfrect.size.height = [detailsHeaderView bounds].size.height + [entryActionsView bounds].size.height;
+        selfrect.size.height = [detailsHeaderView bounds].size.height;
         selfrect.origin = CGPointZero;
         [self setFrame:selfrect];
     }
@@ -54,7 +45,6 @@
 }
 
 - (void)dealloc {
-    [entryActionsView release];
     [detailsHeaderView release];
     
     [super dealloc];

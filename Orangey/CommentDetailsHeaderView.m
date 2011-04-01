@@ -63,6 +63,8 @@
     
     NSString *date = [entry posted];
     NSString *points = [entry points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [entry points]];
+    NSString *pointdate = [NSString stringWithFormat:@"%@ • %@", points, date];
+    NSString *user = [[entry submitter] identifier];
     
     CGRect titlerect;
     titlerect.origin.y = offsets.height;
@@ -74,18 +76,18 @@
     [[UIColor grayColor] set];
     CGRect pointsrect;
     pointsrect.size.width = bounds.width / 2 - (offsets.width * 2);
-    pointsrect.size.height = [points sizeWithFont:[[self class] subtleFont]].height;
+    pointsrect.size.height = [pointdate sizeWithFont:[[self class] subtleFont]].height;
     pointsrect.origin.x = offsets.width;
-    pointsrect.origin.y = bounds.height - offsets.height - pointsrect.size.height;
-    [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+    pointsrect.origin.y = bounds.height - offsets.height - offsets.height - pointsrect.size.height;
+    [pointdate drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     
-    [[UIColor grayColor] set];
-    CGRect daterect;
-    daterect.size.width = bounds.width / 2 - (offsets.width * 2);
-    daterect.size.height = [date sizeWithFont:[[self class] subtleFont]].height;
-    daterect.origin.x = bounds.width / 2 + offsets.width;
-    daterect.origin.y = bounds.height - offsets.height - daterect.size.height;
-    [date drawInRect:daterect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
+    [[UIColor darkGrayColor] set];
+    CGRect userrect;
+    userrect.size.width = bounds.width / 2 - (offsets.width * 2);
+    userrect.size.height = [user sizeWithFont:[[self class] subtleFont]].height;
+    userrect.origin.x = bounds.width / 2 + offsets.width;
+    userrect.origin.y = bounds.height - offsets.height - offsets.height - userrect.size.height;
+    [user drawInRect:userrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
 }
 
 - (UIView *)attributedTextView:(DTAttributedTextView *)attributedTextView viewForAttributedString:(NSAttributedString *)string frame:(CGRect)frame {

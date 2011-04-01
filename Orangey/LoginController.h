@@ -8,7 +8,10 @@
 
 #import "HNKit.h"
 
+@protocol LoginControllerDelegate;
+
 @interface LoginController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, HNSessionAuthenticatorDelegate> {
+    UIImageView *backgroundImageView;
     UITableView *tableView;
     UITableViewCell *usernameCell;
     UITextField *usernameField;
@@ -18,6 +21,17 @@
     UIBarButtonItem *completeItem;
     UIBarButtonItem *loadingItem;
     HNSessionAuthenticator *authenticator;
+    id<LoginControllerDelegate> delegate;
 }
+
+@property (nonatomic, assign) id<LoginControllerDelegate> delegate;
+
+@end
+
+@protocol LoginControllerDelegate<NSObject>
+@optional
+
+- (void)loginControllerDidLogin:(LoginController *)controller;
+- (void)loginControllerDidCancel:(LoginController *)controller;
 
 @end

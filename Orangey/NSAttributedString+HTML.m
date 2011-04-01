@@ -784,9 +784,10 @@ CTParagraphStyleRef createParagraphStyle(CGFloat paragraphSpacingBefore, CGFloat
 			}
 			else if ([tagName isEqualToString:@"p"])
 			{
-				if (tagOpen)
+                if (tagOpen)
 				{
-					[currentTag setObject:[NSNumber numberWithFloat:12.0] forKey:@"ParagraphSpacing"];
+					//[currentTag setObject:[NSNumber numberWithFloat:12.0] forKey:@"ParagraphSpacing"];
+                    nextParagraphAdditionalSpaceBefore = 12.0;
 
 					seenPreviousParagraph = YES;
 				}
@@ -801,6 +802,7 @@ CTParagraphStyleRef createParagraphStyle(CGFloat paragraphSpacingBefore, CGFloat
                 if (tagOpen)
 				{
 					[currentTag setObject:[NSNumber numberWithFloat:12.0] forKey:@"ParagraphSpacing"];
+                    [currentTag setObject:[NSNumber numberWithBool:YES] forKey:@"PreserveNewlines"];
                     currentFontDescriptor.fontFamily = @"Courier";
                     
 					seenPreviousParagraph = YES;
@@ -982,7 +984,9 @@ CTParagraphStyleRef createParagraphStyle(CGFloat paragraphSpacingBefore, CGFloat
 					}
 					
 					// HTML ignores newlines
-					tagContents = [tagContents stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+                    if (![[currentTag objectForKey:@"PreserveNewlines"] boolValue]) {
+                        tagContents = [tagContents stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+                    }
 					
 					if (needsListItemStart)
 					{

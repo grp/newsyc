@@ -48,9 +48,9 @@
     if ([self title] == nil) [self setTitle:[response objectForKey:@"title"]];
     if ([self destination] == nil) [self setDestination:[NSURL URLWithString:[response objectForKey:@"url"]]];
     
-    if ([response objectForKey:@"parent"] != nil) {
+    if ([response objectForKey:@"parent"] != nil && [self parent] == nil) {
         HNEntry *parent_ = [[HNEntry alloc] initWithIdentifier:[response objectForKey:@"parent"]];
-        if ([self parent] == nil) [self setParent:[parent_ autorelease]];
+        [self setParent:[parent_ autorelease]];
     }
     
     NSArray *children_ = [response objectForKey:@"children"];

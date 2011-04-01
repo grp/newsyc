@@ -88,12 +88,12 @@
 		NSString *text = [self aboutText];
 		CGSize constraint = CGSizeMake([[self view] bounds].size.width - 20.0f, 4000.0f);
 		CGSize size = [text sizeWithFont:[UIFont systemFontOfSize:16.0] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-		if (size.height >= 44.0f) return size.height + 20.0;
+        size.height += 20.0f;
+		if (size.height >= 64.0f) return size.height;
 		else return 64.0;
 	}
     
 	return 44.0;
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -8,15 +8,11 @@
 
 #import "OrangeyAppDelegate.h"
 #import "InstapaperAPI.h"
-#import "SubmissionListController.h"
-#import "CommentListController.h"
-#import "ProfileController.h"
-#import "MoreController.h"
-#import "LoginController.h"
+#import "NavigationController.h"
+#import "MainTabBarController.h"
 
 #import "HNKit.h"
 
-#define kNavigationTintOrange [UIColor colorWithRed:0.9f green:0.3 blue:0.0f alpha:1.0f]
 
 @implementation OrangeyAppDelegate
 
@@ -28,36 +24,12 @@
     [[InstapaperAPI sharedInstance] setPassword:[defaults objectForKey:@"instapaper-password"]];
     
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    tabBarController = [[UITabBarController alloc] init];
-    [window setRootViewController:tabBarController];
+    navigationController = [[NavigationController alloc] init];
+    [window setRootViewController:navigationController];
     
-    HNEntry *homeEntry = [[[HNEntry alloc] initWithType:kHNPageTypeSubmissions] autorelease];
-    SubmissionListController *home = [[[SubmissionListController alloc] initWithSource:homeEntry] autorelease];
-    [home setTitle:@"Hacker News"];
-    [home setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Home" image:[UIImage imageNamed:@"home.png"] tag:0] autorelease]];
-    
-    HNEntry *newEntry = [[[HNEntry alloc] initWithType:kHNPageTypeNewSubmissions] autorelease];
-    SubmissionListController *new = [[[SubmissionListController alloc] initWithSource:newEntry] autorelease];
-    [new setTitle:@"New Submissions"];
-    [new setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"New" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
-    
-    HNEntry *profileEntry = [[[HNUser alloc] initWithIdentifier:@"Xuzz"] autorelease];
-    ProfileController *profile = [[[ProfileController alloc] initWithSource:profileEntry] autorelease];
-    [profile setTitle:@"Profile"];
-    [profile setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"profile.png"] tag:0] autorelease]];
-    
-    MoreController *more = [[MoreController alloc] init];
-    [more setTitle:@"More"];
-    [more setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:0] autorelease]];
-    
-    NSMutableArray *items = [NSMutableArray arrayWithObjects:home, new, profile, more, nil];
-    for (int i = 0; i < [items count]; i++) {
-        UIViewController *item = [items objectAtIndex:i];
-        UINavigationController *navigation = [[[UINavigationController alloc] initWithRootViewController:item] autorelease];
-        [[navigation navigationBar] setTintColor:kNavigationTintOrange];
-        [items replaceObjectAtIndex:i withObject:navigation];
-    }
-    [tabBarController setViewControllers:items];
+    MainTabBarController *mainTabBarController = [[MainTabBarController alloc] init];
+    [mainTabBarController setTitle:@"Hacker News"];
+    [navigationController setViewControllers:[NSArray arrayWithObjects:mainTabBarController, nil]];
     
     [window makeKeyAndVisible];
     return YES;
@@ -109,7 +81,7 @@
 
 - (void)dealloc {
     [window release];
-    [tabBarController release];
+    [navigationController release];
 
     [super dealloc];
 }

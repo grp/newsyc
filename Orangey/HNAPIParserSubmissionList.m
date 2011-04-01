@@ -1,17 +1,17 @@
 //
-//  HNParserItemSubmissionList.m
+//  HNParserSubmissionList.m
 //  Orangey
 //
 //  Created by Grant Paul on 3/12/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "HNAPIParserItemSubmissionList.h"
+#import "HNAPIParserSubmissionList.h"
 
 #import "HNKit.h"
 #import "XMLDocument.h"
 
-@implementation HNAPIParserItemSubmissionList
+@implementation HNAPIParserSubmissionList
 
 - (id)parseString:(NSString *)string options:(NSDictionary *)options {
     XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];

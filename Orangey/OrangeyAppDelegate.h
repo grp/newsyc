@@ -8,9 +8,10 @@
 
 #import "StatusDelegate.h"
 
+@class NavigationController;
 @interface OrangeyAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, StatusDelegate> {
     UIWindow *window;
-    UITabBarController *tabBarController;
+    NavigationController *navigationController;
 }
 
 @end

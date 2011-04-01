@@ -71,7 +71,7 @@
 }
 
 - (NSURLRequest *)connection:(NSURLConnection *)connection_ willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response {
-    // XXX: why is this necessary?
+    // XXX: is this necessary? can this cause a hang if it never has the right URL?
     if ([[[request URL] absoluteString] hasSuffix:@"/y"]) return request;
 
     if (response != nil && [response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -102,7 +102,7 @@
     XMLDocument *document = [[[XMLDocument alloc] initWithHTMLData:data] autorelease];
     if (document == nil) return nil;
     
-    // XXX: this xpath is really ugly
+    // XXX: this xpath is really ugly :(
     XMLElement *element = [document firstElementMatchingPath:@"//table//tr[1]//table//tr//td//span[@class='pagetop']//a[text()='login']"];
     return [[element attributeWithName:@"href"] substringFromIndex:[@"/x?fnid=" length]];
 }
@@ -149,8 +149,8 @@
     // XXX: is that an issue with this category in general?
     [request setHTTPBody:[[[query queryString] substringFromIndex:1] dataUsingEncoding:NSUTF8StringEncoding]];
     
-    // The NSURLRequest object must be created on the main thread, or else it will be destroyed
-    // in a second when this thread exits, which is not what we want.
+    // The NSURLRequest object must be created on the main thread, or else it
+    //  will be destroyed when this thread exits (now), which is not what we want.
     [self performSelectorOnMainThread:@selector(_sendAuthenticationRequest:) withObject:request waitUntilDone:YES];
 }
 

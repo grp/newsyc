@@ -11,11 +11,13 @@
 #import "HNKit.h"
 
 @implementation LoginController
+@synthesize delegate;
 
 - (void)dealloc {
     [tableView release];
     [usernameCell release];
     [passwordCell release];
+    [backgroundImageView release];
     
     [super dealloc];
 }
@@ -44,9 +46,28 @@
 - (void)loadView {
     [super loadView];
     
-    tableView = [[UITableView alloc] initWithFrame:[[self view] bounds] style:UITableViewStyleGrouped];
+    // XXX: this is one particuarly ugly way of making a gradient :(
+    UIGraphicsBeginImageContext([[self view] bounds].size);
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
+    CGFloat colors[] = {
+        1.0, 0.6, 0.2, 1.0,
+        0.4, 0.1, 0, 1.0
+    };
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(rgb, colors, NULL, 2);
+    CGContextDrawRadialGradient(context, gradient, CGPointMake(160.0f, 110.0f), 5.0f, CGPointMake(160.0f, 110.0f), 1000.0f, kCGGradientDrawsBeforeStartLocation);
+    CGGradientRelease(gradient);
+    CGColorSpaceRelease(rgb);
+	UIImage *background = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
     
-    [tableView setBackgroundColor:[UIColor colorWithHue:0.044f saturation:0.74f brightness:1.0f alpha:1.0f]];
+    backgroundImageView = [[UIImageView alloc] initWithFrame:[[self view] bounds]];
+    [backgroundImageView setImage:background];
+    [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [[self view] addSubview:backgroundImageView];
+    
+    tableView = [[UITableView alloc] initWithFrame:[[self view] bounds] style:UITableViewStyleGrouped];
+    [tableView setBackgroundColor:[UIColor clearColor]];
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
@@ -74,7 +95,7 @@
     [spinner sizeToFit];
     [spinner startAnimating];
     [spinner setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
-    loadingItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
+    loadingItem = [[UIBarButtonItem alloc] initWithCustomView:[spinner autorelease]];
 }
 
 - (void)viewDidLoad {
@@ -103,7 +124,8 @@
 }
 
 - (void)cancel {
-    [self dismissModalViewControllerAnimated:YES];
+    if ([delegate respondsToSelector:@selector(loginControllerDidCancel:)])
+        [delegate loginControllerDidCancel:self];
 }
 
 - (void)sessionAuthenticator:(HNSessionAuthenticator *)authenticator didRecieveToken:(HNSessionToken)token {
@@ -113,7 +135,9 @@
     [HNSession setCurrentSession:[session autorelease]];
     
     [[self navigationItem] setRightBarButtonItem:nil];
-    [self dismissModalViewControllerAnimated:YES];
+    
+    if ([delegate respondsToSelector:@selector(loginControllerDidLogin:)])
+        [delegate loginControllerDidLogin:self];
 }
 
 - (void)sessionAuthenticatorDidRecieveFailure:(HNSessionAuthenticator *)authenticator {
@@ -121,7 +145,7 @@
     
     UIAlertView *alert = [[UIAlertView alloc] init];
     [alert setTitle:@"Unable to Authenticate"];
-    [alert setMessage:@"Unable to authenticate with Hacker News."];
+    [alert setMessage:@"Unable to authenticate with Hacker News. Make sure your username and password are correct."];
     [alert addButtonWithTitle:@"Continue"];
     [alert setCancelButtonIndex:0];
     [alert show];

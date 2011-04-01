@@ -1,4 +1,7 @@
 
+// Lazy-loading-ish wrapper for libxml2.
+// Not the most amazing stuff, but hey, it works fine.
+// (Somewhat inspired by "Hpple", but rewritten.)
 
 #import "XMLDocument.h"
 #import "XMLElement.h"
@@ -40,10 +43,10 @@
     xmlXPathObjectPtr xpathObj;
     
     xpathCtx = xmlXPathNewContext(document);
-    if(xpathCtx == NULL) return nil;
+    if (xpathCtx == NULL) return nil;
     
     xpathObj = xmlXPathEvalExpression((xmlChar *) [query cStringUsingEncoding:NSUTF8StringEncoding], xpathCtx);
-    if(xpathObj == NULL) return nil;
+    if (xpathObj == NULL) return nil;
     
     xmlNodeSetPtr nodes = xpathObj->nodesetval;
     if (nodes == NULL) return nil;

@@ -1,15 +1,15 @@
 //
-//  HNAPIParserItemCommentTree.m
+//  HNAPIParserCommentTree.m
 //  Orangey
 //
 //  Created by Grant Paul on 3/12/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "HNAPIParserItemCommentTree.h"
+#import "HNAPIParserCommentTree.h"
 #import "XMLDocument.h"
 
-@implementation HNAPIParserItemCommentTree
+@implementation HNAPIParserCommentTree
 
 - (id)parseString:(NSString *)string options:(NSDictionary *)options {
     XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
@@ -17,6 +17,7 @@
     NSMutableArray *result = [NSMutableArray array];
     NSMutableArray *lasts = [NSMutableArray array];
     
+    // XXX: this xpath is very ugly. (note: position()>1 is required to avoid the page header, and is lame)
     NSArray *comments = [document elementsMatchingPath:@"//table//tr[position()>1]//td//table//tr"];
     
     for (int i = 0; i < [comments count]; i++) {
@@ -64,7 +65,7 @@
                             }
                         }
                     } else if ([[element2 attributeWithName:@"class"] isEqual:@"comment"]) {
-                        // XXX: strip out _reply_ link at the bottom.
+                        // XXX: strip out _reply_ link (or "----") at the bottom (when logged in), if necessary?
                         body = [element2 content];
                     }
                 }
@@ -73,6 +74,7 @@
                     if ([[element2 tagName] isEqual:@"img"] && [[element2 attributeWithName:@"src"] isEqual:@"http://ycombinator.com/images/s.gif"]) {
                         // Yes, really: HN uses a 1x1 gif to indent comments. It's like 1999 all over again. :(
                         int width = [[element2 attributeWithName:@"width"] intValue];
+                        // Each comment is "indented" by setting the width to "depth * 40", so divide to get the depth.
                         depth = [NSNumber numberWithInt:width / 40];
                     }
                 }
@@ -82,7 +84,7 @@
         if (depth != nil) children = [NSMutableArray array];
         
         if (user == nil && [body isEqual:@"[deleted]"]) {
-            // XXX: best way to handle deleted comments?
+            // XXX: handle deleted comments
             NSLog(@"Bug: Ignoring deleted comment.");
             continue;
             
@@ -92,7 +94,7 @@
             points = nil;
         }
         
-        
+        // XXX: should this be more strict about what's a valid comment?
         if (user != nil && identifier != nil) {
             NSMutableDictionary *item = [NSMutableDictionary dictionary];
             [item setObject:user forKey:@"user"];

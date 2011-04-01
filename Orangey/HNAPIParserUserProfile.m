@@ -1,14 +1,14 @@
 //
-//  HNAPIParserItemUserProfile.m
+//  HNAPIParserUserProfile.m
 //  Orangey
 //
 //  Created by Grant Paul on 3/12/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "HNAPIParserItemUserProfile.h"
+#import "HNAPIParserUserProfile.h"
 
-@implementation HNAPIParserItemUserProfile
+@implementation HNAPIParserUserProfile
 
 - (id)parseString:(NSString *)string options:(NSDictionary *)options {
     NSScanner *scanner = [NSScanner scannerWithString:string];

@@ -14,11 +14,13 @@
     UILabel *errorLabel;
     BOOL loaded;
     HNObject *source;
+    UIBarButtonItem *actionItem;
 }
 
 @property (nonatomic, retain) HNObject *source;
 
 - (id)initWithSource:(HNObject *)source_;
+- (void)performInitialLoadIfPossible;
 - (void)finishedLoading;
 - (void)showErrorWithTitle:(NSString *)title;
 

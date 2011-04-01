@@ -6,14 +6,11 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-typedef enum {
-    kHNVoteDirectionDown,
-    kHNVoteDirectionUp
-} HNVoteDirection;
+#import "HNKit.h"
 
 typedef NSString *HNSessionToken;
 
-@class HNUser;
+@class HNUser, HNEntry;
 @interface HNSession : NSObject {
     BOOL loaded;
     HNSessionToken token;
@@ -24,9 +21,14 @@ typedef NSString *HNSessionToken;
 @property (nonatomic, copy) NSString *token;
 @property (nonatomic, assign, getter=isLoaded) BOOL loaded;
 
-+ (id)currentSession;
++ (HNSession *)currentSession;
 + (void)setCurrentSession:(HNSession *)session;
 
 - (id)initWithUsername:(NSString *)username token:(HNSessionToken)token;
+
+- (void)flagEntry:(HNEntry *)entry target:(id)target action:(SEL)action;
+- (void)voteEntry:(HNEntry *)entry inDirection:(HNVoteDirection)direction target:(id)target action:(SEL)action;
+- (void)replyToEntry:(HNEntry *)entry withBody:(NSString *)body target:(id)target action:(SEL)action;
+- (void)submitEntryWithTitle:(NSString *)title body:(NSString *)body URL:(NSURL *)url target:(id)target action:(SEL)action;
 
 @end

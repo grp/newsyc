@@ -35,6 +35,8 @@
 - (void)viewDidUnload {
     [tableView release];
     tableView = nil;
+    
+    [super viewDidUnload];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -44,6 +46,8 @@
 }
 
 - (void)showErrorWithTitle:(NSString *)title {
+    [super showErrorWithTitle:title];
+    
     CGRect frame = CGRectZero;
     frame.size.width = [tableView bounds].size.width;
     CGFloat height =  [tableView bounds].size.height - [[tableView tableHeaderView] bounds].size.height;

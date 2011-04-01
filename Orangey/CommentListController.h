@@ -9,13 +9,18 @@
 #import "EntryListController.h"
 #import "EntryActionsView.h"
 #import "DetailsHeaderView.h"
+#import "LoginController.h"
 
 @class HeaderContainerView;
-@interface CommentListController : EntryListController <EntryActionsViewDelegate, DetailsHeaderViewDelegate> {
+@interface CommentListController : EntryListController <EntryActionsViewDelegate, DetailsHeaderViewDelegate, LoginControllerDelegate> {
     HeaderContainerView *headerContainerView;
+    EntryActionsView *entryActionsView;
     UIView *containerContainer;
     CGFloat suggestedHeaderHeight;
     CGFloat maximumHeaderHeight;
+    
+    EntryActionsViewItem savedItem;
+    BOOL shouldCompleteOnAppear;
 }
 
 @end

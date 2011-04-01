@@ -34,7 +34,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection_ {
     NSString *resp = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
-    HNAPIParserItem *parser = nil;
+    HNAPIParser *parser = nil;
     
     if ([type isEqual:kHNPageTypeActiveSubmissions] ||
         [type isEqual:kHNPageTypeAskSubmissions] ||
@@ -43,18 +43,14 @@
         [type isEqual:kHNPageTypeSubmissions] ||
         [type isEqual:kHNPageTypeNewSubmissions] ||
         [type isEqual:kHNPageTypeUserSubmissions]) {
-        parser = [[HNAPIParserItemSubmissionList alloc] init];
-    }
-    
-    if ([type isEqual:kHNPageTypeBestComments] ||
+        parser = [[HNAPIParserSubmissionList alloc] init];
+    } else if ([type isEqual:kHNPageTypeBestComments] ||
         [type isEqual:kHNPageTypeNewComments] ||
         [type isEqual:kHNPageTypeUserComments] ||
         [type isEqual:kHNPageTypeItemComments]) {
-        parser = [[HNAPIParserItemCommentTree alloc] init];
-    }
-    
-    if ([type isEqual:kHNPageTypeUserProfile]) {
-        parser = [[HNAPIParserItemUserProfile alloc] init];
+        parser = [[HNAPIParserCommentTree alloc] init];
+    } else if ([type isEqual:kHNPageTypeUserProfile]) {
+        parser = [[HNAPIParserUserProfile alloc] init];
     }
     
     id result = [parser parseString:resp options:nil];

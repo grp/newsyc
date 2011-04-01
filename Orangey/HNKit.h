@@ -23,14 +23,19 @@ typedef NSString *HNPageType;
 #define kHNPageTypeUserSubmissions @"submitted"
 #define kHNPageTypeUserComments @"threads"
 
+typedef enum {
+    kHNVoteDirectionDown,
+    kHNVoteDirectionUp
+} HNVoteDirection;
+
 #import "HNObject.h"
 #import "HNUser.h"
 #import "HNEntry.h"
 #import "HNAPIRequest.h"
-#import "HNAPIParserItem.h"
-#import "HNAPIParserItemUserProfile.h"
-#import "HNAPIParserItemCommentTree.h"
-#import "HNAPIParserItemSubmissionList.h"
+#import "HNAPIParser.h"
+#import "HNAPIParserUserProfile.h"
+#import "HNAPIParserCommentTree.h"
+#import "HNAPIParserSubmissionList.h"
 #import "HNSession.h"
 #import "HNSessionAuthenticator.h"
 
