@@ -24,7 +24,9 @@
 }
 
 - (NSString *)multilinePlaceholder {
-    return @"Reply";
+    // This is shown only when the controller is first animating in,
+    // so a placeholder actually makes it look worse in this case.
+    return @"";
 }
 
 - (NSString *)title {
