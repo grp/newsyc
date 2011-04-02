@@ -6,8 +6,6 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "JSON.h"
-
 @interface HNAPIRequest : NSObject {
     id target;
     SEL action;

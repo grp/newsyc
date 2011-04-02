@@ -10,8 +10,8 @@
 
 
 @implementation NSURL (Parameters)
+
 - (NSArray *)parameterArray {
-    
     if (![self query]) return nil;
     NSScanner *scanner = [NSScanner scannerWithString:[self query]];
     if (!scanner) return nil;
@@ -35,7 +35,6 @@
     return array;
 }
 
-
 - (NSDictionary *)parameterDictionary {
     if (![self query]) return nil;
     NSArray *parameterArray = [self parameterArray];
@@ -45,6 +44,5 @@
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:values forKeys:keys];
     return dictionary;
 }
-
 
 @end
