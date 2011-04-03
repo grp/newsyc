@@ -72,6 +72,8 @@
     NSURL *url = [NSURL URLWithString:base];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
+    //if (type == kHNPageTypeItemComments) { [target performSelector:action withObject:self withObject:nil withObject:@""]; return; }
+    
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];
 }

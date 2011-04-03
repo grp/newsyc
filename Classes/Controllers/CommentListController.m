@@ -135,13 +135,33 @@
     [super dealloc];
 }
 
+- (BOOL)hasHeaderAndFooter {
+    return [source type] == kHNPageTypeItemComments; 
+}
+
 - (void)finishedLoading {
-    if ([(HNEntry *) source submitter] != nil) {
-        headerContainerView = [[HeaderContainerView alloc] initWithEntry:(HNEntry *) source widthWidth:[[self view] bounds].size.width];
-        [headerContainerView setClipsToBounds:YES];
-        [headerContainerView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
-        [[headerContainerView detailsHeaderView] setDelegate:self];
-        
+    [super finishedLoading];
+}
+
+- (void)updateHeaderPositioning {
+    CGFloat offset = [tableView contentOffset].y;
+    if (suggestedHeaderHeight < maximumHeaderHeight || (offset > suggestedHeaderHeight - maximumHeaderHeight || offset <= 0)) {
+        CGRect frame = [headerContainerView frame];
+        if (suggestedHeaderHeight - maximumHeaderHeight > 0 && offset > 0) offset -= suggestedHeaderHeight - maximumHeaderHeight;
+        frame.origin.y = offset;
+        frame.size.height = suggestedHeaderHeight - offset;
+        [headerContainerView setFrame:frame];
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self updateHeaderPositioning];
+}
+
+- (void)loadView {
+    [super loadView];
+    
+    if ([self hasHeaderAndFooter]) {
         entryActionsView = [[EntryActionsView alloc] initWithFrame:CGRectZero];
         [entryActionsView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
         [entryActionsView sizeToFit];
@@ -157,6 +177,11 @@
         tableFrame.size.height = [[self view] bounds].size.height - actionsFrame.size.height;
         [tableView setFrame:tableFrame];
         
+        headerContainerView = [[HeaderContainerView alloc] initWithEntry:(HNEntry *) source widthWidth:[[self view] bounds].size.width];
+        [headerContainerView setClipsToBounds:YES];
+        [headerContainerView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
+        [[headerContainerView detailsHeaderView] setDelegate:self];
+        
         UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [headerContainerView bounds].size.height, [[self view] bounds].size.width + 100.0f, 1.0f)];
         CALayer *layer = [shadow layer];
         [layer setShadowOffset:CGSizeMake(0, -2.0f)];
@@ -167,7 +192,6 @@
         [shadow setClipsToBounds:NO];
         
         containerContainer = [[UIView alloc] initWithFrame:[headerContainerView bounds]];
-        [containerContainer setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [containerContainer setBackgroundColor:[UIColor clearColor]];
         [containerContainer addSubview:headerContainerView];
         [containerContainer addSubview:[shadow autorelease]];
@@ -176,24 +200,12 @@
         
         suggestedHeaderHeight = [headerContainerView bounds].size.height;
         maximumHeaderHeight = [tableView bounds].size.height - 44.0f;
-    }
-
-    [super finishedLoading];
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat offset = [scrollView contentOffset].y;
-    if (suggestedHeaderHeight < maximumHeaderHeight || (offset > suggestedHeaderHeight - maximumHeaderHeight || offset <= 0)) {
-        CGRect frame = [headerContainerView frame];
-        if (suggestedHeaderHeight - maximumHeaderHeight > 0 && offset > 0) offset -= suggestedHeaderHeight - maximumHeaderHeight;
-        frame.origin.y = offset;
-        frame.size.height = suggestedHeaderHeight - offset;
-        [headerContainerView setFrame:frame];
+        [self updateHeaderPositioning];
     }
 }
 
-- (void)loadView {
-    [super loadView];
+- (CGFloat)statusOffsetHeight {
+    return suggestedHeaderHeight;
 }
 
 - (void)viewDidUnload {

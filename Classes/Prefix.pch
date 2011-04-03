@@ -4,8 +4,8 @@
 
 #import <Availability.h>
 
-#ifndef __IPHONE_3_0
-#warning "This project uses features only available in iPhone SDK 3.0 and later."
+#ifndef __IPHONE_4_0
+#warning "This is probably not going to go well. Might want to try iOS 4.0 or later."
 #endif
 
 #ifdef __OBJC__

@@ -22,6 +22,7 @@
 - (id)initWithSource:(HNObject *)source_;
 - (void)performInitialLoadIfPossible;
 - (void)finishedLoading;
+- (void)addStatusView:(UIView *)view;
 - (void)showErrorWithTitle:(NSString *)title;
 
 @end

@@ -45,19 +45,28 @@
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
 }
 
-- (void)showErrorWithTitle:(NSString *)title {
-    [super showErrorWithTitle:title];
-    
-    CGRect frame = CGRectZero;
-    frame.size.width = [tableView bounds].size.width;
-    CGFloat height =  [tableView bounds].size.height - [[tableView tableHeaderView] bounds].size.height;
-    frame.size.height = height >= 44.0f ? height : 44.0f;
-    [errorLabel setFrame:frame];
+- (CGFloat)statusOffsetHeight {
+    return 0.0f;
+}
 
-    [errorLabel setBackgroundColor:[UIColor clearColor]];
-    [errorLabel setText:title];
-    [tableView setTableFooterView:errorLabel];
+- (void)addStatusView:(UIView *)view {
+    CGRect frame;
+    frame.origin.x = 0;
+    frame.origin.y = 0;
+    frame.size.width = [tableView bounds].size.width;
+    CGFloat height = [tableView bounds].size.height - [self statusOffsetHeight];
+    frame.size.height = height >= 44.0f ? height : 44.0f;
+    [view setFrame:frame];
+    
+    [view setBackgroundColor:[UIColor clearColor]];
+    
+    [tableView setTableFooterView:view];
     [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+}
+
+- (void)removeStatusView:(UIView *)view {
+    [tableView setTableFooterView:nil];
+    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
 }
 
 - (void)finishedLoading {

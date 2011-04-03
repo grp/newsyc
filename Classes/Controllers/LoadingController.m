@@ -44,10 +44,18 @@
     // Overridden in subclasses.
 }
 
+- (void)removeStatusView:(UIView *)view {
+    [view removeFromSuperview];
+}
+
+- (void)addStatusView:(UIView *)view {
+    [view setFrame:[[self view] bounds]];
+    [[self view] addSubview:view];
+}
+
 - (void)showErrorWithTitle:(NSString *)title {
     [errorLabel setText:title];
-    [[self view] addSubview:errorLabel];
-    [errorLabel setFrame:[[self view] bounds]];
+    [self addStatusView:errorLabel];
 }
 
 - (void)object:(HNObject *)source_ failedToLoadWithError:(NSError *)error {
@@ -58,7 +66,7 @@
 }
 
 - (void)objectFinishedLoading:(HNObject *)object; {
-    [indicator removeFromSuperview];
+    [self removeStatusView:indicator];
     [self finishedLoading];
 }
 
@@ -123,8 +131,7 @@
         [[self navigationItem] setRightBarButtonItem:actionItem];
         
         if (![source isLoaded]) {
-            [[self view] addSubview:indicator];
-            [indicator setFrame:[[self view] bounds]];
+            [self addStatusView:indicator];
             [source beginLoading];
         } else {
             [self finishedLoading];
