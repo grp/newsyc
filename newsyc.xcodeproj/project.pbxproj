@@ -102,7 +102,7 @@
 		7D6B9F491347DF2E00CD923C /* HNUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ECD1347DF2E00CD923C /* HNUser.m */; };
 		7D6B9F4A1347DF2E00CD923C /* InstapaperAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ECE1347DF2E00CD923C /* InstapaperAPI.m */; };
 		7D6B9F4B1347DF2E00CD923C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ECF1347DF2E00CD923C /* main.m */; };
-		7D6B9F4C1347DF2E00CD923C /* OrangeyAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ED21347DF2E00CD923C /* OrangeyAppDelegate.m */; };
+		7D6B9F4C1347DF2E00CD923C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ED21347DF2E00CD923C /* AppDelegate.m */; };
 		7D6B9F4D1347DF2E00CD923C /* CommentDetailsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ED61347DF2E00CD923C /* CommentDetailsHeaderView.m */; };
 		7D6B9F4E1347DF2E00CD923C /* DetailsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ED81347DF2E00CD923C /* DetailsHeaderView.m */; };
 		7D6B9F4F1347DF2E00CD923C /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EDA1347DF2E00CD923C /* EGORefreshTableHeaderView.m */; };
@@ -121,7 +121,7 @@
 
 /* Begin PBXFileReference section */
 		7D148E64132D68B5008FBF32 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		7D1F988D1320CF720059EBBB /* Orangey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Orangey.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D1F988D1320CF720059EBBB /* newsyc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newsyc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1F98911320CF720059EBBB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7D1F98931320CF720059EBBB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7D1F98951320CF720059EBBB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -272,8 +272,8 @@
 		7D6B9ECE1347DF2E00CD923C /* InstapaperAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperAPI.m; sourceTree = "<group>"; };
 		7D6B9ECF1347DF2E00CD923C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7D6B9ED01347DF2E00CD923C /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
-		7D6B9ED11347DF2E00CD923C /* OrangeyAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrangeyAppDelegate.h; sourceTree = "<group>"; };
-		7D6B9ED21347DF2E00CD923C /* OrangeyAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrangeyAppDelegate.m; sourceTree = "<group>"; };
+		7D6B9ED11347DF2E00CD923C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		7D6B9ED21347DF2E00CD923C /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		7D6B9ED31347DF2E00CD923C /* StatusDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusDelegate.h; sourceTree = "<group>"; };
 		7D6B9ED51347DF2E00CD923C /* CommentDetailsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentDetailsHeaderView.h; sourceTree = "<group>"; };
 		7D6B9ED61347DF2E00CD923C /* CommentDetailsHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentDetailsHeaderView.m; sourceTree = "<group>"; };
@@ -338,7 +338,7 @@
 		7D1F988E1320CF720059EBBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7D1F988D1320CF720059EBBB /* Orangey.app */,
+				7D1F988D1320CF720059EBBB /* newsyc.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -418,8 +418,8 @@
 				7D6B9ECE1347DF2E00CD923C /* InstapaperAPI.m */,
 				7D6B9ECF1347DF2E00CD923C /* main.m */,
 				7D6B9ED01347DF2E00CD923C /* Prefix.pch */,
-				7D6B9ED11347DF2E00CD923C /* OrangeyAppDelegate.h */,
-				7D6B9ED21347DF2E00CD923C /* OrangeyAppDelegate.m */,
+				7D6B9ED11347DF2E00CD923C /* AppDelegate.h */,
+				7D6B9ED21347DF2E00CD923C /* AppDelegate.m */,
 				7D6B9ED31347DF2E00CD923C /* StatusDelegate.h */,
 			);
 			path = Classes;
@@ -613,9 +613,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7D1F988C1320CF720059EBBB /* Orangey */ = {
+		7D1F988C1320CF720059EBBB /* newsyc */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7D1F98B41320CF720059EBBB /* Build configuration list for PBXNativeTarget "Orangey" */;
+			buildConfigurationList = 7D1F98B41320CF720059EBBB /* Build configuration list for PBXNativeTarget "newsyc" */;
 			buildPhases = (
 				7D1F98891320CF720059EBBB /* Sources */,
 				7D1F988A1320CF720059EBBB /* Frameworks */,
@@ -625,9 +625,9 @@
 			);
 			dependencies = (
 			);
-			name = Orangey;
+			name = newsyc;
 			productName = Orangey;
-			productReference = 7D1F988D1320CF720059EBBB /* Orangey.app */;
+			productReference = 7D1F988D1320CF720059EBBB /* newsyc.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -635,7 +635,7 @@
 /* Begin PBXProject section */
 		7D1F98841320CF720059EBBB /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 7D1F98871320CF720059EBBB /* Build configuration list for PBXProject "Orangey" */;
+			buildConfigurationList = 7D1F98871320CF720059EBBB /* Build configuration list for PBXProject "newsyc" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -647,7 +647,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7D1F988C1320CF720059EBBB /* Orangey */,
+				7D1F988C1320CF720059EBBB /* newsyc */,
 			);
 		};
 /* End PBXProject section */
@@ -758,7 +758,7 @@
 				7D6B9F491347DF2E00CD923C /* HNUser.m in Sources */,
 				7D6B9F4A1347DF2E00CD923C /* InstapaperAPI.m in Sources */,
 				7D6B9F4B1347DF2E00CD923C /* main.m in Sources */,
-				7D6B9F4C1347DF2E00CD923C /* OrangeyAppDelegate.m in Sources */,
+				7D6B9F4C1347DF2E00CD923C /* AppDelegate.m in Sources */,
 				7D6B9F4D1347DF2E00CD923C /* CommentDetailsHeaderView.m in Sources */,
 				7D6B9F4E1347DF2E00CD923C /* DetailsHeaderView.m in Sources */,
 				7D6B9F4F1347DF2E00CD923C /* EGORefreshTableHeaderView.m in Sources */,
@@ -845,7 +845,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7D1F98871320CF720059EBBB /* Build configuration list for PBXProject "Orangey" */ = {
+		7D1F98871320CF720059EBBB /* Build configuration list for PBXProject "newsyc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D1F98B21320CF720059EBBB /* Debug */,
@@ -854,7 +854,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7D1F98B41320CF720059EBBB /* Build configuration list for PBXNativeTarget "Orangey" */ = {
+		7D1F98B41320CF720059EBBB /* Build configuration list for PBXNativeTarget "newsyc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D1F98B51320CF720059EBBB /* Debug */,

@@ -1,12 +1,12 @@
 //
-//  OrangeyAppDelegate.m
-//  Orangey
+//  AppDelegate.m
+//  newsyc
 //
 //  Created by Grant Paul on 3/3/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "OrangeyAppDelegate.h"
+#import "AppDelegate.h"
 #import "InstapaperAPI.h"
 #import "NavigationController.h"
 #import "MainTabBarController.h"
@@ -14,7 +14,7 @@
 #import "HNKit.h"
 
 
-@implementation OrangeyAppDelegate
+@implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

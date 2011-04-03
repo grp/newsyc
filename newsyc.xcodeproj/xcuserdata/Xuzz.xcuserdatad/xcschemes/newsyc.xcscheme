@@ -14,9 +14,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7D1F988C1320CF720059EBBB"
-               BuildableName = "Orangey.app"
-               BlueprintName = "Orangey"
-               ReferencedContainer = "container:Orangey.xcodeproj">
+               BuildableName = "newsyc.app"
+               BlueprintName = "newsyc"
+               ReferencedContainer = "container:newsyc.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -41,9 +41,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D1F988C1320CF720059EBBB"
-            BuildableName = "Orangey.app"
-            BlueprintName = "Orangey"
-            ReferencedContainer = "container:Orangey.xcodeproj">
+            BuildableName = "newsyc.app"
+            BlueprintName = "newsyc"
+            ReferencedContainer = "container:newsyc.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -60,9 +60,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D1F988C1320CF720059EBBB"
-            BuildableName = "Orangey.app"
-            BlueprintName = "Orangey"
-            ReferencedContainer = "container:Orangey.xcodeproj">
+            BuildableName = "newsyc.app"
+            BlueprintName = "newsyc"
+            ReferencedContainer = "container:newsyc.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
