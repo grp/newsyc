@@ -61650,7 +61650,7 @@
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>147</integer>
+					<integer>138</integer>
 				</dict>
 			</array>
 		</dict>
@@ -62568,7 +62568,7 @@
 			<key>NS.string</key>
 			<string>file://localhost/Users/Xuzz/code/newsyc/newsyc.xcodeproj</string>
 		</dict>
-		<real>323494016.98040301</real>
+		<real>323503105.37992901</real>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -62658,7 +62658,7 @@
 				</dict>
 			</array>
 		</dict>
-		<string>{{0, 0}, {1176, 582}}</string>
+		<string>{{0, 0}, {1176, 780}}</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -96656,7 +96656,7 @@
 				<integer>5386</integer>
 			</dict>
 		</dict>
-		<real>323494016.978535</real>
+		<real>323503105.37886697</real>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -107000,8 +107000,8 @@
 		</dict>
 		<string>IDEDeviceLocation</string>
 		<string>IDEDeviceArchitecture</string>
-		<string>dvtdevice-iphonesimulator:/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.3.sdk-iPhone</string>
-		<string>i386</string>
+		<string>dvtdevice-iphonePlaceholder:placeholder</string>
+		<string>armv7</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -107110,7 +107110,7 @@
 		<string>IDEActivityReportStringSegmentStringValue</string>
 		<real>2</real>
 		<string> </string>
-		<string>Build</string>
+		<string>Archive</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -107289,7 +107289,7 @@
 				<integer>6187</integer>
 			</dict>
 			<key>NS.time</key>
-			<real>323494013.32011199</real>
+			<real>323503100.376118</real>
 		</dict>
 		<dict>
 			<key>$classes</key>
@@ -107300,7 +107300,7 @@
 			<key>$classname</key>
 			<string>NSDate</string>
 		</dict>
-		<string>Today at 8:26 PM</string>
+		<string>Today at 10:58 PM</string>
 		<integer>106</integer>
 		<dict>
 			<key>$class</key>
