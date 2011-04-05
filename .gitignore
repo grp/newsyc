@@ -4,4 +4,7 @@
 svn
 CVS
 .xcodeproj/ !*.xcodeproj/project.pbxproj
+build
+newsyc.xcodeproj/*.mode1v3
+newsyc.xcodeproj/*.pbxuser
 
