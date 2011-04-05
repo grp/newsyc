@@ -285,7 +285,6 @@
 		7D6B9EDC1347DF2E00CD923C /* EntryActionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntryActionsView.m; sourceTree = "<group>"; };
 		7D6B9EDD1347DF2E00CD923C /* HeaderContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderContainerView.h; sourceTree = "<group>"; };
 		7D6B9EDE1347DF2E00CD923C /* HeaderContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderContainerView.m; sourceTree = "<group>"; };
-		7D6B9EDF1347DF2E00CD923C /* InstapaperAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperAPI.h; sourceTree = "<group>"; };
 		7D6B9EE01347DF2E00CD923C /* LoadingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingIndicatorView.h; sourceTree = "<group>"; };
 		7D6B9EE11347DF2E00CD923C /* LoadingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingIndicatorView.m; sourceTree = "<group>"; };
 		7D6B9EE21347DF2E00CD923C /* PlacardButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlacardButton.h; sourceTree = "<group>"; };
@@ -303,6 +302,7 @@
 		7D6B9EEF1347DF2E00CD923C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D6B9EF01347DF2E00CD923C /* icon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.psd; sourceTree = "<group>"; };
 		7D8A660713333A72002012AA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		7DB9A57713484E000010FC3E /* InstapaperAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperAPI.h; sourceTree = "<group>"; };
 		7DFFDF0A13325FF20082F55A /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -415,6 +415,7 @@
 				7D6B9ED41347DF2E00CD923C /* Views */,
 				7D6B9E6D1347DF2E00CD923C /* Cells */,
 				7D6B9E741347DF2E00CD923C /* Controllers */,
+				7DB9A57713484E000010FC3E /* InstapaperAPI.h */,
 				7D6B9ECE1347DF2E00CD923C /* InstapaperAPI.m */,
 				7D6B9ECF1347DF2E00CD923C /* main.m */,
 				7D6B9ED01347DF2E00CD923C /* Prefix.pch */,
@@ -472,6 +473,8 @@
 				7D6B9E801347DF2E00CD923C /* LoadingController.m */,
 				7D6B9E7B1347DF2E00CD923C /* EntryListController.h */,
 				7D6B9E7C1347DF2E00CD923C /* EntryListController.m */,
+				7D6B9E8D1347DF2E00CD923C /* SubmissionListController.h */,
+				7D6B9E8E1347DF2E00CD923C /* SubmissionListController.m */,
 				7D6B9E771347DF2E00CD923C /* CommentListController.h */,
 				7D6B9E781347DF2E00CD923C /* CommentListController.m */,
 				7D6B9E851347DF2E00CD923C /* MoreController.h */,
@@ -486,8 +489,6 @@
 				7D6B9E821347DF2E00CD923C /* LoginController.m */,
 				7D6B9E791347DF2E00CD923C /* ComposeController.h */,
 				7D6B9E7A1347DF2E00CD923C /* ComposeController.m */,
-				7D6B9E8D1347DF2E00CD923C /* SubmissionListController.h */,
-				7D6B9E8E1347DF2E00CD923C /* SubmissionListController.m */,
 				7D6B9E8F1347DF2E00CD923C /* SubmissionTextComposeController.h */,
 				7D6B9E901347DF2E00CD923C /* SubmissionTextComposeController.m */,
 				7D6B9E911347DF2E00CD923C /* SubmissionURLComposeController.h */,
@@ -584,7 +585,6 @@
 				7D6B9EDC1347DF2E00CD923C /* EntryActionsView.m */,
 				7D6B9EDD1347DF2E00CD923C /* HeaderContainerView.h */,
 				7D6B9EDE1347DF2E00CD923C /* HeaderContainerView.m */,
-				7D6B9EDF1347DF2E00CD923C /* InstapaperAPI.h */,
 				7D6B9EE01347DF2E00CD923C /* LoadingIndicatorView.h */,
 				7D6B9EE11347DF2E00CD923C /* LoadingIndicatorView.m */,
 				7D6B9EE21347DF2E00CD923C /* PlacardButton.h */,
