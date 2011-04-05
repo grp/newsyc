@@ -3,8 +3,11 @@
 //  newsyc
 //
 //  Created by Grant Paul on 3/6/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
+
+// XXX: this class should support replacing an item with a spinner
+// while something is loading (e.g. a vote is being submitted)
 
 typedef enum {
     kEntryActionsViewItemUpvote,

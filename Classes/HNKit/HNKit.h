@@ -1,3 +1,16 @@
+//
+//  HNKit.h
+//  newsyc
+//
+//  Created by Grant Paul on 3/4/11.
+//  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
+//
+
+// This is the main header file for the HNKit "framework",
+// which has the singular purpose of scraping Hacker News.
+//
+// HNKit depends on the files in the "XML" directory, as
+// well as few files in the "Categories" folder as well.
 
 #import "NSURL+Parameters.h"
 #import "NSObject+PerformSelector.h"

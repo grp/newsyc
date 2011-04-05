@@ -3,7 +3,7 @@
 //  Telekinesis
 //
 //  Created by Nicholas Jitkoff on 6/14/07.
-//  Copyright 2007 __MyCompanyName__. All rights reserved.
+//  Copyright 2007 Xuzz Productions, LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

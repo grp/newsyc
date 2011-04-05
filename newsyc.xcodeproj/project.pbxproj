@@ -415,13 +415,13 @@
 				7D6B9ED41347DF2E00CD923C /* Views */,
 				7D6B9E6D1347DF2E00CD923C /* Cells */,
 				7D6B9E741347DF2E00CD923C /* Controllers */,
+				7D6B9ED31347DF2E00CD923C /* StatusDelegate.h */,
 				7DB9A57713484E000010FC3E /* InstapaperAPI.h */,
 				7D6B9ECE1347DF2E00CD923C /* InstapaperAPI.m */,
-				7D6B9ECF1347DF2E00CD923C /* main.m */,
-				7D6B9ED01347DF2E00CD923C /* Prefix.pch */,
 				7D6B9ED11347DF2E00CD923C /* AppDelegate.h */,
 				7D6B9ED21347DF2E00CD923C /* AppDelegate.m */,
-				7D6B9ED31347DF2E00CD923C /* StatusDelegate.h */,
+				7D6B9ED01347DF2E00CD923C /* Prefix.pch */,
+				7D6B9ECF1347DF2E00CD923C /* main.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -575,12 +575,12 @@
 			isa = PBXGroup;
 			children = (
 				7D6B9E931347DF2E00CD923C /* DTAttributedTextView */,
+				7D6B9ED91347DF2E00CD923C /* EGORefreshTableHeaderView.h */,
+				7D6B9EDA1347DF2E00CD923C /* EGORefreshTableHeaderView.m */,
 				7D6B9ED51347DF2E00CD923C /* CommentDetailsHeaderView.h */,
 				7D6B9ED61347DF2E00CD923C /* CommentDetailsHeaderView.m */,
 				7D6B9ED71347DF2E00CD923C /* DetailsHeaderView.h */,
 				7D6B9ED81347DF2E00CD923C /* DetailsHeaderView.m */,
-				7D6B9ED91347DF2E00CD923C /* EGORefreshTableHeaderView.h */,
-				7D6B9EDA1347DF2E00CD923C /* EGORefreshTableHeaderView.m */,
 				7D6B9EDB1347DF2E00CD923C /* EntryActionsView.h */,
 				7D6B9EDC1347DF2E00CD923C /* EntryActionsView.m */,
 				7D6B9EDD1347DF2E00CD923C /* HeaderContainerView.h */,
