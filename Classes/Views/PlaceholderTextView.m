@@ -11,6 +11,11 @@
 @implementation PlaceholderTextView
 @synthesize placeholder;
 
+- (void)setText:(NSString *)text_ {
+    [placeholderLabel setHidden:(nil != text_ && ![text_ isEqual:@""])];
+    [super setText:text_];
+}
+
 - (void)setPlaceholder:(NSString *)placeholder_ {
     [placeholder_ autorelease];
     placeholder = [placeholder_ copy];
