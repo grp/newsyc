@@ -119,6 +119,7 @@
         [pasteboard setURL:currentURL];
         [pasteboard setString:[currentURL absoluteString]];
     } else if (buttonIndex == first + 2) {
+        [[InstapaperAPI sharedInstance] setLastURL:currentURL];
         [[InstapaperAPI sharedInstance] addItemWithURL:currentURL];
     }
 }

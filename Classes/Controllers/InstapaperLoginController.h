@@ -10,7 +10,7 @@
 #import "LoginController.h"
 
 @interface InstapaperLoginController : LoginController <LoginControllerDelegate>{
-    
+
 }
 
 @end

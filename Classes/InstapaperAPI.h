@@ -17,6 +17,7 @@
     NSString *username;
     NSString *password;
     id<StatusDelegate> delegate;
+    NSURL *lastURL;
 }
 
 + (id)sharedInstance;
@@ -24,6 +25,7 @@
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *password;
 @property (nonatomic, assign) id<StatusDelegate> delegate;
+@property (nonatomic, copy) NSURL *lastURL;
 
 - (BOOL)canAddItems;
 - (void)addItemWithURL:(NSURL *)url title:(NSString *)title selection:(NSString *)selection;

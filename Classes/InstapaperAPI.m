@@ -10,7 +10,7 @@
 #import "InstapaperAPI.h"
 
 @implementation InstapaperAPI
-@synthesize username, password, delegate;
+@synthesize username, password, delegate, lastURL;
 
 + (id)sharedInstance {
     static id shared = nil;
