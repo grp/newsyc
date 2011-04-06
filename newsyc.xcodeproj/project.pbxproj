@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		633194FA134C4B7000D792C9 /* AskDetailsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 633194F9134C4B6E00D792C9 /* AskDetailsHeaderView.m */; };
 		7D148E65132D68B5008FBF32 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D148E64132D68B5008FBF32 /* libxml2.dylib */; };
 		7D17CA2F134AE22700763741 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D17CA2D134AE22700763741 /* Default.png */; };
 		7D17CA30134AE22700763741 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D17CA2E134AE22700763741 /* Default@2x.png */; };
@@ -122,6 +123,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		633194F8134C4B6E00D792C9 /* AskDetailsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AskDetailsHeaderView.h; sourceTree = "<group>"; };
+		633194F9134C4B6E00D792C9 /* AskDetailsHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AskDetailsHeaderView.m; sourceTree = "<group>"; };
 		7D148E64132D68B5008FBF32 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		7D17CA2D134AE22700763741 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		7D17CA2E134AE22700763741 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -583,6 +586,8 @@
 				7D6B9E931347DF2E00CD923C /* DTAttributedTextView */,
 				7D6B9ED91347DF2E00CD923C /* EGORefreshTableHeaderView.h */,
 				7D6B9EDA1347DF2E00CD923C /* EGORefreshTableHeaderView.m */,
+				633194F8134C4B6E00D792C9 /* AskDetailsHeaderView.h */,
+				633194F9134C4B6E00D792C9 /* AskDetailsHeaderView.m */,
 				7D6B9ED51347DF2E00CD923C /* CommentDetailsHeaderView.h */,
 				7D6B9ED61347DF2E00CD923C /* CommentDetailsHeaderView.m */,
 				7D6B9ED71347DF2E00CD923C /* DetailsHeaderView.h */,
@@ -779,6 +784,7 @@
 				7D6B9F561347DF2E00CD923C /* SubmissionDetailsHeaderView.m in Sources */,
 				7D6B9F571347DF2E00CD923C /* XMLDocument.m in Sources */,
 				7D6B9F581347DF2E00CD923C /* XMLElement.m in Sources */,
+				633194FA134C4B7000D792C9 /* AskDetailsHeaderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

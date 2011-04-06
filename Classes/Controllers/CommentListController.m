@@ -129,6 +129,7 @@
 
 - (void)dealloc {
     [containerContainer release];
+	[shadow release];
     [headerContainerView release];
     [entryActionsView release];
     
@@ -141,6 +142,11 @@
 
 - (void)finishedLoading {
     [super finishedLoading];
+
+	// Ask types load their body by now, so redraw
+	if ([self.source isKindOfClass:[HNEntry class]] && [(HNEntry *)self.source isAskType]) {
+		[self layoutHeader];
+	}
 }
 
 - (void)updateHeaderPositioning {
@@ -177,31 +183,44 @@
         tableFrame.size.height = [[self view] bounds].size.height - actionsFrame.size.height;
         [tableView setFrame:tableFrame];
         
-        headerContainerView = [[HeaderContainerView alloc] initWithEntry:(HNEntry *) source widthWidth:[[self view] bounds].size.width];
-        [headerContainerView setClipsToBounds:YES];
-        [headerContainerView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
-        [[headerContainerView detailsHeaderView] setDelegate:self];
-        
-        UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [headerContainerView bounds].size.height, [[self view] bounds].size.width + 100.0f, 1.0f)];
-        CALayer *layer = [shadow layer];
-        [layer setShadowOffset:CGSizeMake(0, -2.0f)];
-        [layer setShadowRadius:5.0f];
-        [layer setShadowColor:[[UIColor blackColor] CGColor]];
-        [layer setShadowOpacity:1.0f];
-        [shadow setBackgroundColor:[UIColor grayColor]];
-        [shadow setClipsToBounds:NO];
-        
-        containerContainer = [[UIView alloc] initWithFrame:[headerContainerView bounds]];
-        [containerContainer setBackgroundColor:[UIColor clearColor]];
-        [containerContainer addSubview:headerContainerView];
-        [containerContainer addSubview:[shadow autorelease]];
-        [containerContainer setClipsToBounds:NO];
-        [tableView setTableHeaderView:containerContainer];
-        
-        suggestedHeaderHeight = [headerContainerView bounds].size.height;
-        maximumHeaderHeight = [tableView bounds].size.height - 44.0f;
-        [self updateHeaderPositioning];
+        [self layoutHeader];
     }
+}
+
+- (void)layoutHeader {
+	// remove the old header views
+	[headerContainerView removeFromSuperview];
+	[headerContainerView release];
+	[shadow removeFromSuperview];
+	[shadow release];
+	[containerContainer removeFromSuperview];
+	[containerContainer release];
+
+	// add the new header views
+	headerContainerView = [[HeaderContainerView alloc] initWithEntry:(HNEntry *) source widthWidth:[[self view] bounds].size.width];
+	[headerContainerView setClipsToBounds:YES];
+	[headerContainerView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
+	[[headerContainerView detailsHeaderView] setDelegate:self];
+	
+	shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [headerContainerView bounds].size.height, [[self view] bounds].size.width + 100.0f, 1.0f)];
+	CALayer *layer = [shadow layer];
+	[layer setShadowOffset:CGSizeMake(0, -2.0f)];
+	[layer setShadowRadius:5.0f];
+	[layer setShadowColor:[[UIColor blackColor] CGColor]];
+	[layer setShadowOpacity:1.0f];
+	[shadow setBackgroundColor:[UIColor grayColor]];
+	[shadow setClipsToBounds:NO];
+	
+	containerContainer = [[UIView alloc] initWithFrame:[headerContainerView bounds]];
+	[containerContainer setBackgroundColor:[UIColor clearColor]];
+	[containerContainer addSubview:headerContainerView];
+	[containerContainer addSubview:shadow];
+	[containerContainer setClipsToBounds:NO];
+	[tableView setTableHeaderView:containerContainer];
+	
+	suggestedHeaderHeight = [headerContainerView bounds].size.height;
+	maximumHeaderHeight = [tableView bounds].size.height - 44.0f;
+	[self updateHeaderPositioning];
 }
 
 - (CGFloat)statusOffsetHeight {

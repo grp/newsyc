@@ -79,4 +79,8 @@
     }
 }
 
+- (BOOL)isAskType {
+	return ([[self.destination absoluteString] rangeOfString:[kHNWebsiteURL absoluteString]].location != NSNotFound);
+}
+
 @end

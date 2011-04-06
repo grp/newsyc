@@ -19,7 +19,11 @@
     
     // XXX: this xpath is very ugly. (note: position()>1 is required to avoid the page header, and is lame)
     NSArray *comments = [document elementsMatchingPath:@"//table//tr[position()>1]//td//table//tr"];
-    
+
+	BOOL isRootPost = NO;
+	int rootPostTdCounter = 0;
+	NSString *rootPostBody = nil;
+
     for (int i = 0; i < [comments count]; i++) {
         XMLElement *comment = [comments objectAtIndex:i];
         
@@ -32,7 +36,22 @@
         NSMutableArray *children = nil;
         
         for (XMLElement *element in [comment children]) {
-            if ([[element attributeWithName:@"class"] isEqual:@"default"]) {
+			if ([[element attributeWithName:@"class"] isEqual:@"subtext"]) {
+				// "subtext" is a reference point for the root post.
+				isRootPost = YES;
+			} else if (isRootPost) {
+				// so find the body 2 spots after "subtext"
+				rootPostTdCounter++;
+				if (rootPostTdCounter == 2) {
+					// this should be the body
+					NSString *content = [element content];
+					if (content && ![content isEqualToString:@""] && [content rangeOfString:@"<"].location != 0 /* make sure it's not HTML */) {
+						rootPostBody = content;
+					}
+					isRootPost = NO;
+				}
+			} else if ([[element attributeWithName:@"class"] isEqual:@"default"]) {
+				isRootPost = NO;
                 for (XMLElement *element2 in [element children]) {
                     if ([[element2 tagName] isEqual:@"div"]) {
                         for (XMLElement *element3 in [element2 children]) {
@@ -120,6 +139,9 @@
     
     NSMutableDictionary *item = [NSMutableDictionary dictionary];
     [item setObject:result forKey:@"children"];
+	if (rootPostBody) {
+		[item setObject:rootPostBody forKey:@"body"];
+	}
     return item;
 }
 

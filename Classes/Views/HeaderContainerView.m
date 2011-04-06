@@ -10,6 +10,7 @@
 
 #import "HeaderContainerView.h"
 #import "DetailsHeaderView.h"
+#import "AskDetailsHeaderView.h"
 #import "SubmissionDetailsHeaderView.h"
 #import "CommentDetailsHeaderView.h"
 #import "EntryActionsView.h"
@@ -22,7 +23,8 @@
         [self setEntry:entry_];
         
         Class headerViewClass = nil;
-        if ([entry destination] != nil) headerViewClass = [SubmissionDetailsHeaderView class];
+        if ([entry destination] != nil && [entry body] != nil) { headerViewClass = [AskDetailsHeaderView class]; }
+        else if ([entry destination] != nil) headerViewClass = [SubmissionDetailsHeaderView class];
         else headerViewClass = [CommentDetailsHeaderView class];
         
         detailsHeaderView = [[headerViewClass alloc] initWithFrame:CGRectZero];

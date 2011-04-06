@@ -16,11 +16,14 @@
     HeaderContainerView *headerContainerView;
     EntryActionsView *entryActionsView;
     UIView *containerContainer;
+	UIView *shadow;
     CGFloat suggestedHeaderHeight;
     CGFloat maximumHeaderHeight;
     
     EntryActionsViewItem savedItem;
     BOOL shouldCompleteOnAppear;
 }
+
+- (void)layoutHeader;
 
 @end

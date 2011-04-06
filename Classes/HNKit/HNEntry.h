@@ -34,5 +34,6 @@
 @property (nonatomic, copy) NSString *more;
 
 - (void)loadFromDictionary:(NSDictionary *)response;
+- (BOOL)isAskType;
 
 @end
