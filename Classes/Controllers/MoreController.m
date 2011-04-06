@@ -54,7 +54,7 @@
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case 0: return 3;
+        case 0: return 4;
         case 1: return 2;
         default: return 0;
     }
@@ -76,6 +76,8 @@
             [[cell textLabel] setText:@"Active Discussions"];
         } else if ([indexPath row] == 2) {
             [[cell textLabel] setText:@"Classic View"];
+        } else if ([indexPath row] == 3) {
+            [[cell textLabel] setText:@"Ask"];
         }
     } else if ([indexPath section] == 1) {
         if ([indexPath row] == 0) {
@@ -114,6 +116,9 @@
         } else if ([indexPath row] == 2) {
             type = kHNPageTypeClassicSubmissions;
             title = @"Classic";
+        } else if ([indexPath row] == 3) {
+            type = kHNPageTypeAskSubmissions;
+            title = @"Ask";
         }
     } else if ([indexPath section] == 1) {
         class = [CommentListController class];
