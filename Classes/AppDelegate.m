@@ -80,7 +80,6 @@
             [[alert autorelease] show];
         }
         else {
-            NSLog(@"%@", message);
             InstapaperLoginController *instapaperLogin = [[InstapaperLoginController alloc] initWithMessage:message];
             [instapaperLogin setDelegate:self];
             NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:instapaperLogin];
@@ -88,7 +87,6 @@
             if(!firstModal) {
                 [navigationController setToShow:navigation];
                 [navigationController setNeedToShow:YES];
-                NSLog(@"%@", @"need to show set to yes");
                 firstModal = NO;
             } else {
                 [navigationController presentModalViewController:navigation animated:YES];

@@ -23,9 +23,7 @@
 }
 
 - (void) viewDidAppear:(BOOL)animated {
-    NSLog(@"%@", @"appeared");
     if(needToShow) {
-        NSLog(@"%@", @"here");
         [self presentModalViewController:toShow animated:YES];
         needToShow = NO;
     }
