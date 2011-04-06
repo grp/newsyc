@@ -87,7 +87,7 @@
         } 
     } else if ([indexPath section] == 2) {
         if([indexPath row] == 0) {
-            [[cell textLabel] setText:@"View FAQs"];
+            [[cell textLabel] setText:@"Hacker News FAQ"];
         }
     }
     
@@ -100,7 +100,7 @@
     } else if (section == 1) {
         return @"Comments";
     } else if (section == 2) {
-        return @"Other";
+        return nil;
     } else {
         return nil;
     }
