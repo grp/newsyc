@@ -95,15 +95,7 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return @"Submissions";
-    } else if (section == 1) {
-        return @"Comments";
-    } else if (section == 2) {
-        return nil;
-    } else {
-        return nil;
-    }
+    return nil;
 }
 
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
