@@ -83,7 +83,7 @@
             NSLog(@"%@", message);
             InstapaperLoginController *instapaperLogin = [[InstapaperLoginController alloc] initWithMessage:message];
             [instapaperLogin setDelegate:self];
-            UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:instapaperLogin];
+            NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:instapaperLogin];
 
             if(!firstModal) {
                 [navigationController setToShow:navigation];
