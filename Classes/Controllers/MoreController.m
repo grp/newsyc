@@ -138,6 +138,7 @@
         if ([indexPath row] == 0) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"http://ycombinator.com/newsfaq.html"]];
             [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+            return;
         }
     }
     
