@@ -23,8 +23,9 @@
 }
 
 - (id) init {
+    self = [super init];
     loginTitle = @"Hacker News";
-    return [super init];
+    return self;
 }
 
 - (void)_updateCompleteItem {

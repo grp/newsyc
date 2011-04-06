@@ -12,8 +12,9 @@
 @implementation InstapaperLoginController
 
 - (id) init {
+    self = [super init];
     loginTitle = @"Instapaper";
-    return [super init];
+    return self;
 }
 
 @end
