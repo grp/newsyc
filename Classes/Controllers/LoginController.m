@@ -22,6 +22,11 @@
     [super dealloc];
 }
 
+- (id) init {
+    loginTitle = @"Hacker News";
+    return [super init];
+}
+
 - (void)_updateCompleteItem {
     if ([[usernameField text] length] > 0 && [[passwordField text] length] > 0) {
         [completeItem setEnabled:YES];
@@ -215,7 +220,7 @@
 - (UIView *)tableView:(UITableView *)table viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 40.0f)];
-        [label setText:@"Hacker News"];
+        [label setText:loginTitle];
         [label setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
         [label setTextAlignment:UITextAlignmentCenter];
         [label setBackgroundColor:[UIColor clearColor]];

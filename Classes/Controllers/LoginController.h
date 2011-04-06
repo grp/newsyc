@@ -22,6 +22,7 @@
     UIBarButtonItem *loadingItem;
     HNSessionAuthenticator *authenticator;
     id<LoginControllerDelegate> delegate;
+    NSString *loginTitle;
 }
 
 @property (nonatomic, assign) id<LoginControllerDelegate> delegate;

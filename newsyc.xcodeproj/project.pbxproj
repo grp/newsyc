@@ -119,6 +119,7 @@
 		7D6B9F581347DF2E00CD923C /* XMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EEE1347DF2E00CD923C /* XMLElement.m */; };
 		7D8A660813333A72002012AA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D8A660713333A72002012AA /* QuartzCore.framework */; };
 		7DFFDF0B13325FF20082F55A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DFFDF0A13325FF20082F55A /* CoreText.framework */; };
+		FA5F796B134CE04F002EEBCA /* InstapaperLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5F796A134CE04F002EEBCA /* InstapaperLoginController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -308,6 +309,8 @@
 		7D8A660713333A72002012AA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7DB9A57713484E000010FC3E /* InstapaperAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperAPI.h; sourceTree = "<group>"; };
 		7DFFDF0A13325FF20082F55A /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		FA5F7969134CE04F002EEBCA /* InstapaperLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperLoginController.h; sourceTree = "<group>"; };
+		FA5F796A134CE04F002EEBCA /* InstapaperLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperLoginController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -501,6 +504,8 @@
 				7D6B9E921347DF2E00CD923C /* SubmissionURLComposeController.m */,
 				7D6B9E7D1347DF2E00CD923C /* EntryReplyComposeController.h */,
 				7D6B9E7E1347DF2E00CD923C /* EntryReplyComposeController.m */,
+				FA5F7969134CE04F002EEBCA /* InstapaperLoginController.h */,
+				FA5F796A134CE04F002EEBCA /* InstapaperLoginController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -779,6 +784,7 @@
 				7D6B9F561347DF2E00CD923C /* SubmissionDetailsHeaderView.m in Sources */,
 				7D6B9F571347DF2E00CD923C /* XMLDocument.m in Sources */,
 				7D6B9F581347DF2E00CD923C /* XMLElement.m in Sources */,
+				FA5F796B134CE04F002EEBCA /* InstapaperLoginController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
