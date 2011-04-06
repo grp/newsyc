@@ -9,8 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "LoginController.h"
 
-
-@interface InstapaperLoginController : LoginController {
+@interface InstapaperLoginController : LoginController <LoginControllerDelegate>{
     
 }
 

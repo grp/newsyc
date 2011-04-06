@@ -6,7 +6,9 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-@interface BrowserController : UIViewController <UIWebViewDelegate, UIActionSheetDelegate> {
+#import "LoginController.h"
+
+@interface BrowserController : UIViewController <UIWebViewDelegate, UIActionSheetDelegate, LoginControllerDelegate> {
     UIWebView *webview;
     UIToolbar *toolbar;
     NSURL *rootURL;
