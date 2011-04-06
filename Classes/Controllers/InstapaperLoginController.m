@@ -25,10 +25,15 @@
     [[InstapaperAPI sharedInstance] setPassword:[passwordField text]];
     [[InstapaperAPI sharedInstance] addItemWithURL:[[InstapaperAPI sharedInstance] lastURL]];
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[usernameField text] forKey:@"instapaper-username"];
+    [defaults setObject:[passwordField text] forKey:@"instapaper-password"];
+    
     [[self navigationItem] setRightBarButtonItem:nil];
     
     if ([delegate respondsToSelector:@selector(loginControllerDidLogin:)])
         [delegate loginControllerDidLogin:self];
+    [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 }
 
 @end
