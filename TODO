@@ -3,7 +3,6 @@ This is an incomplete todo list, taken directly from my Todolicious database. Th
 XX optional confirmation sheets for votes
 wrap parsers in @try and warn of scraper issues
 XX option to save comment list entry
-X add ability to view hacker news FAQ
 XXX support "ignore this user"
 readability option for browser controllers (just run the javascript?)
 X disable downvote button on submissions
