@@ -24,6 +24,11 @@
     [[InstapaperAPI sharedInstance] setUsername:[usernameField text]];
     [[InstapaperAPI sharedInstance] setPassword:[passwordField text]];
     [[InstapaperAPI sharedInstance] addItemWithURL:[[InstapaperAPI sharedInstance] lastURL]];
+    
+    [[self navigationItem] setRightBarButtonItem:nil];
+    
+    if ([delegate respondsToSelector:@selector(loginControllerDidLogin:)])
+        [delegate loginControllerDidLogin:self];
 }
 
 @end
