@@ -13,6 +13,7 @@
 #import "ProfileHeaderView.h"
 #import "SubmissionListController.h"
 #import "CommentListController.h"
+#import "BrowserController.h"
 
 @implementation MoreController
 
@@ -49,13 +50,14 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case 0: return 3;
         case 1: return 2;
+        case 2: return 1;
         default: return 0;
     }
 }
@@ -82,8 +84,13 @@
             [[cell textLabel] setText:@"Best Comments"];
         } else if ([indexPath row] == 1) {
             [[cell textLabel] setText:@"New Comments"];
+        } 
+    } else if ([indexPath section] == 2) {
+        if([indexPath row] == 0) {
+            [[cell textLabel] setText:@"View FAQs"];
         }
     }
+    
     return [cell autorelease];
 }
 
@@ -92,6 +99,8 @@
         return @"Submissions";
     } else if (section == 1) {
         return @"Comments";
+    } else if (section == 2) {
+        return @"Other";
     } else {
         return nil;
     }
@@ -124,6 +133,11 @@
         } else if ([indexPath row] == 1) {
             type = kHNPageTypeNewComments;
             title = @"New Comments";
+        }
+    } else if ([indexPath section] == 2) {
+        if ([indexPath row] == 0) {
+            BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"http://ycombinator.com/newsfaq.html"]];
+            [[self navigationController] pushViewController:[controller autorelease] animated:YES];
         }
     }
     
