@@ -136,7 +136,7 @@
         }
     } else if ([indexPath section] == 2) {
         if ([indexPath row] == 0) {
-            BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"http://ycombinator.com/newsfaq.html"]];
+            BrowserController *controller = [[BrowserController alloc] initWithURL:kHNFAQURL];
             [[self navigationController] pushViewController:[controller autorelease] animated:YES];
             return;
         }
