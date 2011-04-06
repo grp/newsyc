@@ -7,9 +7,10 @@
 //
 
 #import "StatusDelegate.h"
+#import "LoginController.h"
 
 @class NavigationController;
-@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, StatusDelegate> {
+@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, StatusDelegate, LoginControllerDelegate> {
     UIWindow *window;
     NavigationController *navigationController;
 }

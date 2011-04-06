@@ -8,8 +8,6 @@
 
 #import "BrowserController.h"
 #import "InstapaperAPI.h"
-#import "InstapaperLoginController.h"
-#import "NavigationController.h"
 
 @implementation BrowserController
 @synthesize currentURL;
@@ -121,12 +119,7 @@
         [pasteboard setURL:currentURL];
         [pasteboard setString:[currentURL absoluteString]];
     } else if (buttonIndex == first + 2) {
-        InstapaperLoginController *instapaperLogin = [[InstapaperLoginController alloc] init];
-        [instapaperLogin setDelegate:self];
-        
-        NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:[instapaperLogin autorelease]];
-        [self presentModalViewController:[navigation autorelease] animated:YES];
-        //[[InstapaperAPI sharedInstance] addItemWithURL:currentURL];
+        [[InstapaperAPI sharedInstance] addItemWithURL:currentURL];
     }
 }
 
@@ -181,21 +174,6 @@
     }
     
     return YES;
-}
-
-- (void)loginControllerDidLogin:(LoginController *)controller {
-    [self dismissModalViewControllerAnimated:YES];
-    
-    // When a modal view controller is dismissed, you can't present another one
-    // until you get the -viewDidAppear: message called. Because this might cause
-    // a modal view to be presented, we need to use this ivar to have it delayed 
-    // until when -viewDidAppear: is called.
-    //shouldCompleteOnAppear = YES;
-}
-
-- (void)loginControllerDidCancel:(LoginController *)controller {
-    NSLog(@"%@", @"here");
-    [self dismissModalViewControllerAnimated:YES];
 }
 
 @end

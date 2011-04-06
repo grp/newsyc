@@ -10,6 +10,7 @@
 #import "InstapaperAPI.h"
 #import "NavigationController.h"
 #import "MainTabBarController.h"
+#import "InstapaperLoginController.h"
 
 #import "HNKit.h"
 
@@ -65,15 +66,23 @@
     } else if (type == kStatusDelegateTypeWarning) {
         // XXX: display unobtrusive notification
     } else if (type == kStatusDelegateTypeError) {
-        UIAlertView *alert = [[UIAlertView alloc]
-            initWithTitle:@"Error"
-            message:message
-            delegate:self
-            cancelButtonTitle:nil
-            otherButtonTitles:@"Continue", nil
-        ];
-        
-        [[alert autorelease] show];
+        if([message isEqualToString:@"Instapaper encountered an internal error. Please try again later."]) {
+            UIAlertView *alert = [[UIAlertView alloc]
+                initWithTitle:@"Error"
+                message:message
+                delegate:self
+                cancelButtonTitle:nil
+                otherButtonTitles:@"Continue", nil
+            ];
+            
+            [[alert autorelease] show];
+        }
+        else {
+            InstapaperLoginController *instapaperLogin = [[InstapaperLoginController alloc] init];
+            [instapaperLogin setDelegate:self];
+            NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:instapaperLogin];
+            [navigationController presentModalViewController:navigation animated:YES];
+        }
     } else {
         // XXX: that was bad. do something about it.
     }
@@ -84,6 +93,14 @@
     [navigationController release];
 
     [super dealloc];
+}
+
+- (void)loginControllerDidLogin:(LoginController *)controller {
+    [navigationController dismissModalViewControllerAnimated:YES];
+}
+
+- (void)loginControllerDidCancel:(LoginController *)controller {
+    [navigationController dismissModalViewControllerAnimated:YES];
 }
 
 @end
