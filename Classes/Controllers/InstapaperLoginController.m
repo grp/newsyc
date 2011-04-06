@@ -15,6 +15,7 @@
 - (id) init {
     self = [super init];
     loginTitle = @"Instapaper";
+    bottomText = @"Your info is only shared with Instapaper.";
     return self;
 }
 

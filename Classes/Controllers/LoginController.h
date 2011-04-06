@@ -23,6 +23,7 @@
     HNSessionAuthenticator *authenticator;
     id<LoginControllerDelegate> delegate;
     NSString *loginTitle;
+    NSString *bottomText;
 }
 
 @property (nonatomic, assign) id<LoginControllerDelegate> delegate;

@@ -25,6 +25,7 @@
 - (id) init {
     self = [super init];
     loginTitle = @"Hacker News";
+    bottomText = @"Your info is only shared with Hacker News.";
     return self;
 }
 
@@ -246,7 +247,7 @@
 - (UIView *)tableView:(UITableView *)table viewForFooterInSection:(NSInteger)section {
     if (section == 0) {
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 15.0f)];
-        [label setText:@"Your info is only shared with Hacker News."];
+        [label setText:bottomText];
         [label setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
         [label setTextAlignment:UITextAlignmentCenter];
         [label setBackgroundColor:[UIColor clearColor]];
