@@ -12,10 +12,10 @@
 
 @implementation InstapaperLoginController
 
-- (id) init {
+- (id) initWithMessage:(NSString *)message {
     self = [super init];
     loginTitle = @"Instapaper";
-    bottomText = @"Your info is only shared with Instapaper.";
+    bottomText = message;
     return self;
 }
 

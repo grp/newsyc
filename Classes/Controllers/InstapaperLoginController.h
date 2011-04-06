@@ -12,5 +12,5 @@
 @interface InstapaperLoginController : LoginController <LoginControllerDelegate>{
 
 }
-
+- (id) initWithMessage: (NSString *) message;
 @end

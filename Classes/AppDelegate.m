@@ -78,7 +78,7 @@
             [[alert autorelease] show];
         }
         else {
-            InstapaperLoginController *instapaperLogin = [[InstapaperLoginController alloc] init];
+            InstapaperLoginController *instapaperLogin = [[InstapaperLoginController alloc] initWithMessage:message];
             [instapaperLogin setDelegate:self];
             NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:instapaperLogin];
             [navigationController presentModalViewController:navigation animated:YES];
