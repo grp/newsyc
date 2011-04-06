@@ -13,6 +13,7 @@
 @interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, StatusDelegate, LoginControllerDelegate> {
     UIWindow *window;
     NavigationController *navigationController;
+    BOOL firstModal;
 }
 
 @end

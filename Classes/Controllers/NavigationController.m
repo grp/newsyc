@@ -12,12 +12,23 @@
 
 @implementation NavigationController
 
+@synthesize needToShow, toShow;
+
 - (id)init {
     if ((self = [super init])) {
         [[self navigationBar] setTintColor:kNavigationControllerTintOrange];
     }
-    
+    needToShow = NO;
     return self;
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    NSLog(@"%@", @"appeared");
+    if(needToShow) {
+        NSLog(@"%@", @"here");
+        [self presentModalViewController:toShow animated:YES];
+        needToShow = NO;
+    }
 }
 
 @end

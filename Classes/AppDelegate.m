@@ -33,6 +33,7 @@
     [navigationController setViewControllers:[NSArray arrayWithObjects:mainTabBarController, nil]];
     
     [window makeKeyAndVisible];
+    firstModal = YES;
     return YES;
 }
 
@@ -61,6 +62,7 @@
 }
 
 - (void)handleStatusEventWithType:(StatusDelegateType)type message:(NSString *)message {
+    [navigationController dismissModalViewControllerAnimated:YES];
     if (type == kStatusDelegateTypeNotice) {
         NSLog(@"Notice: %@", message);
     } else if (type == kStatusDelegateTypeWarning) {
@@ -78,10 +80,20 @@
             [[alert autorelease] show];
         }
         else {
+            NSLog(@"%@", message);
             InstapaperLoginController *instapaperLogin = [[InstapaperLoginController alloc] initWithMessage:message];
             [instapaperLogin setDelegate:self];
-            NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:instapaperLogin];
-            [navigationController presentModalViewController:navigation animated:YES];
+            UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:instapaperLogin];
+
+            if(!firstModal) {
+                [navigationController setToShow:navigation];
+                [navigationController setNeedToShow:YES];
+                NSLog(@"%@", @"need to show set to yes");
+                firstModal = NO;
+            } else {
+                [navigationController presentModalViewController:navigation animated:YES];
+                firstModal = NO;
+            }
         }
     } else {
         // XXX: that was bad. do something about it.
@@ -96,7 +108,7 @@
 }
 
 - (void)loginControllerDidLogin:(LoginController *)controller {
-    [navigationController dismissModalViewControllerAnimated:YES];
+    [[InstapaperAPI sharedInstance] addItemWithURL:[[InstapaperAPI sharedInstance] lastURL]];
 }
 
 - (void)loginControllerDidCancel:(LoginController *)controller {

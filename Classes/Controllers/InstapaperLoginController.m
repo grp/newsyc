@@ -24,7 +24,7 @@
     [[self navigationItem] setRightBarButtonItem:loadingItem];
     [[InstapaperAPI sharedInstance] setUsername:[usernameField text]];
     [[InstapaperAPI sharedInstance] setPassword:[passwordField text]];
-    [[InstapaperAPI sharedInstance] addItemWithURL:[[InstapaperAPI sharedInstance] lastURL]];
+    
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[usernameField text] forKey:@"instapaper-username"];
