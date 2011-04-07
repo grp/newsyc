@@ -190,6 +190,7 @@
         [layer setShadowOpacity:1.0f];
         [shadow setBackgroundColor:[UIColor grayColor]];
         [shadow setClipsToBounds:NO];
+        shadow.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         
         containerContainer = [[UIView alloc] initWithFrame:[headerContainerView bounds]];
         [containerContainer setBackgroundColor:[UIColor clearColor]];
@@ -265,5 +266,7 @@
     [controller setTitle:@"Replies"];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
+
+AUTOROTATION_FOR_PAD_ONLY
 
 @end

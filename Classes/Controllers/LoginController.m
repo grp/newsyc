@@ -6,6 +6,8 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "LoginController.h"
 
 #import "HNKit.h"
@@ -31,15 +33,16 @@
 }
 
 - (UITextField *)_createCellTextField {
-    UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(120, 10, 175, 30)];
+    UITextField *field = [[UITextField alloc] initWithFrame:CGRectZero];
     [field setAdjustsFontSizeToFitWidth:YES];
     [field setTextColor:[UIColor blackColor]];
     [field setDelegate:self];
-    [field setBackgroundColor:[UIColor whiteColor]];
+    [field setBackgroundColor:[UIColor clearColor]];
     [field setAutocorrectionType:UITextAutocorrectionTypeNo];
     [field setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [field setTextAlignment:UITextAlignmentLeft];
     [field setEnabled:YES];
+    [field setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     return [field autorelease];
 }
 
@@ -61,11 +64,6 @@
 	UIImage *background = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
     
-    backgroundImageView = [[UIImageView alloc] initWithFrame:[[self view] bounds]];
-    [backgroundImageView setImage:background];
-    [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [[self view] addSubview:backgroundImageView];
-    
     tableView = [[UITableView alloc] initWithFrame:[[self view] bounds] style:UITableViewStyleGrouped];
     [tableView setBackgroundColor:[UIColor clearColor]];
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -75,15 +73,25 @@
     [tableView setAllowsSelection:NO];
     [[self view] addSubview:tableView];
     
+    backgroundImageView = [[UIImageView alloc] initWithFrame:[[self view] bounds]];
+    [backgroundImageView setImage:background];
+    [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        tableView.backgroundView = backgroundImageView;
+    else
+        [self.view insertSubview:backgroundImageView atIndex:0];
+    
     usernameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [[usernameCell textLabel] setText:@"Username"];
     usernameField = [self _createCellTextField];
+    usernameField.frame = CGRectMake(140, 12, usernameCell.bounds.size.width - 150, 30);
     [usernameField setReturnKeyType:UIReturnKeyNext];
     [usernameCell addSubview:usernameField];
     
     passwordCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [[passwordCell textLabel] setText:@"Password"];
     passwordField = [self _createCellTextField];
+    passwordField.frame = CGRectMake(140, 12, passwordCell.bounds.size.width - 150, 30);
     [passwordField setSecureTextEntry:YES];
     [passwordField setReturnKeyType:UIReturnKeyDone];
     [passwordCell addSubview:passwordField];
@@ -251,5 +259,7 @@
         return nil;
     }
 }
+
+AUTOROTATION_FOR_PAD_ONLY
 
 @end

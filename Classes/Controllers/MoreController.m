@@ -140,4 +140,6 @@
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
+AUTOROTATION_FOR_PAD_ONLY
+
 @end

@@ -150,4 +150,6 @@
     [loginContainer setHidden:source != nil];
 }
 
+AUTOROTATION_FOR_PAD_ONLY
+
 @end
