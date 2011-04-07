@@ -20,6 +20,7 @@
 - (id)initWithEntry:(HNEntry *)entry_ widthWidth:(CGFloat)width {
     if ((self = [super init])) {
         [self setEntry:entry_];
+        self.backgroundColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
         
         Class headerViewClass = nil;
         if ([entry destination] != nil) headerViewClass = [SubmissionDetailsHeaderView class];
