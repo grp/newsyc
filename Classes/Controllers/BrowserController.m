@@ -144,6 +144,10 @@
             [navigation setViewControllers:[NSArray arrayWithObject:login]];
             [self presentModalViewController:[navigation autorelease] animated:YES];
         }
+    } else if (buttonIndex == first + 3) {
+        NSLog(@"%@", @"here");
+        NSString *result = [webview stringByEvaluatingJavaScriptFromString:kReadabilityJavascript];
+        NSLog(@"%@", result);
     }
 }
 
@@ -169,7 +173,7 @@
         delegate:self
         cancelButtonTitle:@"Cancel"
         destructiveButtonTitle:nil
-        otherButtonTitles:@"Open with Safari", @"Copy Link", @"Read Later", nil
+        otherButtonTitles:@"Open with Safari", @"Copy Link", @"Read Later", @"Readability", nil
     ];
     
     [action showInView:[[self navigationController] view]];
