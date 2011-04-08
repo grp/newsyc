@@ -23,6 +23,7 @@
     UIBarButtonItem *refreshItem;
     UIBarButtonItem *shareItem;
     UIBarButtonItem *spacerItem;
+    UIBarButtonItem *readabilityItem;
 }
 
 @property (nonatomic, copy) NSURL *currentURL;

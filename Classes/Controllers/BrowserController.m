@@ -46,7 +46,7 @@
     if ([webview isLoading]) changableItem = loadingItem;
     else changableItem = refreshItem;
     
-    [toolbar setItems:[NSArray arrayWithObjects:spacerItem, backItem, spacerItem, spacerItem, forwardItem, spacerItem, spacerItem, spacerItem, spacerItem, spacerItem, spacerItem, changableItem, spacerItem, spacerItem, shareItem, spacerItem, nil]];
+    [toolbar setItems:[NSArray arrayWithObjects:spacerItem, backItem, spacerItem, spacerItem, forwardItem, spacerItem, spacerItem, spacerItem, readabilityItem, spacerItem, spacerItem, changableItem, spacerItem, spacerItem, shareItem, spacerItem, nil]];
 }
 
 - (void)loadView {
@@ -69,6 +69,7 @@
     
     backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
     forwardItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"forward.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goForward)];
+    readabilityItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"readability.png"] style:UIBarButtonItemStylePlain target:self action:@selector(readability)];
     refreshItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload)];
     shareItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showShareMenu)];
     spacerItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
@@ -115,6 +116,10 @@
     [request addItemWithURL:currentURL];
 }
 
+- (void)readability {
+    [webview stringByEvaluatingJavaScriptFromString:kReadabilityJavascript];
+}
+
 - (void)loginControllerDidLogin:(LoginController *)controller {
     [controller dismissModalViewControllerAnimated:YES];
     [self submitInstapaperRequest];
@@ -144,11 +149,7 @@
             [navigation setViewControllers:[NSArray arrayWithObject:login]];
             [self presentModalViewController:[navigation autorelease] animated:YES];
         }
-    } else if (buttonIndex == first + 3) {
-        NSLog(@"%@", @"here");
-        NSString *result = [webview stringByEvaluatingJavaScriptFromString:kReadabilityJavascript];
-        NSLog(@"%@", result);
-    }
+    } 
 }
 
 - (void)reload {
@@ -173,7 +174,7 @@
         delegate:self
         cancelButtonTitle:@"Cancel"
         destructiveButtonTitle:nil
-        otherButtonTitles:@"Open with Safari", @"Copy Link", @"Read Later", @"Readability", nil
+        otherButtonTitles:@"Open with Safari", @"Copy Link", @"Read Later", nil
     ];
     
     [action showInView:[[self navigationController] view]];
