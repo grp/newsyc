@@ -6,11 +6,10 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "StatusDelegate.h"
 #import "LoginController.h"
 
 @class NavigationController;
-@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, StatusDelegate, LoginControllerDelegate> {
+@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
     UIWindow *window;
     NavigationController *navigationController;
     BOOL firstModal;

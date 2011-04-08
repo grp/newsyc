@@ -6,11 +6,9 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "HNKit.h"
-
 @protocol LoginControllerDelegate;
 
-@interface LoginController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, HNSessionAuthenticatorDelegate> {
+@interface LoginController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate> {
     UIImageView *backgroundImageView;
     UITableView *tableView;
     UITableViewCell *usernameCell;
@@ -20,13 +18,19 @@
     UIBarButtonItem *cancelItem;
     UIBarButtonItem *completeItem;
     UIBarButtonItem *loadingItem;
-    HNSessionAuthenticator *authenticator;
     id<LoginControllerDelegate> delegate;
-    NSString *loginTitle;
-    NSString *bottomText;
+    UILabel *topLabel;
+    UILabel *bottomLabel;
 }
 
 @property (nonatomic, assign) id<LoginControllerDelegate> delegate;
+
+- (void)finish;
+- (void)authenticate;
+
+- (void)fail;
+- (void)succeed;
+- (void)cancel;
 
 @end
 

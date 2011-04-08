@@ -6,11 +6,11 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "LoginController.h"
+#import "InstapaperAuthenticator.h"
 
-@interface InstapaperLoginController : LoginController <LoginControllerDelegate>{
+@interface InstapaperLoginController : LoginController <LoginControllerDelegate, InstapaperAuthenticatorDelegate> {
 
 }
-- (id) initWithMessage: (NSString *) message;
+
 @end

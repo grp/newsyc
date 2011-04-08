@@ -18,6 +18,7 @@
 #import "ComposeController.h"
 #import "SubmissionTextComposeController.h"
 #import "SubmissionURLComposeController.h"
+#import "HackerNewsLoginController.h"
 #import "LoginController.h"
 
 @implementation MainTabBarController
@@ -90,7 +91,7 @@
     if ([HNSession currentSession] != nil) {
         [self requestSubmissionType];
     } else {
-        LoginController *login = [[LoginController alloc] init];
+        LoginController *login = [[HackerNewsLoginController alloc] init];
         [login setDelegate:self];
         NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:[login autorelease]];
         [self presentModalViewController:[navigation autorelease] animated:YES];

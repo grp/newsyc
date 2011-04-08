@@ -10,6 +10,7 @@
 
 #import "SessionProfileController.h"
 #import "LoginController.h"
+#import "HackerNewsLoginController.h"
 #import "NavigationController.h"
 #import "PlacardButton.h"
 
@@ -70,7 +71,7 @@
 }
 
 - (void)_loginPressed {
-    LoginController *login = [[LoginController alloc] init];
+    LoginController *login = [[HackerNewsLoginController alloc] init];
     [login setDelegate:self];
     NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:[login autorelease]];
     [[self tabBarController] presentModalViewController:[navigation autorelease] animated:YES];

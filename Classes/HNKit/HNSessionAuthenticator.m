@@ -35,24 +35,16 @@
     return self;
 }
 
-- (void)__failAuthentication {
+- (void)_failAuthentication {
     if ([delegate respondsToSelector:@selector(sessionAuthenticatorDidRecieveFailure:)]) {
         [delegate sessionAuthenticatorDidRecieveFailure:self];
     }
 }
 
-- (void)_failAuthentication {
-    [self performSelectorOnMainThread:@selector(__failAuthentication) withObject:nil waitUntilDone:YES];
-}
-
-- (void)__completeAuthenticationWithToken:(HNSessionToken)token {
+- (void)_completeAuthenticationWithToken:(HNSessionToken)token {
     if ([delegate respondsToSelector:@selector(sessionAuthenticator:didRecieveToken:)]) {
         [delegate sessionAuthenticator:self didRecieveToken:token];
     }
-}
-
-- (void)_completeAuthenticationWithToken:(HNSessionToken)token {
-    [self performSelectorOnMainThread:@selector(__completeAuthenticationWithToken:) withObject:token waitUntilDone:YES];
 }
 
 - (void)_clearConnection {

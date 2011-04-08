@@ -6,7 +6,11 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-@interface BrowserController : UIViewController <UIWebViewDelegate, UIActionSheetDelegate> {
+#import "InstapaperRequest.h"
+#import "InstapaperSession.h"
+#import "InstapaperLoginController.h"
+
+@interface BrowserController : UIViewController <UIWebViewDelegate, UIActionSheetDelegate, InstapaperRequestDelegate, LoginControllerDelegate> {
     UIWebView *webview;
     UIToolbar *toolbar;
     NSURL *rootURL;

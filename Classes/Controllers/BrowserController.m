@@ -8,6 +8,7 @@
 
 #import "BrowserController.h"
 #import "InstapaperAPI.h"
+#import "NavigationController.h"
 
 @implementation BrowserController
 @synthesize currentURL;
@@ -108,6 +109,21 @@
     webview = nil;
 }
 
+- (void)submitInstapaperRequest {
+    InstapaperRequest *request = [[InstapaperRequest alloc] initWithSession:[InstapaperSession currentSession]];
+    [request setDelegate:self];
+    [request addItemWithURL:currentURL];
+}
+
+- (void)loginControllerDidLogin:(LoginController *)controller {
+    [controller dismissModalViewControllerAnimated:YES];
+    [self submitInstapaperRequest];
+}
+
+- (void)loginControllerDidCancel:(LoginController *)controller {
+    [controller dismissModalViewControllerAnimated:YES];
+}
+
 - (void)actionSheet:(UIActionSheet *)action clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == [action cancelButtonIndex]) return;
     
@@ -119,8 +135,15 @@
         [pasteboard setURL:currentURL];
         [pasteboard setString:[currentURL absoluteString]];
     } else if (buttonIndex == first + 2) {
-        [[InstapaperAPI sharedInstance] setLastURL:currentURL];
-        [[InstapaperAPI sharedInstance] addItemWithURL:currentURL];
+        if ([InstapaperSession currentSession] != nil) {
+            [self submitInstapaperRequest];
+        } else {
+            NavigationController *navigation = [[NavigationController alloc] init];
+            InstapaperLoginController *login = [[InstapaperLoginController alloc] init];
+            [login setDelegate:self];
+            [navigation setViewControllers:[NSArray arrayWithObject:login]];
+            [self presentModalViewController:[navigation autorelease] animated:YES];
+        }
     }
 }
 

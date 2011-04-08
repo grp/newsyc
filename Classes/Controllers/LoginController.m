@@ -8,8 +8,6 @@
 
 #import "LoginController.h"
 
-#import "HNKit.h"
-
 @implementation LoginController
 @synthesize delegate;
 
@@ -18,19 +16,18 @@
     [usernameCell release];
     [passwordCell release];
     [backgroundImageView release];
+    [topLabel release];
+    [bottomLabel release];
     
     [super dealloc];
 }
 
-- (id) init {
-    self = [super init];
-    loginTitle = @"Hacker News";
-    bottomText = @"Your info is only shared with Hacker News.";
-    return self;
+- (BOOL)requiresPassword {
+    return YES;
 }
 
 - (void)_updateCompleteItem {
-    if ([[usernameField text] length] > 0 && [[passwordField text] length] > 0) {
+    if (([[usernameField text] length] > 0 && [[passwordField text] length] > 0) || ![self requiresPassword]) {
         [completeItem setEnabled:YES];
     } else {
         [completeItem setEnabled:NO];
@@ -50,6 +47,10 @@
     return [field autorelease];
 }
 
+- (NSArray *)gradientColors {
+    return nil;
+}
+
 - (void)loadView {
     [super loadView];
     
@@ -57,11 +58,7 @@
     UIGraphicsBeginImageContext([[self view] bounds].size);
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
-    CGFloat colors[] = {
-        1.0, 0.6, 0.2, 1.0,
-        0.4, 0.1, 0, 1.0
-    };
-    CGGradientRef gradient = CGGradientCreateWithColorComponents(rgb, colors, NULL, 2);
+    CGGradientRef gradient = CGGradientCreateWithColors(rgb, (CFArrayRef) [self gradientColors], NULL);
     CGContextDrawRadialGradient(context, gradient, CGPointMake(160.0f, 110.0f), 5.0f, CGPointMake(160.0f, 110.0f), 1000.0f, kCGGradientDrawsBeforeStartLocation);
     CGGradientRelease(gradient);
     CGColorSpaceRelease(rgb);
@@ -95,8 +92,22 @@
     [passwordField setReturnKeyType:UIReturnKeyDone];
     [passwordCell addSubview:passwordField];
     
-    completeItem = [[UIBarButtonItem alloc] initWithTitle:@"Confirm" style:UIBarButtonItemStyleBordered target:self action:@selector(complete)];
+    completeItem = [[UIBarButtonItem alloc] initWithTitle:@"Confirm" style:UIBarButtonItemStyleBordered target:self action:@selector(_authenticate)];
     cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
+    
+    bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 15.0f)];
+    [bottomLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
+    [bottomLabel setTextAlignment:UITextAlignmentCenter];
+    [bottomLabel setBackgroundColor:[UIColor clearColor]];
+    [bottomLabel setFont:[UIFont systemFontOfSize:14.0f]];
+    
+    topLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 40.0f)];
+    [topLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
+    [topLabel setTextAlignment:UITextAlignmentCenter];
+    [topLabel setBackgroundColor:[UIColor clearColor]];
+    [topLabel setShadowColor:[UIColor blackColor]];
+    [topLabel setShadowOffset:CGSizeMake(0, 1.0f)];
+    [topLabel setFont:[UIFont boldSystemFontOfSize:30.0f]];
     
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [spinner sizeToFit];
@@ -130,29 +141,14 @@
     [usernameField becomeFirstResponder];
 }
 
-- (void)cancel {
-    if ([delegate respondsToSelector:@selector(loginControllerDidCancel:)])
-        [delegate loginControllerDidCancel:self];
+- (void)finish {
+    [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 }
 
-- (void)sessionAuthenticator:(HNSessionAuthenticator *)authenticator didRecieveToken:(HNSessionToken)token {
-    [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-    
-    HNSession *session = [[HNSession alloc] initWithUsername:[usernameField text] token:token];
-    [HNSession setCurrentSession:[session autorelease]];
-    
-    [[self navigationItem] setRightBarButtonItem:nil];
-    
-    if ([delegate respondsToSelector:@selector(loginControllerDidLogin:)])
-        [delegate loginControllerDidLogin:self];
-}
-
-- (void)sessionAuthenticatorDidRecieveFailure:(HNSessionAuthenticator *)authenticator {
-    [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-    
+- (void)fail {
     UIAlertView *alert = [[UIAlertView alloc] init];
     [alert setTitle:@"Unable to Authenticate"];
-    [alert setMessage:@"Unable to authenticate with Hacker News. Make sure your username and password are correct."];
+    [alert setMessage:@"Unable to authenticate. Make sure your username and password are correct."];
     [alert addButtonWithTitle:@"Continue"];
     [alert setCancelButtonIndex:0];
     [alert show];
@@ -161,20 +157,33 @@
     [[self navigationItem] setRightBarButtonItem:completeItem];
 }
 
-- (void)complete {
+- (void)succeed {
+    [[self navigationItem] setRightBarButtonItem:nil];
+    
+    if ([delegate respondsToSelector:@selector(loginControllerDidLogin:)])
+        [delegate loginControllerDidLogin:self];
+}
+
+- (void)cancel {
+    if ([delegate respondsToSelector:@selector(loginControllerDidCancel:)])
+        [delegate loginControllerDidCancel:self];
+}
+
+- (void)authenticate {
+    // overridden in subclasses
+}
+
+- (void)_authenticate {
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     [[self navigationItem] setRightBarButtonItem:loadingItem];
-    
-    authenticator = [[HNSessionAuthenticator alloc] initWithUsername:[usernameField text] password:[passwordField text]];
-    [authenticator setDelegate:self];
-    [authenticator beginAuthenticationRequest];
+    [self authenticate];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == usernameField) {
         [passwordField becomeFirstResponder];
     } else if (textField == passwordField) {
-        [self complete];
+        [self authenticate];
     }
     
     return YES;
@@ -221,16 +230,7 @@
 
 - (UIView *)tableView:(UITableView *)table viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 40.0f)];
-        [label setText:loginTitle];
-        [label setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
-        [label setTextAlignment:UITextAlignmentCenter];
-        [label setBackgroundColor:[UIColor clearColor]];
-        [label setShadowColor:[UIColor blackColor]];
-        [label setShadowOffset:CGSizeMake(0, 1.0f)];
-        [label setTextColor:[UIColor whiteColor]];
-        [label setFont:[UIFont boldSystemFontOfSize:30.0f]];
-        return [label autorelease];
+        return topLabel;
     } else {
         return nil;
     }
@@ -246,14 +246,7 @@
 
 - (UIView *)tableView:(UITableView *)table viewForFooterInSection:(NSInteger)section {
     if (section == 0) {
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 15.0f)];
-        [label setText:bottomText];
-        [label setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
-        [label setTextAlignment:UITextAlignmentCenter];
-        [label setBackgroundColor:[UIColor clearColor]];
-        [label setTextColor:[UIColor whiteColor]];
-        [label setFont:[UIFont systemFontOfSize:14.0f]];
-        return [label autorelease];
+        return bottomLabel;
     } else {
         return nil;
     }

@@ -9,11 +9,6 @@
 // An orange navigation controller.
 
 @interface NavigationController : UINavigationController {
-    BOOL needToShow;
-    UIViewController *toShow;
 }
-
-@property(nonatomic, assign) BOOL needToShow;
-@property(nonatomic, retain) UIViewController *toShow;
 
 @end

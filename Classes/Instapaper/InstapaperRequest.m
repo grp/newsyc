@@ -1,48 +1,65 @@
 //
-//  InstapaperAPI.m
+//  InstapaperRequest.m
 //  newsyc
 //
-//  Created by Grant Paul on 3/10/11.
+//  Created by Grant Paul on 4/7/11.
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "StatusDelegate.h"
-#import "InstapaperAPI.h"
+#import "InstapaperRequest.h"
+#import "InstapaperSession.h"
 
-@implementation InstapaperAPI
-@synthesize username, password, delegate, lastURL;
+@implementation InstapaperRequest
+@synthesize session, delegate; 
 
-+ (id)sharedInstance {
-    static id shared = nil;
-    if (shared == nil) shared = [[self alloc] init];
-    return shared;
+- (id)initWithSession:(InstapaperSession *)session_ {
+    if ((self = [super init])) {
+        session = session_;
+    }
+    
+    return self;
 }
 
-- (BOOL)canAddItems {
-    return username != nil && [username length] > 0;
+- (void)succeed {
+    if ([delegate respondsToSelector:@selector(instapaperRequestDidAddItem:)])
+        [delegate instapaperRequestDidAddItem:self];
+}
+
+- (void)failWithError:(NSError *)error {
+    if ([delegate respondsToSelector:@selector(instapaperRequest:didFailToAddItemWithError:)])
+        [delegate instapaperRequest:self didFailToAddItemWithError:error];
+}
+
+- (void)failWithErrorText:(NSString *)text {
+    NSError *error = [NSError errorWithDomain:@"instapaper" code:0 userInfo:[NSDictionary dictionaryWithObject:text forKey:NSLocalizedDescriptionKey]];
+    
+    [self failWithError:error];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [delegate handleStatusEventWithType:kStatusDelegateTypeError message:[NSString stringWithFormat:@"Instapaper: %@", [error localizedDescription]]];
+    [self failWithError:error];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         int status = [(NSHTTPURLResponse *) response statusCode];
-        if (status == 403) [delegate handleStatusEventWithType:kStatusDelegateTypeError message:@"Invalid Instapaper username or password."];
-        if (status == 500) [delegate handleStatusEventWithType:kStatusDelegateTypeError message:@"Instapaper encountered an internal error. Please try again later."];
-        if (status == 201) [delegate handleStatusEventWithType:kStatusDelegateTypeNotice message:@"Submitted to Instapaper."];
+        if (status == 403) [self failWithErrorText:@"Invalid username or password."];
+        if (status == 500) [self failWithErrorText:@"Internal error, try again later."];
+        if (status == 201) [self succeed];
     } else {
-        // XXX: wtf?
+        [self failWithErrorText:@"Unknown error."];
     }
 }
 
 - (void)addItemWithURL:(NSURL *)url title:(NSString *)title selection:(NSString *)selection {
-    if (username == nil || [username length] == 0) {
-        [delegate handleStatusEventWithType:kStatusDelegateTypeError message:@"You are not signed into Instapaper."];
+    if (session == nil || ![session canAddItems]) {
+        [self failWithErrorText:@"You are not signed into Instapaper."];
         return;
     }
-
+    
+    NSString *password = [session password];
+    NSString *username = [session username];
+    
     NSString *query = @"";
     query = [query stringByAppendingFormat:@"username=%@&", [username stringByURLEncodingString]];
     if (password != nil && [password length] > 0) query = [query stringByAppendingFormat:@"password=%@&", [password stringByURLEncodingString]];

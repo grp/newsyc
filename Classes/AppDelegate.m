@@ -17,13 +17,7 @@
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    [[InstapaperAPI sharedInstance] setDelegate:self];
-    [[InstapaperAPI sharedInstance] setUsername:[defaults objectForKey:@"instapaper-username"]];
-    [[InstapaperAPI sharedInstance] setPassword:[defaults objectForKey:@"instapaper-password"]];
-    
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     navigationController = [[NavigationController alloc] init];
     [window setRootViewController:navigationController];
@@ -47,10 +41,6 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [[InstapaperAPI sharedInstance] setUsername:[defaults objectForKey:@"instapaper-username"]];
-    [[InstapaperAPI sharedInstance] setPassword:[defaults objectForKey:@"instapaper-password"]];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -61,56 +51,11 @@
 
 }
 
-- (void)handleStatusEventWithType:(StatusDelegateType)type message:(NSString *)message {
-    [navigationController dismissModalViewControllerAnimated:YES];
-    if (type == kStatusDelegateTypeNotice) {
-        NSLog(@"Notice: %@", message);
-    } else if (type == kStatusDelegateTypeWarning) {
-        // XXX: display unobtrusive notification
-    } else if (type == kStatusDelegateTypeError) {
-        if([message isEqualToString:@"Instapaper encountered an internal error. Please try again later."]) {
-            UIAlertView *alert = [[UIAlertView alloc]
-                initWithTitle:@"Error"
-                message:message
-                delegate:self
-                cancelButtonTitle:nil
-                otherButtonTitles:@"Continue", nil
-            ];
-            
-            [[alert autorelease] show];
-        }
-        else {
-            InstapaperLoginController *instapaperLogin = [[InstapaperLoginController alloc] initWithMessage:message];
-            [instapaperLogin setDelegate:self];
-            NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:instapaperLogin];
-
-            if(!firstModal) {
-                [navigationController setToShow:navigation];
-                [navigationController setNeedToShow:YES];
-                firstModal = NO;
-            } else {
-                [navigationController presentModalViewController:navigation animated:YES];
-                firstModal = NO;
-            }
-        }
-    } else {
-        // XXX: that was bad. do something about it.
-    }
-}
-
 - (void)dealloc {
     [window release];
     [navigationController release];
 
     [super dealloc];
-}
-
-- (void)loginControllerDidLogin:(LoginController *)controller {
-    [[InstapaperAPI sharedInstance] addItemWithURL:[[InstapaperAPI sharedInstance] lastURL]];
-}
-
-- (void)loginControllerDidCancel:(LoginController *)controller {
-    [navigationController dismissModalViewControllerAnimated:YES];
 }
 
 @end

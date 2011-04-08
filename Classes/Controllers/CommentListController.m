@@ -23,6 +23,7 @@
 #import "NavigationController.h"
 #import "EntryReplyComposeController.h"
 #import "BrowserController.h"
+#import "HackerNewsLoginController.h"
 
 @implementation CommentListController
 
@@ -120,7 +121,7 @@
     if (item == kEntryActionsViewItemSubmitter || [HNSession currentSession] != nil) {
         [self completeAction];
     } else {
-        LoginController *login = [[LoginController alloc] init];
+        LoginController *login = [[HackerNewsLoginController alloc] init];
         [login setDelegate:self];
         NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:[login autorelease]];
         [[self navigationController] presentModalViewController:[navigation autorelease] animated:YES];
