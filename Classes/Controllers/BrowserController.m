@@ -9,6 +9,7 @@
 #import "BrowserController.h"
 #import "InstapaperAPI.h"
 #import "NavigationController.h"
+#import "MBProgressHUD.h"
 
 @implementation BrowserController
 @synthesize currentURL;
@@ -113,11 +114,23 @@
 - (void)submitInstapaperRequest {
     InstapaperRequest *request = [[InstapaperRequest alloc] initWithSession:[InstapaperSession currentSession]];
     [request setDelegate:self];
+    hud = [[MBProgressHUD alloc] initWithView:[[self navigationController] view]];
+    [hud setDelegate:self];
+    [[[self navigationController] view] addSubview:hud];
+    [hud show:YES];
     [request addItemWithURL:currentURL];
+}
+
+- (void)instapaperRequestDidAddItem:(InstapaperRequest *)request {
+    [hud hide:YES];
 }
 
 - (void)readability {
     [webview stringByEvaluatingJavaScriptFromString:kReadabilityJavascript];
+}
+
+- (void)hudWasHidden:(MBProgressHUD *)hud {
+    
 }
 
 - (void)loginControllerDidLogin:(LoginController *)controller {
