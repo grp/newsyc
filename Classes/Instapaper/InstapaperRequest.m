@@ -12,6 +12,11 @@
 @implementation InstapaperRequest
 @synthesize session, delegate; 
 
+- (void)dealloc {
+    [session release];
+    [super dealloc];
+}
+
 - (id)initWithSession:(InstapaperSession *)session_ {
     if ((self = [super init])) {
         session = [session_ retain];
