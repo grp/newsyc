@@ -20,4 +20,14 @@
     return self;
 }
 
+// Why this isn't delegated by UIKit to the top view controller, I have no clue.
+// This, however, should unobstrusively add that delegation.
+- (UIModalPresentationStyle)modalPresentationStyle {
+    if ([self topViewController]) {
+        return [[self topViewController] modalPresentationStyle];
+    } else {
+        return [super modalPresentationStyle];
+    }
+}
+
 @end

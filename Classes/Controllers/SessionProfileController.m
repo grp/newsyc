@@ -44,7 +44,8 @@
     [sheet setCancelButtonIndex:1];
     [sheet setDestructiveButtonIndex:0];
     [sheet setDelegate:self];
-    [sheet showInView:[[self view] window]];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:logoutItem animated:YES];
+    else [sheet showInView:[[self view] window]];
     [sheet setSheetContext:@"logout"];
     [sheet release];
 }

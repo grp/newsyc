@@ -23,6 +23,15 @@
     [super dealloc];
 }
 
+- (id)init {
+    if ((self = [super init])) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            [self setModalPresentationStyle:UIModalPresentationPageSheet];
+    }
+    
+    return self;
+}
+
 - (void)close {
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -50,7 +59,8 @@
         [sheet setCancelButtonIndex:1];
         [sheet setSheetContext:@"cancel"];
         [sheet setDelegate:self];
-        [sheet showInView:[[self view] window]];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:cancelItem animated:YES];
+        else [sheet showInView:[[self view] window]];
         [sheet release];
     }
 }
@@ -103,6 +113,9 @@
 
 - (UITableViewCell *)generateTextFieldCell {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    CGRect cellFrame = [cell frame];
+    cellFrame.size.width = 320.0f;
+    [cell setFrame:cellFrame];
     [[cell textLabel] setTextColor:[UIColor darkGrayColor]];
     [[cell textLabel] setFont:[UIFont systemFontOfSize:16.0f]];
     return [cell autorelease];
@@ -110,6 +123,7 @@
 
 - (UITextField *)generateTextFieldForCell:(UITableViewCell *)cell {
     UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(0, 11, 295, 30)];
+    [field setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [field setAdjustsFontSizeToFitWidth:YES];
     [field setTextColor:[UIColor blackColor]];
     [field setDelegate:self];
@@ -265,7 +279,11 @@
     CGSize keyboardSize = [boundsValue CGRectValue].size;
     
     CGRect frame = [tableView frame];
-    frame.size.height += keyboardSize.height;
+    if (UIInterfaceOrientationIsPortrait([self interfaceOrientation])) {
+        frame.size.height += keyboardSize.height;
+    } else {
+        frame.size.height += keyboardSize.width;
+    }
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
@@ -287,7 +305,11 @@
     CGSize keyboardSize = [boundsValue CGRectValue].size;
     
     CGRect frame = [tableView frame];
-    frame.size.height -= keyboardSize.height;
+    if (UIInterfaceOrientationIsPortrait([self interfaceOrientation])) {
+        frame.size.height -= keyboardSize.height;
+    } else {
+        frame.size.height -= keyboardSize.width;
+    }
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
@@ -296,7 +318,7 @@
     [tableView setFrame:frame];
     [UIView commitAnimations];
     
-    keyboardVisible = NO;
+    keyboardVisible = YES;
 }
 
 - (UIResponder *)initialFirstResponder {

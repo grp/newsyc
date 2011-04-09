@@ -14,6 +14,7 @@
 
 @implementation EntryActionsView
 @synthesize entry, delegate;
+@synthesize upvoteItem, downvoteItem, submitterItem, replyItem, flagItem;
 
 - (void)upvoteTapped:(UIButton *)button {
     [delegate entryActionsView:self didSelectItem:kEntryActionsViewItemUpvote];

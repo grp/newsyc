@@ -24,6 +24,15 @@
     [super dealloc];
 }
 
+- (id)init {
+    if ((self = [super init])) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            [self setModalPresentationStyle:UIModalPresentationFormSheet];
+    }
+    
+    return self;
+}
+
 - (BOOL)requiresPassword {
     return YES;
 }
@@ -62,7 +71,7 @@
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColors(rgb, (CFArrayRef) [self gradientColors], NULL);
-    CGContextDrawRadialGradient(context, gradient, CGPointMake(160.0f, 110.0f), 5.0f, CGPointMake(160.0f, 110.0f), 1000.0f, kCGGradientDrawsBeforeStartLocation);
+    CGContextDrawRadialGradient(context, gradient, CGPointMake(160.0f, 110.0f), 5.0f, CGPointMake(160.0f, 110.0f), 1500.0f, kCGGradientDrawsBeforeStartLocation);
     CGGradientRelease(gradient);
     CGColorSpaceRelease(rgb);
 	UIImage *background = UIGraphicsGetImageFromCurrentImageContext();
@@ -83,7 +92,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         tableView.backgroundView = backgroundImageView;
     else
-        [self.view insertSubview:backgroundImageView atIndex:0];
+        [[self view] insertSubview:backgroundImageView atIndex:0];
     
     usernameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [[usernameCell textLabel] setText:@"Username"];

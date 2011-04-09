@@ -14,6 +14,10 @@
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         [self setBackgroundColor:[UIColor whiteColor]];
+        
+        CALayer *layer = [self layer];
+        [layer setContentsGravity:kCAGravityTopLeft];
+        [layer setNeedsDisplayOnBoundsChange:YES];
     }
     
     return self;

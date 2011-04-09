@@ -71,7 +71,7 @@
     forwardItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"forward.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goForward)];
     readabilityItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"readability.png"] style:UIBarButtonItemStylePlain target:self action:@selector(readability)];
     refreshItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload)];
-    shareItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showShareMenu)];
+    shareItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionMenu)];
     spacerItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
     loadingItem = [[UIBarButtonItem alloc] initWithCustomView:[spinner autorelease]];
     [self updateToolbarItems];
@@ -168,8 +168,8 @@
     [webview goForward];
 }
 
-- (void)showShareMenu {
-    UIActionSheet *action = [[UIActionSheet alloc]
+- (void)showActionMenu {
+    UIActionSheet *sheet = [[UIActionSheet alloc]
         initWithTitle:[currentURL absoluteString]
         delegate:self
         cancelButtonTitle:@"Cancel"
@@ -177,8 +177,10 @@
         otherButtonTitles:@"Open with Safari", @"Copy Link", @"Read Later", nil
     ];
     
-    [action showInView:[[self navigationController] view]];
-    [action release];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:shareItem animated:YES];
+    else [sheet showInView:[[self view] window]];
+    
+    [sheet release];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {

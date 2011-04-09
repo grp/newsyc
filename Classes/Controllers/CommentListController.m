@@ -91,7 +91,8 @@
         [sheet setCancelButtonIndex:1];
         [sheet setDelegate:self];
         [sheet setSheetContext:@"flag"];
-        [sheet showInView:[[self view] window]];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:[entryActionsView flagItem] animated:YES];
+        else [sheet showInView:[[self view] window]];
         [sheet release];
     } else if (item == kEntryActionsViewItemReply) {
         NavigationController *navigation = [[NavigationController alloc] init];
@@ -191,7 +192,7 @@
         [layer setShadowOpacity:1.0f];
         [shadow setBackgroundColor:[UIColor grayColor]];
         [shadow setClipsToBounds:NO];
-        shadow.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        [shadow setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         
         containerContainer = [[UIView alloc] initWithFrame:[headerContainerView bounds]];
         [containerContainer setBackgroundColor:[UIColor clearColor]];

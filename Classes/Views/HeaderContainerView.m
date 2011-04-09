@@ -32,7 +32,6 @@
         headerrect.size.width = width;
         headerrect.size.height = [detailsHeaderView suggestedHeightWithWidth:headerrect.size.width];
         [detailsHeaderView setFrame:headerrect];
-        detailsHeaderView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self addSubview:detailsHeaderView];
         
         CGRect selfrect;
@@ -43,6 +42,16 @@
     }
     
     return self;
+}
+
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    
+    CGRect headerrect;
+    headerrect.origin = CGPointZero;
+    headerrect.size.width = [self bounds].size.width;
+    headerrect.size.height = [detailsHeaderView suggestedHeightWithWidth:headerrect.size.width];
+    [detailsHeaderView setFrame:headerrect];
 }
 
 - (void)dealloc {

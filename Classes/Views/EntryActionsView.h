@@ -32,6 +32,11 @@ typedef enum {
 
 @property (nonatomic, retain) HNEntry *entry;
 @property (nonatomic, assign) id<EntryActionsViewDelegate> delegate;
+@property (nonatomic, readonly) UIBarButtonItem *upvoteItem;
+@property (nonatomic, readonly) UIBarButtonItem *replyItem;
+@property (nonatomic, readonly) UIBarButtonItem *flagItem;
+@property (nonatomic, readonly) UIBarButtonItem *downvoteItem;
+@property (nonatomic, readonly) UIBarButtonItem *submitterItem;
 
 @end
 

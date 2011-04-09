@@ -74,7 +74,8 @@
     [sheet setCancelButtonIndex:2];
     [sheet setSheetContext:@"compose"];
     [sheet setDelegate:self];
-    [sheet showInView:[[self view] window]];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:composeItem animated:YES];
+    else [sheet showInView:[[self view] window]];
     [sheet release];
 }
 
