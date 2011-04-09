@@ -116,6 +116,7 @@
     [request setDelegate:self];
     hud = [[MBProgressHUD alloc] initWithView:[[self navigationController] view]];
     [hud setDelegate:self];
+    [hud setLabelText:@"Sending to Instapaper"];
     [[[self navigationController] view] addSubview:hud];
     [hud show:YES];
     [request addItemWithURL:currentURL];
@@ -129,8 +130,9 @@
     [webview stringByEvaluatingJavaScriptFromString:kReadabilityJavascript];
 }
 
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    
+- (void)hudWasHidden:(MBProgressHUD *)h {
+    [h removeFromSuperview];
+    [h release];
 }
 
 - (void)loginControllerDidLogin:(LoginController *)controller {
