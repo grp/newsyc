@@ -126,6 +126,18 @@
     [hud hide:YES];
 }
 
+- (void)instapaperRequest:(InstapaperRequest *)request didFailToAddItemWithError:(NSError *)error {
+    [hud hide:NO];
+    
+    hud = [[MBProgressHUD alloc] initWithView:[[self navigationController] view]];
+    [hud setDelegate:self];
+    [hud setCustomView:[[UIView alloc] initWithFrame:CGRectZero]];
+    [hud setMode:MBProgressHUDModeCustomView];
+    [hud setLabelText:@"Failed to Send to Instpaper"];
+    [[[self navigationController] view] addSubview:hud];
+    [hud showWhileExecuting:@selector(sleepFor:) onTarget:self withObject:[NSNumber numberWithInt:1] animated:YES];
+}
+
 - (void)readability {
     [webview stringByEvaluatingJavaScriptFromString:kReadabilityJavascript];
 }
@@ -144,6 +156,10 @@
     [controller dismissModalViewControllerAnimated:YES];
 }
 
+- (void)sleepFor: (NSNumber *) seconds {
+    [NSThread sleepForTimeInterval:[seconds doubleValue]];
+}
+
 - (void)actionSheet:(UIActionSheet *)action clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == [action cancelButtonIndex]) return;
     
@@ -154,6 +170,13 @@
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         [pasteboard setURL:currentURL];
         [pasteboard setString:[currentURL absoluteString]];
+        hud = [[MBProgressHUD alloc] initWithView:[[self navigationController] view]];
+        [hud setDelegate:self];
+        [hud setCustomView:[[UIView alloc] initWithFrame:CGRectZero]];
+        [hud setMode:MBProgressHUDModeCustomView];
+        [hud setLabelText:@"Copied to Clipboard"];
+        [[[self navigationController] view] addSubview:hud];
+        [hud showWhileExecuting:@selector(sleepFor:) onTarget:self withObject:[NSNumber numberWithDouble:.5] animated:YES];
     } else if (buttonIndex == first + 2) {
         if ([InstapaperSession currentSession] != nil) {
             [self submitInstapaperRequest];
