@@ -6,6 +6,8 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "HNKit.h"
 
 #import "CommentTableCell.h"
@@ -19,6 +21,9 @@
 - (id)initWithReuseIdentifier:(NSString *)identifier {
     if ((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier])) {
         [contentView setBackgroundColor:[UIColor whiteColor]];
+        CALayer *layer = contentView.layer;
+        layer.contentsGravity = kCAGravityTopLeft;
+        layer.needsDisplayOnBoundsChange = YES;
     }
     
     return self;

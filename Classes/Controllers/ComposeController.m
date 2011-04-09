@@ -310,4 +310,6 @@
     [[self initialFirstResponder] becomeFirstResponder];
 }
 
+AUTOROTATION_FOR_PAD_ONLY
+
 @end

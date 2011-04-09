@@ -125,6 +125,8 @@
 		FA5F796B134CE04F002EEBCA /* InstapaperLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5F796A134CE04F002EEBCA /* InstapaperLoginController.m */; };
 		FAF07BF2134F6B13000743BE /* readability.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF07BF0134F6B13000743BE /* readability.png */; };
 		FAF07BF3134F6B13000743BE /* readability@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF07BF1134F6B13000743BE /* readability@2x.png */; };
+		943C1880134E16D700A5977E /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 943C187E134E16D700A5977E /* Default-Landscape.png */; };
+		943C1881134E16D700A5977E /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 943C187F134E16D700A5977E /* Default-Portrait.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -324,6 +326,8 @@
 		FA5F796A134CE04F002EEBCA /* InstapaperLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperLoginController.m; sourceTree = "<group>"; };
 		FAF07BF0134F6B13000743BE /* readability.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = readability.png; sourceTree = "<group>"; };
 		FAF07BF1134F6B13000743BE /* readability@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "readability@2x.png"; sourceTree = "<group>"; };
+		943C187E134E16D700A5977E /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape.png"; sourceTree = "<group>"; };
+		943C187F134E16D700A5977E /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -381,6 +385,8 @@
 			children = (
 				7D6B9E3B1347DF2E00CD923C /* Images */,
 				7D6B9E5A1347DF2E00CD923C /* Settings.bundle */,
+				943C187E134E16D700A5977E /* Default-Landscape.png */,
+				943C187F134E16D700A5977E /* Default-Portrait.png */,
 				7D17CA2D134AE22700763741 /* Default.png */,
 				7D17CA2E134AE22700763741 /* Default@2x.png */,
 				7D6B9E371347DF2E00CD923C /* Icon-small.png */,
@@ -736,6 +742,8 @@
 				7D17CA30134AE22700763741 /* Default@2x.png in Resources */,
 				FAF07BF2134F6B13000743BE /* readability.png in Resources */,
 				FAF07BF3134F6B13000743BE /* readability@2x.png in Resources */,
+				943C1880134E16D700A5977E /* Default-Landscape.png in Resources */,
+				943C1881134E16D700A5977E /* Default-Portrait.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,7 +846,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "/usr/include/libxml2/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -855,6 +865,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

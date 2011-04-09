@@ -86,4 +86,6 @@
 	return [NSDate date]; // should return date data source was last changed
 }
 
+AUTOROTATION_FOR_PAD_ONLY
+
 @end

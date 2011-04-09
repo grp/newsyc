@@ -87,7 +87,10 @@
 
 - (void)actionTapped {
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open in Safari", @"Copy Link", nil];
-    [sheet showInView:[[self view] window]];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        [sheet showFromBarButtonItem:actionItem animated:YES];
+    else
+        [sheet showInView:[[self view] window]];
     [sheet setSheetContext:@"link"];
     [sheet release];
 }
@@ -148,5 +151,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
 }
+
+AUTOROTATION_FOR_PAD_ONLY
 
 @end

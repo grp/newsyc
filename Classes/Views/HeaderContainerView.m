@@ -32,6 +32,7 @@
         headerrect.size.width = width;
         headerrect.size.height = [detailsHeaderView suggestedHeightWithWidth:headerrect.size.width];
         [detailsHeaderView setFrame:headerrect];
+        detailsHeaderView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self addSubview:detailsHeaderView];
         
         CGRect selfrect;

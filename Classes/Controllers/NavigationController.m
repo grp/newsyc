@@ -8,7 +8,7 @@
 
 #import "NavigationController.h"
 
-#define kNavigationControllerTintOrange [UIColor colorWithRed:0.9f green:0.3 blue:0.0f alpha:1.0f]
+#define kNavigationControllerTintOrange [UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]
 
 @implementation NavigationController
 
