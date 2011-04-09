@@ -14,7 +14,7 @@
 
 - (id)initWithSession:(InstapaperSession *)session_ {
     if ((self = [super init])) {
-        session = session_;
+        session = [session_ retain];
     }
     
     return self;
