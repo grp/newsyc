@@ -4,14 +4,12 @@ XX optional confirmation sheets for votes
 wrap parsers in @try and warn of scraper issues
 XX option to save comment list entry
 XXX support "ignore this user"
-readability option for browser controllers (just run the javascript?)
 X disable downvote button on submissions
 objects stored w/ allowed actions per HNSession (e.g. "can i vote this up", "can i flag this"), and disable items appropriately
 XX support for polls: displaying and voting
 support global/local state change/reload notifications (PLEASE DO THIS! ;P -- this would make things like "reply" do "reply, then reload comments to see your reply". depends on next item.)
 support loading information about an HNEntry itself, not just it's children in the parsers
 X reload global state on login (maybe? is this wanted? related to "store with allowed actions" above)
-X ComposeController: disable "Send" button instead of "can't send" alerts
 cache HNObjects by (type, id) pairs and use exsiting objects when possible (another PLEASE DO THIS: this would reduce memory usage and make updates to the cached data centralized)
 X make profiles have their own tab bar (like Tweetie)
 X implement unflagging
