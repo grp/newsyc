@@ -30,5 +30,6 @@
 - (void)sendFailed;
 - (void)performSubmission;
 - (BOOL)ableToSubmit;
+- (void)titleDidChange: (NSNotification *)notification;
 
 @end

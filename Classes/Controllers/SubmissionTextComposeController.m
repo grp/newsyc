@@ -26,6 +26,7 @@
     UITableViewCell *cell = [self generateTextFieldCell];
     [[cell textLabel] setText:@"Title:"];
     titleField = [self generateTextFieldForCell:cell];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(titleDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     [cell addSubview:titleField];
     
     return [NSArray arrayWithObject:cell];

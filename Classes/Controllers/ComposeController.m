@@ -176,6 +176,10 @@
     [textView setFrame:frame];
 }
 
+- (void)titleDidChange: (NSNotification *)notification {
+    [completeItem setEnabled:[self ableToSubmit]];
+}
+
 - (void)textViewDidChange:(UITextView *)textView_ {
     [self updateTextViewHeight];
     
