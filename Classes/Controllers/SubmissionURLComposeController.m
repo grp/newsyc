@@ -67,6 +67,11 @@
     }
 }
 
+- (BOOL)ableToSubmit {
+    NSURL *url = [NSURL URLWithString:[textView text]];
+    return !([[titleField text] length] == 0 || [[textView text] length] == 0 || url == nil);
+}
+
 AUTOROTATION_FOR_PAD_ONLY
 
 @end
