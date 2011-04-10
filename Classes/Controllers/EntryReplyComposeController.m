@@ -53,6 +53,10 @@
     }
 }
 
+- (BOOL)ableToSubmit {
+    return [[textView text] length] > 0;
+}
+
 AUTOROTATION_FOR_PAD_ONLY
 
 @end

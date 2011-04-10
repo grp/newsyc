@@ -29,5 +29,6 @@
 - (void)sendComplete;
 - (void)sendFailed;
 - (void)performSubmission;
+- (BOOL)ableToSubmit;
 
 @end

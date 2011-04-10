@@ -28,7 +28,6 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             [self setModalPresentationStyle:UIModalPresentationPageSheet];
     }
-    
     return self;
 }
 
@@ -180,6 +179,8 @@
 - (void)textViewDidChange:(UITextView *)textView_ {
     [self updateTextViewHeight];
     
+    [completeItem setEnabled:[self ableToSubmit]];
+    
     // Since our UITextView isn't managing it's own scrolling,
     // it doesn't know to scroll if you are typing at the end.
     // Instead, we need to scroll the table view ourself.
@@ -190,6 +191,10 @@
     }
     
     if ([self includeMultilineEditor]) [tableView setTableFooterView:textView];
+}
+
+- (BOOL)ableToSubmit {
+    return NO;
 }
 
 - (void)loadView {
@@ -218,6 +223,7 @@
     [[self view] addSubview:tableView];
     
     completeItem = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(send)];
+    [completeItem setEnabled:NO];
     cancelItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
