@@ -46,7 +46,7 @@
 }
 
 - (void)performSubmission {
-    if ([[textView text] length] == 0) {
+    if (![self ableToSubmit]) {
         [self sendFailed];
     } else {
         [[HNSession currentSession] replyToEntry:entry withBody:[textView text] target:self action:@selector(submission:performedReply:error:)];

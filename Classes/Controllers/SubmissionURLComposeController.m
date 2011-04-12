@@ -59,9 +59,7 @@
 }
 
 - (void)performSubmission {
-    NSURL *url = [NSURL URLWithString:[textView text]];
-    
-    if ([[titleField text] length] == 0 || [[textView text] length] == 0 || url == nil) {
+    if (![self ableToSubmit]) {
         [self sendFailed];
     } else {
         [[HNSession currentSession] submitEntryWithTitle:[titleField text] body:nil URL:nil target:self action:@selector(submission:performedSubmission:error:)];

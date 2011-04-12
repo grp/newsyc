@@ -45,7 +45,7 @@
 }
 
 - (void)performSubmission {
-    if ([[titleField text] length] == 0 || [[textView text] length] == 0) {
+    if (![self ableToSubmit]) {
         [self sendFailed];
     } else {
         [[HNSession currentSession] submitEntryWithTitle:[titleField text] body:[textView text] URL:nil target:self action:@selector(submission:performedSubmission:error:)];
