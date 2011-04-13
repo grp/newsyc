@@ -176,7 +176,7 @@
     [textView setFrame:frame];
 }
 
-- (void)titleDidChange: (NSNotification *)notification {
+- (void)textDidChange:(NSNotification *)notification {
     [completeItem setEnabled:[self ableToSubmit]];
 }
 
