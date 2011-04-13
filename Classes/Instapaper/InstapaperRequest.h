@@ -15,7 +15,7 @@
     id<InstapaperRequestDelegate> delegate;
 }
 
-@property (nonatomic, assign) id<InstapaperRequestDelegate> delegate;
+@property (nonatomic, retain) id<InstapaperRequestDelegate> delegate;
 @property (nonatomic, readonly) InstapaperSession *session;
 
 - (void)addItemWithURL:(NSURL *)url title:(NSString *)title selection:(NSString *)selection;
