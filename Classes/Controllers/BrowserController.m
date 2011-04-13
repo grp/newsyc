@@ -9,6 +9,7 @@
 #import "BrowserController.h"
 #import "InstapaperAPI.h"
 #import "NavigationController.h"
+#import "MBProgressHUD.h"
 
 @implementation BrowserController
 @synthesize currentURL;
@@ -113,11 +114,21 @@
 - (void)submitInstapaperRequest {
     InstapaperRequest *request = [[InstapaperRequest alloc] initWithSession:[InstapaperSession currentSession]];
     [request setDelegate:self];
+    hud = [[MBProgressHUD alloc] initWithView:[[self navigationController] view]];
+    [hud setDelegate:self];
+    [hud setLabelText:@"Sending to Instapaper"];
+    [[[self navigationController] view] addSubview:hud];
+    [hud show:YES];
     [request addItemWithURL:currentURL];
 }
 
 - (void)readability {
     [webview stringByEvaluatingJavaScriptFromString:kReadabilityJavascript];
+}
+
+- (void)hudWasHidden:(MBProgressHUD *)h {
+    [h removeFromSuperview];
+    [h release];
 }
 
 - (void)loginControllerDidLogin:(LoginController *)controller {
@@ -129,6 +140,30 @@
     [controller dismissModalViewControllerAnimated:YES];
 }
 
+- (void)showHUDMessage:(NSString *)message duration:(NSTimeInterval)duration {
+    hud = [[MBProgressHUD alloc] initWithView:[[self navigationController] view]];
+    [hud setDelegate:self];
+    [hud setCustomView:[[UIView alloc] initWithFrame:CGRectZero]];
+    [hud setMode:MBProgressHUDModeCustomView];
+    [hud setLabelText:message];
+    [[[self navigationController] view] addSubview:hud];
+    [hud showWhileExecuting:@selector(sleepFor:) onTarget:self withObject:[NSNumber numberWithDouble:duration] animated:YES];
+}
+
+- (void)sleepFor: (NSNumber *) seconds {
+    [NSThread sleepForTimeInterval:[seconds doubleValue]];
+}
+
+- (void)instapaperRequestDidAddItem:(InstapaperRequest *)request {
+    [hud hide:YES];
+}
+
+- (void)instapaperRequest:(InstapaperRequest *)request didFailToAddItemWithError:(NSError *)error {
+    [hud hide:NO];
+    [self showHUDMessage:@"Failed to Send to Instapaper" duration:.5];
+}
+
+
 - (void)actionSheet:(UIActionSheet *)action clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == [action cancelButtonIndex]) return;
     
@@ -139,6 +174,7 @@
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         [pasteboard setURL:currentURL];
         [pasteboard setString:[currentURL absoluteString]];
+        [self showHUDMessage:@"Copied to Clipboard" duration:.5];
     } else if (buttonIndex == first + 2) {
         if ([InstapaperSession currentSession] != nil) {
             [self submitInstapaperRequest];
