@@ -25,9 +25,8 @@
     MainTabBarController *mainTabBarController = [[MainTabBarController alloc] init];
     [mainTabBarController setTitle:@"Hacker News"];
     [navigationController setViewControllers:[NSArray arrayWithObjects:mainTabBarController, nil]];
-    
+                        
     [window makeKeyAndVisible];
-    firstModal = YES;
     return YES;
 }
 

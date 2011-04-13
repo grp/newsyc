@@ -12,7 +12,6 @@
 @interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
     UIWindow *window;
     NavigationController *navigationController;
-    BOOL firstModal;
 }
 
 @end
