@@ -239,8 +239,15 @@
     return request;
 }
 
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(buttonIndex == 1) {
+        [[UIApplication sharedApplication] openURL:externalURL];
+    }
+}
+
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    [[UIApplication sharedApplication] openURL:externalURL];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Leaving Application" message:@"Are you sure you want to leave news:yc?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    [alert show];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
