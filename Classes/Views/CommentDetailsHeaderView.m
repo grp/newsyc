@@ -43,7 +43,7 @@
     CGSize offsets = [[self class] offsets];
     CGFloat height = [[textView contentView] sizeThatFits:CGSizeMake(width - offsets.width, 0)].height;
     
-    return offsets.height + height + 16.0f + offsets.height;
+    return offsets.height + height + 18.0f + offsets.height;
 }
 
 - (void)setEntry:(HNEntry *)entry_ {
@@ -78,7 +78,7 @@
     pointsrect.size.width = bounds.width / 2 - (offsets.width * 2);
     pointsrect.size.height = [pointdate sizeWithFont:[[self class] subtleFont]].height;
     pointsrect.origin.x = offsets.width;
-    pointsrect.origin.y = bounds.height - offsets.height - offsets.height - pointsrect.size.height;
+    pointsrect.origin.y = bounds.height - offsets.height - 2.0f - pointsrect.size.height;
     [pointdate drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     
     [[UIColor darkGrayColor] set];
@@ -86,7 +86,7 @@
     userrect.size.width = bounds.width / 2 - (offsets.width * 2);
     userrect.size.height = [user sizeWithFont:[[self class] subtleFont]].height;
     userrect.origin.x = bounds.width / 2 + offsets.width;
-    userrect.origin.y = bounds.height - offsets.height - offsets.height - userrect.size.height;
+    userrect.origin.y = bounds.height - offsets.height - 2.0f - userrect.size.height;
     [user drawInRect:userrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
 }
 
