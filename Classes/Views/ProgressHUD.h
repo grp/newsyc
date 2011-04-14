@@ -26,6 +26,8 @@ typedef NSString *ProgressHUDState;
 
 - (void)showInWindow:(UIWindow *)window;
 - (void)dismiss;
+- (void)dismissWithAnimation:(BOOL)animated;
 - (void)dismissAfterDelay:(NSTimeInterval)delay;
+- (void)dismissAfterDelay:(NSTimeInterval)delay animated:(BOOL)animated;
 
 @end

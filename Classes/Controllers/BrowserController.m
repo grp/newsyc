@@ -141,14 +141,14 @@
 - (void)instapaperRequestDidAddItem:(InstapaperRequest *)request {
     [hud setText:@"Saved!"];
     [hud setState:kProgressHUDStateCompleted];
-    [hud dismissAfterDelay:1.0f];
+    [hud dismissAfterDelay:0.8f animated:YES];
     hud = nil;
 }
 
 - (void)instapaperRequest:(InstapaperRequest *)request didFailToAddItemWithError:(NSError *)error {
     [hud setText:@"Error Saving"];
     [hud setState:kProgressHUDStateError];
-    [hud dismissAfterDelay:1.0f];
+    [hud dismissAfterDelay:0.8f animated:YES];
     hud = nil;
 }
 
@@ -166,9 +166,9 @@
         if (hud == nil) {
             ProgressHUD *copied = [[ProgressHUD alloc] init];
             [copied setState:kProgressHUDStateCompleted];
-            [copied setText:@"Copied"];
+            [copied setText:@"Copied!"];
             [copied showInWindow:[[self view] window]];
-            [copied dismissAfterDelay:1.0f];
+            [copied dismissAfterDelay:0.8f animated:YES];
             [copied release];
         }
     } else if (buttonIndex == first + 2) {

@@ -132,12 +132,33 @@
     [window addSubview:self];
 }
 
+- (void)_dismissWithAnimation:(NSNumber *)animated {
+    if ([animated boolValue]) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.25f];
+        [overlay setAlpha:0.0f];
+        [UIView commitAnimations];
+        
+        [self performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5f];
+    } else {
+        [self removeFromSuperview];
+    }
+}
+
+- (void)dismissWithAnimation:(BOOL)animated {
+    [self _dismissWithAnimation:[NSNumber numberWithBool:animated]];
+}
+
 - (void)dismiss {
-    [self removeFromSuperview];
+    [self dismissWithAnimation:NO];
+}
+
+- (void)dismissAfterDelay:(NSTimeInterval)delay animated:(BOOL)animated {
+    [self performSelector:@selector(_dismissWithAnimation:) withObject:[NSNumber numberWithBool:animated] afterDelay:delay];
 }
 
 - (void)dismissAfterDelay:(NSTimeInterval)delay {
-    [self performSelector:@selector(dismiss) withObject:nil afterDelay:delay];
+    [self dismissAfterDelay:delay animated:NO];
 }
 
 - (void)dealloc {
