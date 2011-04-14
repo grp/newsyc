@@ -245,6 +245,10 @@
     }
 }
 
+- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    [alertView release];
+}
+
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Leaving Application" message:@"Are you sure you want to leave news:yc?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     [alert show];
