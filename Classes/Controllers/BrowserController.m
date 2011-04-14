@@ -10,6 +10,7 @@
 #import "InstapaperAPI.h"
 #import "NavigationController.h"
 #import "ProgressHUD.h"
+#import "NSArray+Strings.h"
 
 @implementation BrowserController
 @synthesize currentURL;
@@ -260,8 +261,9 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
+    NSArray *hosts = [NSArray arrayWithObjects:@"itunes.apple.com", @"phobos.apple.com", nil];
     NSURL *url = [request URL];
-    if([[url host] isEqualToString:@"itunes.apple.com"] || [[url host] isEqualToString:@"phobos.apple.com"]) {
+    if([hosts containsString:[url host]]) {
         [self openReferralURL:url];
         return NO;
     }
