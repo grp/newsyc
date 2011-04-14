@@ -261,9 +261,9 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
-    NSArray *hosts = [NSArray arrayWithObjects:@"itunes.apple.com", @"phobos.apple.com", nil];
+    NSArray *hosts = [NSArray arrayWithObjects:@"itunes.apple.com", @"phobos.apple.com", @"youtube.com", @"maps.google.com", nil];
     NSURL *url = [request URL];
-    if([hosts containsString:[url host]]) {
+    if(navigationType == UIWebViewNavigationTypeLinkClicked && [hosts containsString:[url host]]) {
         [self openReferralURL:url];
         return NO;
     }
