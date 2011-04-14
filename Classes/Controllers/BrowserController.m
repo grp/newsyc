@@ -231,9 +231,9 @@
 }
 
 //These 3 methods from Apple tech doc: http://developer.apple.com/library/ios/#qa/qa1629/_index.html
-- (void)openReferralURL:(NSURL *)referralURL {
-    externalURL = referralURL;
-    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:referralURL] delegate:self startImmediately:YES];
+- (void)openExternalURL:(NSURL *)externalURL {
+    externalURL = externalURL;
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:externalURL] delegate:self startImmediately:YES];
     [conn release];
 }
 
@@ -264,7 +264,7 @@
     NSArray *hosts = [NSArray arrayWithObjects:@"itunes.apple.com", @"phobos.apple.com", @"youtube.com", @"maps.google.com", nil];
     NSURL *url = [request URL];
     if(navigationType == UIWebViewNavigationTypeLinkClicked && [hosts containsString:[url host]]) {
-        [self openReferralURL:url];
+        [self openExternalURL:url];
         return NO;
     }
     if (navigationType == UIWebViewNavigationTypeLinkClicked ||
