@@ -14,6 +14,9 @@
 
 - (void)dealloc {
     [session release];
+    // XXX: hack: see header file
+    [delegate release];
+    
     [super dealloc];
 }
 
