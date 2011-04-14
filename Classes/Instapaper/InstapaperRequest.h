@@ -15,6 +15,7 @@
     id<InstapaperRequestDelegate> delegate;
 }
 
+// XXX: hack: retain the delegate so the delegate can forget about the fact it is a delegate
 @property (nonatomic, retain) id<InstapaperRequestDelegate> delegate;
 @property (nonatomic, readonly) InstapaperSession *session;
 
