@@ -229,6 +229,7 @@
     [self updateToolbarItems];
 }
 
+//These 3 methods from Apple tech doc: http://developer.apple.com/library/ios/#qa/qa1629/_index.html
 - (void)openReferralURL:(NSURL *)referralURL {
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:referralURL] delegate:self startImmediately:YES];
     [conn release];
@@ -239,6 +240,11 @@
     return request;
 }
 
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Leaving Application" message:@"Are you sure you want to leave news:yc?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    [alert show];
+}
+
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if(buttonIndex == 1) {
         [[UIApplication sharedApplication] openURL:externalURL];
@@ -247,11 +253,6 @@
 
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     [alertView release];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Leaving Application" message:@"Are you sure you want to leave news:yc?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-    [alert show];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
