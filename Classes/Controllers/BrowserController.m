@@ -231,12 +231,15 @@
 
 //These 3 methods from Apple tech doc: http://developer.apple.com/library/ios/#qa/qa1629/_index.html
 - (void)openReferralURL:(NSURL *)referralURL {
+    externalURL = referralURL;
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:referralURL] delegate:self startImmediately:YES];
     [conn release];
 }
 
 - (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response {
-    externalURL = [response URL];
+    if(response){
+        externalURL = [response URL];
+    }
     return request;
 }
 
