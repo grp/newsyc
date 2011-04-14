@@ -26,6 +26,7 @@
     UIBarButtonItem *spacerItem;
     UIBarButtonItem *readabilityItem;
     ProgressHUD *hud;
+    NSURL *externalURL;
 }
 
 @property (nonatomic, copy) NSURL *currentURL;

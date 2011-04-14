@@ -229,7 +229,27 @@
     [self updateToolbarItems];
 }
 
+- (void)openReferralURL:(NSURL *)referralURL {
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:referralURL] delegate:self startImmediately:YES];
+    [conn release];
+}
+
+- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response {
+    externalURL = [response URL];
+    return request;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    [[UIApplication sharedApplication] openURL:externalURL];
+}
+
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    
+    NSURL *url = [request URL];
+    if([[url host] isEqualToString:@"itunes.apple.com"]) {
+        [self openReferralURL:url];
+        return NO;
+    }
     if (navigationType == UIWebViewNavigationTypeLinkClicked ||
         navigationType == UIWebViewNavigationTypeFormSubmitted ||
         navigationType == UIWebViewNavigationTypeFormResubmitted) {
