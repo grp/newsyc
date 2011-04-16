@@ -6,6 +6,8 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import "ActivityIndicatorItem.h"
+
 // XXX: this class should support replacing an item with a spinner
 // while something is loading (e.g. a vote is being submitted)
 
@@ -23,20 +25,20 @@ typedef enum {
     HNEntry *entry;
     id<EntryActionsViewDelegate> delegate;
     
-    UIBarButtonItem *upvoteItem;
-    UIBarButtonItem *replyItem;
-    UIBarButtonItem *flagItem;
-    UIBarButtonItem *downvoteItem;
-    UIBarButtonItem *submitterItem;
+    int upvoteLoading;
+    int replyLoading;
+    int flagLoading;
+    int downvoteLoading;
+    int submitterLoading;
 }
 
 @property (nonatomic, retain) HNEntry *entry;
 @property (nonatomic, assign) id<EntryActionsViewDelegate> delegate;
-@property (nonatomic, readonly) UIBarButtonItem *upvoteItem;
-@property (nonatomic, readonly) UIBarButtonItem *replyItem;
-@property (nonatomic, readonly) UIBarButtonItem *flagItem;
-@property (nonatomic, readonly) UIBarButtonItem *downvoteItem;
-@property (nonatomic, readonly) UIBarButtonItem *submitterItem;
+
+- (void)beginLoadingItem:(EntryActionsViewItem)item;
+- (void)stopLoadingItem:(EntryActionsViewItem)item;
+- (BOOL)itemIsLoading:(EntryActionsViewItem)item;
+- (UIBarButtonItem *)barButtonItemForItem:(EntryActionsViewItem)item;
 
 @end
 

@@ -46,6 +46,16 @@
     [headerContainerView setNeedsDisplay];
 }
 
+- (void)submission:(id)submission didSubmitUpvote:(NSNumber *)submitted error:(NSError *)error {
+    [self submission:submission didSubmitVote:submitted error:error];
+    [entryActionsView stopLoadingItem:kEntryActionsViewItemUpvote];
+}
+
+- (void)submission:(id)submission didSubmitDownvote:(NSNumber *)submitted error:(NSError *)error {
+    [self submission:submission didSubmitVote:submitted error:error];
+    [entryActionsView stopLoadingItem:kEntryActionsViewItemDownvote];
+}
+
 - (void)submission:(id)submission didSubmitFlag:(NSNumber *)submitted error:(NSError *)error {
     if (![submitted boolValue]) {
         UIAlertView *alert = [[UIAlertView alloc] init];
@@ -56,6 +66,8 @@
         [alert release];
     }
     
+    [entryActionsView stopLoadingItem:kEntryActionsViewItemFlag];
+    
     [tableView reloadData];
     [headerContainerView setNeedsDisplay];
 }
@@ -64,6 +76,7 @@
     if ([[sheet sheetContext] isEqual:@"flag"]) {
         if (index == [sheet destructiveButtonIndex]) {
             [[HNSession currentSession] flagEntry:(HNEntry *) source target:self action:@selector(submission:didSubmitFlag:error:)];
+            [entryActionsView beginLoadingItem:kEntryActionsViewItemFlag];
         }
     } else {
         if ([[[self class] superclass] instancesRespondToSelector:@selector(actionSheet:clickedButtonAtIndex:)]) {
@@ -80,9 +93,11 @@
         [controller setTitle:@"Profile"];
         [[self navigationController] pushViewController:[controller autorelease] animated:YES];
     } else if (item == kEntryActionsViewItemUpvote) {
-        [[HNSession currentSession] voteEntry:(HNEntry *) source inDirection:kHNVoteDirectionUp target:self action:@selector(submission:didSubmitVote:error:)];
+        [[HNSession currentSession] voteEntry:(HNEntry *) source inDirection:kHNVoteDirectionUp target:self action:@selector(submission:didSubmitUpvote:error:)];
+        [entryActionsView beginLoadingItem:kEntryActionsViewItemUpvote];
     } else if (item == kEntryActionsViewItemDownvote) {
-        [[HNSession currentSession] voteEntry:(HNEntry *) source inDirection:kHNVoteDirectionDown target:self action:@selector(submission:didSubmitVote:error:)];
+        [[HNSession currentSession] voteEntry:(HNEntry *) source inDirection:kHNVoteDirectionDown target:self action:@selector(submission:didSubmitDownvote:error:)];
+        [entryActionsView beginLoadingItem:kEntryActionsViewItemDownvote];
     } else if (item == kEntryActionsViewItemFlag) {
         UIActionSheet *sheet = [[UIActionSheet alloc] init];
         [sheet addButtonWithTitle:@"Flag"];
@@ -91,7 +106,7 @@
         [sheet setCancelButtonIndex:1];
         [sheet setDelegate:self];
         [sheet setSheetContext:@"flag"];
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:[entryActionsView flagItem] animated:YES];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:[entryActionsView barButtonItemForItem:kEntryActionsViewItemFlag] animated:YES];
         else [sheet showInView:[[self view] window]];
         [sheet release];
     } else if (item == kEntryActionsViewItemReply) {
@@ -119,7 +134,7 @@
 - (void)entryActionsView:(EntryActionsView *)eav didSelectItem:(EntryActionsViewItem)item {
     savedItem = item;
     
-    if (item == kEntryActionsViewItemSubmitter || [HNSession currentSession] != nil) {
+    if (item == kEntryActionsViewItemSubmitter || ![[HNSession currentSession] isAnonymous]) {
         [self completeAction];
     } else {
         LoginController *login = [[HackerNewsLoginController alloc] init];

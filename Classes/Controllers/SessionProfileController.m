@@ -109,9 +109,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     // If you logged in somewhere else while this view wasn't visible,
     // we should reflect that change once it does become visible.
-    if (source == nil && [HNSession currentSession] != nil) {
-        [self setSource:[[HNSession currentSession] user]];
-    }
+    [self setSource:[[HNSession currentSession] user]];
     
     [super viewWillAppear:animated];
 }

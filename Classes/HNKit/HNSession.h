@@ -6,8 +6,6 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "HNKit.h"
-
 typedef NSString *HNSessionToken;
 
 @class HNUser, HNEntry;
@@ -15,11 +13,14 @@ typedef NSString *HNSessionToken;
     BOOL loaded;
     HNSessionToken token;
     HNUser *user;
+    
+    NSDictionary *pool;
 }
 
 @property (nonatomic, retain) HNUser *user;
 @property (nonatomic, copy) NSString *token;
 @property (nonatomic, assign, getter=isLoaded) BOOL loaded;
+@property (nonatomic, readonly) BOOL isAnonymous;
 
 + (HNSession *)currentSession;
 + (void)setCurrentSession:(HNSession *)session;

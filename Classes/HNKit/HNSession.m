@@ -10,6 +10,7 @@
 #import "HNSession.h"
 #import "HNAPISubmission.h"
 #import "HNSubmission.h"
+#import "HNAnonymousSession.h"
 
 static HNSession *current = nil;
 
@@ -32,6 +33,9 @@ static HNSession *current = nil;
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HNKit:SessionToken"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HNKit:SessionName"];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        HNSession *session = [[HNAnonymousSession alloc] init];
+        [self setCurrentSession:[session autorelease]];
     }
 }
 
@@ -43,6 +47,8 @@ static HNSession *current = nil;
     if (name != nil && token != nil) {
         HNSession *session = [[HNSession alloc] initWithUsername:name token:token];
         [self setCurrentSession:[session autorelease]];
+    } else {
+        [self setCurrentSession:nil];
     }
 }
 
@@ -58,7 +64,11 @@ static HNSession *current = nil;
     return self;
 }
 
-- (void)_performSubmission:(HNSubmission *)submission target:(id)target action:(SEL)action {
+- (BOOL)isAnonymous {
+    return NO;
+}
+
+- (void)performSubmission:(HNSubmission *)submission target:(id)target action:(SEL)action {
     HNAPISubmission *api = [[HNAPISubmission alloc] initWithTarget:target action:action];
     [api performSubmission:submission withToken:[self token]];
 }
@@ -66,21 +76,21 @@ static HNSession *current = nil;
 - (void)flagEntry:(HNEntry *)entry target:(id)target action:(SEL)action {
     HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeFlag];
     [submission setTarget:entry];
-    [self _performSubmission:submission target:target action:action];
+    [self performSubmission:submission target:target action:action];
 }
 
 - (void)voteEntry:(HNEntry *)entry inDirection:(HNVoteDirection)direction target:(id)target action:(SEL)action {
     HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeVote];
     [submission setDirection:direction];
     [submission setTarget:entry];
-    [self _performSubmission:submission target:target action:action];
+    [self performSubmission:submission target:target action:action];
 }
 
 - (void)replyToEntry:(HNEntry *)entry withBody:(NSString *)body target:(id)target action:(SEL)action {
     HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeReply];
     [submission setBody:body];
     [submission setTarget:entry];
-    [self _performSubmission:submission target:target action:action];
+    [self performSubmission:submission target:target action:action];
 }
 
 - (void)submitEntryWithTitle:(NSString *)title body:(NSString *)body URL:(NSURL *)url target:(id)target action:(SEL)action {
@@ -88,7 +98,7 @@ static HNSession *current = nil;
     [submission setBody:body];
     [submission setTitle:title];
     [submission setDestination:url];
-    [self _performSubmission:submission target:target action:action];
+    [self performSubmission:submission target:target action:action];
 }
 
 @end

@@ -89,7 +89,7 @@
 }
 
 - (void)composePressed {
-    if ([HNSession currentSession] != nil) {
+    if (![[HNSession currentSession] isAnonymous]) {
         [self requestSubmissionType];
     } else {
         LoginController *login = [[HackerNewsLoginController alloc] init];

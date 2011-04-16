@@ -63,18 +63,13 @@
     [toolbar setTintColor:[[[self navigationController] navigationBar] tintColor]];
     [[self view] addSubview:toolbar];
     
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] init];
-    [spinner setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
-    [spinner startAnimating];
-    [spinner sizeToFit];
-    
     backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
     forwardItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"forward.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goForward)];
     readabilityItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"readability.png"] style:UIBarButtonItemStylePlain target:self action:@selector(readability)];
-    refreshItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload)];
+    refreshItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh.png"] style:UIBarButtonItemStylePlain target:self action:@selector(reload)];
     shareItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionMenu)];
     spacerItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
-    loadingItem = [[UIBarButtonItem alloc] initWithCustomView:[spinner autorelease]];
+    loadingItem = [[ActivityIndicatorItem alloc] initWithSize:[[refreshItem image] size]];
     [self updateToolbarItems];
     
     CGRect webviewFrame = [[self view] bounds];

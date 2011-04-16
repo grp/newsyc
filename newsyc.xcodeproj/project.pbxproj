@@ -16,6 +16,7 @@
 		7D36ADCA13553935000613B2 /* ProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36ADC913553935000613B2 /* ProgressHUD.m */; };
 		7D36ADCE13560D87000613B2 /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D36ADCC13560D87000613B2 /* check.png */; };
 		7D36ADCF13560D87000613B2 /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D36ADCD13560D87000613B2 /* check@2x.png */; };
+		7D39780C135682D400A34476 /* HNAnonymousSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D39780B135682D400A34476 /* HNAnonymousSession.m */; };
 		7D6B9EF11347DF2E00CD923C /* Icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6B9E371347DF2E00CD923C /* Icon-small.png */; };
 		7D6B9EF21347DF2E00CD923C /* Icon-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6B9E381347DF2E00CD923C /* Icon-small@2x.png */; };
 		7D6B9EF31347DF2E00CD923C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6B9E391347DF2E00CD923C /* Icon.png */; };
@@ -121,6 +122,9 @@
 		7D6B9F581347DF2E00CD923C /* XMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EEE1347DF2E00CD923C /* XMLElement.m */; };
 		7D8A660813333A72002012AA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D8A660713333A72002012AA /* QuartzCore.framework */; };
 		7D8E9EF6134D76DF00A724C5 /* HackerNewsLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8E9EF5134D76DF00A724C5 /* HackerNewsLoginController.m */; };
+		7D91AA9F135A27DD00247D34 /* ActivityIndicatorItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D91AA9E135A27DD00247D34 /* ActivityIndicatorItem.m */; };
+		7D91AAAA135A44B000247D34 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D91AAA8135A44B000247D34 /* refresh.png */; };
+		7D91AAAB135A44B000247D34 /* refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D91AAA9135A44B000247D34 /* refresh@2x.png */; };
 		7DCB8115134ED75400B521F2 /* InstapaperAuthenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DCB8110134ED75400B521F2 /* InstapaperAuthenticator.m */; };
 		7DCB8116134ED75400B521F2 /* InstapaperRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DCB8112134ED75400B521F2 /* InstapaperRequest.m */; };
 		7DCB8117134ED75400B521F2 /* InstapaperSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DCB8114134ED75400B521F2 /* InstapaperSession.m */; };
@@ -144,6 +148,8 @@
 		7D36ADC913553935000613B2 /* ProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressHUD.m; sourceTree = "<group>"; };
 		7D36ADCC13560D87000613B2 /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
 		7D36ADCD13560D87000613B2 /* check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check@2x.png"; sourceTree = "<group>"; };
+		7D39780A135682D400A34476 /* HNAnonymousSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNAnonymousSession.h; sourceTree = "<group>"; };
+		7D39780B135682D400A34476 /* HNAnonymousSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNAnonymousSession.m; sourceTree = "<group>"; };
 		7D6B9E371347DF2E00CD923C /* Icon-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-small.png"; sourceTree = "<group>"; };
 		7D6B9E381347DF2E00CD923C /* Icon-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-small@2x.png"; sourceTree = "<group>"; };
 		7D6B9E391347DF2E00CD923C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -321,6 +327,10 @@
 		7D8A660713333A72002012AA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7D8E9EF4134D76DF00A724C5 /* HackerNewsLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HackerNewsLoginController.h; sourceTree = "<group>"; };
 		7D8E9EF5134D76DF00A724C5 /* HackerNewsLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HackerNewsLoginController.m; sourceTree = "<group>"; };
+		7D91AA9D135A27DD00247D34 /* ActivityIndicatorItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityIndicatorItem.h; sourceTree = "<group>"; };
+		7D91AA9E135A27DD00247D34 /* ActivityIndicatorItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityIndicatorItem.m; sourceTree = "<group>"; };
+		7D91AAA8135A44B000247D34 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
+		7D91AAA9135A44B000247D34 /* refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh@2x.png"; sourceTree = "<group>"; };
 		7DCB810E134ED75400B521F2 /* InstapaperAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InstapaperAPI.h; path = Instapaper/InstapaperAPI.h; sourceTree = "<group>"; };
 		7DCB810F134ED75400B521F2 /* InstapaperAuthenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InstapaperAuthenticator.h; path = Instapaper/InstapaperAuthenticator.h; sourceTree = "<group>"; };
 		7DCB8110134ED75400B521F2 /* InstapaperAuthenticator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InstapaperAuthenticator.m; path = Instapaper/InstapaperAuthenticator.m; sourceTree = "<group>"; };
@@ -408,6 +418,8 @@
 		7D6B9E3B1347DF2E00CD923C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				7D91AAA8135A44B000247D34 /* refresh.png */,
+				7D91AAA9135A44B000247D34 /* refresh@2x.png */,
 				7D36ADCC13560D87000613B2 /* check.png */,
 				7D36ADCD13560D87000613B2 /* check@2x.png */,
 				FAF07BF0134F6B13000743BE /* readability.png */,
@@ -592,6 +604,8 @@
 				7D6B9EC21347DF2E00CD923C /* HNEntry.m */,
 				7D6B9EC61347DF2E00CD923C /* HNSession.h */,
 				7D6B9EC71347DF2E00CD923C /* HNSession.m */,
+				7D39780A135682D400A34476 /* HNAnonymousSession.h */,
+				7D39780B135682D400A34476 /* HNAnonymousSession.m */,
 				7D6B9EC81347DF2E00CD923C /* HNSessionAuthenticator.h */,
 				7D6B9EC91347DF2E00CD923C /* HNSessionAuthenticator.m */,
 				7D6B9EBD1347DF2E00CD923C /* HNAPIRequest.h */,
@@ -616,6 +630,8 @@
 			isa = PBXGroup;
 			children = (
 				7D6B9E931347DF2E00CD923C /* DTAttributedTextView */,
+				7D91AA9D135A27DD00247D34 /* ActivityIndicatorItem.h */,
+				7D91AA9E135A27DD00247D34 /* ActivityIndicatorItem.m */,
 				7D6B9ED91347DF2E00CD923C /* EGORefreshTableHeaderView.h */,
 				7D6B9EDA1347DF2E00CD923C /* EGORefreshTableHeaderView.m */,
 				7D6B9EE21347DF2E00CD923C /* PlacardButton.h */,
@@ -636,8 +652,8 @@
 				7D6B9EE71347DF2E00CD923C /* ProfileHeaderView.m */,
 				7D6B9EE01347DF2E00CD923C /* LoadingIndicatorView.h */,
 				7D6B9EE11347DF2E00CD923C /* LoadingIndicatorView.m */,
-				7D36ADC813553935000613B2 /* ProgressHUD.h */,
 				7D36ADC913553935000613B2 /* ProgressHUD.m */,
+				7D36ADC813553935000613B2 /* ProgressHUD.h */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -757,6 +773,8 @@
 				943C1881134E16D700A5977E /* Default-Portrait.png in Resources */,
 				7D36ADCE13560D87000613B2 /* check.png in Resources */,
 				7D36ADCF13560D87000613B2 /* check@2x.png in Resources */,
+				7D91AAAA135A44B000247D34 /* refresh.png in Resources */,
+				7D91AAAB135A44B000247D34 /* refresh@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -841,6 +859,8 @@
 				7DCB8116134ED75400B521F2 /* InstapaperRequest.m in Sources */,
 				7DCB8117134ED75400B521F2 /* InstapaperSession.m in Sources */,
 				7D36ADCA13553935000613B2 /* ProgressHUD.m in Sources */,
+				7D39780C135682D400A34476 /* HNAnonymousSession.m in Sources */,
+				7D91AA9F135A27DD00247D34 /* ActivityIndicatorItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

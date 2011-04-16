@@ -126,11 +126,7 @@
     [topLabel setShadowOffset:CGSizeMake(0, 1.0f)];
     [topLabel setFont:[UIFont boldSystemFontOfSize:30.0f]];
     
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [spinner sizeToFit];
-    [spinner startAnimating];
-    [spinner setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
-    loadingItem = [[UIBarButtonItem alloc] initWithCustomView:[spinner autorelease]];
+    loadingItem = [[ActivityIndicatorItem alloc] initWithSize:kActivityIndicatorItemStandardSize];
 }
 
 - (void)viewDidLoad {

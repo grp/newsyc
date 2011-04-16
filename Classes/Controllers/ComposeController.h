@@ -8,6 +8,8 @@
 
 #import "HNKit.h"
 
+#import "ActivityIndicatorItem.h"
+
 @class PlaceholderTextView;
 @interface ComposeController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate> {
     UITableView *tableView;
@@ -15,7 +17,7 @@
     PlaceholderTextView *textView;
     UIBarButtonItem *cancelItem;
     UIBarButtonItem *completeItem;
-    UIBarButtonItem *loadingItem;
+    ActivityIndicatorItem *loadingItem;
     BOOL keyboardVisible;
     id delegate;
 }
