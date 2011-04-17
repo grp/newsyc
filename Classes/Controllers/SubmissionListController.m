@@ -16,10 +16,6 @@
 
 - (void)loadView {
     [super loadView];
-    
-    refreshView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - tableView.bounds.size.height, [self view].frame.size.width,tableView.bounds.size.height)];
-    [refreshView setDelegate:self];
-    [tableView addSubview:refreshView];
 }
 
 - (void)viewDidUnload {
@@ -63,6 +59,13 @@
 
 - (void)finishedLoading {
     [super finishedLoading];
+    
+    if (refreshView == nil) {
+        refreshView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - tableView.bounds.size.height, [self view].frame.size.width,tableView.bounds.size.height)];
+        [refreshView setDelegate:self];
+        [tableView addSubview:refreshView];
+    }
+    
 	[refreshView egoRefreshScrollViewDataSourceDidFinishedLoading:tableView];
 }
 

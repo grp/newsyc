@@ -234,6 +234,7 @@
     suggestedHeaderHeight = [detailsHeaderView bounds].size.height;
     maximumHeaderHeight = [tableView bounds].size.height - 64.0f;
     [self updateHeaderPositioning];
+    [tableView setScrollsToTop:YES];
 }
 
 - (void)finishedLoading {

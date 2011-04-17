@@ -118,6 +118,7 @@
     }
     
     [request addItemWithURL:currentURL];
+    [request autorelease];
 }
 
 - (void)readability {

@@ -19,4 +19,13 @@
     return self;
 }
 
+- (void)dealloc {
+    [target release];
+    [destination release];
+    [body release];
+    [title release];
+    
+    [super dealloc];
+}
+
 @end

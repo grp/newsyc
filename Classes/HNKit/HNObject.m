@@ -116,7 +116,7 @@
 
 - (id)initWithType:(HNPageType)type_ identifier:(id)identifier_ URL:(NSURL *)url_ {
     HNObject *object = [HNObjectCache objectFromCacheWithType:type_ identifier:identifier_];
-    if (object != nil) return object;
+    if (object != nil) return [object retain];
     
     if (type_ != nil && url_ != nil && (self = [super init])) {
         [self setURL:url_];

@@ -71,6 +71,7 @@ static HNSession *current = nil;
 - (void)performSubmission:(HNSubmission *)submission target:(id)target action:(SEL)action {
     HNAPISubmission *api = [[HNAPISubmission alloc] initWithTarget:target action:action];
     [api performSubmission:submission withToken:[self token]];
+    [submission autorelease];
 }
 
 - (void)flagEntry:(HNEntry *)entry target:(id)target action:(SEL)action {
