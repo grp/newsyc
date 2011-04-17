@@ -106,7 +106,7 @@
                     // In "ask HN" posts, we need to extract the id (and fix the URL) here.
                     if ([href hasPrefix:@"item?id="]) {
                         identifier = [NSNumber numberWithInt:[[href substringFromIndex:[@"item?id=" length]] intValue]];
-                        href = [NSString stringWithFormat:@"http://%@/%@", kHNWebsiteHost, href];
+                        href = nil;
                     }
                 }
             }
@@ -171,7 +171,7 @@
         [item setObject:points forKey:@"points"];
         [item setObject:title forKey:@"title"];
         [item setObject:comments forKey:@"numchildren"];
-        [item setObject:href forKey:@"url"];
+        if (href != nil) [item setObject:href forKey:@"url"];
         [item setObject:date forKey:@"date"];
         if (body != nil) [item setObject:body forKey:@"body"];
         [item setObject:identifier forKey:@"identifier"];
