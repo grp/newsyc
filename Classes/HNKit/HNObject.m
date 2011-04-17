@@ -44,6 +44,13 @@
     return self;
 }
 
+- (void)dealloc {
+    [type release];
+    [identifier release];
+    
+    [super dealloc];
+}
+
 + (id)objectCacheWithType:(NSString *)type_ identifier:(id)identifier_ {
     return [[[self alloc] initWithType:type_ identifier:identifier_] autorelease];
 }
