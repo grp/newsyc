@@ -12,6 +12,71 @@
 #import "HNKit.h"
 #import "HNObject.h"
 
+@interface HNObjectCache : NSObject {
+    HNPageType type;
+    id identifier;
+}
+
+@property (nonatomic, retain, readonly) HNObject *object;
+
+@end
+
+@implementation HNObjectCache
+@synthesize object;
+
++ (NSMutableDictionary *)cacheDictionary {
+    static NSMutableDictionary *objectCache = nil;
+    if (objectCache == nil) objectCache = [[NSMutableDictionary alloc] init];
+    return objectCache;
+}
+
++ (void)initialize {
+    // inititalize cache
+    [self cacheDictionary];
+}
+
+- (id)initWithType:(NSString *)type_ identifier:(id)identifier_ {
+    if ((self = [super init])) {
+        type = [type_ copy];
+        identifier = [identifier_ copy];
+    }
+    
+    return self;
+}
+
++ (id)objectCacheWithType:(NSString *)type_ identifier:(id)identifier_ {
+    return [[[self alloc] initWithType:type_ identifier:identifier_] autorelease];
+}
+
++ (void)addObjectToCache:(HNObject *)object_ {
+    HNObjectCache *key = [self objectCacheWithType:[object_ type] identifier:[object_ identifier]];
+    NSMutableDictionary *cache = [self cacheDictionary];
+    [cache setObject:object_ forKey:key];
+}
+
++ (HNObject *)objectFromCacheWithType:(NSString *)type_ identifier:(id)identifier_ {
+    HNObjectCache *key = [self objectCacheWithType:type_ identifier:identifier_];
+    NSMutableDictionary *cache = [self cacheDictionary];
+    HNObject *cached = [cache objectForKey:key];
+    return cached;
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+    return [[[self class] allocWithZone:zone] initWithType:type identifier:identifier];
+}
+
+- (BOOL)isEqual:(id)object_ {
+    // XXX: are hash collisions a likely issue here?
+    return [self hash] == [object_ hash];
+}
+
+- (NSUInteger)hash {
+    // XXX: does this increase the chance of collisions?
+    return [type hash] ^ [identifier hash];
+}
+
+@end
+
 @implementation HNObject
 @synthesize identifier, loadingState, URL=url, type, delegate;
 
@@ -43,10 +108,14 @@
 }
 
 - (id)initWithType:(HNPageType)type_ identifier:(id)identifier_ URL:(NSURL *)url_ {
+    HNObject *object = [HNObjectCache objectFromCacheWithType:type_ identifier:identifier_];
+    if (object != nil) {NSLog(@"found in cache: (%@ %@)", type_, identifier_); return object;}
+    
     if (type_ != nil && url_ != nil && (self = [super init])) {
         [self setURL:url_];
         [self setType:type_];
         [self setIdentifier:identifier_];
+        [HNObjectCache addObjectToCache:self];
     }
     
     return self;
