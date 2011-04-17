@@ -196,7 +196,7 @@
     if (textField == usernameField) {
         [passwordField becomeFirstResponder];
     } else if (textField == passwordField) {
-        [self authenticate];
+        [self _authenticate];
     }
     
     return YES;
