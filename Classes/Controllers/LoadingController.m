@@ -36,6 +36,7 @@
     if ([source delegate] == self) [source setDelegate:nil];
     [source release];
     [actionItem release];
+    [loadingItem release];
     
     [super dealloc];
 }
@@ -58,15 +59,22 @@
     [self addStatusView:errorLabel];
 }
 
+- (void)objectChangedLoadingState:(HNObject *)object {
+    if ([object isLoading]) [[self navigationItem] setRightBarButtonItem:loadingItem];
+}
+
 - (void)object:(HNObject *)source_ failedToLoadWithError:(NSError *)error {
     // If the source has already loaded before, we have *some* data to show,
     // so just show that. Otherwise, what really should happen is to:
     // XXX: show a non-modal loading error display if previously loaded
     if (![source isLoaded]) [self showErrorWithTitle:@"Error loading."];
+    
+    [[self navigationItem] setRightBarButtonItem:actionItem];
 }
 
 - (void)objectFinishedLoading:(HNObject *)object; {
     [self removeStatusView:indicator];
+    [[self navigationItem] setRightBarButtonItem:actionItem];
     [self finishedLoading];
 }
 
@@ -109,10 +117,12 @@
     [errorLabel setTextAlignment:UITextAlignmentCenter];
     
     actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTapped)];
+    loadingItem = [[ActivityIndicatorItem alloc] initWithSize:kActivityIndicatorItemStandardSize];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[self navigationItem] setRightBarButtonItem:actionItem];
 }
 
 - (void)viewDidUnload {
@@ -122,6 +132,8 @@
     errorLabel = nil;
     [actionItem release];
     actionItem = nil;
+    [loadingItem release];
+    loadingItem = nil;
     
     loaded = NO;
     
@@ -131,7 +143,6 @@
 - (void)performInitialLoadIfPossible {
     if (!loaded && source != nil) {
         loaded = YES;
-        [[self navigationItem] setRightBarButtonItem:actionItem];
         
         if (![source isLoaded]) {
             [self addStatusView:indicator];

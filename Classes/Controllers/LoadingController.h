@@ -7,6 +7,7 @@
 //
 
 #import "HNKit.h"
+#import "ActivityIndicatorItem.h"
 
 @class LoadingIndicatorView;
 @interface LoadingController : UIViewController <UIActionSheetDelegate, HNObjectLoadingDelegate> {
@@ -15,6 +16,7 @@
     BOOL loaded;
     HNObject *source;
     UIBarButtonItem *actionItem;
+    ActivityIndicatorItem *loadingItem;
 }
 
 @property (nonatomic, retain) HNObject *source;

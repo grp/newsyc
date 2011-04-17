@@ -71,7 +71,6 @@ typedef enum {
 
 // Fine-grained monitoring of loading state.
 - (void)objectChangedLoadingState:(HNObject *)object;
-
 // Notifications of loading finality.
 - (void)objectFinishedLoading:(HNObject *)object;
 // Notifications of loading failure.

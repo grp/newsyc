@@ -19,7 +19,7 @@
     UIView *containerContainer;
     CGFloat suggestedHeaderHeight;
     CGFloat maximumHeaderHeight;
-    
+        
     EntryActionsViewItem savedItem;
     BOOL shouldCompleteOnAppear;
 }
