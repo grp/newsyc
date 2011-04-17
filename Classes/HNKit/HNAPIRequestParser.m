@@ -316,6 +316,7 @@
         NSNumber *depth = [comment objectForKey:@"depth"];
         
         if (depth != nil) {
+            if ([depth intValue] >= [lasts count]) continue;
             if ([lasts count] >= [depth intValue])
                 [lasts removeObjectsInRange:NSMakeRange([depth intValue] + 1, [lasts count] - [depth intValue] - 1)];
             parent = [lasts lastObject];
