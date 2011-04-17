@@ -10,6 +10,7 @@
 
 #import "ActivityIndicatorItem.h"
 
+@protocol ComposeControllerDelegate;
 @class PlaceholderTextView;
 @interface ComposeController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate> {
     UITableView *tableView;
@@ -19,10 +20,10 @@
     UIBarButtonItem *completeItem;
     ActivityIndicatorItem *loadingItem;
     BOOL keyboardVisible;
-    id delegate;
+    id<ComposeControllerDelegate> delegate;
 }
 
-@property (nonatomic, assign) id delegate;
+@property (nonatomic, assign) id<ComposeControllerDelegate> delegate;
 
 - (UITableViewCell *)generateTextFieldCell;
 - (UITextField *)generateTextFieldForCell:(UITableViewCell *)cell;
@@ -35,3 +36,12 @@
 - (void)textDidChange:(NSNotification *)notification;
 
 @end
+
+@protocol ComposeControllerDelegate <NSObject>
+@optional
+
+- (void)composeControllerDidSubmit:(ComposeController *)controller;
+- (void)composeControllerDidCancel:(ComposeController *)controller;
+
+@end
+

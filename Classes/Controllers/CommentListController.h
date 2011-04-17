@@ -7,12 +7,13 @@
 //
 
 #import "EntryListController.h"
+#import "ComposeController.h"
 #import "EntryActionsView.h"
 #import "DetailsHeaderView.h"
 #import "LoginController.h"
 
 @class HeaderContainerView;
-@interface CommentListController : EntryListController <EntryActionsViewDelegate, DetailsHeaderViewDelegate, LoginControllerDelegate> {
+@interface CommentListController : EntryListController <EntryActionsViewDelegate, DetailsHeaderViewDelegate, LoginControllerDelegate, ComposeControllerDelegate> {
     HeaderContainerView *headerContainerView;
     EntryActionsView *entryActionsView;
     UIView *containerContainer;

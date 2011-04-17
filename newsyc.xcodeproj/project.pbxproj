@@ -94,10 +94,7 @@
 		7D6B9F3B1347DF2E00CD923C /* NSScanner+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EAF1347DF2E00CD923C /* NSScanner+HTML.m */; };
 		7D6B9F3C1347DF2E00CD923C /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EB11347DF2E00CD923C /* NSString+HTML.m */; };
 		7D6B9F3D1347DF2E00CD923C /* UIColor+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EB31347DF2E00CD923C /* UIColor+HTML.m */; };
-		7D6B9F3E1347DF2E00CD923C /* HNAPIParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EB61347DF2E00CD923C /* HNAPIParser.m */; };
-		7D6B9F3F1347DF2E00CD923C /* HNAPIParserCommentTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EB81347DF2E00CD923C /* HNAPIParserCommentTree.m */; };
-		7D6B9F401347DF2E00CD923C /* HNAPIParserSubmissionList.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EBA1347DF2E00CD923C /* HNAPIParserSubmissionList.m */; };
-		7D6B9F411347DF2E00CD923C /* HNAPIParserUserProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EBC1347DF2E00CD923C /* HNAPIParserUserProfile.m */; };
+		7D6B9F3E1347DF2E00CD923C /* HNAPIRequestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EB61347DF2E00CD923C /* HNAPIRequestParser.m */; };
 		7D6B9F421347DF2E00CD923C /* HNAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EBE1347DF2E00CD923C /* HNAPIRequest.m */; };
 		7D6B9F431347DF2E00CD923C /* HNAPISubmission.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EC01347DF2E00CD923C /* HNAPISubmission.m */; };
 		7D6B9F441347DF2E00CD923C /* HNEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EC21347DF2E00CD923C /* HNEntry.m */; };
@@ -269,14 +266,8 @@
 		7D6B9EB11347DF2E00CD923C /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
 		7D6B9EB21347DF2E00CD923C /* UIColor+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+HTML.h"; sourceTree = "<group>"; };
 		7D6B9EB31347DF2E00CD923C /* UIColor+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HTML.m"; sourceTree = "<group>"; };
-		7D6B9EB51347DF2E00CD923C /* HNAPIParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNAPIParser.h; sourceTree = "<group>"; };
-		7D6B9EB61347DF2E00CD923C /* HNAPIParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNAPIParser.m; sourceTree = "<group>"; };
-		7D6B9EB71347DF2E00CD923C /* HNAPIParserCommentTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNAPIParserCommentTree.h; sourceTree = "<group>"; };
-		7D6B9EB81347DF2E00CD923C /* HNAPIParserCommentTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNAPIParserCommentTree.m; sourceTree = "<group>"; };
-		7D6B9EB91347DF2E00CD923C /* HNAPIParserSubmissionList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNAPIParserSubmissionList.h; sourceTree = "<group>"; };
-		7D6B9EBA1347DF2E00CD923C /* HNAPIParserSubmissionList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNAPIParserSubmissionList.m; sourceTree = "<group>"; };
-		7D6B9EBB1347DF2E00CD923C /* HNAPIParserUserProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNAPIParserUserProfile.h; sourceTree = "<group>"; };
-		7D6B9EBC1347DF2E00CD923C /* HNAPIParserUserProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNAPIParserUserProfile.m; sourceTree = "<group>"; };
+		7D6B9EB51347DF2E00CD923C /* HNAPIRequestParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNAPIRequestParser.h; sourceTree = "<group>"; };
+		7D6B9EB61347DF2E00CD923C /* HNAPIRequestParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNAPIRequestParser.m; sourceTree = "<group>"; };
 		7D6B9EBD1347DF2E00CD923C /* HNAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNAPIRequest.h; sourceTree = "<group>"; };
 		7D6B9EBE1347DF2E00CD923C /* HNAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNAPIRequest.m; sourceTree = "<group>"; };
 		7D6B9EBF1347DF2E00CD923C /* HNAPISubmission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNAPISubmission.h; sourceTree = "<group>"; };
@@ -610,14 +601,8 @@
 				7D6B9EC91347DF2E00CD923C /* HNSessionAuthenticator.m */,
 				7D6B9EBD1347DF2E00CD923C /* HNAPIRequest.h */,
 				7D6B9EBE1347DF2E00CD923C /* HNAPIRequest.m */,
-				7D6B9EB51347DF2E00CD923C /* HNAPIParser.h */,
-				7D6B9EB61347DF2E00CD923C /* HNAPIParser.m */,
-				7D6B9EB71347DF2E00CD923C /* HNAPIParserCommentTree.h */,
-				7D6B9EB81347DF2E00CD923C /* HNAPIParserCommentTree.m */,
-				7D6B9EB91347DF2E00CD923C /* HNAPIParserSubmissionList.h */,
-				7D6B9EBA1347DF2E00CD923C /* HNAPIParserSubmissionList.m */,
-				7D6B9EBB1347DF2E00CD923C /* HNAPIParserUserProfile.h */,
-				7D6B9EBC1347DF2E00CD923C /* HNAPIParserUserProfile.m */,
+				7D6B9EB51347DF2E00CD923C /* HNAPIRequestParser.h */,
+				7D6B9EB61347DF2E00CD923C /* HNAPIRequestParser.m */,
 				7D6B9ECA1347DF2E00CD923C /* HNSubmission.h */,
 				7D6B9ECB1347DF2E00CD923C /* HNSubmission.m */,
 				7D6B9EBF1347DF2E00CD923C /* HNAPISubmission.h */,
@@ -827,10 +812,7 @@
 				7D6B9F3B1347DF2E00CD923C /* NSScanner+HTML.m in Sources */,
 				7D6B9F3C1347DF2E00CD923C /* NSString+HTML.m in Sources */,
 				7D6B9F3D1347DF2E00CD923C /* UIColor+HTML.m in Sources */,
-				7D6B9F3E1347DF2E00CD923C /* HNAPIParser.m in Sources */,
-				7D6B9F3F1347DF2E00CD923C /* HNAPIParserCommentTree.m in Sources */,
-				7D6B9F401347DF2E00CD923C /* HNAPIParserSubmissionList.m in Sources */,
-				7D6B9F411347DF2E00CD923C /* HNAPIParserUserProfile.m in Sources */,
+				7D6B9F3E1347DF2E00CD923C /* HNAPIRequestParser.m in Sources */,
 				7D6B9F421347DF2E00CD923C /* HNAPIRequest.m in Sources */,
 				7D6B9F431347DF2E00CD923C /* HNAPISubmission.m in Sources */,
 				7D6B9F441347DF2E00CD923C /* HNEntry.m in Sources */,

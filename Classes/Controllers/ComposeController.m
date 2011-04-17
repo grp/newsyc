@@ -39,17 +39,24 @@
     return [[textView text] length] > 0;
 }
 
+- (void)_cancel {
+    [self close];
+    
+    if ([delegate respondsToSelector:@selector(composeControllerDidCancel:)])
+        [delegate composeControllerDidCancel:self];
+}
+
 - (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
     if ([[sheet sheetContext] isEqual:@"cancel"]) {
         if (index == [sheet cancelButtonIndex]) return;
         
-        [self close];
+        [self _cancel];
     }
 }
 
 - (void)cancel {
     if (![self hasText]) {
-        [self close];
+        [self _cancel];
     } else {
         UIActionSheet *sheet = [[UIActionSheet alloc] init];
         [sheet addButtonWithTitle:@"Discard"];
@@ -72,6 +79,9 @@
     [self _sendFinished];
     
     [self close];
+    
+    if ([delegate respondsToSelector:@selector(composeControllerDidSubmit:)])
+        [delegate composeControllerDidSubmit:self];
 }
 
 - (void)sendFailed {

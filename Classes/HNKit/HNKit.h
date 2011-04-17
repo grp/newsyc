@@ -46,10 +46,7 @@ typedef enum {
 #import "HNUser.h"
 #import "HNEntry.h"
 #import "HNAPIRequest.h"
-#import "HNAPIParser.h"
-#import "HNAPIParserUserProfile.h"
-#import "HNAPIParserCommentTree.h"
-#import "HNAPIParserSubmissionList.h"
+#import "HNAPIRequestParser.h"
 #import "HNSession.h"
 #import "HNSessionAuthenticator.h"
 

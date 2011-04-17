@@ -34,7 +34,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection_ {
     NSString *resp = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
-    HNAPIParser *parser = nil;
+    SEL selector = NULL;
     
     if ([type isEqual:kHNPageTypeActiveSubmissions] ||
         [type isEqual:kHNPageTypeAskSubmissions] ||
@@ -43,18 +43,20 @@
         [type isEqual:kHNPageTypeSubmissions] ||
         [type isEqual:kHNPageTypeNewSubmissions] ||
         [type isEqual:kHNPageTypeUserSubmissions]) {
-        parser = [[HNAPIParserSubmissionList alloc] init];
+        selector = @selector(parseSubmissionsWithString:);
     } else if ([type isEqual:kHNPageTypeBestComments] ||
         [type isEqual:kHNPageTypeNewComments] ||
         [type isEqual:kHNPageTypeUserComments] ||
         [type isEqual:kHNPageTypeItemComments]) {
-        parser = [[HNAPIParserCommentTree alloc] init];
+        selector = @selector(parseCommentTreeWithString:);
     } else if ([type isEqual:kHNPageTypeUserProfile]) {
-        parser = [[HNAPIParserUserProfile alloc] init];
+        selector = @selector(parseUserProfileWithString:);
     }
     
-    id result = [parser parseString:resp options:nil];
-    [parser release];
+    HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] init];
+    NSDictionary *result = nil;
+    if (selector != NULL) result = [parser performSelector:selector withObject:resp];
+    //[parser release];
  
     [received release];
     received = nil;
@@ -71,8 +73,6 @@
     NSString *base = [NSString stringWithFormat:@"http://%@/%@%@", kHNWebsiteHost, type, [parameters queryString]];
     NSURL *url = [NSURL URLWithString:base];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    
-    //if (type == kHNPageTypeItemComments) { [target performSelector:action withObject:self withObject:nil withObject:@""]; return; }
     
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];
