@@ -36,7 +36,7 @@
     if (![submitted boolValue]) {
         UIAlertView *alert = [[UIAlertView alloc] init];
         [alert setTitle:@"Error Voting"];
-        [alert setMessage:@"Unable to submit your vote. Make sure you can perform this vote and haven't already."];
+        [alert setMessage:@"Unable to submit your vote. Make sure you can vote and haven't already."];
         [alert addButtonWithTitle:@"Continue"];
         [alert show];
         [alert release];
@@ -193,6 +193,7 @@
     [entryActionsView setFrame:actionsFrame];
     [entryActionsView setDelegate:self];
     [entryActionsView setEntry:(HNEntry *) source];
+    [entryActionsView setEnabled:([(HNEntry *) source destination] == nil) forItem:kEntryActionsViewItemDownvote];
     [[self view] addSubview:entryActionsView];
     
     CGRect tableFrame = [tableView frame];

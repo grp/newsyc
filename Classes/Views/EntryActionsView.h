@@ -26,15 +26,22 @@ typedef enum {
     id<EntryActionsViewDelegate> delegate;
     
     int upvoteLoading;
+    BOOL upvoteDisabled;
     int replyLoading;
+    BOOL replyDisabled;
     int flagLoading;
+    BOOL flagDisabled;
     int downvoteLoading;
+    BOOL downvoteDisabled;
     int submitterLoading;
+    BOOL submitterDisabled;
 }
 
 @property (nonatomic, retain) HNEntry *entry;
 @property (nonatomic, assign) id<EntryActionsViewDelegate> delegate;
 
+- (void)setEnabled:(BOOL)enabled forItem:(EntryActionsViewItem)item;
+- (BOOL)itemIsEnabled:(EntryActionsViewItem)item;
 - (void)beginLoadingItem:(EntryActionsViewItem)item;
 - (void)stopLoadingItem:(EntryActionsViewItem)item;
 - (BOOL)itemIsLoading:(EntryActionsViewItem)item;

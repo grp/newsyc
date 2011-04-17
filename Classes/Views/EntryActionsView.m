@@ -91,6 +91,47 @@
     }
 }
 
+- (void)setEnabled:(BOOL)enabled forItem:(EntryActionsViewItem)item {
+    switch (item) {
+        case kEntryActionsViewItemReply:
+            replyDisabled = !enabled;
+            break;
+        case kEntryActionsViewItemUpvote:
+            upvoteDisabled = !enabled;
+            break;
+        case kEntryActionsViewItemFlag:
+            flagDisabled = !enabled;
+            break;
+        case kEntryActionsViewItemDownvote:
+            downvoteDisabled = !enabled;
+            break;
+        case kEntryActionsViewItemSubmitter:
+            submitterDisabled = !enabled;
+            break;
+        default:
+            break;
+    }
+    
+    [self updateItems];
+}
+
+- (BOOL)itemIsEnabled:(EntryActionsViewItem)item {
+    switch (item) {
+        case kEntryActionsViewItemReply:
+            return !replyDisabled;
+        case kEntryActionsViewItemUpvote:
+            return !upvoteDisabled;
+        case kEntryActionsViewItemFlag:
+            return !flagDisabled;
+        case kEntryActionsViewItemDownvote:
+            return !downvoteDisabled;
+        case kEntryActionsViewItemSubmitter:
+            return !submitterDisabled;
+        default:
+            return YES;
+    }
+}
+
 - (UIImage *)imageForItem:(EntryActionsViewItem)item {
     switch (item) {
         case kEntryActionsViewItemReply:
@@ -136,6 +177,7 @@
         }
     }
 
+    [barButtonItem setEnabled:[self itemIsEnabled:item]];
     return [barButtonItem autorelease];
 }     
 
