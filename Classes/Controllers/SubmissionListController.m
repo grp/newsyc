@@ -69,7 +69,7 @@
 	[refreshView egoRefreshScrollViewDataSourceDidFinishedLoading:tableView];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{	
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {	
 	[refreshView egoRefreshScrollViewDidScroll:scrollView];
 }
 
