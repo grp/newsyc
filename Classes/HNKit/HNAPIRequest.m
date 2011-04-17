@@ -53,15 +53,26 @@
         selector = @selector(parseUserProfileWithString:);
     }
     
+    BOOL success = YES;
     HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] init];
     NSDictionary *result = nil;
-    if (selector != NULL) result = [parser performSelector:selector withObject:resp];
+    @try {
+        if (selector != NULL) result = [parser performSelector:selector withObject:resp];
+    } @catch (NSException *e) {
+        NSLog(@"HNAPIRequest: Exception parsing page of type %@ with reason %@.", type, [e reason]);
+        success = NO;
+    }
     [parser release];
  
     [received release];
     received = nil;
     
-    [target performSelector:action withObject:self withObject:result withObject:nil];
+    if (success) {
+        [target performSelector:action withObject:self withObject:result withObject:nil];
+    } else {
+        [target performSelector:action withObject:self withObject:nil withObject:[NSError errorWithDomain:@"error" code:100 userInfo:[NSDictionary dictionaryWithObject:@"Error scraping." forKey:NSLocalizedDescriptionKey]]];
+    }
+    
     [connection release];
     connection = nil;
 }
