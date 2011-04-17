@@ -99,7 +99,7 @@
     for (XMLElement *element in [first children]) {
         if ([[element attributeWithName:@"class"] isEqual:@"title"]) {
             for (XMLElement *element2 in [element children]) {
-                if ([[element2 tagName] isEqual:@"a"]) {
+                if ([[element2 tagName] isEqual:@"a"] && ![[element2 content] isEqual:@"scribd"]) {
                     title = [element2 content];
                     href = [element2 attributeWithName:@"href"];
                     
