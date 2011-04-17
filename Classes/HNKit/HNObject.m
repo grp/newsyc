@@ -109,7 +109,7 @@
 
 - (id)initWithType:(HNPageType)type_ identifier:(id)identifier_ URL:(NSURL *)url_ {
     HNObject *object = [HNObjectCache objectFromCacheWithType:type_ identifier:identifier_];
-    if (object != nil) {NSLog(@"found in cache: (%@ %@)", type_, identifier_); return object;}
+    if (object != nil) return object;
     
     if (type_ != nil && url_ != nil && (self = [super init])) {
         [self setURL:url_];
