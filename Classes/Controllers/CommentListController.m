@@ -159,6 +159,9 @@
 }
 
 - (void)updateHeaderPositioning {
+    // Disable the slide-over style headers if they are too tall. Just scroll normally in that case.
+    if (suggestedHeaderHeight > maximumHeaderHeight) return;
+    
     CGFloat offset = [tableView contentOffset].y;
     if (suggestedHeaderHeight < maximumHeaderHeight || (offset > suggestedHeaderHeight - maximumHeaderHeight || offset <= 0)) {
         CGRect frame = [headerContainerView frame];
@@ -223,7 +226,7 @@
     [tableView setTableHeaderView:containerContainer];
     
     suggestedHeaderHeight = [headerContainerView bounds].size.height;
-    maximumHeaderHeight = [tableView bounds].size.height - 44.0f;
+    maximumHeaderHeight = [tableView bounds].size.height - 64.0f;
     [self updateHeaderPositioning];
 }
 
