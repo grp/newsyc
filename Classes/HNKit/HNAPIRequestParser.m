@@ -213,7 +213,7 @@
                                     
                                     if ([href hasPrefix:@"user?id="]) {
                                         user = [content stringByRemovingHTMLTags];
-                                    } else if ([href hasPrefix:@"item?id="]) {
+                                    } else if ([href hasPrefix:@"item?id="] && [content isEqual:@"link"]) {
                                         identifier = [NSNumber numberWithInt:[[href substringFromIndex:[@"item?id=" length]] intValue]];
                                     }
                                 } else if ([tag isEqual:@"span"]) {

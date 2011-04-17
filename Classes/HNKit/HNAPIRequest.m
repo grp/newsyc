@@ -56,7 +56,7 @@
     HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] init];
     NSDictionary *result = nil;
     if (selector != NULL) result = [parser performSelector:selector withObject:resp];
-    //[parser release];
+    [parser release];
  
     [received release];
     received = nil;
