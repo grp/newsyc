@@ -45,6 +45,11 @@
     return result;
 }
 
+- (BOOL)rootElementExistsInDocument:(XMLDocument *)document {
+    BOOL exists = [document firstElementMatchingPath:@"//textarea[@name='text']"] != nil;
+    return exists;
+}
+
 - (NSArray *)entrySectionsForDocument:(XMLDocument *)document {
     NSArray *sections = [document elementsMatchingPath:@"//body/center/table/tr[3]/td/table"];
     return sections;
@@ -54,23 +59,22 @@
     return [document firstElementMatchingPath:@"//body/center/table/tr[3]/td/table//td[@class='title']"] != nil;
 }
 
-- (XMLElement *)rootEntryForDocument:(XMLDocument *)document {
+- (XMLElement *)rootElementForDocument:(XMLDocument *)document {
     NSArray *sections = [self entrySectionsForDocument:document];
     
-    if ([sections count] > 1) return [sections objectAtIndex:0];
+    if ([self rootElementExistsInDocument:document]) return [sections objectAtIndex:0];
     else return nil;
 }
 
 - (NSArray *)contentRowsForDocument:(XMLDocument *)document {
     NSArray *sections = [self entrySectionsForDocument:document];
     
-    if ([sections count] == 1) {
-        return [(XMLElement *) [sections objectAtIndex:0] children];
-    } else if ([sections count] == 2) {
-        return [(XMLElement *) [sections objectAtIndex:1] children];
+    if ([self rootElementExistsInDocument:document]) {
+        if ([sections count] >= 2) return [(XMLElement *) [sections objectAtIndex:1] children];
+        else return nil;
     } else {
-        // XXX: is there ever a case where this would occur?
-        return nil;
+        if ([sections count] >= 1) return [(XMLElement *) [sections objectAtIndex:0] children];
+        else return nil;
     }
 }
 
@@ -263,7 +267,7 @@
 - (NSDictionary *)parseCommentTreeWithString:(NSString *)string {
     XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
     
-    XMLElement *rootElement = [self rootEntryForDocument:document];
+    XMLElement *rootElement = [self rootElementForDocument:document];
     NSMutableDictionary *root = nil;
     if (rootElement != nil) {
         NSDictionary *item = nil;
