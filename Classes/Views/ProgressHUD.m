@@ -112,7 +112,7 @@
         } else if ([state isEqual:kProgressHUDStateError]) {
             [image setImage:[UIImage imageNamed:@"x.png"]];
         } else {
-            NSLog(@"Invalid or nil ProgressHUDState passed.");
+            NSLog(@"ProgressHUD: Invalid or nil state passed.");
         }
     }
     
