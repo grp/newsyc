@@ -151,6 +151,7 @@
     [containerContainer release];
     [detailsHeaderView release];
     [entryActionsView release];
+    [detailsHeaderContainer release];
     
     [super dealloc];
 }
@@ -161,11 +162,11 @@
     
     CGFloat offset = [tableView contentOffset].y;
     if (suggestedHeaderHeight < maximumHeaderHeight || (offset > suggestedHeaderHeight - maximumHeaderHeight || offset <= 0)) {
-        CGRect frame = [detailsHeaderView frame];
+        CGRect frame = [detailsHeaderContainer frame];
         if (suggestedHeaderHeight - maximumHeaderHeight > 0 && offset > 0) offset -= suggestedHeaderHeight - maximumHeaderHeight;
         frame.origin.y = offset;
-        frame.size.height = suggestedHeaderHeight;
-        [detailsHeaderView setFrame:frame];
+        frame.size.height = suggestedHeaderHeight - offset;
+        [detailsHeaderContainer setFrame:frame];
     }
 }
 
@@ -177,6 +178,8 @@
     // Don't show the header if it doesn't make sense, and only show it if the source is at least partially loaded.
     if (![self hasHeaderAndFooter] || [(HNEntry *) source submitter] == nil) return;
     
+    [detailsHeaderContainer release];
+    detailsHeaderContainer = nil;
     [containerContainer release];
     containerContainer = nil;
     [entryActionsView release];
@@ -205,6 +208,12 @@
     [detailsHeaderView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
     [detailsHeaderView setDelegate:self];
     
+    detailsHeaderContainer = [[UIView alloc] initWithFrame:[detailsHeaderView bounds]];
+    [detailsHeaderContainer addSubview:detailsHeaderView];
+    [detailsHeaderContainer setClipsToBounds:YES];
+    [detailsHeaderContainer setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
+    [[detailsHeaderContainer layer] setContentsGravity:kCAGravityTopLeft];
+    
     UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [detailsHeaderView bounds].size.height, [[self view] bounds].size.width + 100.0f, 1.0f)];
     CALayer *layer = [shadow layer];
     [layer setShadowOffset:CGSizeMake(0, -2.0f)];
@@ -217,7 +226,7 @@
     
     containerContainer = [[UIView alloc] initWithFrame:[detailsHeaderView bounds]];
     [containerContainer setBackgroundColor:[UIColor clearColor]];
-    [containerContainer addSubview:detailsHeaderView];
+    [containerContainer addSubview:detailsHeaderContainer];
     [containerContainer addSubview:[shadow autorelease]];
     [containerContainer setClipsToBounds:NO];
     [tableView setTableHeaderView:containerContainer];
@@ -254,6 +263,8 @@
     entryActionsView = nil;
     [detailsHeaderView release];
     detailsHeaderView = nil;
+    [detailsHeaderContainer release];
+    detailsHeaderContainer = nil;
     
     [super viewDidUnload];
 }

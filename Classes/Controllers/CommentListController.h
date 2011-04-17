@@ -13,6 +13,7 @@
 #import "LoginController.h"
 
 @interface CommentListController : EntryListController <EntryActionsViewDelegate, DetailsHeaderViewDelegate, LoginControllerDelegate, ComposeControllerDelegate> {
+    UIView *detailsHeaderContainer;
     DetailsHeaderView *detailsHeaderView;
     EntryActionsView *entryActionsView;
     UIView *containerContainer;

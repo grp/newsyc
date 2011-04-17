@@ -18,7 +18,6 @@
 - (id)initWithEntry:(HNEntry *)entry_ widthWidth:(CGFloat)width {
     if ((self = [super init])) {
         CALayer *layer = [self layer];
-        [layer setContentsGravity:kCAGravityTopLeft];
         [layer setNeedsDisplayOnBoundsChange:YES];
         
         [self addTarget:self action:@selector(viewPressed:withEvent:) forControlEvents:UIControlEventTouchUpInside];
