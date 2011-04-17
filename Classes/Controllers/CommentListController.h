@@ -12,9 +12,8 @@
 #import "DetailsHeaderView.h"
 #import "LoginController.h"
 
-@class HeaderContainerView;
 @interface CommentListController : EntryListController <EntryActionsViewDelegate, DetailsHeaderViewDelegate, LoginControllerDelegate, ComposeControllerDelegate> {
-    HeaderContainerView *headerContainerView;
+    DetailsHeaderView *detailsHeaderView;
     EntryActionsView *entryActionsView;
     UIView *containerContainer;
     CGFloat suggestedHeaderHeight;

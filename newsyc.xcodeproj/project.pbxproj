@@ -105,16 +105,13 @@
 		7D6B9F491347DF2E00CD923C /* HNUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ECD1347DF2E00CD923C /* HNUser.m */; };
 		7D6B9F4B1347DF2E00CD923C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ECF1347DF2E00CD923C /* main.m */; };
 		7D6B9F4C1347DF2E00CD923C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ED21347DF2E00CD923C /* AppDelegate.m */; };
-		7D6B9F4D1347DF2E00CD923C /* CommentDetailsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ED61347DF2E00CD923C /* CommentDetailsHeaderView.m */; };
 		7D6B9F4E1347DF2E00CD923C /* DetailsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9ED81347DF2E00CD923C /* DetailsHeaderView.m */; };
 		7D6B9F4F1347DF2E00CD923C /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EDA1347DF2E00CD923C /* EGORefreshTableHeaderView.m */; };
 		7D6B9F501347DF2E00CD923C /* EntryActionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EDC1347DF2E00CD923C /* EntryActionsView.m */; };
-		7D6B9F511347DF2E00CD923C /* HeaderContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EDE1347DF2E00CD923C /* HeaderContainerView.m */; };
 		7D6B9F521347DF2E00CD923C /* LoadingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EE11347DF2E00CD923C /* LoadingIndicatorView.m */; };
 		7D6B9F531347DF2E00CD923C /* PlacardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EE31347DF2E00CD923C /* PlacardButton.m */; };
 		7D6B9F541347DF2E00CD923C /* PlaceholderTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EE51347DF2E00CD923C /* PlaceholderTextView.m */; };
 		7D6B9F551347DF2E00CD923C /* ProfileHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EE71347DF2E00CD923C /* ProfileHeaderView.m */; };
-		7D6B9F561347DF2E00CD923C /* SubmissionDetailsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EE91347DF2E00CD923C /* SubmissionDetailsHeaderView.m */; };
 		7D6B9F571347DF2E00CD923C /* XMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EEC1347DF2E00CD923C /* XMLDocument.m */; };
 		7D6B9F581347DF2E00CD923C /* XMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EEE1347DF2E00CD923C /* XMLElement.m */; };
 		7D8A660813333A72002012AA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D8A660713333A72002012AA /* QuartzCore.framework */; };
@@ -289,16 +286,12 @@
 		7D6B9ED01347DF2E00CD923C /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		7D6B9ED11347DF2E00CD923C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7D6B9ED21347DF2E00CD923C /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		7D6B9ED51347DF2E00CD923C /* CommentDetailsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentDetailsHeaderView.h; sourceTree = "<group>"; };
-		7D6B9ED61347DF2E00CD923C /* CommentDetailsHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentDetailsHeaderView.m; sourceTree = "<group>"; };
 		7D6B9ED71347DF2E00CD923C /* DetailsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailsHeaderView.h; sourceTree = "<group>"; };
 		7D6B9ED81347DF2E00CD923C /* DetailsHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailsHeaderView.m; sourceTree = "<group>"; };
 		7D6B9ED91347DF2E00CD923C /* EGORefreshTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGORefreshTableHeaderView.h; sourceTree = "<group>"; };
 		7D6B9EDA1347DF2E00CD923C /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
 		7D6B9EDB1347DF2E00CD923C /* EntryActionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntryActionsView.h; sourceTree = "<group>"; };
 		7D6B9EDC1347DF2E00CD923C /* EntryActionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntryActionsView.m; sourceTree = "<group>"; };
-		7D6B9EDD1347DF2E00CD923C /* HeaderContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderContainerView.h; sourceTree = "<group>"; };
-		7D6B9EDE1347DF2E00CD923C /* HeaderContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderContainerView.m; sourceTree = "<group>"; };
 		7D6B9EE01347DF2E00CD923C /* LoadingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingIndicatorView.h; sourceTree = "<group>"; };
 		7D6B9EE11347DF2E00CD923C /* LoadingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingIndicatorView.m; sourceTree = "<group>"; };
 		7D6B9EE21347DF2E00CD923C /* PlacardButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlacardButton.h; sourceTree = "<group>"; };
@@ -307,8 +300,6 @@
 		7D6B9EE51347DF2E00CD923C /* PlaceholderTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceholderTextView.m; sourceTree = "<group>"; };
 		7D6B9EE61347DF2E00CD923C /* ProfileHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileHeaderView.h; sourceTree = "<group>"; };
 		7D6B9EE71347DF2E00CD923C /* ProfileHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileHeaderView.m; sourceTree = "<group>"; };
-		7D6B9EE81347DF2E00CD923C /* SubmissionDetailsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubmissionDetailsHeaderView.h; sourceTree = "<group>"; };
-		7D6B9EE91347DF2E00CD923C /* SubmissionDetailsHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubmissionDetailsHeaderView.m; sourceTree = "<group>"; };
 		7D6B9EEB1347DF2E00CD923C /* XMLDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLDocument.h; sourceTree = "<group>"; };
 		7D6B9EEC1347DF2E00CD923C /* XMLDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLDocument.m; sourceTree = "<group>"; };
 		7D6B9EED1347DF2E00CD923C /* XMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLElement.h; sourceTree = "<group>"; };
@@ -625,14 +616,8 @@
 				7D6B9EE51347DF2E00CD923C /* PlaceholderTextView.m */,
 				7D6B9ED71347DF2E00CD923C /* DetailsHeaderView.h */,
 				7D6B9ED81347DF2E00CD923C /* DetailsHeaderView.m */,
-				7D6B9EE81347DF2E00CD923C /* SubmissionDetailsHeaderView.h */,
-				7D6B9EE91347DF2E00CD923C /* SubmissionDetailsHeaderView.m */,
-				7D6B9ED51347DF2E00CD923C /* CommentDetailsHeaderView.h */,
-				7D6B9ED61347DF2E00CD923C /* CommentDetailsHeaderView.m */,
 				7D6B9EDB1347DF2E00CD923C /* EntryActionsView.h */,
 				7D6B9EDC1347DF2E00CD923C /* EntryActionsView.m */,
-				7D6B9EDD1347DF2E00CD923C /* HeaderContainerView.h */,
-				7D6B9EDE1347DF2E00CD923C /* HeaderContainerView.m */,
 				7D6B9EE61347DF2E00CD923C /* ProfileHeaderView.h */,
 				7D6B9EE71347DF2E00CD923C /* ProfileHeaderView.m */,
 				7D6B9EE01347DF2E00CD923C /* LoadingIndicatorView.h */,
@@ -823,16 +808,13 @@
 				7D6B9F491347DF2E00CD923C /* HNUser.m in Sources */,
 				7D6B9F4B1347DF2E00CD923C /* main.m in Sources */,
 				7D6B9F4C1347DF2E00CD923C /* AppDelegate.m in Sources */,
-				7D6B9F4D1347DF2E00CD923C /* CommentDetailsHeaderView.m in Sources */,
 				7D6B9F4E1347DF2E00CD923C /* DetailsHeaderView.m in Sources */,
 				7D6B9F4F1347DF2E00CD923C /* EGORefreshTableHeaderView.m in Sources */,
 				7D6B9F501347DF2E00CD923C /* EntryActionsView.m in Sources */,
-				7D6B9F511347DF2E00CD923C /* HeaderContainerView.m in Sources */,
 				7D6B9F521347DF2E00CD923C /* LoadingIndicatorView.m in Sources */,
 				7D6B9F531347DF2E00CD923C /* PlacardButton.m in Sources */,
 				7D6B9F541347DF2E00CD923C /* PlaceholderTextView.m in Sources */,
 				7D6B9F551347DF2E00CD923C /* ProfileHeaderView.m in Sources */,
-				7D6B9F561347DF2E00CD923C /* SubmissionDetailsHeaderView.m in Sources */,
 				7D6B9F571347DF2E00CD923C /* XMLDocument.m in Sources */,
 				7D6B9F581347DF2E00CD923C /* XMLElement.m in Sources */,
 				FA5F796B134CE04F002EEBCA /* InstapaperLoginController.m in Sources */,

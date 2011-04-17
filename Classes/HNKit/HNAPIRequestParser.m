@@ -81,6 +81,8 @@
 - (NSDictionary *)parseSubmissionWithElements:(NSArray *)elements {
     XMLElement *first = [elements objectAtIndex:0];
     XMLElement *second = [elements objectAtIndex:1];
+    XMLElement *fourth = nil;
+    if ([elements count] >= 4) fourth = [elements objectAtIndex:3];
     
     // These have a number of edge cases (e.g. "discuss"),
     // so use sane default values in case of one of those.
@@ -90,6 +92,7 @@
     NSString *title = nil;
     NSString *user = nil;
     NSNumber *identifier = nil;
+    NSString *body = nil;
     NSString *date = nil;
     NSString *href = nil;
     
@@ -143,6 +146,24 @@
         }
     }
     
+    for (XMLElement *element in [fourth children]) {
+        if ([[element tagName] isEqual:@"td"]) {
+            BOOL isReplyForm = NO;
+            NSString *content = [element content];
+            
+            for (XMLElement *element2 in [element children]) {
+                if ([[element2 tagName] isEqual:@"form"]) {
+                    isReplyForm = YES;
+                    break;
+                }
+            }
+            
+            if ([content length] > 0 && !isReplyForm) {
+                body = content;
+            }
+        }
+    }
+    
     // XXX: better sanity checks?
     if (user != nil && title != nil && identifier != nil) {
         NSMutableDictionary *item = [NSMutableDictionary dictionary];
@@ -152,6 +173,7 @@
         [item setObject:comments forKey:@"numchildren"];
         [item setObject:href forKey:@"url"];
         [item setObject:date forKey:@"date"];
+        if (body != nil) [item setObject:body forKey:@"body"];
         [item setObject:identifier forKey:@"identifier"];
         return item;
     } else {

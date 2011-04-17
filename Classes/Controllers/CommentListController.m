@@ -14,10 +14,7 @@
 
 #import "CommentListController.h"
 #import "CommentTableCell.h"
-#import "HeaderContainerView.h"
 #import "DetailsHeaderView.h"
-#import "SubmissionDetailsHeaderView.h"
-#import "CommentDetailsHeaderView.h"
 #import "EntryActionsView.h"
 #import "ProfileController.h"
 #import "NavigationController.h"
@@ -152,7 +149,7 @@
 
 - (void)dealloc {
     [containerContainer release];
-    [headerContainerView release];
+    [detailsHeaderView release];
     [entryActionsView release];
     
     [super dealloc];
@@ -164,11 +161,11 @@
     
     CGFloat offset = [tableView contentOffset].y;
     if (suggestedHeaderHeight < maximumHeaderHeight || (offset > suggestedHeaderHeight - maximumHeaderHeight || offset <= 0)) {
-        CGRect frame = [headerContainerView frame];
+        CGRect frame = [detailsHeaderView frame];
         if (suggestedHeaderHeight - maximumHeaderHeight > 0 && offset > 0) offset -= suggestedHeaderHeight - maximumHeaderHeight;
         frame.origin.y = offset;
-        frame.size.height = suggestedHeaderHeight - offset;
-        [headerContainerView setFrame:frame];
+        frame.size.height = suggestedHeaderHeight;
+        [detailsHeaderView setFrame:frame];
     }
 }
 
@@ -184,8 +181,8 @@
     containerContainer = nil;
     [entryActionsView release];
     entryActionsView = nil;
-    [headerContainerView release];
-    headerContainerView = nil;
+    [detailsHeaderView release];
+    detailsHeaderView = nil;
     
     entryActionsView = [[EntryActionsView alloc] initWithFrame:CGRectZero];
     [entryActionsView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
@@ -203,12 +200,12 @@
     tableFrame.size.height = [[self view] bounds].size.height - actionsFrame.size.height;
     [tableView setFrame:tableFrame];
     
-    headerContainerView = [[HeaderContainerView alloc] initWithEntry:(HNEntry *) source widthWidth:[[self view] bounds].size.width];
-    [headerContainerView setClipsToBounds:YES];
-    [headerContainerView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
-    [[headerContainerView detailsHeaderView] setDelegate:self];
+    detailsHeaderView = [[DetailsHeaderView alloc] initWithEntry:(HNEntry *) source widthWidth:[[self view] bounds].size.width];
+    [detailsHeaderView setClipsToBounds:YES];
+    [detailsHeaderView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
+    [detailsHeaderView setDelegate:self];
     
-    UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [headerContainerView bounds].size.height, [[self view] bounds].size.width + 100.0f, 1.0f)];
+    UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [detailsHeaderView bounds].size.height, [[self view] bounds].size.width + 100.0f, 1.0f)];
     CALayer *layer = [shadow layer];
     [layer setShadowOffset:CGSizeMake(0, -2.0f)];
     [layer setShadowRadius:5.0f];
@@ -218,14 +215,14 @@
     [shadow setClipsToBounds:NO];
     [shadow setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     
-    containerContainer = [[UIView alloc] initWithFrame:[headerContainerView bounds]];
+    containerContainer = [[UIView alloc] initWithFrame:[detailsHeaderView bounds]];
     [containerContainer setBackgroundColor:[UIColor clearColor]];
-    [containerContainer addSubview:headerContainerView];
+    [containerContainer addSubview:detailsHeaderView];
     [containerContainer addSubview:[shadow autorelease]];
     [containerContainer setClipsToBounds:NO];
     [tableView setTableHeaderView:containerContainer];
     
-    suggestedHeaderHeight = [headerContainerView bounds].size.height;
+    suggestedHeaderHeight = [detailsHeaderView bounds].size.height;
     maximumHeaderHeight = [tableView bounds].size.height - 64.0f;
     [self updateHeaderPositioning];
 }
@@ -255,8 +252,8 @@
     containerContainer = nil;
     [entryActionsView release];
     entryActionsView = nil;
-    [headerContainerView release];
-    headerContainerView = nil;
+    [detailsHeaderView release];
+    detailsHeaderView = nil;
     
     [super viewDidUnload];
 }
