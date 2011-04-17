@@ -41,7 +41,7 @@
 
 - (CGFloat)suggestedHeightWithWidth:(CGFloat)width {
     CGSize offsets = [[self class] offsets];
-    CGFloat height = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(width - (offsets.width * 2) - [[[self class] disclosureImage] size].width, 400.0f) lineBreakMode:UILineBreakModeWordWrap].height;
+    CGFloat height = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(width - (offsets.width * 3) - [[[self class] disclosureImage] size].width, 400.0f) lineBreakMode:UILineBreakModeWordWrap].height;
     
     return offsets.height + height + 30.0f + offsets.height;
 }
