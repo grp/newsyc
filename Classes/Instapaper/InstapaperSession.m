@@ -23,7 +23,7 @@ static id currentSession = nil;
     [defaults setObject:[session password] forKey:@"instapaper-password"];
     
     [currentSession autorelease];
-    currentSession = session;
+    currentSession = [session retain];
 }
 
 + (void)initialize {
