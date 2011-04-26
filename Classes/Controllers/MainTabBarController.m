@@ -26,24 +26,24 @@
 - (id)init {
     if ((self = [super init])) {
         HNEntry *homeEntry = [[[HNEntry alloc] initWithType:kHNPageTypeSubmissions] autorelease];
-        SubmissionListController *home = [[[SubmissionListController alloc] initWithSource:homeEntry] autorelease];
+        home = [[[SubmissionListController alloc] initWithSource:homeEntry] autorelease];
         [home setTitle:@"Hacker News"];
         [home setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Home" image:[UIImage imageNamed:@"home.png"] tag:0] autorelease]];
         
         HNEntry *newEntry = [[[HNEntry alloc] initWithType:kHNPageTypeNewSubmissions] autorelease];
-        SubmissionListController *new = [[[SubmissionListController alloc] initWithSource:newEntry] autorelease];
-        [new setTitle:@"New Submissions"];
-        [new setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"New" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
+        latest = [[[SubmissionListController alloc] initWithSource:newEntry] autorelease];
+        [latest setTitle:@"New Submissions"];
+        [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"New" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
         
-        SessionProfileController *profile = [[[SessionProfileController alloc] initWithSource:[[HNSession currentSession] user]] autorelease];
+        profile = [[[SessionProfileController alloc] initWithSource:[[HNSession currentSession] user]] autorelease];
         [profile setTitle:@"Profile"];
         [profile setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"person.png"] tag:0] autorelease]];
         
-        MoreController *more = [[[MoreController alloc] init] autorelease];
+        more = [[[MoreController alloc] init] autorelease];
         [more setTitle:@"More"];
         [more setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:0] autorelease]];
 
-        NSMutableArray *items = [NSMutableArray arrayWithObjects:home, new, profile, more, nil];
+        NSMutableArray *items = [NSMutableArray arrayWithObjects:home, latest, profile, more, nil];
         [self setViewControllers:items];
     }
     
@@ -101,8 +101,27 @@
 
 - (void)dealloc {
     [composeItem release];
+    [lastSeen release];
     
     [super dealloc];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    lastSeen = [[NSDate date] retain];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // XXX: is 15 inutes the optimal time here?
+    if ([lastSeen timeIntervalSinceNow] < -(15 * 60)) {
+        [[home source] beginReloading];
+        [[latest source] beginReloading];
+    }
+         
+    lastSeen = [[NSDate date] retain];
 }
 
 - (void)loadView {

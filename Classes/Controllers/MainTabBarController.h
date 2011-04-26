@@ -8,7 +8,14 @@
 
 #import "LoginController.h"
 
+@class SubmissionListController, SessionProfileController, MoreController;
 @interface MainTabBarController : UITabBarController <UIActionSheetDelegate, LoginControllerDelegate> {
+    SubmissionListController *home;
+    SubmissionListController *latest;
+    SessionProfileController *profile;
+    MoreController *more;
+    
+    NSDate *lastSeen;
     UIBarButtonItem *composeItem;
 }
 
