@@ -40,36 +40,42 @@
     return [NSString stringWithFormat:@"%d points by %@", points, submitter];
 }
 
-- (void)loadFromDictionary:(NSDictionary *)response {
+- (void)loadFromDictionary:(NSDictionary *)response {    
+    if ([response objectForKey:@"url"] != nil) [self setDestination:[NSURL URLWithString:[response objectForKey:@"url"]]];
+    if ([response objectForKey:@"user"] != nil) [self setSubmitter:[[[HNUser alloc] initWithIdentifier:[response objectForKey:@"user"]] autorelease]];
+    if ([response objectForKey:@"body"] != nil) [self setBody:[response objectForKey:@"body"]];
+    if ([response objectForKey:@"date"] != nil) [self setPosted:[response objectForKey:@"date"]];
+    if ([response objectForKey:@"title"] != nil) [self setTitle:[response objectForKey:@"title"]];
     if ([response objectForKey:@"points"] != nil) [self setPoints:[[response objectForKey:@"points"] intValue]];
-    if ([self body] == nil) [self setBody:[response objectForKey:@"body"]];
-    if ([self posted] == nil) [self setPosted:[response objectForKey:@"date"]];
-    if ([self submitter] == nil && [response objectForKey:@"user"] != nil) [self setSubmitter:[[[HNUser alloc] initWithIdentifier:[response objectForKey:@"user"]] autorelease]];
-    if ([self title] == nil) [self setTitle:[response objectForKey:@"title"]];
-    if ([self destination] == nil) [self setDestination:[NSURL URLWithString:[response objectForKey:@"url"]]];
+    if ([response objectForKey:@"parent"] != nil) [self setParent:[[[HNEntry alloc] initWithIdentifier:[response objectForKey:@"parent"]] autorelease]];
     
-    if ([response objectForKey:@"parent"] != nil && [self parent] == nil) {
-        HNEntry *parent_ = [[HNEntry alloc] initWithIdentifier:[response objectForKey:@"parent"]];
-        [self setParent:[parent_ autorelease]];
-    }
-    
-    NSArray *children_ = [response objectForKey:@"children"];
     NSMutableArray *comments = [NSMutableArray array];
-    for (NSDictionary *child in children_) {
+    for (NSDictionary *child in [response objectForKey:@"children"]) {
         HNEntry *entry = [[HNEntry alloc] initWithType:kHNPageTypeItemComments identifier:[child objectForKey:@"identifier"]];
         [entry loadFromDictionary:child];
-        if ([child objectForKey:@"children"] != nil) [entry addLoadingState:kHNObjectLoadingStateLoaded];
         [entry setParent:self];
+        
+        if ([child objectForKey:@"children"] != nil) {
+            [entry clearLoadingState:kHNObjectLoadingStateUnloaded];
+            [entry clearLoadingState:kHNObjectLoadingStateNotLoaded];
+            [entry addLoadingState:kHNObjectLoadingStateLoaded];
+        } else {
+            [entry clearLoadingState:kHNObjectLoadingStateLoaded];
+            [entry addLoadingState:kHNObjectLoadingStateUnloaded];
+        }
+        
         [comments addObject:[entry autorelease]];
     }
     [self setEntries:comments];
     
     if ([response objectForKey:@"numchildren"] != nil) {
-        [self setChildren:[[response objectForKey:@"numchildren"] intValue]];
+        int count = [[response objectForKey:@"numchildren"] intValue];
+        [self setChildren:count];
     } else {
-        int num = 0;
-        for (HNEntry *child in [self entries]) num += [child children];
-        [self setChildren:num + [[self entries] count]];
+        int count = [[self entries] count];
+        for (HNEntry *child in [self entries])
+            count += [child children];
+        [self setChildren:count];
     }
 }
 
