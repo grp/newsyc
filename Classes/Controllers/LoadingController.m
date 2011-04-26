@@ -69,12 +69,12 @@
     // XXX: show a non-modal loading error display if previously loaded
     if (![source isLoaded]) [self showErrorWithTitle:@"Error loading."];
     
-    [[self navigationItem] setRightBarButtonItem:actionItem];
+    [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
 }
 
 - (void)objectFinishedLoading:(HNObject *)object; {
     [self removeStatusView:indicator];
-    [[self navigationItem] setRightBarButtonItem:actionItem];
+    [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
     [self finishedLoading];
 }
 

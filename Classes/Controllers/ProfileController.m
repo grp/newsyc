@@ -32,6 +32,7 @@
     [[self view] addSubview:tableView];
     
     header = [[ProfileHeaderView alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 65.0f)];
+    [header setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
     [tableView setTableHeaderView:header];
 }
 
