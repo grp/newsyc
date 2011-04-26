@@ -202,6 +202,7 @@
     if (selected.location == [[textView text] length]) {
         // XXX: find out why this needs to be done on the next runloop cycle to work
         [self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.0f];
+        [self scrollToBottom];
     }
     
     if ([self includeMultilineEditor]) [tableView setTableFooterView:textView];
