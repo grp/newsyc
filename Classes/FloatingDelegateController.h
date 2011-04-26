@@ -6,11 +6,12 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
-
 @interface FloatingDelegateController : NSObject {
-    
+    NSMutableDictionary *delegates;
 }
+
++ (id)sharedInstance;
+- (void)addObject:(id)object withOwner:(id)owner;
+- (void)clearObjectsForOwner:(id)owner;
 
 @end
