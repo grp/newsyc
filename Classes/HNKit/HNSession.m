@@ -80,7 +80,6 @@ static HNSession *current = nil;
     [self setToken:token_];
 }
 
-
 - (void)reloadToken {
     // XXX: maybe this should return an error code
     if (authenticator != nil) return;
@@ -94,38 +93,10 @@ static HNSession *current = nil;
     return NO;
 }
 
-- (void)performSubmission:(HNSubmission *)submission target:(id)target action:(SEL)action {
-    HNAPISubmission *api = [[HNAPISubmission alloc] initWithTarget:target action:action];
-    [api performSubmission:submission withToken:[self token]];
-    [submission autorelease];
-}
-
-- (void)flagEntry:(HNEntry *)entry target:(id)target action:(SEL)action {
-    HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeFlag];
-    [submission setTarget:entry];
-    [self performSubmission:submission target:target action:action];
-}
-
-- (void)voteEntry:(HNEntry *)entry inDirection:(HNVoteDirection)direction target:(id)target action:(SEL)action {
-    HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeVote];
-    [submission setDirection:direction];
-    [submission setTarget:entry];
-    [self performSubmission:submission target:target action:action];
-}
-
-- (void)replyToEntry:(HNEntry *)entry withBody:(NSString *)body target:(id)target action:(SEL)action {
-    HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeReply];
-    [submission setBody:body];
-    [submission setTarget:entry];
-    [self performSubmission:submission target:target action:action];
-}
-
-- (void)submitEntryWithTitle:(NSString *)title body:(NSString *)body URL:(NSURL *)url target:(id)target action:(SEL)action {
-    HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeSubmission];
-    [submission setBody:body];
-    [submission setTitle:title];
-    [submission setDestination:url];
-    [self performSubmission:submission target:target action:action];
+- (void)performSubmission:(HNSubmission *)submission {
+    HNAPISubmission *api = [[HNAPISubmission alloc] initWithSubmission:submission];
+    [api performSubmissionWithToken:[self token]];
+    [api autorelease];
 }
 
 @end

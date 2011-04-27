@@ -50,6 +50,7 @@
     [session setPassword:[passwordField text]];
     [InstapaperSession setCurrentSession:session];
     [auth release];
+    [session release];
     
     [self finish];
     [self succeed];

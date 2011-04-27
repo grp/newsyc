@@ -198,8 +198,7 @@
 - (void)request:(HNAPIRequest *)request completedWithResponse:(NSDictionary *)response error:(NSError *)error {
     [self finishLoadingWithResponse:response error:error];
     
-    // XXX: this MUST MUST MUST be above the code below
-    // move it below at penalty of death
+    // note: don't move this downwards, bad things will happen
     [self _clearRequest];
     
     if (error == nil) {

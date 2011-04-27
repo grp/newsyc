@@ -37,24 +37,35 @@
     return (UIResponder *) textView;
 }
 
-- (void)submission:(id)submission performedReply:(NSNumber *)submitted error:(NSError *)error {
-    if ([submitted boolValue]) {
-        [self sendComplete];
-    } else {
-        [self sendFailed];
-    }
+- (void)replySucceededWithNotification:(NSNotification *)notification {
+    [self sendComplete];
+}
+
+- (void)replyFailedWithNotification:(NSNotification *)notification {
+    [self sendFailed];
 }
 
 - (void)performSubmission {
     if (![self ableToSubmit]) {
         [self sendFailed];
     } else {
-        [[HNSession currentSession] replyToEntry:entry withBody:[textView text] target:self action:@selector(submission:performedReply:error:)];
+        HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeReply];
+        [submission setBody:[textView text]];
+        [submission setTarget:entry];
+        [[HNSession currentSession] performSubmission:submission];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replySucceededWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyFailedWithNotification:) name:kHNSubmissionFailureNotification object:submission];
+        [submission release];
     }
 }
 
 - (BOOL)ableToSubmit {
     return [[textView text] length] > 0;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [super dealloc];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

@@ -44,11 +44,19 @@ typedef enum {
 
 typedef NSString *HNSessionToken;
 
+// data
 #import "HNObject.h"
 #import "HNUser.h"
 #import "HNEntry.h"
+
+// sessions
+#import "HNSession.h"
+#import "HNAnonymousSession.h"
+#import "HNSessionAuthenticator.h"
+#import "HNSubmission.h"
+
+// internal
 #import "HNAPIRequest.h"
 #import "HNAPIRequestParser.h"
-#import "HNSession.h"
-#import "HNSessionAuthenticator.h"
+#import "HNAPISubmission.h"
 

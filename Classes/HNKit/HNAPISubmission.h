@@ -6,12 +6,10 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "HNSubmission.h"
+@protocol HNAPISubmissionDelegate;
 
+@class HNSubmission;
 @interface HNAPISubmission : NSObject {
-    id target;
-    SEL action;
-    
     HNSessionToken token;
     HNSubmission *submission;
     
@@ -22,8 +20,15 @@
 
 @property (nonatomic, readonly, retain) HNSubmission *submission;
 
-- (id)initWithTarget:(id)target_ action:(SEL)action_;
-- (void)performSubmission:(HNSubmission *)submission_ withToken:(HNSessionToken)token_;
+- (id)initWithSubmission:(HNSubmission *)submission_;
+- (void)performSubmissionWithToken:(HNSessionToken)token_;
 - (BOOL)isLoading;
+
+@end
+
+@protocol HNAPISubmissionDelegate
+@optional
+
+- (void)submissionCompletedSuccessfully:(BOOL)successfully withError:(NSError *)error;
 
 @end

@@ -19,6 +19,14 @@
     return self;
 }
 
+- (void)submissionCompletedSuccessfully:(BOOL)successfully withError:(NSError *)error {
+    if (successfully) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kHNSubmissionSuccessNotification object:self];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kHNSubmissionFailureNotification object:self userInfo:[NSDictionary dictionaryWithObject:error forKey:@"error"]];
+    }
+}
+
 - (void)dealloc {
     [target release];
     [destination release];

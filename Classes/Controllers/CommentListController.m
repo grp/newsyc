@@ -29,41 +29,61 @@
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
-- (void)submission:(id)submission didSubmitVote:(NSNumber *)submitted error:(NSError *)error {
-    if (![submitted boolValue]) {
-        UIAlertView *alert = [[UIAlertView alloc] init];
-        [alert setTitle:@"Error Voting"];
-        [alert setMessage:@"Unable to submit your vote. Make sure you can vote and haven't already."];
-        [alert addButtonWithTitle:@"Continue"];
-        [alert show];
-        [alert release];
-    }
-    
+- (void)flagFinished {
+    [entryActionsView stopLoadingItem:kEntryActionsViewItemFlag];
     [source beginReloading];
 }
 
-- (void)submission:(id)submission didSubmitUpvote:(NSNumber *)submitted error:(NSError *)error {
-    [self submission:submission didSubmitVote:submitted error:error];
+- (void)submissionFlagDidSucceedWithNotification:(NSNotification *)notification {
+    [self flagFinished];
+}
+
+- (void)submissionFlagDidFailWithNotification:(NSNotification *)notification {
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setTitle:@"Error Flagging"];
+    [alert setMessage:@"Unable to submit your vote. Make sure you can flag items and haven't already."];
+    [alert addButtonWithTitle:@"Continue"];
+    [alert show];
+    [alert release];
+    
+    [self flagFinished];
+}
+
+- (void)voteFailed {
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setTitle:@"Error Voting"];
+    [alert setMessage:@"Unable to submit your vote. Make sure you can vote and haven't already."];
+    [alert addButtonWithTitle:@"Continue"];
+    [alert show];
+    [alert release];
+}
+
+- (void)upvoteFinished {
+    [source beginReloading];
     [entryActionsView stopLoadingItem:kEntryActionsViewItemUpvote];
 }
 
-- (void)submission:(id)submission didSubmitDownvote:(NSNumber *)submitted error:(NSError *)error {
-    [self submission:submission didSubmitVote:submitted error:error];
+- (void)submissionUpvoteDidSucceedWithNotification:(NSNotification *)notification {
+    [self upvoteFinished];
+}
+
+- (void)submissionUpvoteDidFailWithNotification:(NSNotification *)notification {
+    [self voteFailed];
+    [self upvoteFinished];
+}
+
+- (void)downvoteFinished {
     [entryActionsView stopLoadingItem:kEntryActionsViewItemDownvote];
 }
 
-- (void)submission:(id)submission didSubmitFlag:(NSNumber *)submitted error:(NSError *)error {
-    if (![submitted boolValue]) {
-        UIAlertView *alert = [[UIAlertView alloc] init];
-        [alert setTitle:@"Error Flagging"];
-        [alert setMessage:@"Unable to submit your vote. Make sure you can flag items and haven't already."];
-        [alert addButtonWithTitle:@"Continue"];
-        [alert show];
-        [alert release];
-    }
-    
-    [entryActionsView stopLoadingItem:kEntryActionsViewItemFlag];
+- (void)submissionDownvoteDidSucceedWithNotification:(NSNotification *)notification {
     [source beginReloading];
+    [self downvoteFinished];
+}
+
+- (void)submissionDownvoteDidFailWithNotification:(NSNotification *)notification {
+    [self voteFailed];
+    [self downvoteFinished];
 }
 
 - (void)composeControllerDidCancel:(ComposeController *)controller {
@@ -77,7 +97,13 @@
 - (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
     if ([[sheet sheetContext] isEqual:@"flag"]) {
         if (index == [sheet destructiveButtonIndex]) {
-            [[HNSession currentSession] flagEntry:(HNEntry *) source target:self action:@selector(submission:didSubmitFlag:error:)];
+            HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeFlag];
+            [submission setTarget:(HNEntry *) source];
+            [[HNSession currentSession] performSubmission:submission];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionFlagDidSucceedWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionFlagDidFailWithNotification:) name:kHNSubmissionFailureNotification object:submission];
+            [submission release];
+            
             [entryActionsView beginLoadingItem:kEntryActionsViewItemFlag];
         }
     } else {
@@ -95,10 +121,24 @@
         [controller setTitle:@"Profile"];
         [[self navigationController] pushViewController:[controller autorelease] animated:YES];
     } else if (item == kEntryActionsViewItemUpvote) {
-        [[HNSession currentSession] voteEntry:(HNEntry *) source inDirection:kHNVoteDirectionUp target:self action:@selector(submission:didSubmitUpvote:error:)];
+        HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeVote];
+        [submission setDirection:kHNVoteDirectionUp];
+        [submission setTarget:(HNEntry *) source];
+        [[HNSession currentSession] performSubmission:submission];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionUpvoteDidSucceedWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionUpvoteDidFailWithNotification:) name:kHNSubmissionFailureNotification object:submission];
+        [submission release];
+        
         [entryActionsView beginLoadingItem:kEntryActionsViewItemUpvote];
     } else if (item == kEntryActionsViewItemDownvote) {
-        [[HNSession currentSession] voteEntry:(HNEntry *) source inDirection:kHNVoteDirectionDown target:self action:@selector(submission:didSubmitDownvote:error:)];
+        HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeVote];
+        [submission setDirection:kHNVoteDirectionDown];
+        [submission setTarget:(HNEntry *) source];
+        [[HNSession currentSession] performSubmission:submission];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionDownvoteDidSucceedWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionDownvoteDidFailWithNotification:) name:kHNSubmissionFailureNotification object:submission];
+        [submission release];
+        
         [entryActionsView beginLoadingItem:kEntryActionsViewItemDownvote];
     } else if (item == kEntryActionsViewItemFlag) {
         UIActionSheet *sheet = [[UIActionSheet alloc] init];
@@ -152,6 +192,8 @@
     [detailsHeaderView release];
     [entryActionsView release];
     [detailsHeaderContainer release];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [super dealloc];
 }

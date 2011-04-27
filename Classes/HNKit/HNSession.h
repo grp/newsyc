@@ -8,7 +8,7 @@
 
 #include "HNSessionAuthenticator.h"
 
-@class HNUser, HNEntry;
+@class HNUser, HNEntry, HNSubmission;
 @interface HNSession : NSObject <HNSessionAuthenticatorDelegate> {
     BOOL loaded;
     HNSessionToken token;
@@ -30,11 +30,7 @@
 
 - (id)initWithUsername:(NSString *)username password:(NSString *)password token:(HNSessionToken)token;
 
-- (void)flagEntry:(HNEntry *)entry target:(id)target action:(SEL)action;
-- (void)voteEntry:(HNEntry *)entry inDirection:(HNVoteDirection)direction target:(id)target action:(SEL)action;
-- (void)replyToEntry:(HNEntry *)entry withBody:(NSString *)body target:(id)target action:(SEL)action;
-- (void)submitEntryWithTitle:(NSString *)title body:(NSString *)body URL:(NSURL *)url target:(id)target action:(SEL)action;
-
+- (void)performSubmission:(HNSubmission *)submission;
 - (void)reloadToken;
 
 @end

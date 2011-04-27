@@ -7,6 +7,10 @@
 //
 
 #import "HNKit.h"
+#import "HNAPISubmission.h"
+
+#define kHNSubmissionSuccessNotification @"kHNSubmissionSuccessNotification"
+#define kHNSubmissionFailureNotification @"kHNSubmissionFailureNotification"
 
 typedef enum {
     kHNSubmissionTypeSubmission,
@@ -16,7 +20,7 @@ typedef enum {
 } HNSubmissionType;
 
 @class HNEntry;
-@interface HNSubmission : NSObject {
+@interface HNSubmission : NSObject <HNAPISubmissionDelegate> {
     HNSubmissionType type;
     HNEntry *target;
     

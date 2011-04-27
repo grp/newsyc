@@ -6,7 +6,9 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import "HNKit.h"
 #import "HNAPISubmission.h"
+
 #import "XMLDocument.h"
 #import "NSDictionary+Parameters.h"
 
@@ -20,10 +22,9 @@
     [super dealloc];
 }
 
-- (id)initWithTarget:(id)target_ action:(SEL)action_ {
+- (id)initWithSubmission:(HNSubmission *)submission_ {
     if ((self = [super init])) {
-        target = target_;
-        action = action_;
+        submission = [submission_ retain];
         loadingState = 0;
     }
     
@@ -33,8 +34,8 @@
 - (void)_completedSuccessfully:(BOOL)successfully withError:(NSError *)error {
     loadingState = 0;
 
-    if ([target respondsToSelector:action])
-        [target performSelector:action withObject:[self autorelease] withObject:[NSNumber numberWithBool:successfully] withObject:error];
+    if ([submission respondsToSelector:@selector(submissionCompletedSuccessfully:withError:)])
+        [submission submissionCompletedSuccessfully:successfully withError:error];
 }
 
 - (void)_addCookiesToRequest:(NSMutableURLRequest *)request {
@@ -60,6 +61,8 @@
         loadingState = 2;
         
         XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[result dataUsingEncoding:NSUTF8StringEncoding]];
+        [document autorelease];
+        
         NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
         [self _addCookiesToRequest:request];
         
@@ -121,7 +124,6 @@
             }
         }
         
-        [document release];
         connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
         [connection start];
     } else if (loadingState == 2) {
@@ -151,11 +153,10 @@
     [received appendData:data];
 }
 
-- (void)performSubmission:(HNSubmission *)submission_ withToken:(HNSessionToken)token_ {
+- (void)performSubmissionWithToken:(HNSessionToken)token_ {
     received = [[NSMutableData alloc] init];
     
     loadingState = 1;
-    submission = [submission_ retain];
     token = [token_ copy];
     
     NSURL *url = nil;
