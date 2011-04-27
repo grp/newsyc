@@ -20,6 +20,8 @@
     [source autorelease];
     source = [source_ retain];
     [source setDelegate:self];
+
+    loaded = NO;
 }
 
 - (id)initWithSource:(HNObject *)source_ {
