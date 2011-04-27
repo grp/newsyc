@@ -10,7 +10,7 @@
 #import "InstapaperSession.h"
 
 @implementation InstapaperRequest
-@synthesize session, delegate; 
+@synthesize session; 
 
 - (void)dealloc {
     [session release];
@@ -27,13 +27,11 @@
 }
 
 - (void)succeed {
-    if ([delegate respondsToSelector:@selector(instapaperRequestDidAddItem:)])
-        [delegate instapaperRequestDidAddItem:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kInstapaperRequestSucceededNotification object:self];
 }
 
 - (void)failWithError:(NSError *)error {
-    if ([delegate respondsToSelector:@selector(instapaperRequest:didFailToAddItemWithError:)])
-        [delegate instapaperRequest:self didFailToAddItemWithError:error];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kInstapaperRequestFailedNotification object:self userInfo:[NSDictionary dictionaryWithObject:error forKey:@"error"]];
 }
 
 - (void)failWithErrorText:(NSString *)text {

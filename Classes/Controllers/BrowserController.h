@@ -13,9 +13,9 @@
 
 #import "ActivityIndicatorItem.h"
 
-#define kReadabilityJavascript @"(function(){window.baseUrl='https://www.readability.com';window.readabilityToken='';var s=document.createElement('script');s.setAttribute('type','text/javascript');s.setAttribute('charset','UTF-8');s.setAttribute('src',baseUrl+'/bookmarklet/read.js');document.documentElement.appendChild(s);})()"
+#define kReadabilityBookmarkletCode @"(function(){window.baseUrl='https://www.readability.com';window.readabilityToken='';var s=document.createElement('script');s.setAttribute('type','text/javascript');s.setAttribute('charset','UTF-8');s.setAttribute('src',baseUrl+'/bookmarklet/read.js');document.documentElement.appendChild(s);})()"
 
-@interface BrowserController : UIViewController <UIWebViewDelegate, UIActionSheetDelegate, InstapaperRequestDelegate, LoginControllerDelegate> {
+@interface BrowserController : UIViewController <UIWebViewDelegate, UIActionSheetDelegate, LoginControllerDelegate> {
     UIWebView *webview;
     UIToolbar *toolbar;
     NSURL *rootURL;

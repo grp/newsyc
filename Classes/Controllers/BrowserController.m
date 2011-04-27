@@ -36,6 +36,16 @@
     [loadingItem release];
     [spacerItem release];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    if (hud != nil) {
+        // XXX: this is not actually what we want: this should show on top of
+        // other controllers whilte it continues to save. however, since the
+        // browser controller, not some "instapaper saving controller", manages
+        // the HUD, this is the best we can do for now, and is "good enough"
+        [hud dismissWithAnimation:YES];
+    }
+    
     [super dealloc];
 }
 
@@ -108,7 +118,9 @@
 
 - (void)submitInstapaperRequest {
     InstapaperRequest *request = [[InstapaperRequest alloc] initWithSession:[InstapaperSession currentSession]];
-    [request setDelegate:self];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instapaperRequestDidAddItem:) name:kInstapaperRequestSucceededNotification object:request];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instapaperRequestDidFailToAddItem:) name:kInstapaperRequestFailedNotification object:request];
     
     if (hud == nil) {
         hud = [[ProgressHUD alloc] init];
@@ -122,7 +134,7 @@
 }
 
 - (void)readability {
-    [webview stringByEvaluatingJavaScriptFromString:kReadabilityJavascript];
+    [webview stringByEvaluatingJavaScriptFromString:kReadabilityBookmarkletCode];
 }
 
 - (void)loginControllerDidLogin:(LoginController *)controller {
@@ -134,14 +146,14 @@
     [controller dismissModalViewControllerAnimated:YES];
 }
 
-- (void)instapaperRequestDidAddItem:(InstapaperRequest *)request {
+- (void)instapaperRequestDidAddItem:(NSNotification *)notification {
     [hud setText:@"Saved!"];
     [hud setState:kProgressHUDStateCompleted];
     [hud dismissAfterDelay:0.8f animated:YES];
     hud = nil;
 }
 
-- (void)instapaperRequest:(InstapaperRequest *)request didFailToAddItemWithError:(NSError *)error {
+- (void)instapaperRequestDidFailToAddItem:(NSNotification *)notification {
     [hud setText:@"Error Saving"];
     [hud setState:kProgressHUDStateError];
     [hud dismissAfterDelay:0.8f animated:YES];

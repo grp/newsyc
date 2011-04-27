@@ -8,14 +8,11 @@
 
 #import "InstapaperAPI.h"
 
-@protocol InstapaperRequestDelegate;
 @class InstapaperSession;
 @interface InstapaperRequest : NSObject {
     InstapaperSession *session;
-    id<InstapaperRequestDelegate> delegate;
 }
 
-@property (nonatomic, assign) id<InstapaperRequestDelegate> delegate;
 @property (nonatomic, readonly) InstapaperSession *session;
 
 - (void)addItemWithURL:(NSURL *)url title:(NSString *)title selection:(NSString *)selection;
@@ -26,11 +23,6 @@
 
 @end
 
-@protocol InstapaperRequestDelegate <NSObject>
-@optional
-
-- (void)instapaperRequestDidAddItem:(InstapaperRequest *)request;
-- (void)instapaperRequest:(InstapaperRequest *)request didFailToAddItemWithError:(NSError *)error;
-
-@end
+#define kInstapaperRequestSucceededNotification @"instapaper-request-completed"
+#define kInstapaperRequestFailedNotification @"instapaper-request-failed"
 
