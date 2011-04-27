@@ -73,8 +73,12 @@
         if ([sections count] >= 2) return [(XMLElement *) [sections objectAtIndex:1] children];
         else return nil;
     } else {
-        if ([sections count] >= 1) return [(XMLElement *) [sections objectAtIndex:0] children];
-        else return nil;
+        if ([sections count] == 1) return [(XMLElement *) [sections objectAtIndex:0] children];
+        else {
+            NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
+            if ([elements count] > 2) return [elements subarrayWithRange:NSMakeRange(2, [elements count] - 3)];
+            else return nil;
+        }
     }
 }
 
