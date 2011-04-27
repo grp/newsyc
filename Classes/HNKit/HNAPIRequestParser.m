@@ -133,7 +133,8 @@
                 
                 if ([tag isEqual:@"a"]) {
                     if ([[element2 attributeWithName:@"href"] hasPrefix:@"user?id="]) {
-                        user = content;
+                        user = [content stringByRemovingHTMLTags];
+                        user = [user stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                     } else if ([[element2 attributeWithName:@"href"] hasPrefix:@"item?id="]) {
                         int end = [content rangeOfString:@" "].location;
                         if (end != NSNotFound) comments = [NSNumber numberWithInt:[[content substringToIndex:end] intValue]];
@@ -239,6 +240,7 @@
                                     
                                     if ([href hasPrefix:@"user?id="]) {
                                         user = [content stringByRemovingHTMLTags];
+                                        user = [user stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                                     } else if ([href hasPrefix:@"item?id="] && [content isEqual:@"link"]) {
                                         identifier = [NSNumber numberWithInt:[[href substringFromIndex:[@"item?id=" length]] intValue]];
                                     }
