@@ -82,6 +82,7 @@ static HNSession *current = nil;
 
 
 - (void)reloadToken {
+    // XXX: maybe this should return an error code
     if (authenticator != nil) return;
     
     authenticator = [[HNSessionAuthenticator alloc] initWithUsername:[user identifier] password:password];
