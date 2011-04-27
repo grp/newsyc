@@ -14,17 +14,22 @@
 
 @implementation SubmissionListController
 
+- (void)dealloc {
+    [refreshView release];
+    [super dealloc];
+}
+
 - (void)loadView {
     [super loadView];
 }
 
 - (void)viewDidUnload {
-    [refreshView release];
     [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
     [refreshView refreshLastUpdatedDate];
+    [tableView addSubview:refreshView];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {

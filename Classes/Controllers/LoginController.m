@@ -20,6 +20,9 @@
     [backgroundImageView release];
     [topLabel release];
     [bottomLabel release];
+    [cancelItem release];
+    [completeItem release];
+    [loadingItem release];
     
     [super dealloc];
 }
@@ -146,6 +149,20 @@
     passwordCell = nil;
     [usernameCell release];
     usernameCell = nil;
+    [loadingItem release];
+    loadingItem = nil;
+    [cancelItem release];
+    cancelItem = nil;
+    [completeItem release];
+    completeItem = nil;
+    [topLabel release];
+    topLabel = nil;
+    [bottomLabel release];
+    bottomLabel = nil;
+    [backgroundImageView release];
+    backgroundImageView = nil;
+    [tableView release];
+    tableView = nil;
 }
 
 - (void)viewDidAppear:(BOOL)animated {

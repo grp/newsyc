@@ -109,6 +109,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
+    [lastSeen release];
     lastSeen = [[NSDate date] retain];
 }
 
@@ -120,7 +121,8 @@
         [[home source] beginReloading];
         [[latest source] beginReloading];
     }
-         
+        
+    [lastSeen release];
     lastSeen = [[NSDate date] retain];
 }
 

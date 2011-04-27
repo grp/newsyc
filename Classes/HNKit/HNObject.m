@@ -115,10 +115,15 @@
 }
 
 - (id)initWithType:(HNPageType)type_ identifier:(id)identifier_ URL:(NSURL *)url_ {
-    HNObject *object = [HNObjectCache objectFromCacheWithType:type_ identifier:identifier_];
-    if (object != nil) return [object retain];
+    if ((self = [super init]) == nil) return nil;
     
-    if (type_ != nil && url_ != nil && (self = [super init])) {
+    HNObject *object = [HNObjectCache objectFromCacheWithType:type_ identifier:identifier_];
+    if (object != nil) {
+        [self release];
+        return [object retain];
+    }
+    
+    if (type_ != nil && url_ != nil) {
         [self setURL:url_];
         [self setType:type_];
         [self setIdentifier:identifier_];

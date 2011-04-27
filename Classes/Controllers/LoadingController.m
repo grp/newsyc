@@ -119,7 +119,7 @@
     [errorLabel setTextAlignment:UITextAlignmentCenter];
     
     actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTapped)];
-    loadingItem = [[ActivityIndicatorItem alloc] initWithSize:kActivityIndicatorItemStandardSize];
+    loadingItem = [[ActivityIndicatorItem alloc] initWithSize:CGSizeMake(25.0f, kActivityIndicatorItemStandardSize.height)];
 }
 
 - (void)viewDidLoad {
