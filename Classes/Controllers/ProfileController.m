@@ -13,6 +13,8 @@
 #import "SubmissionListController.h"
 #import "CommentListController.h"
 
+#import "NSString+Tags.h"
+
 @implementation ProfileController
 
 - (void)dealloc {
@@ -66,9 +68,9 @@
     NSString *about = [(HNUser *) source about];
     about = [about stringByReplacingOccurrencesOfString:@"<p>" withString:@"\n\n"];
     about = [about stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
-    about = [about stringByReplacingOccurrencesOfString:@"<a href='" withString:@""];
-    about = [about stringByReplacingOccurrencesOfString:@"'>" withString:@""];
-    about = [about stringByReplacingOccurrencesOfString:@"</a>" withString:@""];
+    about = [about stringByReplacingOccurrencesOfString:@"<br />" withString:@"\n"];
+    about = [about stringByReplacingOccurrencesOfString:@"<br/>" withString:@"\n"];
+    about = [about stringByRemovingHTMLTags];
     return about;
 }
 
