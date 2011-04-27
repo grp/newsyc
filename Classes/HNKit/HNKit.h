@@ -42,6 +42,8 @@ typedef enum {
     kHNVoteDirectionUp
 } HNVoteDirection;
 
+typedef NSString *HNSessionToken;
+
 #import "HNObject.h"
 #import "HNUser.h"
 #import "HNEntry.h"

@@ -30,7 +30,7 @@
 }
 
 - (void)sessionAuthenticator:(HNSessionAuthenticator *)authenticator didRecieveToken:(HNSessionToken)token {
-    HNSession *session = [[HNSession alloc] initWithUsername:[usernameField text] token:token];
+    HNSession *session = [[HNSession alloc] initWithUsername:[usernameField text] password:[passwordField text] token:token];
     [HNSession setCurrentSession:[session autorelease]];
     [authenticator autorelease];
     

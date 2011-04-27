@@ -22,6 +22,10 @@
     MainTabBarController *mainTabBarController = [[MainTabBarController alloc] init];
     [mainTabBarController setTitle:@"Hacker News"];
     [navigationController setViewControllers:[NSArray arrayWithObjects:mainTabBarController, nil]];
+    
+    if (![[HNSession currentSession] isAnonymous]) {
+        [[HNSession currentSession] reloadToken];
+    }
                   
     [window makeKeyAndVisible];
     return YES;
@@ -40,7 +44,9 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    
+    if (![[HNSession currentSession] isAnonymous]) {
+        [[HNSession currentSession] reloadToken];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

@@ -20,4 +20,8 @@
     return YES;
 }
 
+- (void)reloadToken {
+    // do nothing
+}
+
 @end
