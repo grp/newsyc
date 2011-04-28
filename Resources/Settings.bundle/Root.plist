@@ -5,48 +5,41 @@
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
+			<key>FooterText</key>
+			<string>Enabling this option will log you out of Instapaper next time you launch news:yc.</string>
 			<key>Title</key>
 			<string>Instapaper</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
 		<dict>
-			<key>AutocapitalizationType</key>
-			<string>None</string>
-			<key>AutocorrectionType</key>
-			<string>No</string>
 			<key>DefaultValue</key>
-			<string></string>
-			<key>IsSecure</key>
 			<false/>
 			<key>Key</key>
-			<string>instapaper-username</string>
-			<key>KeyboardType</key>
-			<string>Alphabet</string>
+			<string>instapaper-logout</string>
 			<key>Title</key>
-			<string>Username</string>
+			<string>Logout on Launch</string>
 			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
+			<string>PSToggleSwitchSpecifier</string>
 		</dict>
-		<dict>
-			<key>AutocapitalizationType</key>
-			<string>None</string>
-			<key>AutocorrectionType</key>
-			<string>No</string>
-			<key>DefaultValue</key>
+        <dict>
+			<key>FooterText</key>
+			<string>Includes contributions by many others, see website for more information. Source code is available on GitHub under the BSD license, contributions are welcome.</string>
+			<key>Title</key>
 			<string></string>
-			<key>IsSecure</key>
-			<true/>
-			<key>Key</key>
-			<string>instapaper-password</string>
-			<key>KeyboardType</key>
-			<string>Alphabet</string>
-			<key>Title</key>
-			<string>Password</string>
 			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
+			<string>PSGroupSpecifier</string>
 		</dict>
-	</array>
+        <dict>
+			<key>FooterText</key>
+			<string>news:yc © 2011 Xuzz Productions, LLC
+            </string>
+			<key>Title</key>
+			<string></string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+    </array>
 	<key>StringsTable</key>
 	<string>Root</string>
 </dict>

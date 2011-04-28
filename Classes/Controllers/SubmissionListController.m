@@ -91,7 +91,8 @@
 }
 
 - (NSDate *)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view {
-	return [NSDate date]; // should return date data source was last changed
+     // XXX: what should really go here?
+	return [NSDate date];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

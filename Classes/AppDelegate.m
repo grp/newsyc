@@ -11,6 +11,7 @@
 #import "MainTabBarController.h"
 
 #import "HNKit.h"
+#import "InstapaperSession.h"
 
 @implementation AppDelegate
 
@@ -42,12 +43,16 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
+    
     if (![[HNSession currentSession] isAnonymous]) {
         [[HNSession currentSession] reloadToken];
     }
+    
+    [InstapaperSession logoutIfNecessary];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

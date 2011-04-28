@@ -18,12 +18,27 @@ static id currentSession = nil;
 }
 
 + (void)setCurrentSession:(id)session {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:[session username] forKey:@"instapaper-username"];
-    [defaults setObject:[session password] forKey:@"instapaper-password"];
-    
     [currentSession autorelease];
     currentSession = [session retain];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if (session != nil) {
+        [defaults setObject:[session username] forKey:@"instapaper-username"];
+        [defaults setObject:[session password] forKey:@"instapaper-password"];
+    } else {
+        [defaults removeObjectForKey:@"instapaper-username"];
+        [defaults removeObjectForKey:@"instapaper-password"];
+    }
+}
+
++ (void)logoutIfNecessary {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL logout = [[defaults objectForKey:@"instapaper-logout"] boolValue];
+    
+    if (logout) {
+        [defaults setObject:[NSNumber numberWithBool:NO] forKey:@"instapaper-logout"];
+        [self setCurrentSession:nil];
+    }
 }
 
 + (void)initialize {
@@ -38,6 +53,8 @@ static id currentSession = nil;
         [session setPassword:password];
         [self setCurrentSession:[session autorelease]];
     }
+    
+    [self logoutIfNecessary];
 }
 
 - (BOOL)canAddItems {

@@ -15,6 +15,7 @@
 
 + (id)currentSession;
 + (void)setCurrentSession:(id)session;
++ (void)logoutIfNecessary;
 
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *password;
