@@ -24,6 +24,10 @@
 }
 
 - (void)viewDidUnload {
+    [refreshView removeFromSuperview];
+    [refreshView release];
+    refreshView = nil;
+    
     [super viewDidUnload];
 }
 
@@ -66,10 +70,12 @@
     [super finishedLoading];
     
     if (refreshView == nil) {
-        refreshView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - tableView.bounds.size.height, [self view].frame.size.width,tableView.bounds.size.height)];
+        refreshView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - tableView.bounds.size.height, [self view].frame.size.width, tableView.bounds.size.height)];
         [refreshView setDelegate:self];
-        [tableView addSubview:refreshView];
     }
+    
+    [tableView addSubview:refreshView];
+    [refreshView setFrame:CGRectMake(0.0f, 0.0f - tableView.bounds.size.height, [self view].frame.size.width, tableView.bounds.size.height)];
     
 	[refreshView egoRefreshScrollViewDataSourceDidFinishedLoading:tableView];
 }
