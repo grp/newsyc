@@ -89,7 +89,7 @@
 - (CGFloat)tableView:(UITableView *)table heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([indexPath section] == 0 && [indexPath row] == 0 && [self hasAbout]) {
 		NSString *text = [self aboutText];
-		CGSize constraint = CGSizeMake([[self view] bounds].size.width - 20.0f, 4000.0f);
+		CGSize constraint = CGSizeMake([[self view] bounds].size.width - 40.0f, 4000.0f);
 		CGSize size = [text sizeWithFont:[UIFont systemFontOfSize:16.0] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
         size.height += 20.0f;
 		if (size.height >= 64.0f) return size.height;
