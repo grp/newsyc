@@ -45,14 +45,13 @@
     return result;
 }
 
-- (BOOL)rootElementExistsInDocument:(XMLDocument *)document {
-    BOOL exists = [document firstElementMatchingPath:@"//textarea[@name='text']"] != nil;
-    return exists;
-}
-
 - (NSArray *)entrySectionsForDocument:(XMLDocument *)document {
     NSArray *sections = [document elementsMatchingPath:@"//body/center/table/tr[3]/td/table"];
     return sections;
+}
+
+- (BOOL)rootElementExistsInDocument:(XMLDocument *)document {
+    return [[self entrySectionsForDocument:document] count] >= 2;
 }
 
 - (BOOL)rootElementIsSubmission:(XMLDocument *)document {
@@ -70,11 +69,11 @@
     NSArray *sections = [self entrySectionsForDocument:document];
     
     if ([self rootElementExistsInDocument:document]) {
-        if ([sections count] >= 2) return [(XMLElement *) [sections objectAtIndex:1] children];
-        else return nil;
+        return [(XMLElement *) [sections objectAtIndex:1] children];
     } else {
-        if ([sections count] == 1) return [(XMLElement *) [sections objectAtIndex:0] children];
-        else {
+        if ([sections count] == 1) {
+            return [(XMLElement *) [sections objectAtIndex:0] children];
+        } else {
             NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
             if ([elements count] > 2) return [elements subarrayWithRange:NSMakeRange(2, [elements count] - 3)];
             else return nil;
