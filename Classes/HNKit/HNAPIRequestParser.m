@@ -45,39 +45,38 @@
     return result;
 }
 
-- (NSArray *)entrySectionsForDocument:(XMLDocument *)document {
-    NSArray *sections = [document elementsMatchingPath:@"//body/center/table/tr[3]/td/table"];
-    return sections;
-}
-
-- (BOOL)rootElementExistsInDocument:(XMLDocument *)document {
-    return [[self entrySectionsForDocument:document] count] >= 2;
-}
-
 - (BOOL)rootElementIsSubmission:(XMLDocument *)document {
     return [document firstElementMatchingPath:@"//body/center/table/tr[3]/td/table//td[@class='title']"] != nil;
 }
 
 - (XMLElement *)rootElementForDocument:(XMLDocument *)document {
-    NSArray *sections = [self entrySectionsForDocument:document];
-    
-    if ([self rootElementExistsInDocument:document]) return [sections objectAtIndex:0];
-    else return nil;
+    if ([type isEqual:kHNPageTypeItemComments]) {
+        return [document firstElementMatchingPath:@"//body/center/table/tr[3]/td/table[1]"];
+    } else {
+        return nil;
+    }
 }
 
 - (NSArray *)contentRowsForDocument:(XMLDocument *)document {
-    NSArray *sections = [self entrySectionsForDocument:document];
-    
-    if ([self rootElementExistsInDocument:document]) {
-        return [(XMLElement *) [sections objectAtIndex:1] children];
+    if ([type isEqual:kHNPageTypeActiveSubmissions] ||
+        [type isEqual:kHNPageTypeAskSubmissions] ||
+        [type isEqual:kHNPageTypeBestSubmissions] ||
+        [type isEqual:kHNPageTypeClassicSubmissions] ||
+        [type isEqual:kHNPageTypeSubmissions] ||
+        [type isEqual:kHNPageTypeNewSubmissions] ||
+        [type isEqual:kHNPageTypeBestComments] ||
+        [type isEqual:kHNPageTypeNewComments]) {
+        NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr[3]/td/table/tr"];
+        return elements;
+    } else if ([type isEqual:kHNPageTypeUserSubmissions] || 
+               [type isEqual:kHNPageTypeUserComments]) {
+        NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
+        return [elements subarrayWithRange:NSMakeRange(3, [elements count] - 5)];
+    } else if ([type isEqual:kHNPageTypeItemComments]) {
+        NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr[3]/td/table[2]/tr"];
+        return elements;
     } else {
-        if ([sections count] == 1) {
-            return [(XMLElement *) [sections objectAtIndex:0] children];
-        } else {
-            NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
-            if ([elements count] > 2) return [elements subarrayWithRange:NSMakeRange(2, [elements count] - 3)];
-            else return nil;
-        }
+        return nil;
     }
 }
 
@@ -366,6 +365,19 @@
     [item setObject:result forKey:@"children"];
     if (more != nil) [item setObject:more forKey:@"more"];
     return item;
+}
+
+- (id)initWithType:(HNPageType)type_ {
+    if ((self = [super init])) {
+        type = [type_ copy];
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [type release];
+    [super dealloc];
 }
 
 @end

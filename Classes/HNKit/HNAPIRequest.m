@@ -54,7 +54,7 @@
     }
     
     BOOL success = YES;
-    HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] init];
+    HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] initWithType:type];
     NSDictionary *result = nil;
     @try {
         if (selector != NULL) result = [parser performSelector:selector withObject:resp];
