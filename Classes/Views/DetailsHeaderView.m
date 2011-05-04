@@ -127,7 +127,7 @@
     if ([[entry title] length] > 0) {
         [[UIColor blackColor] set];
         
-        titlerect.size.width = bounds.width - (offsets.width * 3) - [disclosure size].width;
+        titlerect.size.width = bounds.width - (offsets.width * 2) - [disclosure size].width - ([self hasDestination] ? offsets.width : 0);
         titlerect.size.height = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(titlerect.size.width, 400.0f) lineBreakMode:UILineBreakModeWordWrap].height;
         titlerect.origin.x = offsets.width;
         titlerect.origin.y = offsets.height + 8.0f;
