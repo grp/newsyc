@@ -15,7 +15,7 @@
 
 #define kReadabilityBookmarkletCode @"(function(){window.baseUrl='https://www.readability.com';window.readabilityToken='';var s=document.createElement('script');s.setAttribute('type','text/javascript');s.setAttribute('charset','UTF-8');s.setAttribute('src',baseUrl+'/bookmarklet/read.js');document.documentElement.appendChild(s);})()"
 
-@interface BrowserController : UIViewController <UIWebViewDelegate, UIActionSheetDelegate, LoginControllerDelegate> {
+@interface BrowserController : UIViewController <UIWebViewDelegate, UIActionSheetDelegate, LoginControllerDelegate, UIAlertViewDelegate> {
     UIWebView *webview;
     UIToolbar *toolbar;
     NSURL *rootURL;
@@ -28,6 +28,7 @@
     UIBarButtonItem *spacerItem;
     UIBarButtonItem *readabilityItem;
     ProgressHUD *hud;
+    NSURL *externalURL;
 }
 
 @property (nonatomic, copy) NSURL *currentURL;

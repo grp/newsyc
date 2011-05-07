@@ -10,6 +10,7 @@
 #import "InstapaperAPI.h"
 #import "NavigationController.h"
 #import "ProgressHUD.h"
+#import "NSArray+Strings.h"
 
 @implementation BrowserController
 @synthesize currentURL;
@@ -237,7 +238,43 @@
     [self updateToolbarItems];
 }
 
+//These 3 methods from Apple tech doc: http://developer.apple.com/library/ios/#qa/qa1629/_index.html
+- (void)openExternalURL:(NSURL *)externalURL {
+    externalURL = externalURL;
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:externalURL] delegate:self startImmediately:YES];
+    [conn release];
+}
+
+- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response {
+    if(response){
+        externalURL = [response URL];
+    }
+    return request;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Leaving Application" message:@"Are you sure you want to leave news:yc?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    [alert show];
+}
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(buttonIndex == 1) {
+        [[UIApplication sharedApplication] openURL:externalURL];
+    }
+}
+
+- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    [alertView release];
+}
+
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    
+    NSArray *hosts = [NSArray arrayWithObjects:@"itunes.apple.com", @"phobos.apple.com", @"youtube.com", @"maps.google.com", nil];
+    NSURL *url = [request URL];
+    if(navigationType == UIWebViewNavigationTypeLinkClicked && [hosts containsString:[url host]]) {
+        [self openExternalURL:url];
+        return NO;
+    }
     if (navigationType == UIWebViewNavigationTypeLinkClicked ||
         navigationType == UIWebViewNavigationTypeFormSubmitted ||
         navigationType == UIWebViewNavigationTypeFormResubmitted) {
