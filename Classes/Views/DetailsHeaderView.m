@@ -83,6 +83,10 @@
     entry = [entry_ retain];
     
     NSString *body = [entry body];
+    
+    // Make font of full comments a bit bigger & more readable
+    body = [NSString stringWithFormat:@"%@%@%@", @"<font size=\"4\" face=\"Georgia\">", body, @"</font>"];
+    
     NSData *data = [body dataUsingEncoding:NSUTF8StringEncoding];
     NSAttributedString *attributed = [[NSAttributedString alloc] initWithHTML:data baseURL:kHNWebsiteURL documentAttributes:NULL];
     [textView setAttributedString:[attributed autorelease]];
