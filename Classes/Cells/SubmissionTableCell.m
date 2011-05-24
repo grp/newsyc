@@ -57,14 +57,14 @@
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {
     CGSize titlesize = [[entry title] sizeWithFont:[self titleFont] constrainedToSize:CGSizeMake(width - 16.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
-    return titlesize.height + 45.0f;
+    return titlesize.height + 30.0f;
 }
 
 - (void)drawContentView:(CGRect)rect {
     CGSize bounds = [self bounds].size;
     CGSize offsets = CGSizeMake(8.0f, 4.0f);
     
-    NSString *user = [[submission submitter] identifier];
+	//  NSString *user = [[submission submitter] identifier];
     NSString *date = [submission posted];
     NSString *site = [[submission destination] host];
     if ([submission body] != nil) site = @""; // don't show URLs for self posts
@@ -74,17 +74,14 @@
     NSString *title = [[submission title] stringByDecodingHTMLEntities];
     
     if ([self isHighlighted] || [self isSelected]) [[UIColor whiteColor] set];
-    
-    if (!([self isHighlighted] || [self isSelected])) [[UIColor grayColor] set];
-    [user drawAtPoint:CGPointMake(offsets.width, offsets.height) withFont:[[self class] userFont]];
-    
+	CGFloat datewidth = [date sizeWithFont:[[self class] dateFont]].width;
+	
+	if (!([self isHighlighted] || [self isSelected])) [[UIColor blackColor] set];
+    [title drawInRect:CGRectMake(offsets.width, offsets.height, bounds.width - (2 * offsets.width) - (datewidth + 10.0f), bounds.height - 30.0f) withFont:[[self class] titleFont] lineBreakMode:UILineBreakModeTailTruncation];
+	
     if (!([self isHighlighted] || [self isSelected])) [[UIColor lightGrayColor] set];
-    CGFloat datewidth = [date sizeWithFont:[[self class] dateFont]].width;
-    [date drawAtPoint:CGPointMake(bounds.width - datewidth - offsets.width, offsets.height) withFont:[[self class] dateFont]];
-    
-    if (!([self isHighlighted] || [self isSelected])) [[UIColor blackColor] set];
-    [title drawInRect:CGRectMake(offsets.width, offsets.height + 19.0f, bounds.width - (2 * offsets.width), bounds.height - 45.0f) withFont:[[self class] titleFont] lineBreakMode:UILineBreakModeWordWrap];
-    
+    [date drawAtPoint:CGPointMake(bounds.width - datewidth - offsets.width, offsets.height + 2.0f) withFont:[[self class] dateFont]];
+	
     if (!([self isHighlighted] || [self isSelected])) [[UIColor grayColor] set];
     CGRect pointsrect;
     pointsrect.size.height = [points sizeWithFont:[[self class] subtleFont]].height;
