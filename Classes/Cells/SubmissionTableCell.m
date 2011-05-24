@@ -66,7 +66,7 @@
     
 	//  NSString *user = [[submission submitter] identifier];
     NSString *date = [submission posted];
-    NSString *site = [[submission destination] host];
+    NSString *site = [[[submission destination] host] stringByReplacingOccurrencesOfString:@"www." withString:@""];
     if ([submission body] != nil) site = @""; // don't show URLs for self posts
     NSString *point = [submission points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [submission points]];
     NSString *comment = [submission children] == 0 ? @"no comments" : [submission children] == 1 ? @"1 comment" : [NSString stringWithFormat:@"%d comments", [submission children]];
@@ -74,9 +74,9 @@
     NSString *title = [[submission title] stringByDecodingHTMLEntities];
     
     if ([self isHighlighted] || [self isSelected]) [[UIColor whiteColor] set];
-	CGFloat datewidth = [date sizeWithFont:[[self class] dateFont]].width;
 	
 	if (!([self isHighlighted] || [self isSelected])) [[UIColor blackColor] set];
+	CGFloat datewidth = [date sizeWithFont:[[self class] dateFont]].width;
     [title drawInRect:CGRectMake(offsets.width, offsets.height, bounds.width - (2 * offsets.width) - (datewidth + 10.0f), bounds.height - 30.0f) withFont:[[self class] titleFont] lineBreakMode:UILineBreakModeTailTruncation];
 	
     if (!([self isHighlighted] || [self isSelected])) [[UIColor lightGrayColor] set];
