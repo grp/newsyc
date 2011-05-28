@@ -46,7 +46,13 @@
 }
 
 + (UIFont *)bodyFont {
-    return [UIFont systemFontOfSize:12.0f];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *small = [defaults objectForKey:@"interface-small-text"];
+    if (small == nil || [small boolValue]) {
+        return [UIFont systemFontOfSize:12.0f];
+    } else {
+        return [UIFont systemFontOfSize:14.0f];
+    }
 }
 
 + (UIFont *)userFont {
@@ -61,9 +67,23 @@
     return [UIFont systemFontOfSize:13.0f];
 }
 
++ (CGFloat)heightForBodyText:(NSString *)text withWidth:(CGFloat)width {
+    CGSize size = CGSizeMake(width - 16.0f, CGFLOAT_MAX);
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *small = [defaults objectForKey:@"interface-short-comments"];
+    if (small == nil || [small boolValue]) {
+        // Show only three lines of text.
+        CGFloat singleHeight = [[self bodyFont] lineHeight];
+        CGFloat tripleHeight = singleHeight * 3;
+        if (size.height > tripleHeight) size.height = tripleHeight;
+    }
+    
+    return [[self formatBodyText:text] sizeWithFont:[self bodyFont] constrainedToSize:size lineBreakMode:UILineBreakModeWordWrap].height;
+}
+
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {
-    CGSize titlesize = [[self formatBodyText:[entry body]] sizeWithFont:[self bodyFont] constrainedToSize:CGSizeMake(width - 16.0f, 45.0f) lineBreakMode:UILineBreakModeWordWrap];
-    return titlesize.height + 45.0f;
+    return [self heightForBodyText:[entry body] withWidth:width] + 45.0f;
 }
 
 - (void)drawContentView:(CGRect)rect {
@@ -87,7 +107,7 @@
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor blackColor] set];
     CGRect bodyrect;
-    bodyrect.size.height = bounds.height - 45.0f;
+    bodyrect.size.height = [[self class] heightForBodyText:body withWidth:bounds.width];
     bodyrect.size.width = bounds.width - offsets.width * 2;
     bodyrect.origin.x = offsets.width;
     bodyrect.origin.y = offsets.height + 19.0f;

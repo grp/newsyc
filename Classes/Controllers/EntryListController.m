@@ -89,6 +89,10 @@
     return nil;
 }
 
+- (void)relayoutView {
+    [tableView reloadData];
+}
+
 - (void)tableView:(UITableView *)table willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([indexPath section] == [tableView numberOfSections] - 1 
         && [indexPath row] == [tableView numberOfRowsInSection:[tableView numberOfSections] - 1]) {

@@ -11,4 +11,6 @@
 @interface NavigationController : UINavigationController {
 }
 
+- (void)relayoutViews;
+
 @end

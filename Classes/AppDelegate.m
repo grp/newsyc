@@ -49,6 +49,8 @@
     }
     
     [InstapaperSession logoutIfNecessary];
+    
+    [navigationController relayoutViews];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
