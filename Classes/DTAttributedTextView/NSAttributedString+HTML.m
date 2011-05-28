@@ -769,9 +769,17 @@ CTParagraphStyleRef createParagraphStyle(CGFloat paragraphSpacingBefore, CGFloat
 							currentFontDescriptor.pointSize = 37.0;
 							break;	
 						case 3:
-						default:
-							currentFontDescriptor.pointSize = 12.0;
+						default: {
+                            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                            NSNumber *small = [defaults objectForKey:@"interface-small-text"];
+                            if (small == nil || [small boolValue]) {
+                                currentFontDescriptor.pointSize = 12.0;
+                            } else {
+                                currentFontDescriptor.pointSize = 14.0;
+                            }
+							
 							break;
+                        }
 					}
 					
 					NSString *face = [tagAttributesDict objectForKey:@"face"];
