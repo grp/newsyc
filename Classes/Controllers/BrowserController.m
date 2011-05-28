@@ -239,28 +239,30 @@
 }
 
 //These 3 methods from Apple tech doc: http://developer.apple.com/library/ios/#qa/qa1629/_index.html
-- (void)openExternalURL:(NSURL *)externalURL {
-    externalURL = externalURL;
-    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:externalURL] delegate:self startImmediately:YES];
+- (void)openExternalURL:(NSURL *)external {
+    externalURL = [external retain];
+    
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:external] delegate:self startImmediately:YES];
     [conn release];
 }
 
 - (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response {
-    if(response){
-        externalURL = [response URL];
-    }
+    if (response) externalURL = [[response URL] retain];
     return request;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Leaving Application" message:@"Are you sure you want to leave news:yc?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Opening Link" message:@"Are you sure you want to leave news:yc to open this link?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Open Link", nil];
     [alert show];
 }
 
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(buttonIndex == 1) {
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
         [[UIApplication sharedApplication] openURL:externalURL];
     }
+    
+    [externalURL release];
+    externalURL = nil;
 }
 
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {

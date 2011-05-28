@@ -5,6 +5,42 @@
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Interface</string>
+		</dict>
+        <dict>
+			<key>DefaultValue</key>
+			<true/>
+			<key>Key</key>
+			<string>interface-short-comments</string>
+			<key>Title</key>
+			<string>Truncate Comments</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+        <dict>
+			<key>DefaultValue</key>
+			<true/>
+			<key>Key</key>
+			<string>interface-small-text</string>
+			<key>Title</key>
+			<string>Small Text Font</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+        <dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>interface-confirm-votes</string>
+			<key>Title</key>
+			<string>Confirm Votes</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+		<dict>
 			<key>FooterText</key>
 			<string>Enabling this option will log you out of Instapaper next time you launch news:yc.</string>
 			<key>Title</key>
@@ -22,7 +58,7 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
-        <dict>
+		<dict>
 			<key>FooterText</key>
 			<string>Includes contributions by many others, see website for more information. Source code is available on GitHub under the BSD license. Contributions are welcome.</string>
 			<key>Title</key>
@@ -30,7 +66,7 @@
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
-        <dict>
+		<dict>
 			<key>FooterText</key>
 			<string>news:yc © 2011 Xuzz Productions, LLC
             </string>
@@ -38,8 +74,10 @@
 			<string></string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
+			<key>New item</key>
+			<string></string>
 		</dict>
-    </array>
+	</array>
 	<key>StringsTable</key>
 	<string>Root</string>
 </dict>

@@ -94,6 +94,30 @@
     [source beginReloading];
 }
 
+- (void)performUpvote {
+    HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeVote];
+    [submission setDirection:kHNVoteDirectionUp];
+    [submission setTarget:(HNEntry *) source];
+    [[HNSession currentSession] performSubmission:submission];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionUpvoteDidSucceedWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionUpvoteDidFailWithNotification:) name:kHNSubmissionFailureNotification object:submission];
+    [submission release];
+    
+    [entryActionsView beginLoadingItem:kEntryActionsViewItemUpvote];
+}
+
+- (void)performDownvote {
+    HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeVote];
+    [submission setDirection:kHNVoteDirectionDown];
+    [submission setTarget:(HNEntry *) source];
+    [[HNSession currentSession] performSubmission:submission];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionDownvoteDidSucceedWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionDownvoteDidFailWithNotification:) name:kHNSubmissionFailureNotification object:submission];
+    [submission release];
+    
+    [entryActionsView beginLoadingItem:kEntryActionsViewItemDownvote];
+}
+
 - (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
     if ([[sheet sheetContext] isEqual:@"flag"]) {
         if (index == [sheet destructiveButtonIndex]) {
@@ -105,6 +129,14 @@
             [submission release];
             
             [entryActionsView beginLoadingItem:kEntryActionsViewItemFlag];
+        }
+    } else if ([[sheet sheetContext] isEqual:@"upvote"]) {
+        if (index != [sheet cancelButtonIndex]) {
+            [self performUpvote];
+        }
+    } else if ([[sheet sheetContext] isEqual:@"downvote"]) {
+        if (index != [sheet cancelButtonIndex]) {
+            [self performDownvote];
         }
     } else {
         if ([[[self class] superclass] instancesRespondToSelector:@selector(actionSheet:clickedButtonAtIndex:)]) {
@@ -121,25 +153,37 @@
         [controller setTitle:@"Profile"];
         [[self navigationController] pushViewController:[controller autorelease] animated:YES];
     } else if (item == kEntryActionsViewItemUpvote) {
-        HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeVote];
-        [submission setDirection:kHNVoteDirectionUp];
-        [submission setTarget:(HNEntry *) source];
-        [[HNSession currentSession] performSubmission:submission];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionUpvoteDidSucceedWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionUpvoteDidFailWithNotification:) name:kHNSubmissionFailureNotification object:submission];
-        [submission release];
-        
-        [entryActionsView beginLoadingItem:kEntryActionsViewItemUpvote];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSNumber *confirm = [defaults objectForKey:@"interface-confirm-votes"];
+        if (confirm != nil && [confirm boolValue]) {
+            UIActionSheet *sheet = [[UIActionSheet alloc] init];
+            [sheet addButtonWithTitle:@"Vote"];
+            [sheet addButtonWithTitle:@"Cancel"];
+            [sheet setCancelButtonIndex:1];
+            [sheet setDelegate:self];
+            [sheet setSheetContext:@"upvote"];
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:[entryActionsView barButtonItemForItem:kEntryActionsViewItemUpvote] animated:YES];
+            else [sheet showInView:[[self view] window]];
+            [sheet release];
+        } else {
+            [self performUpvote];
+        }
     } else if (item == kEntryActionsViewItemDownvote) {
-        HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeVote];
-        [submission setDirection:kHNVoteDirectionDown];
-        [submission setTarget:(HNEntry *) source];
-        [[HNSession currentSession] performSubmission:submission];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionDownvoteDidSucceedWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionDownvoteDidFailWithNotification:) name:kHNSubmissionFailureNotification object:submission];
-        [submission release];
-        
-        [entryActionsView beginLoadingItem:kEntryActionsViewItemDownvote];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSNumber *confirm = [defaults objectForKey:@"interface-confirm-votes"];
+        if (confirm != nil && [confirm boolValue]) {
+            UIActionSheet *sheet = [[UIActionSheet alloc] init];
+            [sheet addButtonWithTitle:@"Vote"];
+            [sheet addButtonWithTitle:@"Cancel"];
+            [sheet setCancelButtonIndex:1];
+            [sheet setDelegate:self];
+            [sheet setSheetContext:@"downvote"];
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:[entryActionsView barButtonItemForItem:kEntryActionsViewItemDownvote] animated:YES];
+            else [sheet showInView:[[self view] window]];
+            [sheet release];
+        } else {
+            [self performUpvote];
+        }
     } else if (item == kEntryActionsViewItemFlag) {
         UIActionSheet *sheet = [[UIActionSheet alloc] init];
         [sheet addButtonWithTitle:@"Flag"];
