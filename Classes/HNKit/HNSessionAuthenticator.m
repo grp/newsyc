@@ -9,8 +9,10 @@
 #import "HNKit.h"
 #import "HNSessionAuthenticator.h"
 
-#import "NSDictionary+Parameters.h"
 #import "XMLDocument.h"
+
+#import "NSDictionary+Parameters.h"
+#import "UIApplication+ActivityIndicator.h"
 
 #define kHNWebsiteLoginURL [NSURL URLWithString:[[kHNWebsiteURL absoluteString] stringByAppendingString:@"y"]]
 
@@ -48,6 +50,8 @@
 }
 
 - (void)_clearConnection {
+    [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    
     [connection release];
     connection = nil;
 }
@@ -57,7 +61,7 @@
     [self _clearConnection];
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {    
     [self _failAuthentication];
     [self _clearConnection];
 }
@@ -113,6 +117,8 @@
 - (void)_sendAuthenticationRequest:(NSURLRequest *)request {
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];
+    
+    [[UIApplication sharedApplication] retainNetworkActivityIndicator];
 }
 
 - (void)_performAuthentication {

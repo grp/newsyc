@@ -81,12 +81,12 @@
 - (void)objectChangedLoadingState:(HNObject *)object {
     if ([object isLoading]) { 
         [[self navigationItem] setRightBarButtonItem:loadingItem];
-    } else {
-        [self removeStatusView:indicator];
     }
 }
 
 - (void)object:(HNObject *)source_ failedToLoadWithError:(NSError *)error {
+    [self removeStatusView:indicator];
+    
     // If the source has already loaded before, we have *some* data to show,
     // so just show that. Otherwise, what really should happen is to:
     // XXX: show a non-modal loading error display if previously loaded
@@ -100,6 +100,7 @@
 
 - (void)objectFinishedLoading:(HNObject *)object; {
     [self removeStatusView:indicator];
+    
     [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
     [self finishedLoading];
 }

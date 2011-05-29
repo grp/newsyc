@@ -18,6 +18,7 @@
 		7D36ADCF13560D87000613B2 /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D36ADCD13560D87000613B2 /* check@2x.png */; };
 		7D39780C135682D400A34476 /* HNAnonymousSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D39780B135682D400A34476 /* HNAnonymousSession.m */; };
 		7D49183A13919CC500F05203 /* LoadingTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D49183913919CC500F05203 /* LoadingTableCell.m */; };
+		7D49183E1391E5DA00F05203 /* UIApplication+ActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D49183D1391E5DA00F05203 /* UIApplication+ActivityIndicator.m */; };
 		7D6B9EF11347DF2E00CD923C /* Icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6B9E371347DF2E00CD923C /* Icon-small.png */; };
 		7D6B9EF21347DF2E00CD923C /* Icon-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6B9E381347DF2E00CD923C /* Icon-small@2x.png */; };
 		7D6B9EF31347DF2E00CD923C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6B9E391347DF2E00CD923C /* Icon.png */; };
@@ -148,6 +149,8 @@
 		7D39780B135682D400A34476 /* HNAnonymousSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNAnonymousSession.m; sourceTree = "<group>"; };
 		7D49183813919CC500F05203 /* LoadingTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingTableCell.h; sourceTree = "<group>"; };
 		7D49183913919CC500F05203 /* LoadingTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingTableCell.m; sourceTree = "<group>"; };
+		7D49183C1391E5DA00F05203 /* UIApplication+ActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+ActivityIndicator.h"; sourceTree = "<group>"; };
+		7D49183D1391E5DA00F05203 /* UIApplication+ActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+ActivityIndicator.m"; sourceTree = "<group>"; };
 		7D6B9E371347DF2E00CD923C /* Icon-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-small.png"; sourceTree = "<group>"; };
 		7D6B9E381347DF2E00CD923C /* Icon-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-small@2x.png"; sourceTree = "<group>"; };
 		7D6B9E391347DF2E00CD923C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -484,6 +487,8 @@
 				7D6B9E6C1347DF2E00CD923C /* UIActionSheet+Context.m */,
 				FA85248C1357BA73004E5A72 /* NSArray+Strings.h */,
 				FA85248D1357BA73004E5A72 /* NSArray+Strings.m */,
+				7D49183C1391E5DA00F05203 /* UIApplication+ActivityIndicator.h */,
+				7D49183D1391E5DA00F05203 /* UIApplication+ActivityIndicator.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -837,6 +842,7 @@
 				7D91AA9F135A27DD00247D34 /* ActivityIndicatorItem.m in Sources */,
 				FA85248E1357BA73004E5A72 /* NSArray+Strings.m in Sources */,
 				7D49183A13919CC500F05203 /* LoadingTableCell.m in Sources */,
+				7D49183E1391E5DA00F05203 /* UIApplication+ActivityIndicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

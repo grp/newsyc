@@ -9,6 +9,8 @@
 #import "InstapaperRequest.h"
 #import "InstapaperSession.h"
 
+#import "UIApplication+ActivityIndicator.h"
+
 @implementation InstapaperRequest
 @synthesize session; 
 
@@ -41,10 +43,14 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    
     [self failWithError:error];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         int status = [(NSHTTPURLResponse *) response statusCode];
         if (status == 403) [self failWithErrorText:@"Invalid username or password."];
@@ -81,6 +87,8 @@
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];
     [connection autorelease];
+    
+    [[UIApplication sharedApplication] retainNetworkActivityIndicator];
 }
 
 - (void)addItemWithURL:(NSURL *)url title:(NSString *)title {

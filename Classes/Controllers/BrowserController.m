@@ -11,6 +11,7 @@
 #import "NavigationController.h"
 #import "ProgressHUD.h"
 #import "NSArray+Strings.h"
+#import "UIApplication+ActivityIndicator.h"
 
 @implementation BrowserController
 @synthesize currentURL;
@@ -166,7 +167,7 @@
     
     NSInteger first = [action firstOtherButtonIndex];
     if (buttonIndex == first) {
-        [[UIApplication sharedApplication] openURL:[[webview request] URL]];
+        [[UIApplication sharedApplication] openURL:currentURL];
     } else if (buttonIndex == first + 1) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         [pasteboard setURL:currentURL];
@@ -226,15 +227,21 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     [self updateToolbarItems];
+    
+    [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     [self updateToolbarItems];
     [self setCurrentURL:[[webView request] URL]];
     [[self navigationItem] setTitle:[webview stringByEvaluatingJavaScriptFromString:@"document.title"]];
+    
+    [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
+    [[UIApplication sharedApplication] retainNetworkActivityIndicator];
+    
     [self updateToolbarItems];
 }
 
@@ -270,6 +277,7 @@
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    [self updateToolbarItems];
     
     NSArray *hosts = [NSArray arrayWithObjects:@"itunes.apple.com", @"phobos.apple.com", @"youtube.com", @"maps.google.com", nil];
     NSURL *url = [request URL];

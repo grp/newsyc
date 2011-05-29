@@ -26,6 +26,13 @@
     [tableView setDelegate:self];
     [tableView setDataSource:self];
     [[self view] addSubview:tableView];
+    
+    emptyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    [emptyLabel setFont:[UIFont boldSystemFontOfSize:17.0f]];
+    [emptyLabel setBackgroundColor:[UIColor whiteColor]];
+    [emptyLabel setTextColor:[UIColor grayColor]];
+    [emptyLabel setText:@"No items."];
+    [emptyLabel setTextAlignment:UITextAlignmentCenter];
 }
 
 - (void)viewDidLoad {
@@ -53,7 +60,7 @@
     if (resize) {
         CGRect frame;
         frame.origin.x = 0;
-        frame.origin.y = 0;
+        frame.origin.y = [self statusOffsetHeight];
         frame.size.width = [tableView bounds].size.width;
         CGFloat height = [tableView bounds].size.height - [self statusOffsetHeight];
         frame.size.height = height >= 44.0f ? height : 44.0f;
@@ -75,7 +82,7 @@
     [tableView reloadData];
     
     if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
-        [self showErrorWithTitle:@"No items."];
+        [self addStatusView:emptyLabel];
     }
 }
 

@@ -10,6 +10,7 @@
 #import "HNAPIRequest.h"
 
 #import "NSDictionary+Parameters.h"
+#import "UIApplication+ActivityIndicator.h"
 
 @implementation HNAPIRequest
 
@@ -27,12 +28,16 @@
 }
 
 - (void)connection:(NSURLConnection *)connection_ didFailWithError:(NSError *)error {
+    [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    
     [target performSelector:action withObject:self withObject:nil withObject:error];
     [connection release];
     connection = nil;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection_ {
+    [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    
     NSString *resp = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
     SEL selector = NULL;
     
@@ -87,6 +92,8 @@
     
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];
+    
+    [[UIApplication sharedApplication] retainNetworkActivityIndicator];
 }
 
 - (BOOL)isLoading {

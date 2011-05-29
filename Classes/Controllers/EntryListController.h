@@ -10,6 +10,7 @@
 
 @interface EntryListController : LoadingController <UITableViewDelegate, UITableViewDataSource> {
     UITableView *tableView;
+    UILabel *emptyLabel;
 }
 
 - (void)relayoutView;

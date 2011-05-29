@@ -10,7 +10,9 @@
 #import "HNAPISubmission.h"
 
 #import "XMLDocument.h"
+
 #import "NSDictionary+Parameters.h"
+#import "UIApplication+ActivityIndicator.h"
 
 @implementation HNAPISubmission
 @synthesize submission;
@@ -51,6 +53,8 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection_ {
+    [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    
     NSString *result = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
     [received release];
     received = nil;
@@ -143,6 +147,8 @@
 }
 
 - (void)connection:(NSURLConnection *)connection_ didFailWithError:(NSError *)error {
+    [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    
     [received release];
     received = nil;
     
@@ -173,6 +179,8 @@
     
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];
+    
+    [[UIApplication sharedApplication] retainNetworkActivityIndicator];
 }
 
 - (BOOL)isLoading {
