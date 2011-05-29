@@ -12,4 +12,6 @@
     UITableView *tableView;
 }
 
+- (void)relayoutView;
+
 @end

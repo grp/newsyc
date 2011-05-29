@@ -323,6 +323,11 @@
     [tableView setScrollsToTop:YES];
 }
 
+- (void)relayoutView {
+    [super relayoutView];
+    [self setupHeader]; 
+}
+
 - (void)finishedLoading {
     [self setupHeader];
     
