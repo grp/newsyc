@@ -38,54 +38,33 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
-    // Don't show the loading indicator until it has loaded at all.
-    if ([[(HNEntry *) source entries] count] > 0) {
-        return 2;
-    } else {
-        return 0;
-    }
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return [[(HNEntry *) source entries] count];
-    } else {
-        return 1;
-    }
+    return [[(HNEntry *) source entries] count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 0) {
-        HNEntry *entry = [[(HNEntry *) source entries] objectAtIndex:[indexPath row]];
-        return [SubmissionTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
-    } else {
-        return 64.0f;
-    }
+    HNEntry *entry = [[(HNEntry *) source entries] objectAtIndex:[indexPath row]];
+    return [SubmissionTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 0) {
-        SubmissionTableCell *cell = (SubmissionTableCell *) [tableView dequeueReusableCellWithIdentifier:@"submission"];
-        if (cell == nil) cell = [[[SubmissionTableCell alloc] initWithReuseIdentifier:@"submission"] autorelease];
+    SubmissionTableCell *cell = (SubmissionTableCell *) [tableView dequeueReusableCellWithIdentifier:@"submission"];
+    if (cell == nil) cell = [[[SubmissionTableCell alloc] initWithReuseIdentifier:@"submission"] autorelease];
     
-        HNEntry *entry = [[(HNEntry *) source entries] objectAtIndex:[indexPath row]];
-        [cell setSubmission:entry];
-        return cell;
-    } else {
-        LoadingTableCell *cell = (LoadingTableCell *) [tableView dequeueReusableCellWithIdentifier:@"loading"];
-        if (cell == nil) cell = [[[LoadingTableCell alloc] initWithReuseIdentifier:@"loading"] autorelease];
-        return cell;
-    }
+    HNEntry *entry = [[(HNEntry *) source entries] objectAtIndex:[indexPath row]];
+    [cell setSubmission:entry];
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 0) {
-        HNEntry *entry = [[(HNEntry *) source entries] objectAtIndex:[indexPath row]];
+    HNEntry *entry = [[(HNEntry *) source entries] objectAtIndex:[indexPath row]];
     
-        CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-        [controller setTitle:@"Submission"];
-        [[self navigationController] pushViewController:[controller autorelease] animated:YES];
-    }
+    CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
+    [controller setTitle:@"Submission"];
+    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
 - (void)finishedLoading {
