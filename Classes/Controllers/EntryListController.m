@@ -14,6 +14,8 @@
 
 - (void)dealloc {
     [tableView release];
+    [emptyLabel release];
+    [statusView release];
     
     [super dealloc];
 }
@@ -26,6 +28,10 @@
     [tableView setDelegate:self];
     [tableView setDataSource:self];
     [[self view] addSubview:tableView];
+    
+    statusView = [[UIView alloc] initWithFrame:CGRectZero];
+    [statusView setBackgroundColor:[UIColor clearColor]];
+    [tableView setTableFooterView:statusView];
     
     emptyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [emptyLabel setFont:[UIFont boldSystemFontOfSize:17.0f]];
@@ -40,8 +46,12 @@
 }
 
 - (void)viewDidUnload {
+    [emptyLabel release];
+    emptyLabel = nil;
     [tableView release];
     tableView = nil;
+    [statusView release];
+    statusView = nil;
     
     [super viewDidUnload];
 }
@@ -57,25 +67,26 @@
 }
 
 - (void)addStatusView:(UIView *)view resize:(BOOL)resize {
-    if (resize) {
-        CGRect frame;
-        frame.origin.x = 0;
-        frame.origin.y = [self statusOffsetHeight];
-        frame.size.width = [tableView bounds].size.width;
-        CGFloat height = [tableView bounds].size.height - [self statusOffsetHeight];
-        frame.size.height = height >= 44.0f ? height : 44.0f;
-        [view setFrame:frame];
-    }
+    CGRect frame = CGRectZero;
+    frame.size.width = [tableView bounds].size.width;
+    CGFloat height = [tableView bounds].size.height - [self statusOffsetHeight];
+    frame.size.height = height >= 50.0f ? height : 50.0f;
+    if (resize) [view setFrame:frame];
+    [statusView setFrame:frame];
     
     [view setBackgroundColor:[UIColor clearColor]];
     
-    [tableView addSubview:view];
+    [statusView addSubview:view];
+    [tableView setTableFooterView:statusView];
     [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
 - (void)removeStatusView:(UIView *)view {
     [super removeStatusView:view];
-    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    
+    if ([[statusView subviews] count] == 0) {
+        [tableView setTableFooterView:nil];
+    }
 }
 
 - (void)finishedLoading {
@@ -83,6 +94,7 @@
     
     if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
         [self addStatusView:emptyLabel];
+        [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     }
 }
 

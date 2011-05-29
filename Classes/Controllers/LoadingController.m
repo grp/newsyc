@@ -38,6 +38,7 @@
     if ([source delegate] == self) [source setDelegate:nil];
     [source release];
     [actionItem release];
+    [retryButton release];
     [loadingItem release];
     
     [super dealloc];
@@ -61,20 +62,17 @@
 }
 
 - (void)removeError {
-    [self removeStatusView:errorLabel];
     [self removeStatusView:retryButton];
 }
 
-- (void)showErrorWithTitle:(NSString *)title {
-    [errorLabel setText:title];
-    [self addStatusView:errorLabel];
+- (void)showError {
     [self addStatusView:retryButton resize:NO];
     
     CGRect buttonFrame = [retryButton frame];
     buttonFrame.size.width = 180.0f;
-    buttonFrame.size.height = 44.0f;
+    buttonFrame.size.height = 40.0f;
     buttonFrame.origin.x = floorf(([[retryButton superview] bounds].size.width / 2) - (buttonFrame.size.width / 2));
-    buttonFrame.origin.y = floorf(([[retryButton superview] bounds].size.height / 2) - (buttonFrame.size.height / 2)) + 60.0f;
+    buttonFrame.origin.y = floorf(([[retryButton superview] bounds].size.height / 2) - (buttonFrame.size.height / 2));
     [retryButton setFrame:buttonFrame];
 }
 
@@ -91,7 +89,7 @@
     // so just show that. Otherwise, what really should happen is to:
     // XXX: show a non-modal loading error display if previously loaded
     if (![source isLoaded]) {
-        [self showErrorWithTitle:@"Error loading."];
+        [self showError];
         loaded = NO;
     }
     
@@ -142,12 +140,6 @@
     [indicator setBackgroundColor:[UIColor whiteColor]];
     [indicator setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     
-    errorLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    [errorLabel setFont:[UIFont boldSystemFontOfSize:17.0f]];
-    [errorLabel setBackgroundColor:[UIColor whiteColor]];
-    [errorLabel setTextColor:[UIColor grayColor]];
-    [errorLabel setTextAlignment:UITextAlignmentCenter];
-    
     retryButton = [[PlacardButton alloc] initWithFrame:CGRectZero];
     [retryButton setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
     [retryButton setTitle:@"Retry Loading" forState:UIControlStateNormal];
@@ -165,12 +157,12 @@
 - (void)viewDidUnload {
     [indicator release];
     indicator = nil;
-    [errorLabel release];
-    errorLabel = nil;
     [actionItem release];
     actionItem = nil;
     [loadingItem release];
     loadingItem = nil;
+    [retryButton release];
+    retryButton = nil;
     
     loaded = NO;
     
