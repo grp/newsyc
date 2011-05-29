@@ -51,25 +51,49 @@
     [view removeFromSuperview];
 }
 
-- (void)addStatusView:(UIView *)view {
-    [view setFrame:[[self view] bounds]];
+- (void)addStatusView:(UIView *)view resize:(BOOL)resize {
+    if (resize) [view setFrame:[[self view] bounds]];
     [[self view] addSubview:view];
+}
+
+- (void)addStatusView:(UIView *)view {
+    [self addStatusView:view resize:YES];
+}
+
+- (void)removeError {
+    [self removeStatusView:errorLabel];
+    [self removeStatusView:retryButton];
 }
 
 - (void)showErrorWithTitle:(NSString *)title {
     [errorLabel setText:title];
     [self addStatusView:errorLabel];
+    [self addStatusView:retryButton resize:NO];
+    
+    CGRect buttonFrame = [retryButton frame];
+    buttonFrame.size.width = 180.0f;
+    buttonFrame.size.height = 44.0f;
+    buttonFrame.origin.x = floorf(([[retryButton superview] bounds].size.width / 2) - (buttonFrame.size.width / 2));
+    buttonFrame.origin.y = floorf(([[retryButton superview] bounds].size.height / 2) - (buttonFrame.size.height / 2)) + 60.0f;
+    [retryButton setFrame:buttonFrame];
 }
 
 - (void)objectChangedLoadingState:(HNObject *)object {
-    if ([object isLoading]) [[self navigationItem] setRightBarButtonItem:loadingItem];
+    if ([object isLoading]) { 
+        [[self navigationItem] setRightBarButtonItem:loadingItem];
+    } else {
+        [self removeStatusView:indicator];
+    }
 }
 
 - (void)object:(HNObject *)source_ failedToLoadWithError:(NSError *)error {
     // If the source has already loaded before, we have *some* data to show,
     // so just show that. Otherwise, what really should happen is to:
     // XXX: show a non-modal loading error display if previously loaded
-    if (![source isLoaded]) [self showErrorWithTitle:@"Error loading."];
+    if (![source isLoaded]) {
+        [self showErrorWithTitle:@"Error loading."];
+        loaded = NO;
+    }
     
     [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
 }
@@ -105,6 +129,11 @@
     [sheet release];
 }
 
+- (void)retryPressed {
+    [self removeError];
+    [self performInitialLoadIfPossible];
+}
+
 - (void)loadView {
     [super loadView];
     
@@ -117,6 +146,11 @@
     [errorLabel setBackgroundColor:[UIColor whiteColor]];
     [errorLabel setTextColor:[UIColor grayColor]];
     [errorLabel setTextAlignment:UITextAlignmentCenter];
+    
+    retryButton = [[PlacardButton alloc] initWithFrame:CGRectZero];
+    [retryButton setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+    [retryButton setTitle:@"Retry Loading" forState:UIControlStateNormal];
+    [retryButton addTarget:self action:@selector(retryPressed) forControlEvents:UIControlEventTouchUpInside];
     
     actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTapped)];
     loadingItem = [[ActivityIndicatorItem alloc] initWithSize:CGSizeMake(27.0f, kActivityIndicatorItemStandardSize.height)];

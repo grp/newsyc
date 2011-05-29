@@ -49,23 +49,25 @@
     return 0.0f;
 }
 
-- (void)addStatusView:(UIView *)view {
-    CGRect frame;
-    frame.origin.x = 0;
-    frame.origin.y = 0;
-    frame.size.width = [tableView bounds].size.width;
-    CGFloat height = [tableView bounds].size.height - [self statusOffsetHeight];
-    frame.size.height = height >= 44.0f ? height : 44.0f;
-    [view setFrame:frame];
+- (void)addStatusView:(UIView *)view resize:(BOOL)resize {
+    if (resize) {
+        CGRect frame;
+        frame.origin.x = 0;
+        frame.origin.y = 0;
+        frame.size.width = [tableView bounds].size.width;
+        CGFloat height = [tableView bounds].size.height - [self statusOffsetHeight];
+        frame.size.height = height >= 44.0f ? height : 44.0f;
+        [view setFrame:frame];
+    }
     
     [view setBackgroundColor:[UIColor clearColor]];
     
-    [tableView setTableFooterView:view];
+    [tableView addSubview:view];
     [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
 - (void)removeStatusView:(UIView *)view {
-    [tableView setTableFooterView:nil];
+    [super removeStatusView:view];
     [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
 }
 
