@@ -346,7 +346,13 @@ CTParagraphStyleRef createParagraphStyle(CGFloat paragraphSpacingBefore, CGFloat
 
 	// base tag with font defaults
 	DTCoreTextFontDescriptor *defaultFontDescriptor = [[[DTCoreTextFontDescriptor alloc] initWithFontAttributes:nil] autorelease];
-	defaultFontDescriptor.pointSize = 12;
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *small = [defaults objectForKey:@"interface-small-text"];
+    if (small == nil || [small boolValue]) {
+        defaultFontDescriptor.pointSize = 12.0;
+    } else {
+        defaultFontDescriptor.pointSize = 14.0;
+    }
 	defaultFontDescriptor.fontFamily = @"Helvetica";
 	NSDictionary *bodyTag = [NSDictionary dictionaryWithObjectsAndKeys:defaultFontDescriptor, @"FontDescriptor", @"black", @"color", nil];
 	[tagStack addObject:bodyTag];
