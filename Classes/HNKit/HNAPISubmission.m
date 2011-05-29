@@ -53,6 +53,7 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection_ {
+    NSLog(@"%s: released", __PRETTY_FUNCTION__);
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
     NSString *result = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
@@ -130,6 +131,8 @@
         
         connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
         [connection start];
+        
+        [[UIApplication sharedApplication] retainNetworkActivityIndicator];
     } else if (loadingState == 2) {
         // Here we "simulate" the action on the locally cached items.
         // XXX: This should really cause a reload action on this element (and it's parent?) 
@@ -147,6 +150,7 @@
 }
 
 - (void)connection:(NSURLConnection *)connection_ didFailWithError:(NSError *)error {
+    NSLog(@"%s: released", __PRETTY_FUNCTION__);
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
     [received release];

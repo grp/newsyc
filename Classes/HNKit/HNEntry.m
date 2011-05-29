@@ -49,6 +49,8 @@
     if ([response objectForKey:@"points"] != nil) [self setPoints:[[response objectForKey:@"points"] intValue]];
     if ([response objectForKey:@"parent"] != nil) [self setParent:[[[HNEntry alloc] initWithIdentifier:[response objectForKey:@"parent"]] autorelease]];
     
+    [self setMore:[response objectForKey:@"more"]];
+    
     NSMutableArray *comments = [NSMutableArray array];
     for (NSDictionary *child in [response objectForKey:@"children"]) {
         HNEntry *entry = [[HNEntry alloc] initWithType:kHNPageTypeItemComments identifier:[child objectForKey:@"identifier"]];
@@ -66,7 +68,12 @@
         
         [comments addObject:[entry autorelease]];
     }
-    [self setEntries:comments];
+     
+    if ([[response objectForKey:@"append"] boolValue]) {
+        [self setEntries:[[self entries] arrayByAddingObjectsFromArray:comments]];
+    } else {
+        [self setEntries:comments];
+    }
     
     if ([response objectForKey:@"numchildren"] != nil) {
         int count = [[response objectForKey:@"numchildren"] intValue];

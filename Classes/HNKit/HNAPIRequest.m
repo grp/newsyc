@@ -30,13 +30,18 @@
 - (void)connection:(NSURLConnection *)connection_ didFailWithError:(NSError *)error {
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
-    [target performSelector:action withObject:self withObject:nil withObject:error];
     [connection release];
     connection = nil;
+    
+    [target performSelector:action withObject:self withObject:nil withObject:error];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection_ {
+    NSLog(@"%s: released", __PRETTY_FUNCTION__);
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    
+    [connection release];
+    connection = nil;
     
     NSString *resp = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
     SEL selector = NULL;
@@ -77,9 +82,6 @@
     } else {
         [target performSelector:action withObject:self withObject:nil withObject:[NSError errorWithDomain:@"error" code:100 userInfo:[NSDictionary dictionaryWithObject:@"Error scraping." forKey:NSLocalizedDescriptionKey]]];
     }
-    
-    [connection release];
-    connection = nil;
 }
 
 - (void)performRequestOfType:(HNPageType)type_ withParameters:(NSDictionary *)parameters {
@@ -102,6 +104,9 @@
 
 - (void)cancelRequest {
     if (connection != nil) {
+        NSLog(@"%s: released", __PRETTY_FUNCTION__);
+        [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+        
         [connection cancel];
         [connection release];
         connection = nil;

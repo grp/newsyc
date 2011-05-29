@@ -228,6 +228,7 @@
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     [self updateToolbarItems];
     
+    NSLog(@"%s: released", __PRETTY_FUNCTION__);
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
 }
 
@@ -236,6 +237,7 @@
     [self setCurrentURL:[[webView request] URL]];
     [[self navigationItem] setTitle:[webview stringByEvaluatingJavaScriptFromString:@"document.title"]];
     
+    NSLog(@"%s: released", __PRETTY_FUNCTION__);
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
 }
 

@@ -48,9 +48,11 @@
     [self failWithError:error];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
-    
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         int status = [(NSHTTPURLResponse *) response statusCode];
         if (status == 403) [self failWithErrorText:@"Invalid username or password."];

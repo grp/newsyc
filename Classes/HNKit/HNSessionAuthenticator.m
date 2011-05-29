@@ -50,10 +50,13 @@
 }
 
 - (void)_clearConnection {
-    [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    if (connection != nil) {
+        NSLog(@"%s: released", __PRETTY_FUNCTION__);
+        [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
-    [connection release];
-    connection = nil;
+        [connection release];
+        connection = nil;
+    }
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
@@ -148,7 +151,7 @@
     [request setHTTPBody:[[[query queryString] substringFromIndex:1] dataUsingEncoding:NSUTF8StringEncoding]];
     
     // The NSURLRequest object must be created on the main thread, or else it
-    //  will be destroyed when this thread exits (now), which is not what we want.
+    // will be destroyed when this thread exits (now), which is not what we want.
     [self performSelectorOnMainThread:@selector(_sendAuthenticationRequest:) withObject:request waitUntilDone:YES];
 }
 

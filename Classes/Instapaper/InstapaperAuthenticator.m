@@ -45,12 +45,14 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    NSLog(@"%s: released", __PRETTY_FUNCTION__);
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
     [self failWithError:error];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    NSLog(@"%s: released", __PRETTY_FUNCTION__);
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
