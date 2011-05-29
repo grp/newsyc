@@ -53,7 +53,6 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection_ {
-    NSLog(@"%s: released", __PRETTY_FUNCTION__);
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
     NSString *result = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
@@ -150,7 +149,6 @@
 }
 
 - (void)connection:(NSURLConnection *)connection_ didFailWithError:(NSError *)error {
-    NSLog(@"%s: released", __PRETTY_FUNCTION__);
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
     [received release];

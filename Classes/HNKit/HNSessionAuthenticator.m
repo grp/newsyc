@@ -51,7 +51,6 @@
 
 - (void)_clearConnection {
     if (connection != nil) {
-        NSLog(@"%s: released", __PRETTY_FUNCTION__);
         [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
         [connection release];

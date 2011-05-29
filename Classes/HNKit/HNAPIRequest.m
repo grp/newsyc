@@ -37,7 +37,6 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection_ {
-    NSLog(@"%s: released", __PRETTY_FUNCTION__);
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
     [connection release];
@@ -104,7 +103,6 @@
 
 - (void)cancelRequest {
     if (connection != nil) {
-        NSLog(@"%s: released", __PRETTY_FUNCTION__);
         [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
         
         [connection cancel];
