@@ -86,6 +86,7 @@
     
     if ([[statusView subviews] count] == 0) {
         [tableView setTableFooterView:nil];
+        [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     }
 }
 
@@ -94,7 +95,6 @@
     
     if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
         [self addStatusView:emptyLabel];
-        [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     }
 }
 

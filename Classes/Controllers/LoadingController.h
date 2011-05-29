@@ -13,7 +13,6 @@
 @class LoadingIndicatorView;
 @interface LoadingController : UIViewController <UIActionSheetDelegate, HNObjectLoadingDelegate> {
     LoadingIndicatorView *indicator;
-    UILabel *errorLabel;
     PlacardButton *retryButton;
     BOOL loaded;
     HNObject *source;
@@ -31,7 +30,7 @@
 - (void)addStatusView:(UIView *)view resize:(BOOL)resize;
 - (void)removeStatusView:(UIView *)view;
 
-- (void)showErrorWithTitle:(NSString *)title;
+- (void)showError;
 - (void)removeError;
 
 @end
