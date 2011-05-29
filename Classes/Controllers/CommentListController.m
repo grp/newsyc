@@ -182,7 +182,7 @@
             else [sheet showInView:[[self view] window]];
             [sheet release];
         } else {
-            [self performUpvote];
+            [self performDownvote];
         }
     } else if (item == kEntryActionsViewItemFlag) {
         UIActionSheet *sheet = [[UIActionSheet alloc] init];
