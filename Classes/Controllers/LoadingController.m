@@ -174,6 +174,7 @@
         loaded = YES;
         
         if (![source isLoaded]) {
+            [self removeError];
             [self addStatusView:indicator];
             [source beginLoading];
         } else {

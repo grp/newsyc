@@ -10,8 +10,6 @@
 	<array/>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleIconFile</key>
-	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>com.xuzzproductions.news-yc</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -26,8 +24,6 @@
 	<array/>
 	<key>CFBundleVersion</key>
 	<string>1.0.1</string>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIPrerenderedIcon</key>
@@ -36,5 +32,7 @@
 	<array/>
 	<key>UTImportedTypeDeclarations</key>
 	<array/>
+	<key>UIRequiresPersistentWiFi</key>
+	<true/>
 </dict>
 </plist>
