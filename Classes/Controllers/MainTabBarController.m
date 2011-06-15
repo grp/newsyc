@@ -20,6 +20,7 @@
 #import "SubmissionURLComposeController.h"
 #import "HackerNewsLoginController.h"
 #import "LoginController.h"
+#import "SearchController.h"
 
 @implementation MainTabBarController
 
@@ -38,12 +39,16 @@
         profile = [[[SessionProfileController alloc] initWithSource:[[HNSession currentSession] user]] autorelease];
         [profile setTitle:@"Profile"];
         [profile setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"person.png"] tag:0] autorelease]];
-        
+
+        search = [[[SearchController alloc] init] autorelease];
+        [search setTitle:@"Search"];
+        [search setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:0] autorelease]];
+
         more = [[[MoreController alloc] init] autorelease];
         [more setTitle:@"More"];
         [more setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:0] autorelease]];
 
-        NSMutableArray *items = [NSMutableArray arrayWithObjects:home, latest, profile, more, nil];
+        NSMutableArray *items = [NSMutableArray arrayWithObjects:home, latest, search, profile, more, nil];
         [self setViewControllers:items];
     }
     
