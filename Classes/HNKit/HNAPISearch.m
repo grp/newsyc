@@ -37,26 +37,36 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+	[responseData release];
+	responseData = nil;
+	[connection release];
+	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+	[notificationCenter postNotificationName:@"searchDone" object:nil userInfo:nil];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+	[self handleResponse];
+	[connection release];
 }
 
 - (void)handleResponse {
+	self.entries = [NSMutableArray array];
 	NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+	[responseData release];
+	responseData = nil;
+
 	NSArray *rawResults = [[NSArray alloc] initWithArray:[[responseString JSONValue] objectForKey:@"results"]];
-	NSMutableArray *results = [NSMutableArray arrayWithCapacity:[rawResults count]];
 	for (NSDictionary *result in rawResults) {
 		NSDictionary *item = [self itemFromRaw:[result objectForKey:@"item"]];
 		HNEntry *entry = [[HNEntry alloc] initWithType:kHNPageTypeItemComments identifier:[item objectForKey:@"identifier"]];
 
 		[entry loadFromDictionary:item];
-		[results addObject:entry];
+		[entries addObject:entry];
 	}
-	self.entries = results;
 	[responseString release];
 	responseString = nil;
 	[rawResults release];
 	rawResults = nil;
-	[results release];
-	results = nil;
 
 	NSDictionary *dictToBePassed = [NSDictionary dictionaryWithObject:entries forKey:@"array"];
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -94,11 +104,6 @@
 	return item;
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	[self handleResponse];
-	responseData = nil;
-}
-
 - (void)performSearch:(NSString *)searchQuery {
 	NSString *paramsString = nil;
 	if (searchType == kHNSearchTypeInteresting) {
@@ -111,8 +116,7 @@
 	NSURL *url = [NSURL URLWithString:urlString];
 
 	NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	[connection release];
+	[[NSURLConnection alloc] initWithRequest:request delegate:self];
 	[request release];
 
 	searchQuery = nil;
