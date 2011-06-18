@@ -5,14 +5,16 @@
 //  Created by Quin Hoxie on 6/2/11.
 //
 
-#import <UIKit/UIKit.h>
 #import "HNAPISearch.h"
+
+@class LoadingIndicatorView;
 
 @interface SearchController : UIViewController <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     IBOutlet UISearchBar *searchBar;
 	IBOutlet UISegmentedControl *facetControl;
 	IBOutlet UITableView *tableView;
 	IBOutlet UIView *emptyResultsView;
+    LoadingIndicatorView *indicator;
 	BOOL searchPerformed;
 	HNAPISearch *searchAPI;
 	NSMutableArray *entries;

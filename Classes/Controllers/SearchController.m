@@ -8,6 +8,7 @@
 #import "SearchController.h"
 #import "SubmissionTableCell.h"
 #import "CommentListController.h"
+#import "LoadingIndicatorView.h"
 
 @implementation SearchController
 
@@ -45,6 +46,9 @@
 - (void)performSearch {
 	self.searchPerformed = YES;
 	[[self searchAPI] performSearch:[searchBar text]];
+    
+    [emptyResultsView setHidden:YES];
+    [indicator setHidden:NO];
 }
 
 - (void)searchBarSearchButtonClicked:(id)sender {
@@ -54,27 +58,38 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+    
+    indicator = [[LoadingIndicatorView alloc] initWithFrame:[tableView frame]];
+    [indicator setBackgroundColor:[UIColor whiteColor]];
+    [indicator setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [self.view addSubview:indicator];
+    [indicator setHidden:YES];
+    
+    [emptyResultsView setFrame:[tableView frame]];
+    
 	self.searchPerformed = NO;
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	[notificationCenter addObserver:self selector:@selector(receivedResults:) name:@"searchDone" object:nil];
 }
 
 - (void)receivedResults:(NSNotification *)notification {
+    [indicator setHidden:YES];
+    [emptyResultsView setHidden:NO];
+    
 	if ([notification userInfo] == nil) {
 		UIAlertView *alert = [[UIAlertView alloc]
-							  initWithTitle:@"Error"
+							  initWithTitle:@"Unable to Connect"
 							  message:@"Could not connect to search server. Please try again."
 							  delegate:nil
-							  cancelButtonTitle:@"OK"
+							  cancelButtonTitle:@"Continue"
 							  otherButtonTitles:nil];
 		[alert show];
 		[alert release];
 	} else {
 		NSDictionary *dict = [notification userInfo];
 		self.entries = [dict objectForKey:@"array"];
-		if ([entries count] == 0) {
-			[emptyResultsView setHidden:NO];
-		} else {
+        
+		if ([entries count] != 0) {
 			[emptyResultsView setHidden:YES];
 		}
 
@@ -125,12 +140,17 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	[[self navigationController] setNavigationBarHidden:YES animated:NO];
+	[[self navigationController] setNavigationBarHidden:YES animated:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	[[self navigationController] setNavigationBarHidden:NO animated:NO];
+	[[self navigationController] setNavigationBarHidden:NO animated:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
 }
 
 - (void)dealloc {
