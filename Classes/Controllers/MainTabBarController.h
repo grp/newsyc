@@ -8,10 +8,11 @@
 
 #import "LoginController.h"
 
-@class SubmissionListController, SessionProfileController, MoreController;
+@class SubmissionListController, SessionProfileController, MoreController, SearchController;
 @interface MainTabBarController : UITabBarController <UIActionSheetDelegate, LoginControllerDelegate> {
     SubmissionListController *home;
     SubmissionListController *latest;
+	SearchController *search;
     SessionProfileController *profile;
     MoreController *more;
     
