@@ -40,7 +40,7 @@
     return [NSString stringWithFormat:@"%d points by %@", points, submitter];
 }
 
-- (void)loadFromDictionary:(NSDictionary *)response {    
+- (void)loadFromDictionary:(NSDictionary *)response {
     if ([response objectForKey:@"url"] != nil) [self setDestination:[NSURL URLWithString:[response objectForKey:@"url"]]];
     if ([response objectForKey:@"user"] != nil) [self setSubmitter:[[[HNUser alloc] initWithIdentifier:[response objectForKey:@"user"]] autorelease]];
     if ([response objectForKey:@"body"] != nil) [self setBody:[response objectForKey:@"body"]];
