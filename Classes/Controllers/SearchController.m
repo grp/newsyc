@@ -91,6 +91,7 @@
         
 		if ([entries count] != 0) {
 			[emptyResultsView setHidden:YES];
+            [[self tableView] setContentOffset:CGPointZero animated:NO];
 		}
 
         [[self tableView] reloadData];
