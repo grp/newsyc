@@ -56,9 +56,9 @@
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case 0: return 3;
+        case 0: return 4;
         case 1: return 2;
-        case 2: return 1;
+        case 2: return 2;
         default: return 0;
     }
 }
@@ -79,6 +79,8 @@
             [[cell textLabel] setText:@"Active Discussions"];
         } else if ([indexPath row] == 2) {
             [[cell textLabel] setText:@"Classic View"];
+        } else if ([indexPath row] == 3) {
+            [[cell textLabel] setText:@"Ask HN"];
         }
     } else if ([indexPath section] == 1) {
         if ([indexPath row] == 0) {
@@ -87,8 +89,10 @@
             [[cell textLabel] setText:@"New Comments"];
         } 
     } else if ([indexPath section] == 2) {
-        if([indexPath row] == 0) {
+        if ([indexPath row] == 0) {
             [[cell textLabel] setText:@"Hacker News FAQ"];
+        } else if ([indexPath row] == 1) {
+            [[cell textLabel] setText:@"news:yc homepage"];
         }
     }
     
@@ -96,6 +100,14 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return @"Submissions";
+    } else if (section == 1) {
+        return @"Comments";
+    } else if (section == 2) {
+        return @"Other";
+    }
+    
     return nil;
 }
 
@@ -116,6 +128,9 @@
         } else if ([indexPath row] == 2) {
             type = kHNPageTypeClassicSubmissions;
             title = @"Classic";
+        } else if ([indexPath row] == 3) {
+            type = kHNPageTypeAskSubmissions;
+            title = @"Ask HN";
         }
     } else if ([indexPath section] == 1) {
         class = [CommentListController class];
@@ -130,6 +145,10 @@
     } else if ([indexPath section] == 2) {
         if ([indexPath row] == 0) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:kHNFAQURL];
+            [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+            return;
+        } else if ([indexPath row] == 1) {
+            BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"http://newsyc.me/"]];
             [[self navigationController] pushViewController:[controller autorelease] animated:YES];
             return;
         }
