@@ -14,6 +14,7 @@
 @synthesize searchBar;
 @synthesize facetControl;
 @synthesize tableView;
+@synthesize emptyResultsView;
 @synthesize entries;
 @synthesize searchPerformed;
 
@@ -72,15 +73,11 @@
 		NSDictionary *dict = [notification userInfo];
 		self.entries = [dict objectForKey:@"array"];
 		if ([entries count] == 0) {
-			UIAlertView *alert = [[UIAlertView alloc]
-								  initWithTitle:@"No Results"
-								  message:@"Sorry, but your search returned no results."
-								  delegate:nil
-								  cancelButtonTitle:@"OK"
-								  otherButtonTitles:nil];
-			[alert show];
-			[alert release];
+			[emptyResultsView setHidden:NO];
+		} else {
+			[emptyResultsView setHidden:YES];
 		}
+
         [[self tableView] reloadData];
 	}
 }
@@ -138,6 +135,7 @@
 
 - (void)dealloc {
 	[searchAPI release];
+	[emptyResultsView release];
     [super dealloc];
 }
 
