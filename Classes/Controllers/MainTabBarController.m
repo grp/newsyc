@@ -48,7 +48,7 @@
         [more setTitle:@"More"];
         [more setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:0] autorelease]];
 
-        NSMutableArray *items = [NSMutableArray arrayWithObjects:home, latest, search, profile, more, nil];
+        NSMutableArray *items = [NSMutableArray arrayWithObjects:home, latest, profile, search, more, nil];
         [self setViewControllers:items];
     }
     
