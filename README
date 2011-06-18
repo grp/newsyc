@@ -1,7 +1,0 @@
-Welcome to news:yc on GitHub! ;P
-
-Right now, I don't have much information here, but I hope to add more in the future. You can check out the source code itself (it's in "Classes", as is normal) or read the TODO list.
-
-For building, just opening the Xcode project and hitting build should be good enough, but you might need to mess with target SDKs and such. I built this in Xcode 4, so you might need that, too: I'm not sure what the state of Xcode 4 is with regards to backwards compatability.
-
-

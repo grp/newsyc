@@ -92,7 +92,7 @@
 
 - (void)finishedLoading {
     [tableView reloadData];
-    
+
     if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
         [self addStatusView:emptyLabel];
     }
