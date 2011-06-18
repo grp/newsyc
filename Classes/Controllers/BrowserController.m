@@ -27,6 +27,13 @@
 }
 
 - (void)dealloc {
+    // there may be multiple connections open on the webview, so we have
+    // to keep track of how many are open ourselves and release the indicator
+    // that many times to make sure it is properly hidden when we are popped
+    for (int i = 0; i < networkRetainCount; i++) {
+        [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    }
+    
     [webview setDelegate:nil];
     [webview release];
     [toolbar release];
@@ -113,9 +120,40 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
     
+    // there may be multiple connections open on the webview, so we have
+    // to keep track of how many are open ourselves and release the indicator
+    // that many times to make sure it is properly hidden when we are popped
+    for (int i = 0; i < networkRetainCount; i++) {
+        [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    }
+    
     [webview setDelegate:nil];
     [webview release];
     webview = nil;
+    
+    [toolbar release];
+    toolbar = nil;
+    
+    [backItem release];
+    backItem = nil;
+    
+    [forwardItem release];
+    forwardItem = nil;
+    
+    [readabilityItem release];
+    readabilityItem = nil;
+    
+    [refreshItem release];
+    refreshItem = nil;
+    
+    [shareItem release];
+    shareItem = nil;
+    
+    [loadingItem release];
+    loadingItem = nil;
+    
+    [spacerItem release];
+    spacerItem = nil;
 }
 
 - (void)submitInstapaperRequest {
@@ -228,6 +266,7 @@
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     [self updateToolbarItems];
     
+    networkRetainCount -= 1;
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
 }
 
@@ -236,10 +275,12 @@
     [self setCurrentURL:[[webView request] URL]];
     [[self navigationItem] setTitle:[webview stringByEvaluatingJavaScriptFromString:@"document.title"]];
     
+    networkRetainCount -= 1;
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
+    networkRetainCount += 1;
     [[UIApplication sharedApplication] retainNetworkActivityIndicator];
     
     [self updateToolbarItems];

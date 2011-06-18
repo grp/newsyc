@@ -29,6 +29,8 @@
     UIBarButtonItem *readabilityItem;
     ProgressHUD *hud;
     NSURL *externalURL;
+    
+    int networkRetainCount;
 }
 
 @property (nonatomic, copy) NSURL *currentURL;
