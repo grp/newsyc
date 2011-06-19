@@ -9,6 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "LoginController.h"
+#import "LoadingIndicatorView.h"
 
 @implementation LoginController
 @synthesize delegate;
@@ -114,17 +115,11 @@
     [passwordCell addSubview:passwordField];
     
 	loadingCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-	loadingCell.textLabel.textAlignment = UITextAlignmentCenter;
-	loadingCell.textLabel.text = @"Logging In";	
-	loadingCell.textLabel.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];			
-	UIActivityIndicatorView *activityView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
-	[activityView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
-	[activityView sizeToFit];	
-	[activityView startAnimating];	
-	activityView.center = CGPointMake(loadingCell.center.x-60, loadingCell.center.y);
-	[loadingCell addSubview:activityView];
+    LoadingIndicatorView *loadingIndicatorView = [[LoadingIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
+    [loadingIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
+    [loadingIndicatorView setCenter:[loadingCell center]];
+	[loadingCell addSubview:loadingIndicatorView];
 		
-	
     completeItem = [[UIBarButtonItem alloc] initWithTitle:@"Confirm" style:UIBarButtonItemStyleBordered target:self action:@selector(_authenticate)];
     cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
     
@@ -138,7 +133,7 @@
     [topLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
     [topLabel setTextAlignment:UITextAlignmentCenter];
     [topLabel setBackgroundColor:[UIColor clearColor]];
-    [topLabel setShadowColor:[UIColor blackColor]];
+    [topLabel setShadowColor:[UIColor clearColor]];
     [topLabel setShadowOffset:CGSizeMake(0, 1.0f)];
     [topLabel setFont:[UIFont boldSystemFontOfSize:30.0f]];
 	
@@ -202,6 +197,7 @@
 	
 	isAuthenticating = NO;
 	[tableView reloadData];
+    [passwordField becomeFirstResponder];
     [[self navigationItem] setRightBarButtonItem:completeItem];
 }
 

@@ -15,6 +15,7 @@
     
     [topLabel setText:@"Hacker News"];
     [topLabel setTextColor:[UIColor whiteColor]];
+    [topLabel setShadowColor:[UIColor blackColor]];
     [bottomLabel setText:@"Your info is only shared with Hacker News."];
     [bottomLabel setTextColor:[UIColor whiteColor]];
 }
