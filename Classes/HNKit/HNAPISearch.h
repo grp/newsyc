@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HNKit.h"
+#import "NSString+URLEncoding.h"
 
 @interface HNAPISearch : NSObject <UIApplicationDelegate> {
 	NSMutableData *responseData;
