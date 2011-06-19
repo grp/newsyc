@@ -57,6 +57,7 @@
 }
 
 - (void)authenticate {
+	[super authenticate];
     InstapaperAuthenticator *auth = [[InstapaperAuthenticator alloc] initWithUsername:[usernameField text] password:[passwordField text]];
     [auth setDelegate:self];
     [auth beginAuthentication];

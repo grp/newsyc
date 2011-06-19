@@ -91,6 +91,16 @@
     [super viewDidUnload];
 }
 
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	
+	//#56 Automatically show "log in" panel when tapping the profile tab and not logged in.	
+	if (![[HNSession currentSession] user]) {
+		[self _loginPressed];
+	}
+	
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -98,8 +108,8 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
+    [super viewDidAppear:animated];    	
+	
     // XXX: because this navigation item is shown for every tab, this is a gigantic hack:
     // we are removing it and adding it manually as this view is shown/hidden :(
     // maybe this should be a button in the table view instead?

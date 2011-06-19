@@ -46,6 +46,7 @@
 }
 
 - (void)authenticate {
+	[super authenticate];
     HNSessionAuthenticator *authenticator = [[HNSessionAuthenticator alloc] initWithUsername:[usernameField text] password:[passwordField text]];
     [authenticator setDelegate:self];
     [authenticator beginAuthenticationRequest];
