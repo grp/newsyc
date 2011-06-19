@@ -15,6 +15,7 @@
 
 - (void)dealloc {
     [tableView release];
+	[loadingCell release];
     [usernameCell release];
     [passwordCell release];
     [backgroundImageView release];
@@ -112,6 +113,18 @@
     [passwordField setReturnKeyType:UIReturnKeyDone];
     [passwordCell addSubview:passwordField];
     
+	loadingCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+	loadingCell.textLabel.textAlignment = UITextAlignmentCenter;
+	loadingCell.textLabel.text = @"Logging In";	
+	loadingCell.textLabel.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];			
+	UIActivityIndicatorView *activityView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
+	[activityView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
+	[activityView sizeToFit];	
+	[activityView startAnimating];	
+	activityView.center = CGPointMake(loadingCell.center.x-60, loadingCell.center.y);
+	[loadingCell addSubview:activityView];
+		
+	
     completeItem = [[UIBarButtonItem alloc] initWithTitle:@"Confirm" style:UIBarButtonItemStyleBordered target:self action:@selector(_authenticate)];
     cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
     
@@ -128,8 +141,9 @@
     [topLabel setShadowColor:[UIColor blackColor]];
     [topLabel setShadowOffset:CGSizeMake(0, 1.0f)];
     [topLabel setFont:[UIFont boldSystemFontOfSize:30.0f]];
-    
-    loadingItem = [[ActivityIndicatorItem alloc] initWithSize:kActivityIndicatorItemStandardSize];
+	
+	loadingItem = [[ActivityIndicatorItem alloc] initWithSize:kActivityIndicatorItemStandardSize];
+        
 }
 
 - (void)viewDidLoad {
@@ -144,7 +158,9 @@
 
 - (void)viewDidUnload {
     [super viewDidUnload];
-    
+	
+    [loadingCell release];
+	loadingCell = nil;
     [passwordCell release];
     passwordCell = nil;
     [usernameCell release];
@@ -175,15 +191,17 @@
     [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 }
 
-- (void)fail {
+- (void)fail {	
     UIAlertView *alert = [[UIAlertView alloc] init];
     [alert setTitle:@"Unable to Authenticate"];
     [alert setMessage:@"Unable to authenticate. Make sure your username and password are correct."];
     [alert addButtonWithTitle:@"Continue"];
     [alert setCancelButtonIndex:0];
     [alert show];
-    [alert release];
-    
+    [alert release];    	
+	
+	isAuthenticating = NO;
+	[tableView reloadData];
     [[self navigationItem] setRightBarButtonItem:completeItem];
 }
 
@@ -201,6 +219,8 @@
 
 - (void)authenticate {
     // overridden in subclasses
+	isAuthenticating = YES;
+	[tableView reloadData];
 }
 
 - (void)_authenticate {
@@ -231,18 +251,18 @@
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case 0: return 2;
+        case 0: return isAuthenticating ? 1 : 2;
         default: return 0;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)table heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return 44.0;
+	return isAuthenticating ? 88.0 : 44.0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath row] == 0) {
-        return usernameCell;
+    if ([indexPath row] == 0) {		
+        return isAuthenticating ? loadingCell : usernameCell;
     } else if ([indexPath row] == 1) {
         return passwordCell;
     } else {

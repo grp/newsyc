@@ -13,6 +13,7 @@
 @interface LoginController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate> {
     UIImageView *backgroundImageView;
     UITableView *tableView;
+	UITableViewCell *loadingCell;
     UITableViewCell *usernameCell;
     UITextField *usernameField;
     UITableViewCell *passwordCell;
@@ -23,6 +24,8 @@
     id<LoginControllerDelegate> delegate;
     UILabel *topLabel;
     UILabel *bottomLabel;
+	
+	BOOL isAuthenticating;
 }
 
 @property (nonatomic, assign) id<LoginControllerDelegate> delegate;
