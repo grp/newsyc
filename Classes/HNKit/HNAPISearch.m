@@ -106,10 +106,11 @@
 
 - (void)performSearch:(NSString *)searchQuery {
 	NSString *paramsString = nil;
+	NSString *encodedQuery = [searchQuery stringByURLEncodingString];
 	if (searchType == kHNSearchTypeInteresting) {
-		paramsString = [NSString stringWithFormat:kHNSearchParamsInteresting, searchQuery];
+		paramsString = [NSString stringWithFormat:kHNSearchParamsInteresting, encodedQuery];
 	} else {
-		paramsString = [NSString stringWithFormat:kHNSearchParamsRecent, searchQuery];
+		paramsString = [NSString stringWithFormat:kHNSearchParamsRecent, encodedQuery];
 	}
 
 	NSString *urlString = [NSString stringWithFormat:kHNSearchBaseURL, paramsString];
