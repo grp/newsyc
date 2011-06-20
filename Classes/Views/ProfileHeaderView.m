@@ -15,20 +15,20 @@
     if ((self = [super initWithFrame:frame])) {
         CGFloat width = frame.size.width;
         
-        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20.0f, width, 20.0f)];
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 20.0f, width - 40.0f, 20.0f)];
         [titleLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
         [titleLabel setShadowColor:[UIColor whiteColor]];
-        [titleLabel setTextAlignment:UITextAlignmentCenter];
+        [titleLabel setTextAlignment:UITextAlignmentLeft];
         [titleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
         [titleLabel setTextColor:[UIColor blackColor]];//[UIColor colorWithRed:(76.0f/255.0f) green:(86.0f/255.0f) blue:(108.0f/255.0f) alpha:1.0f]];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
         [titleLabel setFont:[UIFont boldSystemFontOfSize:19.0f]];
         [self addSubview:titleLabel];
         
-        subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 42.0f, width, 20.0f)];
+        subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 42.0f, width - 40.0f, 20.0f)];
         [subtitleLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
         [subtitleLabel setShadowColor:[UIColor whiteColor]];
-        [subtitleLabel setTextAlignment:UITextAlignmentCenter];
+        [subtitleLabel setTextAlignment:UITextAlignmentLeft];
         [subtitleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
         [subtitleLabel setTextColor:[UIColor darkGrayColor]];//[UIColor colorWithRed:(76.0f/255.0f) green:(86.0f/255.0f) blue:(108.0f/255.0f) alpha:1.0f]];
         [subtitleLabel setBackgroundColor:[UIColor clearColor]];
