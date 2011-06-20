@@ -44,11 +44,16 @@
 }
 
 - (void)performSearch {
-	self.searchPerformed = YES;
-	[[self searchAPI] performSearch:[searchBar text]];
+    if ([[searchBar text] length] > 0) {
+        self.searchPerformed = YES;
+        [[self searchAPI] performSearch:[searchBar text]];
     
-    [emptyResultsView setHidden:YES];
-    [indicator setHidden:NO];
+        [emptyResultsView setHidden:YES];
+        [indicator setHidden:NO];
+    } else {
+        [indicator setHidden:YES];
+        [emptyResultsView setHidden:NO];
+    }
 }
 
 - (void)searchBarSearchButtonClicked:(id)sender {
@@ -58,6 +63,16 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+    
+    // This is a hack, but it's all that's available right now.
+    UITextField *searchBarTextField = nil;
+    for (UIView *subview in [searchBar subviews]) {
+        if ([subview isKindOfClass:[UITextField class]]) {
+            searchBarTextField = (UITextField *)subview;
+            break;
+        }
+    }
+    [searchBarTextField setEnablesReturnKeyAutomatically:NO];
     
     indicator = [[LoadingIndicatorView alloc] initWithFrame:[tableView frame]];
     [indicator setBackgroundColor:[UIColor whiteColor]];
