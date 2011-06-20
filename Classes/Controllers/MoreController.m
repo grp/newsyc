@@ -28,7 +28,7 @@
     
     tableView = [[UITableView alloc] initWithFrame:[[self view] bounds] style:UITableViewStyleGrouped];
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [tableView setBackgroundColor:[UIColor colorWithRed:0.95 green:0.85 blue:0.75 alpha:1.0f]];
+    [tableView setBackgroundColor:[UIColor colorWithRed:1.0 green:0.85 blue:0.70 alpha:1.0f]];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
     [[self view] addSubview:tableView];
