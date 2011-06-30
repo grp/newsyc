@@ -24,7 +24,8 @@
     
     [topLabel setText:@"Instapaper"];
     [topLabel setTextColor:[UIColor blackColor]];
-    [topLabel setShadowColor:[UIColor darkGrayColor]];
+    [topLabel setShadowColor:[UIColor clearColor]];
+    [topLabel setFont:[UIFont fontWithName:@"Georgia" size:36.0f]];
     [bottomLabel setText:@"Enter your password if you have one."];
     [bottomLabel setTextColor:[UIColor blackColor]];
 }
