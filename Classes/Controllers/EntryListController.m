@@ -9,13 +9,13 @@
 #import "HNKit.h"
 
 #import "EntryListController.h"
+#import "LoadingIndicatorView.h"
 
 @implementation EntryListController
 
 - (void)dealloc {
     [tableView release];
     [emptyLabel release];
-    [statusView release];
     
     [super dealloc];
 }
@@ -27,11 +27,8 @@
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
-    [[self view] addSubview:tableView];
-    
-    statusView = [[UIView alloc] initWithFrame:CGRectZero];
-    [statusView setBackgroundColor:[UIColor clearColor]];
     [tableView setTableFooterView:statusView];
+    [[self view] addSubview:tableView];
     
     emptyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [emptyLabel setFont:[UIFont boldSystemFontOfSize:17.0f]];
@@ -50,8 +47,6 @@
     emptyLabel = nil;
     [tableView release];
     tableView = nil;
-    [statusView release];
-    statusView = nil;
     
     [super viewDidUnload];
 }
@@ -111,10 +106,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     return nil;
-}
-
-- (void)relayoutView {
-    [tableView reloadData];
 }
 
 - (void)tableView:(UITableView *)table willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {

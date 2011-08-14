@@ -8,24 +8,16 @@
 
 #import "NavigationController.h"
 
-#define kNavigationControllerTintOrange [UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]
+#define kNavigationControllerOrangeColor [UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]
 
 @implementation NavigationController
 
 - (id)init {
     if ((self = [super init])) {
-        [[self navigationBar] setTintColor:kNavigationControllerTintOrange];
+        [[self navigationBar] setTintColor:kNavigationControllerOrangeColor];
     }
     
     return self;
-}
-
-- (void)relayoutViews {
-    for (UIViewController *controller in [self viewControllers]) {
-        if ([controller respondsToSelector:@selector(relayoutView)]) {
-            [controller performSelector:@selector(relayoutView)];
-        }
-    }
 }
 
 // Why this isn't delegated by UIKit to the top view controller, I have no clue.

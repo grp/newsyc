@@ -8,10 +8,10 @@
 
 #import "EntryListController.h"
 
-#import "EGORefreshTableHeaderView.h"
+#import "PullToRefreshView.h"
 
-@interface SubmissionListController : EntryListController<EGORefreshTableHeaderDelegate> {
-    EGORefreshTableHeaderView *refreshView;
+@interface SubmissionListController : EntryListController <PullToRefreshViewDelegate> {
+    PullToRefreshView *pullToRefreshView;
 }
 
 @end

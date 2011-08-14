@@ -7,6 +7,7 @@
 //
 
 #import "SubmissionTextComposeController.h"
+#import "PlaceholderTextView.h"
 
 @implementation SubmissionTextComposeController
 

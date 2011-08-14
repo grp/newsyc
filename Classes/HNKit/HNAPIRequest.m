@@ -36,58 +36,77 @@
     [target performSelector:action withObject:self withObject:nil withObject:error];
 }
 
+- (void)completeSuccessfullyWithResult:(NSDictionary *)result {
+    [target performSelector:action withObject:self withObject:result withObject:nil];
+}
+
+- (void)completeUnsuccessfullyWithError:(NSError *)error {
+    [target performSelector:action withObject:self withObject:nil withObject:error];
+}
+
+- (void)parseInBackground {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
+    NSString *resp = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
+    SEL selector = NULL;
+    
+    // XXX: This is a gigantic hack.
+    if ([path isEqual:@"active"] ||
+        [path isEqual:@"ask"] ||
+        [path isEqual:@"best"] ||
+        [path isEqual:@"classic"] ||
+        [path isEqual:@"news"] ||
+        [path isEqual:@"newest"] ||
+        [path isEqual:@"submitted"]) {
+        selector = @selector(parseSubmissionsWithString:);
+    } else if ([path isEqual:@"bestcomments"] ||
+               [path isEqual:@"newcomments"] ||
+               [path isEqual:@"threads"] ||
+               [path isEqual:@"item"]) {
+        selector = @selector(parseCommentTreeWithString:);
+    } else if ([path isEqual:@"user"]) {
+        selector = @selector(parseUserProfileWithString:);
+    }
+    
+    BOOL success = YES;
+    HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] init];
+    NSDictionary *result = nil;
+    @try {
+        if (selector != NULL) result = [parser performSelector:selector withObject:resp];
+    } @catch (NSException *e) {
+        NSLog(@"HNAPIRequest: Exception parsing page at /%@ with reason \"%@\".", path, [e reason]);
+        success = NO;
+    }
+    [parser release];
+    
+    [received release];
+    received = nil;
+    
+    if (success) {
+        [self performSelectorOnMainThread:@selector(completeSuccessfullyWithResult:) withObject:result waitUntilDone:YES];
+    } else {
+        NSError *error = [NSError errorWithDomain:@"error" code:100 userInfo:[NSDictionary dictionaryWithObject:@"Error scraping." forKey:NSLocalizedDescriptionKey]];
+        
+        [self performSelectorOnMainThread:@selector(completeUnsuccessfullyWithError:) withObject:error waitUntilDone:YES];
+    }
+    
+    [pool release];
+}
+
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection_ {
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
     [connection release];
     connection = nil;
-    
-    NSString *resp = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
-    SEL selector = NULL;
-    
-    if ([type isEqual:kHNPageTypeActiveSubmissions] ||
-        [type isEqual:kHNPageTypeAskSubmissions] ||
-        [type isEqual:kHNPageTypeBestSubmissions] ||
-        [type isEqual:kHNPageTypeClassicSubmissions] ||
-        [type isEqual:kHNPageTypeSubmissions] ||
-        [type isEqual:kHNPageTypeNewSubmissions] ||
-        [type isEqual:kHNPageTypeUserSubmissions]) {
-        selector = @selector(parseSubmissionsWithString:);
-    } else if ([type isEqual:kHNPageTypeBestComments] ||
-        [type isEqual:kHNPageTypeNewComments] ||
-        [type isEqual:kHNPageTypeUserComments] ||
-        [type isEqual:kHNPageTypeItemComments]) {
-        selector = @selector(parseCommentTreeWithString:);
-    } else if ([type isEqual:kHNPageTypeUserProfile]) {
-        selector = @selector(parseUserProfileWithString:);
-    }
-    
-    BOOL success = YES;
-    HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] initWithType:type];
-    NSDictionary *result = nil;
-    @try {
-        if (selector != NULL) result = [parser performSelector:selector withObject:resp];
-    } @catch (NSException *e) {
-        NSLog(@"HNAPIRequest: Exception parsing page of type %@ with reason %@.", type, [e reason]);
-        success = NO;
-    }
-    [parser release];
- 
-    [received release];
-    received = nil;
-    
-    if (success) {
-        [target performSelector:action withObject:self withObject:result withObject:nil];
-    } else {
-        [target performSelector:action withObject:self withObject:nil withObject:[NSError errorWithDomain:@"error" code:100 userInfo:[NSDictionary dictionaryWithObject:@"Error scraping." forKey:NSLocalizedDescriptionKey]]];
-    }
+
+    [self performSelectorInBackground:@selector(parseInBackground) withObject:nil];
 }
 
-- (void)performRequestOfType:(HNPageType)type_ withParameters:(NSDictionary *)parameters {
-    type = [type_ copy];
+- (void)performRequestWithPath:(NSString *)path_ parameters:(NSDictionary *)parameters {
+    path = [path_ copy];
     received = [[NSMutableData alloc] init];
     
-    NSString *base = [NSString stringWithFormat:@"http://%@/%@%@", kHNWebsiteHost, type, [parameters queryString]];
+    NSString *base = [NSString stringWithFormat:@"http://%@/%@%@", kHNWebsiteHost, path, [parameters queryString]];
     NSURL *url = [NSURL URLWithString:base];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
@@ -114,7 +133,7 @@
 - (void)dealloc {
     [connection release];
     [received release];
-    [type release];
+    [path release];
     
     [super dealloc];
 }

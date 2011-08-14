@@ -14,21 +14,28 @@
 @implementation HNUser
 @synthesize karma, average, created, about;
 
-- (id)initWithIdentifier:(id)identifier_ {
-    return [self initWithType:kHNPageTypeUserProfile identifier:identifier_];
-}
-
-+ (id)_parseParametersWithType:(HNPageType)type_ parameters:(NSDictionary *)parameters {
++ (id)identifierForURL:(NSURL *)url_ {
+    if (![self isValidURL:url_]) return NO;
+    
+    NSDictionary *parameters = [url_ parameterDictionary];
     return [parameters objectForKey:@"id"];
 }
 
-+ (NSDictionary *)_generateParametersWithType:(HNPageType)type_ identifier:(id)identifier_ {
++ (NSString *)pathForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+    return @"user";
+}
+
++ (NSDictionary *)parametersForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
     if (identifier_ != nil) return [NSDictionary dictionaryWithObject:identifier_ forKey:@"id"];
     else return [NSDictionary dictionary];
 }
 
++ (id)userWithIdentifier:(id)identifier_ {
+    return [self objectWithIdentifier:identifier_];
+}
+
 - (NSString *)_additionalDescription {
-    return [NSString stringWithFormat:@"karma=%d average=%f created=%@ about=%@", karma, average, created, about];
+    return [NSString stringWithFormat:@"karma=%d", karma];
 }
 
 - (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error {

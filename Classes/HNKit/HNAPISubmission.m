@@ -133,17 +133,6 @@
         
         [[UIApplication sharedApplication] retainNetworkActivityIndicator];
     } else if (loadingState == 2) {
-        // Here we "simulate" the action on the locally cached items.
-        // XXX: This should really cause a reload action on this element (and it's parent?) 
-        
-        if ([submission type] == kHNSubmissionTypeVote) {
-            if ([submission direction] == kHNVoteDirectionUp) {
-                [[submission target] setPoints:[[submission target] points] + 1];
-            } else {
-                [[submission target] setPoints:[[submission target] points] - 1];
-            }
-        }
-        
         [self _completedSuccessfully:YES withError:nil];
     }
 }

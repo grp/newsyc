@@ -35,4 +35,9 @@
 
 - (void)loadFromDictionary:(NSDictionary *)response;
 
+- (BOOL)isComment;
+- (BOOL)isSubmission;
+
++ (id)entryWithIdentifier:(id)identifier_;
+
 @end

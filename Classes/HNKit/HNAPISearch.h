@@ -5,11 +5,11 @@
 //  Created by Quin Hoxie on 6/2/11.
 //
 
-#import <Foundation/Foundation.h>
 #import "HNKit.h"
+
 #import "NSString+URLEncoding.h"
 
-@interface HNAPISearch : NSObject <UIApplicationDelegate> {
+@interface HNAPISearch : NSObject {
 	NSMutableData *responseData;
 	NSMutableArray *entries;
 	HNSearchType searchType;

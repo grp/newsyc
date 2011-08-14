@@ -9,10 +9,7 @@
 #import "HNKit.h"
 
 @interface HNAPIRequestParser : NSObject {
-    HNPageType type;
 }
-
-- (id)initWithType:(HNPageType)type_;
 
 - (NSDictionary *)parseUserProfileWithString:(NSString *)string;
 - (NSDictionary *)parseCommentTreeWithString:(NSString *)string;

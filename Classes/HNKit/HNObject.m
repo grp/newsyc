@@ -13,8 +13,9 @@
 #import "HNObject.h"
 
 @interface HNObjectCache : NSObject {
-    HNPageType type;
+    Class cls;
     id identifier;
+    NSDictionary *info;
 }
 
 @property (nonatomic, retain, readonly) HNObject *object;
@@ -24,52 +25,53 @@
 @implementation HNObjectCache
 @synthesize object;
 
-+ (NSMutableDictionary *)cacheDictionary {
-    static NSMutableDictionary *objectCache = nil;
-    if (objectCache == nil) objectCache = [[NSMutableDictionary alloc] init];
++ (NSCache *)cache {
+    static NSCache *objectCache = nil;
+    if (objectCache == nil) objectCache = [[NSCache alloc] init];
     return objectCache;
 }
 
 + (void)initialize {
     // inititalize cache
-    [self cacheDictionary];
+    [self cache];
 }
 
-- (id)initWithType:(NSString *)type_ identifier:(id)identifier_ {
+- (id)initWithClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info_ {
     if ((self = [super init])) {
-        type = [type_ copy];
+        cls = cls_;
         identifier = [identifier_ copy];
+        info = [info_ copy];
     }
     
     return self;
 }
 
 - (void)dealloc {
-    [type release];
     [identifier release];
+    [info release];
     
     [super dealloc];
 }
 
-+ (id)objectCacheWithType:(NSString *)type_ identifier:(id)identifier_ {
-    return [[[self alloc] initWithType:type_ identifier:identifier_] autorelease];
++ (id)objectCacheWithClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+    return [[[self alloc] initWithClass:cls_ identifier:identifier_ infoDictionary:info] autorelease];
 }
 
 + (void)addObjectToCache:(HNObject *)object_ {
-    HNObjectCache *key = [self objectCacheWithType:[object_ type] identifier:[object_ identifier]];
-    NSMutableDictionary *cache = [self cacheDictionary];
+    HNObjectCache *key = [self objectCacheWithClass:[object_ class] identifier:[object_ identifier] infoDictionary:[object_ infoDictionary]];
+    NSCache *cache = [self cache];
     [cache setObject:object_ forKey:key];
 }
 
-+ (HNObject *)objectFromCacheWithType:(NSString *)type_ identifier:(id)identifier_ {
-    HNObjectCache *key = [self objectCacheWithType:type_ identifier:identifier_];
-    NSMutableDictionary *cache = [self cacheDictionary];
++ (HNObject *)objectFromCacheWithClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+    HNObjectCache *key = [self objectCacheWithClass:cls_ identifier:identifier_ infoDictionary:info];
+    NSCache *cache = [self cache];
     HNObject *cached = [cache objectForKey:key];
     return cached;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    return [[[self class] allocWithZone:zone] initWithType:type identifier:identifier];
+    return [[[self class] allocWithZone:zone] initWithClass:cls identifier:identifier infoDictionary:info];
 }
 
 - (BOOL)isEqual:(id)object_ {
@@ -79,71 +81,87 @@
 
 - (NSUInteger)hash {
     // XXX: does this increase the chance of collisions?
-    return [type hash] ^ [identifier hash];
+    return [cls hash] ^ [identifier hash] ^ [info hash];
 }
 
 @end
 
 @implementation HNObject
-@synthesize identifier, loadingState, URL=url, type, delegate;
+@synthesize identifier, loadingState, URL=url, delegate;
 
-+ (id)_parseParametersWithType:(HNPageType)type_ parameters:(NSDictionary *)parameters {
++ (BOOL)isValidURL:(NSURL *)url_ {
+    if (url_ == nil) return NO;
+    if (![[url_ scheme] isEqualToString:@"http"] && ![[url_ scheme] isEqualToString:@"https"]) return NO;
+    if (![[url_ host] isEqualToString:kHNWebsiteHost]) return NO;
+    
+    return YES;
+}
+
++ (NSDictionary *)infoDictionaryForURL:(NSURL *)url_ {
     return nil;
 }
 
-+ (id)parseURL:(NSURL *)url_ {
-    if (![[url_ scheme] isEqualToString:@"http"] && ![[url_ scheme] isEqualToString:@"https"]) return nil;
-    if (![[url_ host] isEqualToString:kHNWebsiteHost]) return nil;
++ (id)identifierForURL:(NSURL *)url_ {
+    return nil;
+}
+
++ (NSString *)pathForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+    return nil;
+}
+
++ (NSDictionary *)parametersForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+    return nil;
+}
+
++ (NSURL *)generateURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+    NSDictionary *parameters = [self parametersForURLWithIdentifier:identifier_ infoDictionary:info];
+    NSString *path = [self pathForURLWithIdentifier:identifier_ infoDictionary:info];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", [kHNWebsiteURL absoluteString], path, [parameters queryString]]];
+}
+
++ (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info URL:(NSURL *)url_ {
+    HNObject *object = [HNObjectCache objectFromCacheWithClass:self identifier:identifier_ infoDictionary:info];
     
-    NSString *type_ = [url_ path];
-    if ([[type_ substringToIndex:1] isEqual:@"/"]) type_ = [type_ substringFromIndex:1];
-    id identifier_ = [self _parseParametersWithType:type_ parameters:[url_ parameterDictionary]];
-    return [NSDictionary dictionaryWithObjectsAndKeys:type_, @"type", identifier_, @"identifier", nil];
-}
-
-+ (NSDictionary *)_generateParametersWithType:(HNPageType)type_ identifier:(id)identifier_ {
-    return [NSDictionary dictionary];
-}
-
-+ (NSURL *)generateURLWithType:(HNPageType)type_ identifier:(id)identifier_ {
-    NSDictionary *parameters = [self _generateParametersWithType:type_ identifier:identifier_];
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", [kHNWebsiteURL absoluteString], type_, [parameters queryString]]];
-}
-            
-+ (NSURL *)generateURLWithType:(HNPageType)type_ {
-    return [self generateURLWithType:type_ identifier:nil];
-}
-
-- (id)initWithType:(HNPageType)type_ identifier:(id)identifier_ URL:(NSURL *)url_ {
-    if ((self = [super init]) == nil) return nil;
-    
-    HNObject *object = [HNObjectCache objectFromCacheWithType:type_ identifier:identifier_];
-    if (object != nil) {
-        [self release];
-        return [object retain];
+    if (object == nil) {
+        object = [[[self alloc] init] autorelease];
     }
     
-    if (type_ != nil && url_ != nil) {
-        [self setURL:url_];
-        [self setType:type_];
-        [self setIdentifier:identifier_];
-        [HNObjectCache addObjectToCache:self];
+    if (url_ != nil) {
+        [object setURL:url_];
+        [object setIdentifier:identifier_];
+        
+        [object loadInfoDictionary:info];
+        
+        [HNObjectCache addObjectToCache:object];
     }
     
-    return self;
+    return object;
 }
 
-- (id)initWithType:(HNPageType)type_ identifier:(id)identifier_ {
-    return [self initWithType:type_ identifier:identifier_ URL:[[self class] generateURLWithType:type_ identifier:identifier_]];
-}
-            
-- (id)initWithType:(HNPageType)type_ {
-    return [self initWithType:type_ identifier:nil];
++ (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+    return [self objectWithIdentifier:identifier_ infoDictionary:info URL:[[self class] generateURLWithIdentifier:identifier_ infoDictionary:info]];
 }
 
-- (id)initWithURL:(NSURL *)url_ {
-    NSDictionary *parsed = [[self class] parseURL:url_];
-    return [self initWithType:[parsed objectForKey:@"type"] identifier:[parsed objectForKey:@"identifier"] URL:url_];
++ (id)objectWithIdentifier:(id)identifier_ {
+    return [self objectWithIdentifier:identifier_ infoDictionary:nil];
+}
+
++ (id)objectWithURL:(NSURL *)url_ {
+    id identifier_ = [self identifierForURL:url_];
+    NSDictionary *info = [self infoDictionaryForURL:url_];
+    return [self objectWithIdentifier:identifier_ infoDictionary:info URL:url_];
+}
+
++ (NSString *)pathWithIdentifier:(id)identifier {
+    return nil;
+}
+
+- (NSDictionary *)infoDictionary {
+    return nil;
+}
+
+- (void)loadInfoDictionary:(NSDictionary *)info {
+    return;
 }
             
 - (NSString *)_additionalDescription {
@@ -158,7 +176,7 @@
     NSString *identifier_ = [NSString stringWithFormat:@" identifier=%@", identifier];
     if (identifier == nil) identifier_ = @"";
     
-    return [NSString stringWithFormat:@"<%@:%p type=%@%@ %@>", [self class], self, type, identifier_, other];
+    return [NSString stringWithFormat:@"<%@:%p %@ %@>", [self class], self, identifier_, other];
 }
 
 #pragma mark -
@@ -175,6 +193,8 @@
     
     if ((state_ & kHNObjectLoadingStateLoaded) > 0) {
         if ([delegate respondsToSelector:@selector(objectFinishedLoading:)]) [delegate objectFinishedLoading:self];
+    } else if ((state_ & kHNObjectLoadingStateLoadingAny) > 0) {
+        if ([delegate respondsToSelector:@selector(objectStartedLoading:)]) [delegate objectStartedLoading:self];
     }
     
     if ([delegate respondsToSelector:@selector(objectChangedLoadingState:)]) [delegate objectChangedLoadingState:self];
@@ -218,8 +238,13 @@
     if ([self isLoading]) return;
     
     [self addLoadingState:state_];
+    
+    NSDictionary *info = [self infoDictionary];
+    NSDictionary *parameters = [[self class] parametersForURLWithIdentifier:identifier infoDictionary:info];
+    NSString *path = [[self class] pathForURLWithIdentifier:identifier infoDictionary:info];
+    
     apiRequest = [[HNAPIRequest alloc] initWithTarget:self action:@selector(request:completedWithResponse:error:)];
-    [apiRequest performRequestOfType:type withParameters:[[self class] _generateParametersWithType:type identifier:identifier]];
+    [apiRequest performRequestWithPath:path parameters:parameters];
 }
 
 - (void)cancelLoading {
@@ -227,13 +252,11 @@
 }
 
 - (void)beginLoading {
-    // If we've already loaded, an initial makes no sense.
-    if ([self isLoaded]) return;
-    [self _beginLoadingWithState:kHNObjectLoadingStateLoadingInitial];
-}
-
-- (void)beginReloading {
-    [self _beginLoadingWithState:kHNObjectLoadingStateLoadingReload];
+    if ([self isLoaded]) {
+        [self _beginLoadingWithState:kHNObjectLoadingStateLoadingReload];
+    } else {
+        [self _beginLoadingWithState:kHNObjectLoadingStateLoadingInitial];
+    }
 }
 
 @end

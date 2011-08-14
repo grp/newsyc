@@ -12,6 +12,13 @@
 #import "XMLElement.h"
 #import "NSString+Tags.h"
 
+typedef enum {
+    kHNPageLayoutTypeUnknown,
+    kHNPageLayoutTypeEnclosed, // <table> inside <tr>[3]
+    kHNPageLayoutTypeHeaderFooter, // two <table>[2] inside <tr>[3]
+    kHNPageLayoutTypeExposed // <tr>[3:]
+} HNPageLayoutType;
+
 @implementation HNAPIRequestParser
 
 - (NSDictionary *)parseUserProfileWithString:(NSString *)string {
@@ -45,34 +52,53 @@
     return result;
 }
 
+- (HNPageLayoutType)pageLayoutTypeForDocument:(XMLDocument *)document {
+    NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
+    
+    if ([elements count] >= 3) {
+        XMLElement *tr = [elements objectAtIndex:2];
+        XMLElement *td = [[tr children] lastObject];
+        
+        if (td != nil) {
+            if ([[td children] count] == 0) {
+                return kHNPageLayoutTypeExposed;
+            } else {
+                NSArray *tables = [[td children] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(XMLElement *object, NSDictionary *bindings) {
+                    return [[object tagName] isEqualToString:@"table"];
+                }]];
+                
+                if ([tables count] == 1) {
+                    return kHNPageLayoutTypeEnclosed;
+                } else if ([tables count] >= 2) {
+                    return kHNPageLayoutTypeHeaderFooter;
+                }
+            }
+        }
+    }
+    
+    return kHNPageLayoutTypeUnknown;
+}
+
 - (BOOL)rootElementIsSubmission:(XMLDocument *)document {
     return [document firstElementMatchingPath:@"//body/center/table/tr[3]/td/table//td[@class='title']"] != nil;
 }
 
-- (XMLElement *)rootElementForDocument:(XMLDocument *)document {
-    if ([type isEqual:kHNPageTypeItemComments]) {
+- (XMLElement *)rootElementForDocument:(XMLDocument *)document pageLayoutType:(HNPageLayoutType)type {
+    if (type == kHNPageLayoutTypeHeaderFooter) {
         return [document firstElementMatchingPath:@"//body/center/table/tr[3]/td/table[1]"];
     } else {
         return nil;
     }
 }
 
-- (NSArray *)contentRowsForDocument:(XMLDocument *)document {
-    if ([type isEqual:kHNPageTypeActiveSubmissions] ||
-        [type isEqual:kHNPageTypeAskSubmissions] ||
-        [type isEqual:kHNPageTypeBestSubmissions] ||
-        [type isEqual:kHNPageTypeClassicSubmissions] ||
-        [type isEqual:kHNPageTypeSubmissions] ||
-        [type isEqual:kHNPageTypeNewSubmissions] ||
-        [type isEqual:kHNPageTypeBestComments] ||
-        [type isEqual:kHNPageTypeNewComments]) {
+- (NSArray *)contentRowsForDocument:(XMLDocument *)document pageLayoutType:(HNPageLayoutType)type {
+    if (type == kHNPageLayoutTypeEnclosed) {
         NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr[3]/td/table/tr"];
         return elements;
-    } else if ([type isEqual:kHNPageTypeUserSubmissions] || 
-               [type isEqual:kHNPageTypeUserComments]) {
+    } else if (type == kHNPageLayoutTypeExposed) {
         NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
         return [elements subarrayWithRange:NSMakeRange(3, [elements count] - 5)];
-    } else if ([type isEqual:kHNPageTypeItemComments]) {
+    } else if (type == kHNPageLayoutTypeHeaderFooter) {
         NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr[3]/td/table[2]/tr"];
         return elements;
     } else {
@@ -292,8 +318,9 @@
 
 - (NSDictionary *)parseCommentTreeWithString:(NSString *)string {
     XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+    HNPageLayoutType type = [self pageLayoutTypeForDocument:document];
     
-    XMLElement *rootElement = [self rootElementForDocument:document];
+    XMLElement *rootElement = [self rootElementForDocument:document pageLayoutType:type];
     NSMutableDictionary *root = nil;
     if (rootElement != nil) {
         NSDictionary *item = nil;
@@ -306,7 +333,7 @@
     if (root == nil) root = [NSMutableDictionary dictionary];
     [root setObject:[NSMutableArray array] forKey:@"children"];
     
-    NSArray *comments = [self contentRowsForDocument:document];
+    NSArray *comments = [self contentRowsForDocument:document pageLayoutType:type];
     NSMutableArray *lasts = [NSMutableArray array];
     [lasts addObject:root];
     
@@ -339,12 +366,15 @@
 
 - (NSDictionary *)parseSubmissionsWithString:(NSString *)string {
     XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+    HNPageLayoutType type = [self pageLayoutTypeForDocument:document];
+    
     NSMutableArray *result = [NSMutableArray array];
     
     // The first row is the HN header, which also uses a nested table.
     // Hardcoding around it is required to prevent crashing.
     // XXX: can this be done in a more change-friendly way?
-    NSArray *submissions = [document elementsMatchingPath:@"//table//tr[position()>1]//td//table//tr"];
+    NSArray *submissions = [self contentRowsForDocument:document pageLayoutType:type];
+    //[document elementsMatchingPath:@"//table//tr[position()>1]//td//table//tr"];
     
     // Token for the next page of items.
     NSString *more = nil;
@@ -367,16 +397,7 @@
     return item;
 }
 
-- (id)initWithType:(HNPageType)type_ {
-    if ((self = [super init])) {
-        type = [type_ copy];
-    }
-    
-    return self;
-}
-
 - (void)dealloc {
-    [type release];
     [super dealloc];
 }
 

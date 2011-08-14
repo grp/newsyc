@@ -119,7 +119,8 @@
     pointsrect.size.width = bounds.width / 2 - offsets.width * 2;
     pointsrect.origin.x = offsets.width;
     pointsrect.origin.y = bounds.height - offsets.height - pointsrect.size.height;
-    [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+    // Re-enable this if Hacker News re-enables comment score viewing.
+    // [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor grayColor] set];
     CGRect commentsrect;

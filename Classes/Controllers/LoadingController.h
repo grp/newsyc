@@ -12,10 +12,12 @@
 
 @class LoadingIndicatorView;
 @interface LoadingController : UIViewController <UIActionSheetDelegate, HNObjectLoadingDelegate> {
-    LoadingIndicatorView *indicator;
-    PlacardButton *retryButton;
-    BOOL loaded;
     HNObject *source;
+    
+    UIView *statusView;
+    PlacardButton *retryButton;
+    LoadingIndicatorView *indicator;
+    
     UIBarButtonItem *actionItem;
     ActivityIndicatorItem *loadingItem;
 }
@@ -23,7 +25,6 @@
 @property (nonatomic, retain) HNObject *source;
 
 - (id)initWithSource:(HNObject *)source_;
-- (void)performInitialLoadIfPossible;
 - (void)finishedLoading;
 
 - (void)addStatusView:(UIView *)view;

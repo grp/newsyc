@@ -7,6 +7,7 @@
 //
 
 #import "EntryReplyComposeController.h"
+#import "PlaceholderTextView.h"
 
 @implementation EntryReplyComposeController
 @synthesize entry;

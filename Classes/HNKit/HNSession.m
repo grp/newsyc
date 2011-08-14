@@ -57,9 +57,9 @@ static HNSession *current = nil;
 
 - (id)initWithUsername:(NSString *)username password:(NSString *)password_ token:(NSString *)token_ {
     if ((self = [super init])) {
-        HNUser *user_ = [[HNUser alloc] initWithIdentifier:username];
+        HNUser *user_ = [HNUser userWithIdentifier:username];
         
-        [self setUser:[user_ autorelease]];
+        [self setUser:user_];
         [self setToken:token_];
         [self setPassword:password_];
         [self setLoaded:YES];
@@ -87,10 +87,6 @@ static HNSession *current = nil;
     authenticator = [[HNSessionAuthenticator alloc] initWithUsername:[user identifier] password:password];
     [authenticator setDelegate:self];
     [authenticator beginAuthenticationRequest];
-}
-
-- (BOOL)isAnonymous {
-    return NO;
 }
 
 - (void)performSubmission:(HNSubmission *)submission {

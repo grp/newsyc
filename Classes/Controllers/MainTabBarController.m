@@ -26,13 +26,13 @@
 
 - (id)init {
     if ((self = [super init])) {
-        HNEntry *homeEntry = [[[HNEntry alloc] initWithType:kHNPageTypeSubmissions] autorelease];
-        home = [[[SubmissionListController alloc] initWithSource:homeEntry] autorelease];
+        HNEntryList *homeList = [HNEntryList entryListWithIdentifier:kHNEntryListIdentifierSubmissions];
+        home = [[[SubmissionListController alloc] initWithSource:homeList] autorelease];
         [home setTitle:@"Hacker News"];
         [home setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Home" image:[UIImage imageNamed:@"home.png"] tag:0] autorelease]];
         
-        HNEntry *newEntry = [[[HNEntry alloc] initWithType:kHNPageTypeNewSubmissions] autorelease];
-        latest = [[[SubmissionListController alloc] initWithSource:newEntry] autorelease];
+        HNEntryList *newList = [HNEntryList entryListWithIdentifier:kHNEntryListIdentifierNewSubmissions];
+        latest = [[[SubmissionListController alloc] initWithSource:newList] autorelease];
         [latest setTitle:@"New Submissions"];
         [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"New" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
         
@@ -50,6 +50,8 @@
 
         NSMutableArray *items = [NSMutableArray arrayWithObjects:home, latest, profile, search, more, nil];
         [self setViewControllers:items];
+        
+        [self setDelegate:self];
     }
     
     return self;
@@ -86,21 +88,47 @@
 
 - (void)loginControllerDidLogin:(LoginController *)controller {
     [self dismissModalViewControllerAnimated:YES];
-    [self requestSubmissionType];
+    
+    loginCompletionBlock();
+    
+    [loginCompletionBlock release];
+    loginCompletionBlock = nil;
 }
 
 - (void)loginControllerDidCancel:(LoginController *)controller {
     [self dismissModalViewControllerAnimated:YES];
 }
 
+- (void)showLoginController {
+    LoginController *login = [[HackerNewsLoginController alloc] init];
+    [login setDelegate:self];
+    NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:[login autorelease]];
+    [self presentModalViewController:[navigation autorelease] animated:YES];
+}
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
+    if (viewController == profile && [[HNSession currentSession] isAnonymous]) {
+        loginCompletionBlock = [^{
+            [self setSelectedViewController:profile];
+        } copy];
+        
+		[self showLoginController];
+        
+        return NO;
+	}
+    
+    return YES;
+}
+
 - (void)composePressed {
     if (![[HNSession currentSession] isAnonymous]) {
         [self requestSubmissionType];
     } else {
-        LoginController *login = [[HackerNewsLoginController alloc] init];
-        [login setDelegate:self];
-        NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:[login autorelease]];
-        [self presentModalViewController:[navigation autorelease] animated:YES];
+        loginCompletionBlock = [^{
+            [self requestSubmissionType];
+        } copy];
+        
+        [self showLoginController];
     }
 }
 
@@ -123,8 +151,8 @@
     
     // XXX: is 15 inutes the optimal time here?
     if ([lastSeen timeIntervalSinceNow] < -(15 * 60)) {
-        [[home source] beginReloading];
-        [[latest source] beginReloading];
+        [[home source] beginLoading];
+        [[latest source] beginLoading];
     }
         
     [lastSeen release];

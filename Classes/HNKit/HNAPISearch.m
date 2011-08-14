@@ -58,7 +58,7 @@
 	NSArray *rawResults = [[NSArray alloc] initWithArray:[[responseString JSONValue] objectForKey:@"results"]];
 	for (NSDictionary *result in rawResults) {
 		NSDictionary *item = [self itemFromRaw:[result objectForKey:@"item"]];
-		HNEntry *entry = [[HNEntry alloc] initWithType:kHNPageTypeItemComments identifier:[item objectForKey:@"identifier"]];
+		HNEntry *entry = [HNEntry entryWithIdentifier:[item objectForKey:@"identifier"]];
 
 		[entry loadFromDictionary:item];
 		[entries addObject:entry];

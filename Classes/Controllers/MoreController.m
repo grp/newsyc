@@ -112,7 +112,7 @@
 }
 
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    HNPageType type = nil;
+    HNEntryListIdentifier type = nil;
     Class class = nil;
     NSString *title = nil;
     
@@ -120,26 +120,26 @@
         class = [SubmissionListController class];
         
         if ([indexPath row] == 0) {
-            type = kHNPageTypeBestSubmissions;
+            type = kHNEntryListIdentifierBestSubmissions;
             title = @"Best Submissions";
         } else if ([indexPath row] == 1) {
-            type = kHNPageTypeActiveSubmissions;
+            type = kHNEntryListIdentifierActiveSubmissions;
             title = @"Active";
         } else if ([indexPath row] == 2) {
-            type = kHNPageTypeClassicSubmissions;
+            type = kHNEntryListIdentifierClassicSubmissions;
             title = @"Classic";
         } else if ([indexPath row] == 3) {
-            type = kHNPageTypeAskSubmissions;
+            type = kHNEntryListIdentifierAskSubmissions;
             title = @"Ask HN";
         }
     } else if ([indexPath section] == 1) {
         class = [CommentListController class];
         
         if ([indexPath row] == 0) {
-            type = kHNPageTypeBestComments;
+            type = kHNEntryListIdentifierBestComments;
             title = @"Best Comments";
         } else if ([indexPath row] == 1) {
-            type = kHNPageTypeNewComments;
+            type = kHNEntryListIdentifierNewComments;
             title = @"New Comments";
         }
     } else if ([indexPath section] == 2) {
@@ -154,8 +154,8 @@
         }
     }
     
-    HNEntry *entry = [[HNEntry alloc] initWithType:type];
-    UIViewController *controller = [[class alloc] initWithSource:[entry autorelease]];
+    HNEntryList *list = [HNEntryList entryListWithIdentifier:type];
+    UIViewController *controller = [[class alloc] initWithSource:list];
     [controller setTitle:title];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }

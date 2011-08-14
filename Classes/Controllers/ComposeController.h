@@ -12,6 +12,7 @@
 
 @protocol ComposeControllerDelegate;
 @class PlaceholderTextView;
+
 @interface ComposeController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate> {
     UITableView *tableView;
     NSArray *entryCells;

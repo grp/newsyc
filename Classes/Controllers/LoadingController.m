@@ -9,6 +9,7 @@
 #import "HNKit.h"
 
 #import "UIActionSheet+Context.h"
+#import "ProgressHUD.h"
 
 #import "LoadingController.h"
 #import "LoadingIndicatorView.h"
@@ -20,8 +21,6 @@
     [source autorelease];
     source = [source_ retain];
     [source setDelegate:self];
-
-    loaded = NO;
 }
 
 - (id)initWithSource:(HNObject *)source_ {
@@ -40,7 +39,8 @@
     [actionItem release];
     [retryButton release];
     [loadingItem release];
-    
+    [statusView release];
+
     [super dealloc];
 }
 
@@ -53,7 +53,11 @@
 }
 
 - (void)addStatusView:(UIView *)view resize:(BOOL)resize {
-    if (resize) [view setFrame:[[self view] bounds]];
+    if (resize) {
+        [statusView setFrame:[[self view] bounds]];
+        [view setFrame:[[self view] bounds]];
+    }
+    
     [[self view] addSubview:view];
 }
 
@@ -77,20 +81,32 @@
 }
 
 - (void)objectChangedLoadingState:(HNObject *)object {
-    if ([object isLoading]) { 
-        [[self navigationItem] setRightBarButtonItem:loadingItem];
+    
+}
+
+- (void)objectStartedLoading:(id)object {
+    [[self navigationItem] setRightBarButtonItem:loadingItem];
+    
+    if (![source isLoaded]) {
+        [self removeError];
+        [self addStatusView:indicator];
     }
 }
 
 - (void)object:(HNObject *)source_ failedToLoadWithError:(NSError *)error {
     [self removeStatusView:indicator];
     
-    // If the source has already loaded before, we have *some* data to show,
-    // so just show that. Otherwise, what really should happen is to:
-    // XXX: show a non-modal loading error display if previously loaded
+    // If the source has already loaded before, we have *some* data to show, so
+    // just show that. Otherwise, show a dialog to let the user know it failed.
     if (![source isLoaded]) {
         [self showError];
-        loaded = NO;
+    } else {
+        ProgressHUD *hud = [[ProgressHUD alloc] init];
+        [hud setText:@"Error Loading"];
+        [hud setState:kProgressHUDStateError];
+        [hud showInWindow:[self.view window]];
+        [hud dismissAfterDelay:0.8f animated:YES];
+        [hud release];
     }
     
     [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
@@ -111,9 +127,17 @@
         if (index == first) {
             [[UIApplication sharedApplication] openURL:[source URL]];
         } else if (index == first + 1) {
+            // XXX: find the best way to copy a URL to the clipboard
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             [pasteboard setURL:[source URL]];
             [pasteboard setString:[[source URL] absoluteString]];
+            
+            ProgressHUD *hud = [[ProgressHUD alloc] init];
+            [hud setText:@"Copied!"];
+            [hud setState:kProgressHUDStateCompleted];
+            [hud showInWindow:[self.view window]];
+            [hud dismissAfterDelay:0.8f animated:YES];
+            [hud release];
         }
     }
 }
@@ -130,7 +154,8 @@
 
 - (void)retryPressed {
     [self removeError];
-    [self performInitialLoadIfPossible];
+    
+    [source beginLoading];
 }
 
 - (void)loadView {
@@ -147,10 +172,15 @@
     
     actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTapped)];
     loadingItem = [[ActivityIndicatorItem alloc] initWithSize:CGSizeMake(27.0f, kActivityIndicatorItemStandardSize.height)];
+    
+    statusView = [[UIView alloc] initWithFrame:CGRectZero];
+    [statusView setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:statusView];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [[self navigationItem] setRightBarButtonItem:actionItem];
 }
 
@@ -163,30 +193,22 @@
     loadingItem = nil;
     [retryButton release];
     retryButton = nil;
-    
-    loaded = NO;
+    [statusView release];
+    statusView = nil;
     
     [super viewDidUnload];
-}
-
-- (void)performInitialLoadIfPossible {
-    if (!loaded && source != nil) {
-        loaded = YES;
-        
-        if (![source isLoaded]) {
-            [self removeError];
-            [self addStatusView:indicator];
-            [source beginLoading];
-        } else {
-            [self finishedLoading];
-        }
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self performInitialLoadIfPossible];
+    if (![source isLoaded]) {
+        [source beginLoading];
+    } else {
+        // Fake a finished loading event if it's already
+        // loaded, since we want to show some content.
+        [self finishedLoading];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

@@ -29,23 +29,6 @@ typedef enum {
 } HNSearchType;
 
 
-typedef NSString *HNPageType;
-
-#define kHNPageTypeSubmissions @"news"
-#define kHNPageTypeNewSubmissions @"newest"
-#define kHNPageTypeBestSubmissions @"best"
-#define kHNPageTypeActiveSubmissions @"active"
-#define kHNPageTypeClassicSubmissions @"classic"
-#define kHNPageTypeAskSubmissions @"ask"
-
-#define kHNPageTypeItemComments @"item"
-#define kHNPageTypeBestComments @"bestcomments"
-#define kHNPageTypeNewComments @"newcomments"
-
-#define kHNPageTypeUserProfile @"user"
-#define kHNPageTypeUserSubmissions @"submitted"
-#define kHNPageTypeUserComments @"threads"
-
 typedef enum {
     kHNVoteDirectionDown,
     kHNVoteDirectionUp
@@ -57,6 +40,7 @@ typedef NSString *HNSessionToken;
 #import "HNObject.h"
 #import "HNUser.h"
 #import "HNEntry.h"
+#import "HNEntryList.h"
 
 // sessions
 #import "HNSession.h"

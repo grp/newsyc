@@ -23,7 +23,6 @@
 @property (nonatomic, retain) HNUser *user;
 @property (nonatomic, copy) NSString *token;
 @property (nonatomic, assign, getter=isLoaded) BOOL loaded;
-@property (nonatomic, readonly) BOOL isAnonymous;
 
 + (HNSession *)currentSession;
 + (void)setCurrentSession:(HNSession *)session;

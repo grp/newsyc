@@ -9,7 +9,8 @@
 #import "LoginController.h"
 
 @class SubmissionListController, SessionProfileController, MoreController, SearchController;
-@interface MainTabBarController : UITabBarController <UIActionSheetDelegate, LoginControllerDelegate> {
+
+@interface MainTabBarController : UITabBarController <UIActionSheetDelegate, LoginControllerDelegate, UITabBarControllerDelegate> {
     SubmissionListController *home;
     SubmissionListController *latest;
 	SearchController *search;
@@ -18,6 +19,8 @@
     
     NSDate *lastSeen;
     UIBarButtonItem *composeItem;
+    
+    void (^loginCompletionBlock)(void);
 }
 
 @end

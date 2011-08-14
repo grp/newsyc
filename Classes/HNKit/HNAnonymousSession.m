@@ -10,6 +10,14 @@
 #import "HNAnonymousSession.h"
 #import "HNSubmission.h"
 
+@implementation HNSession (HNAnonymousSession)
+
+- (BOOL)isAnonymous {
+    return NO;
+}
+
+@end
+
 @implementation HNAnonymousSession
 
 - (void)performSubmission:(HNSubmission *)submission target:(id)target action:(SEL)action {

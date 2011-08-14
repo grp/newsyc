@@ -16,25 +16,24 @@
 @implementation SubmissionListController
 
 - (void)dealloc {
-    [refreshView release];
+    [pullToRefreshView release];
+    
     [super dealloc];
 }
 
 - (void)loadView {
     [super loadView];
+    
+    pullToRefreshView = [[PullToRefreshView alloc] initWithScrollView:tableView];
+    [tableView addSubview:pullToRefreshView];
+    [pullToRefreshView setDelegate:self];
 }
 
 - (void)viewDidUnload {
-    [refreshView removeFromSuperview];
-    [refreshView release];
-    refreshView = nil;
+    [pullToRefreshView release];
+    pullToRefreshView = nil;
     
     [super viewDidUnload];
-}
-
-- (void)viewDidLoad {
-    [refreshView refreshLastUpdatedDate];
-    [tableView addSubview:refreshView];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
@@ -67,39 +66,38 @@
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
-- (void)finishedLoading {
-    [super finishedLoading];
+- (void)objectStartedLoading:(HNObject *)object {
+    [super objectStartedLoading:object];
     
-    if (refreshView == nil) {
-        refreshView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - tableView.bounds.size.height, [self view].frame.size.width, tableView.bounds.size.height)];
-        [refreshView setDelegate:self];
-    }
+    [pullToRefreshView setState:PullToRefreshViewStateLoading];
+}
+
+- (void)objectFinishedLoading:(HNObject *)object {
+    [super objectFinishedLoading:object];
     
-    [tableView addSubview:refreshView];
-    [refreshView setFrame:CGRectMake(0.0f, 0.0f - tableView.bounds.size.height, [self view].frame.size.width, tableView.bounds.size.height)];
+    [pullToRefreshView finishedLoading];
+}
+
+- (void)object:(HNObject *)object failedToLoadWithError:(NSError *)error {
+    [super object:object failedToLoadWithError:error];
     
-	[refreshView egoRefreshScrollViewDataSourceDidFinishedLoading:tableView];
+    [pullToRefreshView finishedLoading];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {	
-	[refreshView egoRefreshScrollViewDidScroll:scrollView];
+- (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
+    [source beginLoading];
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-	[refreshView egoRefreshScrollViewDidEndDragging:scrollView];
+- (void)addStatusView:(UIView *)view resize:(BOOL)resize {
+    [super addStatusView:view resize:resize];
+    
+    [tableView setScrollEnabled:NO];
 }
 
-- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView *)view {
-	[source beginReloading];
-}
-
-- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView *)view {
-	return [source isLoading];
-}
-
-- (NSDate *)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view {
-     // XXX: what should really go here?
-	return [NSDate date];
+- (void)removeStatusView:(UIView *)view {
+    [super removeStatusView:view];
+    
+    [tableView setScrollEnabled:YES];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

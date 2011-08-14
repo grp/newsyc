@@ -31,7 +31,7 @@
 
 - (void)flagFinished {
     [entryActionsView stopLoadingItem:kEntryActionsViewItemFlag];
-    [source beginReloading];
+    [source beginLoading];
 }
 
 - (void)submissionFlagDidSucceedWithNotification:(NSNotification *)notification {
@@ -59,7 +59,7 @@
 }
 
 - (void)upvoteFinished {
-    [source beginReloading];
+    [source beginLoading];
     [entryActionsView stopLoadingItem:kEntryActionsViewItemUpvote];
 }
 
@@ -77,7 +77,7 @@
 }
 
 - (void)submissionDownvoteDidSucceedWithNotification:(NSNotification *)notification {
-    [source beginReloading];
+    [source beginLoading];
     [self downvoteFinished];
 }
 
@@ -91,7 +91,7 @@
 }
 
 - (void)composeControllerDidSubmit:(ComposeController *)controller {
-    [source beginReloading];
+    [source beginLoading];
 }
 
 - (void)performUpvote {
@@ -257,7 +257,7 @@
 }
 
 - (BOOL)hasHeaderAndFooter {
-    return [[source type] isEqual:kHNPageTypeItemComments]; 
+    return [source isKindOfClass:[HNEntry class]]; 
 }
 
 - (void)setupHeader {
@@ -321,11 +321,6 @@
     maximumHeaderHeight = [tableView bounds].size.height - 64.0f;
     [self updateHeaderPositioning];
     [tableView setScrollsToTop:YES];
-}
-
-- (void)relayoutView {
-    [super relayoutView];
-    [self setupHeader]; 
 }
 
 - (void)finishedLoading {

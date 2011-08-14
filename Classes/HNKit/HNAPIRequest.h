@@ -11,11 +11,11 @@
     SEL action;
     NSMutableData *received;
     NSURLConnection *connection;
-    HNPageType type;
+    NSString *path;
 }
 
 - (HNAPIRequest *)initWithTarget:(id)target_ action:(SEL)action_;
-- (void)performRequestOfType:(HNPageType)type_ withParameters:(NSDictionary *)parameters;
+- (void)performRequestWithPath:(NSString *)path parameters:(NSDictionary *)parameters;
 - (void)cancelRequest;
 - (BOOL)isLoading;
 

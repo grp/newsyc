@@ -28,6 +28,8 @@
     if (![[HNSession currentSession] isAnonymous]) {
         [[HNSession currentSession] reloadToken];
     }
+    
+    [InstapaperSession logoutIfNecessary];
                   
     [window makeKeyAndVisible];
     return YES;
@@ -49,8 +51,6 @@
     }
     
     [InstapaperSession logoutIfNecessary];
-    
-    [navigationController relayoutViews];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

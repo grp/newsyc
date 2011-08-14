@@ -161,7 +161,10 @@
     pointsrect.size.height = [pointdate sizeWithFont:[[self class] subtleFont]].height;
     pointsrect.origin.x = offsets.width;
     pointsrect.origin.y = bounds.height - offsets.height - 2.0f - pointsrect.size.height;
-    [pointdate drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+    // Re-enable this for comments if Hacker News re-enables comment score viewing.
+    if ([entry isSubmission]) {
+        [pointdate drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+    }
     
     [[UIColor darkGrayColor] set];
     CGRect userrect;

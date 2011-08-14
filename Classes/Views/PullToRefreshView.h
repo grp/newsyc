@@ -1,6 +1,8 @@
 //
-//  EGORefreshTableHeaderView.h
-//  Demo
+//  PullToRefreshView.h
+//  Grant Paul (chpwn)
+//
+//  (based on EGORefreshTableHeaderView)
 //
 //  Created by Devin Doty on 10/14/09October14.
 //  Copyright 2009 enormego. All rights reserved.
@@ -27,37 +29,40 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-typedef enum{
-	EGOOPullRefreshPulling = 0,
-	EGOOPullRefreshNormal,
-	EGOOPullRefreshLoading,	
-} EGOPullRefreshState;
+typedef enum {
+    PullToRefreshViewStateNormal = 0,
+	PullToRefreshViewStateReady,
+	PullToRefreshViewStateLoading
+} PullToRefreshViewState;
 
-@protocol EGORefreshTableHeaderDelegate;
-@interface EGORefreshTableHeaderView : UIView {
-	
-	id _delegate;
-	EGOPullRefreshState _state;
+@protocol PullToRefreshViewDelegate;
 
-	UILabel *_lastUpdatedLabel;
-	UILabel *_statusLabel;
-	CALayer *_arrowImage;
-	UIActivityIndicatorView *_activityView;
-	
-
+@interface PullToRefreshView : UIView {
+	id<PullToRefreshViewDelegate> delegate;
+    UIScrollView *scrollView;
+	PullToRefreshViewState state;
+    
+	UILabel *lastUpdatedLabel;
+	UILabel *statusLabel;
+	CALayer *arrowImage;
+	UIActivityIndicatorView *activityView;
 }
 
-@property(nonatomic,assign) id <EGORefreshTableHeaderDelegate> delegate;
+@property (nonatomic, readonly) UIScrollView *scrollView;
+@property (nonatomic, assign) id<PullToRefreshViewDelegate> delegate;
+@property (nonatomic, assign) PullToRefreshViewState state;
 
 - (void)refreshLastUpdatedDate;
-- (void)egoRefreshScrollViewDidScroll:(UIScrollView *)scrollView;
-- (void)egoRefreshScrollViewDidEndDragging:(UIScrollView *)scrollView;
-- (void)egoRefreshScrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView;
+- (void)finishedLoading;
+
+- (id)initWithScrollView:(UIScrollView *)scrollView;
 
 @end
-@protocol EGORefreshTableHeaderDelegate
-- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view;
-- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view;
+
+@protocol PullToRefreshViewDelegate <NSObject>
+
 @optional
-- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view;
+- (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view;
+- (NSDate *)pullToRefreshViewLastUpdated:(PullToRefreshView *)view;
+
 @end

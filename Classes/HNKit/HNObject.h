@@ -8,14 +8,13 @@
 
 typedef enum {
     kHNObjectLoadingStateNotLoaded = 0,
+    kHNObjectLoadingStateUnloaded = 0,
     kHNObjectLoadingStateLoadingInitial = 1 << 0,
     kHNObjectLoadingStateLoadingReload = 1 << 1,
     kHNObjectLoadingStateLoadingOther = 1 << 2,
-    kHNObjectLoadingStateLoadingAny = 0x00000007,
+    kHNObjectLoadingStateLoadingAny = (kHNObjectLoadingStateLoadingInitial | kHNObjectLoadingStateLoadingReload | kHNObjectLoadingStateLoadingOther),
     kHNObjectLoadingStateLoaded = 1 << 15,
 } HNObjectLoadingState;
-
-#define kHNObjectLoadingStateUnloaded kHNObjectLoadingStateNotLoaded
 
 @protocol HNObjectLoadingDelegate;
 
@@ -23,31 +22,35 @@ typedef enum {
 @interface HNObject : NSObject {
     id identifier;
     NSURL *url;
-    HNObjectLoadingState loadingState;
     
+    HNObjectLoadingState loadingState;
     id<HNObjectLoadingDelegate> delegate;
     
     HNAPIRequest *apiRequest;
-    HNPageType type;
 }
 
 @property (nonatomic, readonly) HNObjectLoadingState loadingState;
 @property (nonatomic, copy) id identifier;
 @property (nonatomic, copy) NSURL *URL;
-@property (nonatomic, copy) HNPageType type;
 @property (nonatomic, assign) id<HNObjectLoadingDelegate> delegate;
 
-+ (id)_parseParametersWithType:(HNPageType)type_ parameters:(NSDictionary *)parameters;
-+ (id)parseURL:(NSURL *)url_;
++ (BOOL)isValidURL:(NSURL *)url_;
++ (NSDictionary *)infoDictionaryForURL:(NSURL *)url_;
++ (id)identifierForURL:(NSURL *)url_;
 
-+ (NSDictionary *)_generateParametersWithType:(HNPageType)type_ identifier:(id)identifier_;
-+ (NSURL *)generateURLWithType:(HNPageType)type_ identifier:(id)identifier_;
-+ (NSURL *)generateURLWithType:(HNPageType)type_;
-            
-- (id)initWithType:(HNPageType)type_ identifier:(id)identifier_ URL:(NSURL *)url_;
-- (id)initWithType:(HNPageType)type_ identifier:(id)identifier_;
-- (id)initWithType:(HNPageType)type_;
-- (id)initWithURL:(NSURL *)url_;
++ (NSString *)pathForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
++ (NSDictionary *)parametersForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
++ (NSURL *)generateURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
+
+// These methods don't necessarily create a new object if it's already in the
+// cache. The cache is keyed on (type, identifier) pairs managed by HNObject.
++ (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info URL:(NSURL *)url_;
++ (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
++ (id)objectWithIdentifier:(id)identifier_;
++ (id)objectWithURL:(NSURL *)url_;
+
+- (NSDictionary *)infoDictionary;
+- (void)loadInfoDictionary:(NSDictionary *)info;
 
 - (NSString *)_additionalDescription;
 - (NSString *)description;
@@ -62,7 +65,6 @@ typedef enum {
 
 - (void)cancelLoading;
 - (void)beginLoading;
-- (void)beginReloading;
 
 @end
 
@@ -71,8 +73,13 @@ typedef enum {
 
 // Fine-grained monitoring of loading state.
 - (void)objectChangedLoadingState:(HNObject *)object;
+
+// Notificatinos of loading starting.
+- (void)objectStartedLoading:(HNObject *)object;
+
 // Notifications of loading finality.
 - (void)objectFinishedLoading:(HNObject *)object;
+
 // Notifications of loading failure.
 - (void)object:(HNObject *)object failedToLoadWithError:(NSError *)error;
 

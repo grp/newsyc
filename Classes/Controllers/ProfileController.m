@@ -137,23 +137,23 @@
     if ([indexPath section] == 0) {
         [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     } else {
-        HNPageType type = nil;
+        HNEntryListIdentifier type = nil;
         NSString *title = nil;
         Class controllerClass = nil;
         
         if ([indexPath row] == 0) {
-            type = kHNPageTypeUserSubmissions;
+            type = kHNEntryListIdentifierUserSubmissions;
             title = @"Submissions";
             controllerClass = [SubmissionListController class];
         } else if ([indexPath row] == 1) {
-            type = kHNPageTypeUserComments;
+            type = kHNEntryListIdentifierUserComments;
             title = @"Comments";
             controllerClass = [CommentListController class];
         }
         
-        HNEntry *entry = [[HNEntry alloc] initWithType:type identifier:[(HNUser *) source identifier]];
+        HNEntryList *list = [HNEntryList entryListWithIdentifier:type user:(HNUser *) source];
         
-        UIViewController *controller = [[controllerClass alloc] initWithSource:[entry autorelease]];
+        UIViewController *controller = [[controllerClass alloc] initWithSource:list];
         [controller setTitle:title];
         [[self navigationController] pushViewController:[controller autorelease] animated:YES];
     }

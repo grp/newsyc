@@ -64,7 +64,7 @@
 - (void)loginControllerDidLogin:(LoginController *)controller {
     [[self tabBarController] dismissModalViewControllerAnimated:YES];
     [self setSource:[[HNSession currentSession] user]];
-    [self performInitialLoadIfPossible];
+    [source beginLoading];
 }
 
 - (void)loginControllerDidCancel:(LoginController *)controller {
@@ -89,16 +89,6 @@
     logoutItem = nil;
     
     [super viewDidUnload];
-}
-
-- (void)viewDidLoad {
-	[super viewDidLoad];
-	
-	//#56 Automatically show "log in" panel when tapping the profile tab and not logged in.	
-	if (![[HNSession currentSession] user]) {
-		[self _loginPressed];
-	}
-	
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
