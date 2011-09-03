@@ -48,13 +48,19 @@
 }
 
 + (NSString *)formatBodyText:(NSString *)bodyText {
-    return [[[bodyText stringByRemovingHTMLTags] stringByDecodingHTMLEntities] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"interface-short-comments"]) {
+        bodyText = [bodyText stringByReplacingOccurrencesOfString:@"<p>" withString:@"\n\n"];
+    }
+    
+    bodyText = [bodyText stringByRemovingHTMLTags];
+    bodyText = [bodyText stringByDecodingHTMLEntities];
+    bodyText = [bodyText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    return bodyText;
 }
 
 + (UIFont *)bodyFont {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber *small = [defaults objectForKey:@"interface-small-text"];
-    if (small == nil || [small boolValue]) {
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"interface-small-text"]) {
         return [UIFont systemFontOfSize:12.0f];
     } else {
         return [UIFont systemFontOfSize:14.0f];
@@ -73,28 +79,31 @@
     return [UIFont systemFontOfSize:13.0f];
 }
 
-+ (CGFloat)heightForBodyText:(NSString *)text withWidth:(CGFloat)width {
++ (CGFloat)heightForBodyText:(NSString *)text withWidth:(CGFloat)width indentationLevel:(int)indentationLevel {
     CGSize size = CGSizeMake(width - 16.0f, CGFLOAT_MAX);
+    size.width -= (indentationLevel * 15.0f);
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber *small = [defaults objectForKey:@"interface-short-comments"];
-    if (small == nil || [small boolValue]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"interface-short-comments"]) {
         // Show only three lines of text.
         CGFloat singleHeight = [[self bodyFont] lineHeight];
         CGFloat tripleHeight = singleHeight * 3;
         if (size.height > tripleHeight) size.height = tripleHeight;
     }
     
-    return [[self formatBodyText:text] sizeWithFont:[self bodyFont] constrainedToSize:size lineBreakMode:UILineBreakModeWordWrap].height;
+    return ceilf([[self formatBodyText:text] sizeWithFont:[self bodyFont] constrainedToSize:size lineBreakMode:UILineBreakModeWordWrap].height);
+}
+
++ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width indentationLevel:(int)indentationLevel {
+    return [self heightForBodyText:[entry body] withWidth:width indentationLevel:indentationLevel] + 45.0f;
 }
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {
-    return [self heightForBodyText:[entry body] withWidth:width] + 45.0f;
+    return [self heightForEntry:entry withWidth:width indentationLevel:0];
 }
 
 - (void)drawContentView:(CGRect)rect {
     CGRect bounds = [self bounds];
-    bounds.origin.x += (indentationLevel * 20.0f);
+    bounds.origin.x += (indentationLevel * 15.0f);
     
     CGSize offsets = CGSizeMake(8.0f, 4.0f);
     
@@ -115,7 +124,7 @@
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor blackColor] set];
     CGRect bodyrect;
-    bodyrect.size.height = [[self class] heightForBodyText:body withWidth:bounds.size.width];
+    bodyrect.size.height = [[self class] heightForBodyText:body withWidth:bounds.size.width indentationLevel:indentationLevel];
     bodyrect.size.width = bounds.size.width - bounds.origin.x - offsets.width - offsets.width;
     bodyrect.origin.x = bounds.origin.x + offsets.width;
     bodyrect.origin.y = offsets.height + 19.0f;

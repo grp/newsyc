@@ -18,4 +18,7 @@
     NSArray *entries;
 }
 
+- (HNEntry *)entryAtIndexPath:(NSIndexPath *)indexPath;
+- (void)configureCell:(UITableViewCell *)cell forEntry:(HNEntry *)entry;
+
 @end

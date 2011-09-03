@@ -110,6 +110,12 @@
     [statusView addSubview:view];
     [tableView setTableFooterView:statusView];
     [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    
+    // XXX: this is a hack :(
+    if (statusView == indicator) {
+        [tableView setContentOffset:CGPointZero];
+        [tableView setUserInteractionEnabled:NO];
+    }
 }
 
 - (void)removeStatusView:(UIView *)view {
@@ -120,12 +126,21 @@
         [tableView setTableFooterView:nil];
         [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     }
+    
+    // XXX: this is a hack :(
+    if (statusView == indicator) {
+        [tableView setUserInteractionEnabled:YES];
+    }
+}
+
+- (void)loadEntries {
+    [entries release];
+    entries = [[(HNEntry *) source entries] copy];
 }
 
 - (void)finishedLoading {
-    [entries autorelease];
-    entries = [[(HNEntry *) source entries] copy];
-    
+    [self loadEntries];
+        
     [tableView reloadData];
 
     if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
@@ -153,6 +168,16 @@
     else return [CommentTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
 }
 
+- (void)configureCell:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
+    if ([entry isSubmission]) {
+        SubmissionTableCell *cell_ = (SubmissionTableCell *) cell;
+        [cell_ setSubmission:entry];
+    } else if ([entry isComment]) {
+        CommentTableCell *cell_ = (CommentTableCell *) cell;
+        [cell_ setComment:entry];
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     HNEntry *entry = [self entryAtIndexPath:indexPath];
     
@@ -160,13 +185,15 @@
         SubmissionTableCell *cell = (SubmissionTableCell *) [tableView dequeueReusableCellWithIdentifier:@"submission"];
         if (cell == nil) cell = [[[SubmissionTableCell alloc] initWithReuseIdentifier:@"submission"] autorelease];
         
-        [cell setSubmission:entry];
+        [self configureCell:cell forEntry:entry];
+        
         return cell;
     } else if ([entry isComment]) {
         CommentTableCell *cell = (CommentTableCell *) [tableView dequeueReusableCellWithIdentifier:@"comment"];
         if (cell == nil) cell = [[[CommentTableCell alloc] initWithReuseIdentifier:@"comment"] autorelease];
+
+        [self configureCell:cell forEntry:entry];
         
-        [cell setComment:entry];
         return cell;
     }
     

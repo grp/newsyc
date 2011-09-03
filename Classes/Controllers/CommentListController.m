@@ -246,6 +246,10 @@
     return [source isKindOfClass:[HNEntry class]]; 
 }
 
+- (CGFloat)statusOffsetHeight {
+    return suggestedHeaderHeight;
+}
+
 - (void)setupHeader {
     // Don't show the header if it doesn't make sense, and only show it if the source is at least partially loaded.
     if (![self hasHeaderAndFooter] || [(HNEntry *) source submitter] == nil) return;
@@ -306,6 +310,63 @@
     suggestedHeaderHeight = [detailsHeaderView bounds].size.height;
     maximumHeaderHeight = [tableView bounds].size.height - 64.0f;
     [tableView setScrollsToTop:YES];
+}
+
+- (void)addChildrenOfEntry:(HNEntry *)entry toEntryArray:(NSMutableArray *)array includeChildren:(BOOL)includeChildren {
+    // only show children of comments that are fully loaded
+    includeChildren = includeChildren && [entry isLoaded] && [entry isKindOfClass:[HNEntry class]];
+    
+    for (HNEntry *child in [entry entries]) {
+        [array addObject:child];
+        
+        if (includeChildren) {
+            [self addChildrenOfEntry:child toEntryArray:array includeChildren:includeChildren];
+        }
+    }
+}
+
+- (void)loadEntries {
+    BOOL includeChildren = [[NSUserDefaults standardUserDefaults] boolForKey:@"show-nested-comments"];
+    
+    NSMutableArray *children = [NSMutableArray array];
+    [self addChildrenOfEntry:(HNEntry *) source toEntryArray:children includeChildren:includeChildren]; 
+    
+    [entries release];
+    entries = [children copy];
+}
+
+- (int)depthOfEntry:(HNEntry *)entry {
+    int depth = 0;
+    
+    HNEntry *parent = [entry parent];
+    
+    // parent can be nil if we the parent is unknown. this is usually because it
+    // is a child of an entry list, not of an entry itself, so we don't know.
+    if (parent == nil) return 0;
+    
+    while (parent != source && parent != nil) {
+        depth += 1;
+        parent = [parent parent];
+    }
+    
+    // don't show it at some crazy indentation level if this happens
+    if (parent == nil) return 0;
+    
+    return depth;
+}
+
+- (CGFloat)tableView:(UITableView *)table heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    HNEntry *entry = [self entryAtIndexPath:indexPath];
+    if ([entry isComment]) return [CommentTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width indentationLevel:[self depthOfEntry:entry]];
+    else return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+}
+
+- (void)configureCell:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
+    if ([entry isComment]) {
+        [cell setIndentationLevel:[self depthOfEntry:entry]];
+    }
+    
+    [super configureCell:cell forEntry:entry];
 }
 
 - (void)finishedLoading {

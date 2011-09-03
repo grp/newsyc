@@ -15,7 +15,7 @@
 typedef enum {
     kHNPageLayoutTypeUnknown,
     kHNPageLayoutTypeEnclosed, // <table> inside <tr>[3]
-    kHNPageLayoutTypeHeaderFooter, // two <table>[2] inside <tr>[3]
+    kHNPageLayoutTypeHeaderFooter, // <table>[1:2] inside <tr>[3]
     kHNPageLayoutTypeExposed // <tr>[3:]
 } HNPageLayoutType;
 
@@ -71,10 +71,18 @@ typedef enum {
                     return [[object tagName] isEqualToString:@"table"];
                 }]];
                 
-                if ([tables count] == 1) {
-                    return kHNPageLayoutTypeEnclosed;
-                } else if ([tables count] >= 2) {
+                NSArray *linebreaks = [[td children] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(XMLElement *object, NSDictionary *bindings) {
+                    return [[object tagName] isEqualToString:@"br"];
+                }]];
+                
+                // This is because when there is only a header, we want to make
+                // sure that we don't consider the header to be replying to
+                // itself. There are two <br> tags in that case, so we use those
+                // to guess. This is horrible hack, but so is the rest of this…
+                if ([tables count] >= 2 || [linebreaks count] == 2) {
                     return kHNPageLayoutTypeHeaderFooter;
+                } else if ([tables count] == 1) {
+                    return kHNPageLayoutTypeEnclosed;
                 }
             }
         }
