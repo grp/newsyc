@@ -7,10 +7,15 @@
 //
 
 #import "LoadingController.h"
+#import "PullToRefreshView.h"
 
-@interface EntryListController : LoadingController <UITableViewDelegate, UITableViewDataSource> {
+@interface EntryListController : LoadingController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate> {
     UITableView *tableView;
     UILabel *emptyLabel;
+    
+    PullToRefreshView *pullToRefreshView;
+    
+    NSArray *entries;
 }
 
 @end

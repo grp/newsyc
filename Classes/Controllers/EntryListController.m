@@ -10,12 +10,20 @@
 
 #import "EntryListController.h"
 #import "LoadingIndicatorView.h"
+#import "PullToRefreshView.h"
+
+#import "CommentTableCell.h"
+#import "SubmissionTableCell.h"
+
+#import "CommentListController.h"
 
 @implementation EntryListController
 
 - (void)dealloc {
     [tableView release];
     [emptyLabel release];
+    [pullToRefreshView release];
+    [entries release];
     
     [super dealloc];
 }
@@ -36,6 +44,10 @@
     [emptyLabel setTextColor:[UIColor grayColor]];
     [emptyLabel setText:@"No items."];
     [emptyLabel setTextAlignment:UITextAlignmentCenter];
+    
+    pullToRefreshView = [[PullToRefreshView alloc] initWithScrollView:tableView];
+    [tableView addSubview:pullToRefreshView];
+    [pullToRefreshView setDelegate:self];
 }
 
 - (void)viewDidLoad {
@@ -47,6 +59,8 @@
     emptyLabel = nil;
     [tableView release];
     tableView = nil;
+    [pullToRefreshView release];
+    pullToRefreshView = nil;
     
     [super viewDidUnload];
 }
@@ -55,6 +69,28 @@
     [super viewDidAppear:animated];
     
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+}
+
+- (void)sourceStartedLoading {
+    [super sourceStartedLoading];
+    
+    [pullToRefreshView setState:PullToRefreshViewStateLoading];
+}
+
+- (void)sourceFinishedLoading {
+    [super sourceFinishedLoading];
+    
+    [pullToRefreshView finishedLoading];
+}
+
+- (void)sourceFailedLoading {
+    [super sourceFailedLoading];
+    
+    [pullToRefreshView finishedLoading];
+}
+
+- (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
+    [source beginLoading];
 }
 
 - (CGFloat)statusOffsetHeight {
@@ -87,6 +123,9 @@
 }
 
 - (void)finishedLoading {
+    [entries autorelease];
+    entries = [[(HNEntry *) source entries] copy];
+    
     [tableView reloadData];
 
     if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
@@ -96,16 +135,51 @@
     }
 }
 
+- (HNEntry *)entryAtIndexPath:(NSIndexPath *)indexPath {
+    return [entries objectAtIndex:[indexPath row]];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
-    return 0;
+    return [source isLoaded] ? 1 : 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 0;
+    return [entries count];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    HNEntry *entry = [self entryAtIndexPath:indexPath];
+    if ([entry isSubmission]) return [SubmissionTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
+    else return [CommentTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    HNEntry *entry = [self entryAtIndexPath:indexPath];
+    
+    if ([entry isSubmission]) {
+        SubmissionTableCell *cell = (SubmissionTableCell *) [tableView dequeueReusableCellWithIdentifier:@"submission"];
+        if (cell == nil) cell = [[[SubmissionTableCell alloc] initWithReuseIdentifier:@"submission"] autorelease];
+        
+        [cell setSubmission:entry];
+        return cell;
+    } else if ([entry isComment]) {
+        CommentTableCell *cell = (CommentTableCell *) [tableView dequeueReusableCellWithIdentifier:@"comment"];
+        if (cell == nil) cell = [[[CommentTableCell alloc] initWithReuseIdentifier:@"comment"] autorelease];
+        
+        [cell setComment:entry];
+        return cell;
+    }
+    
     return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    HNEntry *entry = [self entryAtIndexPath:indexPath];
+    
+    CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
+    if ([entry isSubmission]) [controller setTitle:@"Submission"];
+    if ([entry isComment]) [controller setTitle:@"Replies"];
+    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
 - (void)tableView:(UITableView *)table willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {

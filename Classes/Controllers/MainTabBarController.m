@@ -22,6 +22,9 @@
 #import "LoginController.h"
 #import "SearchController.h"
 
+#import "CommentListController.h"
+#import "HNTimeline.h"
+
 @implementation MainTabBarController
 
 - (id)init {
@@ -35,7 +38,14 @@
         latest = [[[SubmissionListController alloc] initWithSource:newList] autorelease];
         [latest setTitle:@"New Submissions"];
         [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"New" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
-        
+    
+#ifdef ENABLE_TIMELINE
+        HNEntryList *newList = [HNTimeline timelineForSession:[HNSession currentSession]];
+        latest = [[[CommentListController alloc] initWithSource:newList] autorelease];
+        [latest setTitle:@"Timeline"];
+        [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Timeline" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
+#endif
+
         profile = [[[SessionProfileController alloc] initWithSource:[[HNSession currentSession] user]] autorelease];
         [profile setTitle:@"Profile"];
         [profile setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"person.png"] tag:0] autorelease]];

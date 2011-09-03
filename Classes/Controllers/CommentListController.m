@@ -208,8 +208,8 @@
     [self dismissModalViewControllerAnimated:YES];
     
     // When a modal view controller is dismissed, you can't present another one
-    // until you get the -viewDidAppear: message called. Because this might cause
-    // a modal view to be presented, we need to use this ivar to have it delayed 
+    // until the -viewDidAppear: message is called. Because this might cause a
+    // modal view to be presented, we need to use this ivar to have it delayed 
     // until when -viewDidAppear: is called.
     shouldCompleteOnAppear = YES;
 }
@@ -240,20 +240,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [super dealloc];
-}
-
-- (void)updateHeaderPositioning {
-    // Disable the slide-over style headers if they are too tall. Just scroll normally in that case.
-    if (suggestedHeaderHeight > maximumHeaderHeight) return;
-    
-    CGFloat offset = [tableView contentOffset].y;
-    if (suggestedHeaderHeight < maximumHeaderHeight || (offset > suggestedHeaderHeight - maximumHeaderHeight || offset <= 0)) {
-        CGRect frame = [detailsHeaderContainer frame];
-        if (suggestedHeaderHeight - maximumHeaderHeight > 0 && offset > 0) offset -= suggestedHeaderHeight - maximumHeaderHeight;
-        frame.origin.y = offset;
-        frame.size.height = suggestedHeaderHeight - offset;
-        [detailsHeaderContainer setFrame:frame];
-    }
 }
 
 - (BOOL)hasHeaderAndFooter {
@@ -319,7 +305,6 @@
     
     suggestedHeaderHeight = [detailsHeaderView bounds].size.height;
     maximumHeaderHeight = [tableView bounds].size.height - 64.0f;
-    [self updateHeaderPositioning];
     [tableView setScrollsToTop:YES];
 }
 
@@ -329,18 +314,14 @@
     [super finishedLoading];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [self updateHeaderPositioning];
-}
-
 - (void)loadView {
     [super loadView];
     
     [self setupHeader];
-}
-
-- (CGFloat)statusOffsetHeight {
-    return suggestedHeaderHeight;
+    
+    if ([self hasHeaderAndFooter]) {
+        [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
+    }
 }
 
 - (void)viewDidUnload {
@@ -367,40 +348,6 @@
         shouldCompleteOnAppear = NO;
         [self completeAction];
     }
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
-    return [source isLoaded] ? 1 : 0;
-}
-
-- (HNEntry *)entryAtIndexPath:(NSIndexPath *)indexPath {
-    return [[(HNEntry *) source entries] objectAtIndex:[indexPath row]];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[(HNEntry *) source entries] count];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    HNEntry *entry = [self entryAtIndexPath:indexPath];
-    return [CommentTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CommentTableCell *cell = (CommentTableCell *) [tableView dequeueReusableCellWithIdentifier:@"comment"];
-    if (cell == nil) cell = [[[CommentTableCell alloc] initWithReuseIdentifier:@"comment"] autorelease];
-    
-    HNEntry *entry = [self entryAtIndexPath:indexPath];
-    [cell setComment:entry];
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    HNEntry *entry = [self entryAtIndexPath:indexPath];
-    
-    CommentListController *controller = [[CommentListController alloc] initWithSource:(HNObject *) entry];
-    [controller setTitle:@"Replies"];
-    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

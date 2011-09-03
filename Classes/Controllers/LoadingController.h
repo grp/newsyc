@@ -11,7 +11,7 @@
 #import "PlacardButton.h"
 
 @class LoadingIndicatorView;
-@interface LoadingController : UIViewController <UIActionSheetDelegate, HNObjectLoadingDelegate> {
+@interface LoadingController : UIViewController <UIActionSheetDelegate> {
     HNObject *source;
     
     UIView *statusView;
@@ -33,5 +33,9 @@
 
 - (void)showError;
 - (void)removeError;
+
+- (void)sourceStartedLoading;
+- (void)sourceFinishedLoading;
+- (void)sourceFailedLoading;
 
 @end

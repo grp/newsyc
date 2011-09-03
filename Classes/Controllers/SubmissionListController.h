@@ -8,10 +8,7 @@
 
 #import "EntryListController.h"
 
-#import "PullToRefreshView.h"
-
-@interface SubmissionListController : EntryListController <PullToRefreshViewDelegate> {
-    PullToRefreshView *pullToRefreshView;
+@interface SubmissionListController : EntryListController {
 }
 
 @end

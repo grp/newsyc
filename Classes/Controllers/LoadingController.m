@@ -18,9 +18,17 @@
 @synthesize source;
 
 - (void)setSource:(HNObject *)source_ {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNObjectStartedLoadingNotification object:source];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNObjectFinishedLoadingNotification object:source];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNObjectFailedLoadingNotification object:source];
+    
     [source autorelease];
     source = [source_ retain];
-    [source setDelegate:self];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceStartedLoading) name:kHNObjectStartedLoadingNotification object:source];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceFinishedLoading) name:kHNObjectFinishedLoadingNotification object:source];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceFailedLoading) name:kHNObjectFailedLoadingNotification object:source];
+
 }
 
 - (id)initWithSource:(HNObject *)source_ {
@@ -34,7 +42,6 @@
 - (void)dealloc {
     [indicator release];
     if ([source isLoading]) [source cancelLoading];
-    if ([source delegate] == self) [source setDelegate:nil];
     [source release];
     [actionItem release];
     [retryButton release];
@@ -84,7 +91,7 @@
     
 }
 
-- (void)objectStartedLoading:(id)object {
+- (void)sourceStartedLoading {
     [[self navigationItem] setRightBarButtonItem:loadingItem];
     
     if (![source isLoaded]) {
@@ -93,7 +100,7 @@
     }
 }
 
-- (void)object:(HNObject *)source_ failedToLoadWithError:(NSError *)error {
+- (void)sourceFailedLoading {
     [self removeStatusView:indicator];
     
     // If the source has already loaded before, we have *some* data to show, so
@@ -112,7 +119,7 @@
     [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
 }
 
-- (void)objectFinishedLoading:(HNObject *)object; {
+- (void)sourceFinishedLoading {
     [self removeStatusView:indicator];
     
     [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
