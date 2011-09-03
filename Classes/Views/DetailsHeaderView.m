@@ -119,9 +119,16 @@
     NSString *title = [[entry title] stringByDecodingHTMLEntities];
     NSString *date = [entry posted];
     NSString *points = [entry points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [entry points]];
-    NSString *pointdate = [NSString stringWithFormat:@"%@ • %@", points, date];
+    NSString *pointdate = nil;
     NSString *user = [[entry submitter] identifier];
     UIImage *disclosure = [[self class] disclosureImage];
+    
+    // Re-enable this for everyone if comment score viewing is re-enabled.
+    if ([entry submitter] == [[HNSession currentSession] user] || [entry isSubmission]) {
+        pointdate = [NSString stringWithFormat:@"%@ • %@", points, date];
+    } else {
+        pointdate = [NSString stringWithFormat:@"%@", date];
+    }
     
     CGRect titlerect;
     if ([[entry title] length] > 0) {
@@ -161,10 +168,7 @@
     pointsrect.size.height = [pointdate sizeWithFont:[[self class] subtleFont]].height;
     pointsrect.origin.x = offsets.width;
     pointsrect.origin.y = bounds.height - offsets.height - 2.0f - pointsrect.size.height;
-    // Re-enable this for comments if Hacker News re-enables comment score viewing.
-    if ([entry isSubmission]) {
-        [pointdate drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
-    }
+    [pointdate drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     
     [[UIColor darkGrayColor] set];
     CGRect userrect;
