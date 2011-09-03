@@ -11,9 +11,11 @@
 @class HNEntry;
 @interface CommentTableCell : ABTableViewCell {
     HNEntry *comment;
+    int indentationLevel;
 }
 
 @property (nonatomic, retain) HNEntry *comment;
+@property (nonatomic, assign) int indentationLevel;
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width;
 - (id)initWithReuseIdentifier:(NSString *)identifier;

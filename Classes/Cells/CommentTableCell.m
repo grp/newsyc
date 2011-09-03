@@ -14,7 +14,7 @@
 #import "NSString+Entities.h"
 
 @implementation CommentTableCell
-@synthesize comment;
+@synthesize comment, indentationLevel;
 
 - (id)initWithReuseIdentifier:(NSString *)identifier {
     if ((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier])) {
@@ -37,6 +37,12 @@
 - (void)setComment:(HNEntry *)comment_ {
     [comment autorelease];
     comment = [comment_ retain];
+    
+    [self setNeedsDisplay];
+}
+
+- (void)setIndentationLevel:(int)level {
+    indentationLevel = level;
     
     [self setNeedsDisplay];
 }
@@ -87,7 +93,9 @@
 }
 
 - (void)drawContentView:(CGRect)rect {
-    CGSize bounds = [self bounds].size;
+    CGRect bounds = [self bounds];
+    bounds.origin.x += (indentationLevel * 20.0f);
+    
     CGSize offsets = CGSizeMake(8.0f, 4.0f);
     
     NSString *user = [[comment submitter] identifier];
@@ -99,35 +107,36 @@
     if ([self isHighlighted] || [self isSelected]) [[UIColor whiteColor] set];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor blackColor] set];
-    [user drawAtPoint:CGPointMake(offsets.width, offsets.height) withFont:[[self class] userFont]];
+    [user drawAtPoint:CGPointMake(bounds.origin.x + offsets.width, offsets.height) withFont:[[self class] userFont]];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor lightGrayColor] set];
     CGFloat datewidth = [date sizeWithFont:[[self class] dateFont]].width;
-    [date drawAtPoint:CGPointMake(bounds.width - datewidth - offsets.width, offsets.height) withFont:[[self class] dateFont]];
+    [date drawAtPoint:CGPointMake(bounds.size.width - datewidth - offsets.width, offsets.height) withFont:[[self class] dateFont]];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor blackColor] set];
     CGRect bodyrect;
-    bodyrect.size.height = [[self class] heightForBodyText:body withWidth:bounds.width];
-    bodyrect.size.width = bounds.width - offsets.width * 2;
-    bodyrect.origin.x = offsets.width;
+    bodyrect.size.height = [[self class] heightForBodyText:body withWidth:bounds.size.width];
+    bodyrect.size.width = bounds.size.width - bounds.origin.x - offsets.width - offsets.width;
+    bodyrect.origin.x = bounds.origin.x + offsets.width;
     bodyrect.origin.y = offsets.height + 19.0f;
     [body drawInRect:bodyrect withFont:[[self class] bodyFont] lineBreakMode:UILineBreakModeWordWrap | UILineBreakModeTailTruncation];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor grayColor] set];
     CGRect pointsrect;
     pointsrect.size.height = [points sizeWithFont:[[self class] subtleFont]].height;
-    pointsrect.size.width = bounds.width / 2 - offsets.width * 2;
-    pointsrect.origin.x = offsets.width;
-    pointsrect.origin.y = bounds.height - offsets.height - pointsrect.size.height;
-    // Re-enable this if Hacker News re-enables comment score viewing.
-    // [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+    pointsrect.size.width = (bounds.size.width + bounds.origin.x) / 2 - offsets.width * 2;
+    pointsrect.origin.x = bounds.origin.x + offsets.width;
+    pointsrect.origin.y = bounds.size.height - offsets.height - pointsrect.size.height;
+    // Re-enable this for everyone if comment score viewing is re-enabled.
+    if ([comment submitter] == [[HNSession currentSession] user])
+          [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor grayColor] set];
     CGRect commentsrect;
     commentsrect.size.height = [comments sizeWithFont:[[self class] subtleFont]].height;
-    commentsrect.size.width = bounds.width / 2 - offsets.width * 2;
-    commentsrect.origin.x = bounds.width / 2 + offsets.width;
-    commentsrect.origin.y = bounds.height - offsets.height - commentsrect.size.height;
+    commentsrect.size.width = (bounds.size.width - bounds.origin.x) / 2 - offsets.width * 2;
+    commentsrect.origin.x = bounds.size.width - (bounds.size.width - bounds.origin.x) / 2 + offsets.width;
+    commentsrect.origin.y = bounds.size.height - offsets.height - commentsrect.size.height;
     [comments drawInRect:commentsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];    
 }
 
