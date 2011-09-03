@@ -8,6 +8,20 @@
 
 #import "HNEntryList.h"
 
-@interface HNTimeline : HNEntryList
+#ifdef ENABLE_TIMELINE
+
+#define kHNEntryListIdentifierTimeline @"timeline"
+
+@class HNSession;
+
+@interface HNTimeline : HNEntryList {
+    HNSession *session;
+    NSMutableSet *loadingUsers;
+    NSMutableSet *loadedUsers;
+}
+
++ (HNTimeline *)timelineForSession:(HNSession *)session;
 
 @end
+
+#endif
