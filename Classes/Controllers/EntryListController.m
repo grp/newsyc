@@ -114,7 +114,7 @@
     // XXX: this is a hack :(
     if (statusView == indicator) {
         [tableView setContentOffset:CGPointZero];
-        [tableView setUserInteractionEnabled:NO];
+        [tableView setScrollEnabled:NO];
     }
 }
 
@@ -129,7 +129,7 @@
     
     // XXX: this is a hack :(
     if (statusView == indicator) {
-        [tableView setUserInteractionEnabled:YES];
+        [tableView setScrollEnabled:YES];
     }
 }
 
