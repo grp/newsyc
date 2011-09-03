@@ -27,7 +27,7 @@ typedef NSString *HNEntryListIdentifier;
 }
 
 @property (nonatomic, retain, readonly) HNUser *user;
-@property (nonatomic, copy, readonly) NSArray *entries;
+@property (nonatomic, copy) NSArray *entries;
 
 + (id)entryListWithIdentifier:(HNEntryListIdentifier)identifier_;
 + (id)entryListWithIdentifier:(HNEntryListIdentifier)identifier_ user:(HNUser *)user_;

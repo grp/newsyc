@@ -13,7 +13,6 @@
 @interface HNEntryList ()
 
 @property (nonatomic, retain) HNUser *user;
-@property (nonatomic, copy) NSArray *entries;
 
 @end
 

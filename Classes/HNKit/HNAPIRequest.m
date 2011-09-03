@@ -108,7 +108,9 @@
     
     NSString *base = [NSString stringWithFormat:@"http://%@/%@%@", kHNWebsiteHost, path, [parameters queryString]];
     NSURL *url = [NSURL URLWithString:base];
+    
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [[HNSession currentSession] addCookiesToRequest:request];
     
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];

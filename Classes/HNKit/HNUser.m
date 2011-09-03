@@ -34,10 +34,6 @@
     return [self objectWithIdentifier:identifier_];
 }
 
-- (NSString *)_additionalDescription {
-    return [NSString stringWithFormat:@"karma=%d", karma];
-}
-
 - (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error {
     if (error == nil) {
         [self setAbout:[response objectForKey:@"about"]];

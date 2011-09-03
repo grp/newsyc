@@ -6,7 +6,8 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#include "HNSessionAuthenticator.h"
+#import "HNKit.h"
+#import "HNSessionAuthenticator.h"
 
 @class HNUser, HNEntry, HNSubmission;
 @interface HNSession : NSObject <HNSessionAuthenticatorDelegate> {
@@ -31,5 +32,7 @@
 
 - (void)performSubmission:(HNSubmission *)submission;
 - (void)reloadToken;
+
+- (void)addCookiesToRequest:(NSMutableURLRequest *)request;
 
 @end

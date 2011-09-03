@@ -6,6 +6,7 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import "HNKit.h"
 #import "HNSession.h"
 
 @protocol HNSessionAuthenticatorDelegate;

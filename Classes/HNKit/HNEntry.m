@@ -33,10 +33,6 @@
     return [self objectWithIdentifier:identifier_];
 }
 
-- (NSString *)_additionalDescription {
-    return [NSString stringWithFormat:@"submitter=%@", submitter];
-}
-
 - (BOOL)isComment {
     return title == nil;
 }
@@ -63,12 +59,9 @@
         [entry setParent:self];
         
         if ([child objectForKey:@"children"] != nil) {
-            [entry clearLoadingState:kHNObjectLoadingStateUnloaded];
-            [entry clearLoadingState:kHNObjectLoadingStateNotLoaded];
-            [entry addLoadingState:kHNObjectLoadingStateLoaded];
+            [entry setIsLoaded:YES];
         } else {
-            [entry clearLoadingState:kHNObjectLoadingStateLoaded];
-            [entry addLoadingState:kHNObjectLoadingStateUnloaded];
+            [entry setIsLoaded:NO];
         }
         
         [comments addObject:entry];

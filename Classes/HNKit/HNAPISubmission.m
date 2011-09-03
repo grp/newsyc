@@ -18,7 +18,6 @@
 @synthesize submission;
 
 - (void)dealloc {
-    [token release];
     [submission release];
     
     [super dealloc];
@@ -40,18 +39,6 @@
         [submission submissionCompletedSuccessfully:successfully withError:error];
 }
 
-- (void)_addCookiesToRequest:(NSMutableURLRequest *)request {
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-        kHNWebsiteHost, NSHTTPCookieDomain,
-        @"/", NSHTTPCookiePath,
-        @"user", NSHTTPCookieName,
-        (NSString *) token, NSHTTPCookieValue,
-    nil];
-    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
-    NSDictionary *headers = [NSHTTPCookie requestHeaderFieldsWithCookies:[NSArray arrayWithObject:cookie]];
-    [request setAllHTTPHeaderFields:headers];
-}
-
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection_ {
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     
@@ -68,7 +55,7 @@
         [document autorelease];
         
         NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-        [self _addCookiesToRequest:request];
+        [[HNSession currentSession] addCookiesToRequest:request];
         
         if ([submission type] == kHNSubmissionTypeSubmission) {
             XMLElement *element = [document firstElementMatchingPath:@"//input[@name='fnid']"];
@@ -150,11 +137,10 @@
     [received appendData:data];
 }
 
-- (void)performSubmissionWithToken:(HNSessionToken)token_ {
+- (void)performSubmission {
     received = [[NSMutableData alloc] init];
     
     loadingState = 1;
-    token = [token_ copy];
     
     NSURL *url = nil;
     
@@ -166,7 +152,7 @@
     }
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [self _addCookiesToRequest:request];
+    [[HNSession currentSession] addCookiesToRequest:request];
     
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];

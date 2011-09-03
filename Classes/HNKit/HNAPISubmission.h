@@ -10,7 +10,6 @@
 
 @class HNSubmission;
 @interface HNAPISubmission : NSObject {
-    HNSessionToken token;
     HNSubmission *submission;
     
     int loadingState;
@@ -21,7 +20,7 @@
 @property (nonatomic, readonly, retain) HNSubmission *submission;
 
 - (id)initWithSubmission:(HNSubmission *)submission_;
-- (void)performSubmissionWithToken:(HNSessionToken)token_;
+- (void)performSubmission;
 - (BOOL)isLoading;
 
 @end

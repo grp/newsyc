@@ -91,8 +91,22 @@ static HNSession *current = nil;
 
 - (void)performSubmission:(HNSubmission *)submission {
     HNAPISubmission *api = [[HNAPISubmission alloc] initWithSubmission:submission];
-    [api performSubmissionWithToken:[self token]];
+    [api performSubmission];
     [api autorelease];
+}
+
+- (void)addCookiesToRequest:(NSMutableURLRequest *)request {
+    if (token == nil) return;
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                kHNWebsiteHost, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,
+                                @"user", NSHTTPCookieName,
+                                (NSString *) token, NSHTTPCookieValue,
+                                nil];
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    NSDictionary *headers = [NSHTTPCookie requestHeaderFieldsWithCookies:[NSArray arrayWithObject:cookie]];
+    [request setAllHTTPHeaderFields:headers];
 }
 
 @end

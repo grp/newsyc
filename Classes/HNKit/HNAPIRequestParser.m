@@ -39,6 +39,10 @@ typedef enum {
         if ([value hasPrefix:mid]) value = [value substringFromIndex:[mid length]];
         
         if ([key isEqual:@"about"]) {
+            if ([value rangeOfString:@"</textarea>"].location != NSNotFound) {
+                value = [value substringToIndex:[value rangeOfString:@"</textarea>"].location];
+            }
+            
             [result setObject:value forKey:@"about"];
         } else if ([key isEqual:@"karma"]) {
             [result setObject:value forKey:@"karma"];
@@ -367,18 +371,11 @@ typedef enum {
 - (NSDictionary *)parseSubmissionsWithString:(NSString *)string {
     XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
     HNPageLayoutType type = [self pageLayoutTypeForDocument:document];
+    NSArray *submissions = [self contentRowsForDocument:document pageLayoutType:type];
     
     NSMutableArray *result = [NSMutableArray array];
-    
-    // The first row is the HN header, which also uses a nested table.
-    // Hardcoding around it is required to prevent crashing.
-    // XXX: can this be done in a more change-friendly way?
-    NSArray *submissions = [self contentRowsForDocument:document pageLayoutType:type];
-    //[document elementsMatchingPath:@"//table//tr[position()>1]//td//table//tr"];
-    
-    // Token for the next page of items.
-    NSString *more = nil;
-    
+    NSString *moreToken = nil;
+
     // Three rows are used per submission.
     for (int i = 0; i + 2 < [submissions count]; i += 3) {
         XMLElement *first = [submissions objectAtIndex:i];
@@ -393,7 +390,7 @@ typedef enum {
     
     NSMutableDictionary *item = [NSMutableDictionary dictionary];
     [item setObject:result forKey:@"children"];
-    if (more != nil) [item setObject:more forKey:@"more"];
+    if (moreToken != nil) [item setObject:moreToken forKey:@"more"];
     return item;
 }
 

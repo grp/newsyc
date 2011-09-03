@@ -16,7 +16,11 @@ typedef enum {
     kHNObjectLoadingStateLoaded = 1 << 15,
 } HNObjectLoadingState;
 
-@protocol HNObjectLoadingDelegate;
+#define kHNObjectStartedLoadingNotification @"HNObjectStartedLoading"
+#define kHNObjectFinishedLoadingNotification @"HNObjectFinishedLoading"
+#define kHNObjectFailedLoadingNotification @"HNObjectFailedLoading"
+#define kHNObjectLoadingStateChangedNotification @"HNObjectLoadingStateChanged"
+#define kHNObjectLoadingStateChangedNotificationErrorKey @"HNObjectLoadingStateChangedNotificationError"
 
 @class HNAPIRequest;
 @interface HNObject : NSObject {
@@ -24,7 +28,6 @@ typedef enum {
     NSURL *url;
     
     HNObjectLoadingState loadingState;
-    id<HNObjectLoadingDelegate> delegate;
     
     HNAPIRequest *apiRequest;
 }
@@ -32,7 +35,6 @@ typedef enum {
 @property (nonatomic, readonly) HNObjectLoadingState loadingState;
 @property (nonatomic, copy) id identifier;
 @property (nonatomic, copy) NSURL *URL;
-@property (nonatomic, assign) id<HNObjectLoadingDelegate> delegate;
 
 + (BOOL)isValidURL:(NSURL *)url_;
 + (NSDictionary *)infoDictionaryForURL:(NSURL *)url_;
@@ -42,45 +44,33 @@ typedef enum {
 + (NSDictionary *)parametersForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
 + (NSURL *)generateURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
 
-// These methods don't necessarily create a new object if it's already in the
-// cache. The cache is keyed on (type, identifier) pairs managed by HNObject.
+// These methods don't necessarily create a new instance if it's already in the
+// cache. The cache's keyed on (class, identifier, info) tuples inside HNObject.
 + (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info URL:(NSURL *)url_;
 + (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
 + (id)objectWithIdentifier:(id)identifier_;
 + (id)objectWithURL:(NSURL *)url_;
 
 - (NSDictionary *)infoDictionary;
-- (void)loadInfoDictionary:(NSDictionary *)info;
-
-- (NSString *)_additionalDescription;
-- (NSString *)description;
 
 - (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error;
 
-- (void)addLoadingState:(HNObjectLoadingState)state_;
-- (void)clearLoadingState:(HNObjectLoadingState)state_;
-
+- (void)setIsLoaded:(BOOL)loaded;
 - (BOOL)isLoaded;
+
 - (BOOL)isLoading;
 
 - (void)cancelLoading;
 - (void)beginLoading;
 
-@end
+// Subclasses only below:
+- (void)beginLoadingWithState:(HNObjectLoadingState)state_;
 
-@protocol HNObjectLoadingDelegate <NSObject>
-@optional
+- (void)loadInfoDictionary:(NSDictionary *)info;
 
-// Fine-grained monitoring of loading state.
-- (void)objectChangedLoadingState:(HNObject *)object;
+- (void)addLoadingState:(HNObjectLoadingState)state_;
+- (void)clearLoadingState:(HNObjectLoadingState)state_;
 
-// Notificatinos of loading starting.
-- (void)objectStartedLoading:(HNObject *)object;
-
-// Notifications of loading finality.
-- (void)objectFinishedLoading:(HNObject *)object;
-
-// Notifications of loading failure.
-- (void)object:(HNObject *)object failedToLoadWithError:(NSError *)error;
 
 @end
+
