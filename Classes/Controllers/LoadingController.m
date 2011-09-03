@@ -47,6 +47,8 @@
     [retryButton release];
     [loadingItem release];
     [statusView release];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 
     [super dealloc];
 }
@@ -119,11 +121,19 @@
     [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
 }
 
+- (void)appRelaunched:(NSNotification *)notification {
+    // fake a finished loading here to reload to account for changed preferences
+    // (this is only set up when we finish loading, so assume we are loaded)
+    [self finishedLoading];
+}
+
 - (void)sourceFinishedLoading {
     [self removeStatusView:indicator];
     
     [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
     [self finishedLoading];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appRelaunched:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
