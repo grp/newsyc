@@ -13,6 +13,7 @@ typedef enum {
     kHNObjectLoadingStateLoadingReload = 1 << 1,
     kHNObjectLoadingStateLoadingOther = 1 << 2,
     kHNObjectLoadingStateLoadingAny = (kHNObjectLoadingStateLoadingInitial | kHNObjectLoadingStateLoadingReload | kHNObjectLoadingStateLoadingOther),
+    kHNOBjectLoadingStateCustom = 0xFFFF0000, /* mask */
     kHNObjectLoadingStateLoaded = 1 << 15,
 } HNObjectLoadingState;
 
@@ -22,7 +23,7 @@ typedef enum {
 #define kHNObjectLoadingStateChangedNotification @"HNObjectLoadingStateChanged"
 #define kHNObjectLoadingStateChangedNotificationErrorKey @"HNObjectLoadingStateChangedNotificationError"
 
-@class HNAPIRequest;
+@class HNAPIRequest, HNSession;
 @interface HNObject : NSObject {
     id identifier;
     NSURL *url;
@@ -70,7 +71,7 @@ typedef enum {
 
 - (void)addLoadingState:(HNObjectLoadingState)state_;
 - (void)clearLoadingState:(HNObjectLoadingState)state_;
-
+- (BOOL)hasLoadingState:(HNObjectLoadingState)state_;
 
 @end
 

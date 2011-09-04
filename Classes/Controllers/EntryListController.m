@@ -24,7 +24,8 @@
     [tableView release];
     [emptyLabel release];
     [entries release];
-    
+    [moreLoadingIndicator release];
+
     [super dealloc];
 }
 
@@ -61,6 +62,8 @@
     pullToRefreshView = nil;
     [tableView release];
     tableView = nil;
+    [moreLoadingIndicator release];
+    moreLoadingIndicator = nil;
     
     [super viewDidUnload];
 }
@@ -81,6 +84,17 @@
     [super sourceFinishedLoading];
     
     [pullToRefreshView finishedLoading];
+    
+    if ([source isKindOfClass:[HNEntryList class]]) {
+        if ([(HNEntryList *) source moreToken] != nil) {
+            moreLoadingIndicator = [[LoadingIndicatorView alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 64.0f)];
+            [tableView setTableFooterView:moreLoadingIndicator];
+        } else {
+            [tableView setTableFooterView:nil];
+            [moreLoadingIndicator release];
+            moreLoadingIndicator = nil;
+        }
+    }
 }
 
 - (void)sourceFailedLoading {
@@ -108,14 +122,9 @@
     [view setBackgroundColor:[UIColor clearColor]];
     
     [statusView addSubview:view];
+    
     [tableView setTableFooterView:statusView];
     [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    
-    // XXX: this is a hack :(
-    if (statusView == indicator) {
-        [tableView setContentOffset:CGPointZero];
-        [tableView setScrollEnabled:NO];
-    }
 }
 
 - (void)removeStatusView:(UIView *)view {
@@ -126,11 +135,6 @@
         [tableView setTableFooterView:nil];
         [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     }
-    
-    // XXX: this is a hack :(
-    if (statusView == indicator) {
-        [tableView setScrollEnabled:YES];
-    }
 }
 
 - (void)loadEntries {
@@ -140,7 +144,7 @@
 
 - (void)finishedLoading {
     [self loadEntries];
-        
+    
     [tableView reloadData];
 
     if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
@@ -209,11 +213,15 @@
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
-- (void)tableView:(UITableView *)table willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == [tableView numberOfSections] - 1 
-        && [indexPath row] == [tableView numberOfRowsInSection:[tableView numberOfSections] - 1]) {
-        // XXX: load more items? (if possible for this entry type?)
-        // [source beginLoadingWithTarget:self action:@selector(sourceDidFinishLoading:)];
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (![scrollView isDragging] && ![scrollView isDecelerating]) return;
+    
+    if ([scrollView contentSize].height - [scrollView contentOffset].y - [scrollView bounds].size.height < [moreLoadingIndicator bounds].size.height) {
+        if ([source isKindOfClass:[HNEntryList class]]) {
+            if ([source isLoaded] && ![(HNEntryList *) source isLoadingMore]) {
+                [(HNEntryList *) source beginLoadingMore];
+            }
+        }
     }
 }
 

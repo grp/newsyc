@@ -222,8 +222,7 @@
     if (![source isLoaded]) {
         [source beginLoading];
     } else {
-        // Fake a finished loading event if it's already
-        // loaded, since we want to show some content.
+        // Fake a finished loading event even if it's  loaded (to show content).
         [self finishedLoading];
     }
 }

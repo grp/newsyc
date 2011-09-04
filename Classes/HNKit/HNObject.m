@@ -218,8 +218,12 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectLoadingStateChangedNotification object:self];
 }
 
+- (BOOL)hasLoadingState:(HNObjectLoadingState)state_ {
+    return ([self loadingState] & state_) > 0;
+}
+
 - (BOOL)isLoaded {
-    return ([self loadingState] & kHNObjectLoadingStateLoaded) > 0;
+    return [self hasLoadingState:kHNObjectLoadingStateLoaded];
 }
 
 - (void)setIsLoaded:(BOOL)loaded {
@@ -237,11 +241,11 @@
 }
 
 - (BOOL)isLoading {
-    return ([self loadingState] & kHNObjectLoadingStateLoadingAny) > 0;
+    return [self hasLoadingState:kHNObjectLoadingStateLoadingAny];
 }
             
 - (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error {
-    // NOTE: overridden in subclasses
+    // overridden in subclasses
 }
 
 - (void)_clearRequest {

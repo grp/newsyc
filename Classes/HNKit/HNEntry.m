@@ -12,7 +12,7 @@
 #import "HNEntry.h"
 
 @implementation HNEntry
-@synthesize points, children, submitter, body, posted, parent, title, destination, entries, more;
+@synthesize points, children, submitter, body, posted, parent, title, destination, entries;
 
 + (id)identifierForURL:(NSURL *)url_ {
     if (![self isValidURL:url_]) return NO;
@@ -49,9 +49,7 @@
     if ([response objectForKey:@"title"] != nil) [self setTitle:[response objectForKey:@"title"]];
     if ([response objectForKey:@"points"] != nil) [self setPoints:[[response objectForKey:@"points"] intValue]];
     if ([response objectForKey:@"parent"] != nil) [self setParent:[HNEntry entryWithIdentifier:[response objectForKey:@"parent"]]];
-    
-    [self setMore:[response objectForKey:@"more"]];
-    
+        
     NSMutableArray *comments = [NSMutableArray array];
     for (NSDictionary *child in [response objectForKey:@"children"]) {
         HNEntry *entry = [HNEntry entryWithIdentifier:[child objectForKey:@"identifier"]];

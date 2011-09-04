@@ -382,6 +382,7 @@
     
     if ([self hasHeaderAndFooter]) {
         [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
+        [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
     }
 }
 

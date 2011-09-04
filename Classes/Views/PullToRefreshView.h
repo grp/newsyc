@@ -52,6 +52,8 @@ typedef enum {
 @property (nonatomic, assign) id<PullToRefreshViewDelegate> delegate;
 @property (nonatomic, assign) PullToRefreshViewState state;
 
+@property (nonatomic, copy) UIColor *textShadowColor;
+
 - (void)refreshLastUpdatedDate;
 - (void)finishedLoading;
 

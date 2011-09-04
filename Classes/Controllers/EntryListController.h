@@ -13,6 +13,7 @@
     UITableView *tableView;
     UILabel *emptyLabel;
     
+    LoadingIndicatorView *moreLoadingIndicator;
     PullToRefreshView *pullToRefreshView;
     
     NSArray *entries;

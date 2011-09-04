@@ -21,16 +21,25 @@ typedef NSString *HNEntryListIdentifier;
 #define kHNEntryListIdentifierUserSubmissions @"submitted"
 #define kHNEntryListIdentifierUserComments @"threads"
 
+#define kHNEntryListLoadingStateLoadingMore 0x00010000
+
 @interface HNEntryList : HNObject {
     HNUser *user;
     NSArray *entries;
+    
+    HNMoreToken moreToken;
+    HNAPIRequest *moreRequest;
 }
 
 @property (nonatomic, retain, readonly) HNUser *user;
 @property (nonatomic, copy) NSArray *entries;
+@property (nonatomic, copy) HNMoreToken moreToken;
 
 + (id)entryListWithIdentifier:(HNEntryListIdentifier)identifier_;
 + (id)entryListWithIdentifier:(HNEntryListIdentifier)identifier_ user:(HNUser *)user_;
 
+- (void)beginLoadingMore;
+- (BOOL)isLoadingMore;
+- (void)cancelLoadingMore;
 
 @end

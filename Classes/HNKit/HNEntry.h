@@ -19,7 +19,6 @@
     NSMutableArray *entries;
     NSURL *destination;
     NSString *title;
-    NSString *more;
 }
 
 @property (nonatomic, assign) int points;
@@ -31,7 +30,6 @@
 @property (nonatomic, retain) NSArray *entries;
 @property (nonatomic, copy) NSURL *destination;
 @property (nonatomic, copy) NSString *title;
-@property (nonatomic, copy) NSString *more;
 
 - (void)loadFromDictionary:(NSDictionary *)response;
 

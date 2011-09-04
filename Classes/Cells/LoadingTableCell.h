@@ -13,4 +13,6 @@
     LoadingIndicatorView *indicator;
 }
 
+- (id)initWithReuseIdentifier:(NSString *)identifier;
+
 @end

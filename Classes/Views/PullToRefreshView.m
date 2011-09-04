@@ -121,6 +121,15 @@
     [formatter release];
 }
 
+- (void)setTextShadowColor:(UIColor *)textShadowColor {
+    [statusLabel setShadowColor:textShadowColor];
+    [lastUpdatedLabel setShadowColor:textShadowColor];
+}
+
+- (UIColor *)textShadowColor {
+    return [statusLabel shadowColor];
+}
+
 - (void)setState:(PullToRefreshViewState)state_ {
     state = state_;
     

@@ -135,6 +135,7 @@ typedef enum {
     NSString *body = nil;
     NSString *date = nil;
     NSString *href = nil;
+    HNMoreToken more = nil;
     
     for (XMLElement *element in [first children]) {
         if ([[element attributeWithName:@"class"] isEqual:@"title"]) {
@@ -182,8 +183,12 @@ typedef enum {
                     if (end != NSNotFound) points = [NSNumber numberWithInt:[[content substringToIndex:end] intValue]];
                 }
             }
-        } else if ([[element attributeWithName:@"class"] isEqual:@"title"] && [[element content] isEqual:@"More"]) {
-            // XXX: parse more link: [[element attributeWithName:@"href"] substringFromIndex:[@"x?fnid=" length]];
+        } else if ([[element attributeWithName:@"class"] isEqual:@"title"] && [[[[element content] stringByRemovingHTMLTags] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@"More"]) {
+            for (XMLElement *element2 in [element children]) {
+                if ([[element2 tagName] isEqualToString:@"a"]) {
+                    more = [[element2 attributeWithName:@"href"] substringFromIndex:[@"/x?fnid=" length]];
+                }
+            }
         }
     }
     
@@ -205,8 +210,10 @@ typedef enum {
         }
     }
     
-    // XXX: better sanity checks?
-    if (user != nil && title != nil && identifier != nil) {
+    if (more != nil) {
+        return [NSDictionary dictionaryWithObject:more forKey:@"more"];
+    } else if (user != nil && title != nil && identifier != nil) {
+        // XXX: better sanity checks?
         NSMutableDictionary *item = [NSMutableDictionary dictionary];
         [item setObject:user forKey:@"user"];
         [item setObject:points forKey:@"points"];
@@ -215,10 +222,11 @@ typedef enum {
         if (href != nil) [item setObject:href forKey:@"url"];
         [item setObject:date forKey:@"date"];
         if (body != nil) [item setObject:body forKey:@"body"];
+        if (more != nil) [item setObject:more forKey:@"more"];
         [item setObject:identifier forKey:@"identifier"];
         return item;
     } else {
-        NSLog(@"Bug: Ignoring unparsable submission (more link?).");
+        NSLog(@"Bug: Ignoring unparsable submission.");
         return nil;
     }
 }
@@ -385,13 +393,19 @@ typedef enum {
     NSString *moreToken = nil;
 
     // Three rows are used per submission.
-    for (int i = 0; i + 2 < [submissions count]; i += 3) {
+    for (int i = 0; i < [submissions count]; i += 3) {
         XMLElement *first = [submissions objectAtIndex:i];
-        XMLElement *second = [submissions objectAtIndex:i + 1];
-        XMLElement *third = [submissions objectAtIndex:i + 2];
+        XMLElement *second = i + 1 < [submissions count] ? [submissions objectAtIndex:i + 1] : nil;
+        XMLElement *third = i + 2 < [submissions count] ? [submissions objectAtIndex:i + 2] : nil;
         
         NSDictionary *submission = [self parseSubmissionWithElements:[NSArray arrayWithObjects:first, second, third, nil]];
-        if (submission != nil) [result addObject:submission];
+        if (submission != nil) {
+            if ([submission objectForKey:@"more"] != nil) {
+                moreToken = [submission objectForKey:@"more"];
+            } else {
+                [result addObject:submission];
+            }
+        }
     }
     
     [document release];

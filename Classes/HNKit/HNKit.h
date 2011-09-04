@@ -36,6 +36,8 @@ typedef enum {
 
 typedef NSString *HNSessionToken;
 
+typedef NSString *HNMoreToken;
+
 // data
 #import "HNObject.h"
 #import "HNUser.h"
