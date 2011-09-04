@@ -58,7 +58,7 @@
     switch (section) {
         case 0: return 4;
         case 1: return 2;
-        case 2: return 2;
+        case 2: return 3;
         default: return 0;
     }
 }
@@ -93,6 +93,8 @@
             [[cell textLabel] setText:@"Hacker News FAQ"];
         } else if ([indexPath row] == 1) {
             [[cell textLabel] setText:@"news:yc homepage"];
+        } else if ([indexPath row] == 2) {
+            [[cell textLabel] setText:@"@newsyc_"];
         }
     }
     
@@ -106,6 +108,14 @@
         return @"Comments";
     } else if (section == 2) {
         return @"Other";
+    }
+    
+    return nil;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (section == 2) {
+        return [NSString stringWithFormat:@"news:yc version %@.\n\nIf you're having issues or have suggestions, feel free to email me: support@newsyc.me\n\nSettings are available in the Settings app.\n\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
     }
     
     return nil;
@@ -149,6 +159,10 @@
             return;
         } else if ([indexPath row] == 1) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"http://newsyc.me/"]];
+            [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+            return;
+        } else if ([indexPath row] == 2) {
+            BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"https://twitter.com/newsyc_"]];
             [[self navigationController] pushViewController:[controller autorelease] animated:YES];
             return;
         }
