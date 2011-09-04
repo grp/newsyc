@@ -94,7 +94,7 @@
 }
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width indentationLevel:(int)indentationLevel {
-    return [self heightForBodyText:[entry body] withWidth:width indentationLevel:indentationLevel] + 45.0f;
+    return [self heightForBodyText:[entry body] withWidth:width indentationLevel:indentationLevel] + 44.0f;
 }
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {

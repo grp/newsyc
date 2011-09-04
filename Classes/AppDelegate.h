@@ -9,7 +9,7 @@
 #import "LoginController.h"
 
 @class NavigationController;
-@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, NSURLConnectionDelegate> {
+@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
     UIWindow *window;
     NavigationController *navigationController;
     

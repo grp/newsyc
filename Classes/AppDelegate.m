@@ -16,6 +16,10 @@
 
 @implementation AppDelegate
 
+- (NSString *)version {
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     navigationController = [[NavigationController alloc] init];
@@ -34,7 +38,7 @@
                   
     [window makeKeyAndVisible];
     
-    NSString *appv = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    NSString *appv = [self version];
     NSString *sysv = [[UIDevice currentDevice] systemVersion];
     NSString *dev = [[UIDevice currentDevice] model];
     NSString *udid = [[UIDevice currentDevice] uniqueIdentifier];
@@ -91,7 +95,7 @@
         }
     }
     
-    [[NSUserDefaults standardUserDefaults] setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"current-version"];
+    [[NSUserDefaults standardUserDefaults] setObject:[self version] forKey:@"current-version"];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"initial-install-seen"];
     
     [received release];
