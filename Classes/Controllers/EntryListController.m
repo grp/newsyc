@@ -20,9 +20,9 @@
 @implementation EntryListController
 
 - (void)dealloc {
+    [pullToRefreshView release];
     [tableView release];
     [emptyLabel release];
-    [pullToRefreshView release];
     [entries release];
     
     [super dealloc];
@@ -57,10 +57,10 @@
 - (void)viewDidUnload {
     [emptyLabel release];
     emptyLabel = nil;
-    [tableView release];
-    tableView = nil;
     [pullToRefreshView release];
     pullToRefreshView = nil;
+    [tableView release];
+    tableView = nil;
     
     [super viewDidUnload];
 }
