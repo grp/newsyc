@@ -27,7 +27,6 @@
     UIBarButtonItem *shareItem;
     UIBarButtonItem *spacerItem;
     UIBarButtonItem *readabilityItem;
-    ProgressHUD *hud;
     NSURL *externalURL;
     
     int networkRetainCount;

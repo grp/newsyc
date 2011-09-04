@@ -47,14 +47,6 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    if (hud != nil) {
-        // XXX: this is not actually what we want: this should show on top of
-        // other controllers whilte it continues to save. however, since the
-        // browser controller, not some "instapaper saving controller", manages
-        // the HUD, this is the best we can do for now, and is "good enough"
-        [hud dismissWithAnimation:YES];
-    }
-    
     [super dealloc];
 }
 
@@ -158,16 +150,29 @@
 
 - (void)submitInstapaperRequest {
     InstapaperRequest *request = [[InstapaperRequest alloc] initWithSession:[InstapaperSession currentSession]];
+        
+    ProgressHUD *hud = [[ProgressHUD alloc] init];
+    [hud setText:@"Saving"];
+    [hud showInWindow:[[self view] window]];
+    [hud release];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instapaperRequestDidAddItem:) name:kInstapaperRequestSucceededNotification object:request];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instapaperRequestDidFailToAddItem:) name:kInstapaperRequestFailedNotification object:request];
+    __block id succeededObserver = nil;
+    [[NSNotificationCenter defaultCenter] addObserverForName:kInstapaperRequestSucceededNotification object:request queue:nil usingBlock:^(NSNotification *notification) {
+        [hud setText:@"Saved!"];
+        [hud setState:kProgressHUDStateCompleted];
+        [hud dismissAfterDelay:0.8f animated:YES];
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:succeededObserver];
+    }];
     
-    if (hud == nil) {
-        hud = [[ProgressHUD alloc] init];
-        [hud setText:@"Saving"];
-        [hud showInWindow:[[self view] window]];
-        [hud release];
-    }
+    __block id failedObserver = nil;
+    failedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kInstapaperRequestFailedNotification object:request queue:nil usingBlock:^(NSNotification *notification) {
+        [hud setText:@"Error Saving"];
+        [hud setState:kProgressHUDStateError];
+        [hud dismissAfterDelay:0.8f animated:YES];
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:failedObserver];
+    }];
     
     [request addItemWithURL:currentURL];
     [request autorelease];
@@ -186,20 +191,6 @@
     [controller dismissModalViewControllerAnimated:YES];
 }
 
-- (void)instapaperRequestDidAddItem:(NSNotification *)notification {
-    [hud setText:@"Saved!"];
-    [hud setState:kProgressHUDStateCompleted];
-    [hud dismissAfterDelay:0.8f animated:YES];
-    hud = nil;
-}
-
-- (void)instapaperRequestDidFailToAddItem:(NSNotification *)notification {
-    [hud setText:@"Error Saving"];
-    [hud setState:kProgressHUDStateError];
-    [hud dismissAfterDelay:0.8f animated:YES];
-    hud = nil;
-}
-
 - (void)actionSheet:(UIActionSheet *)action clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == [action cancelButtonIndex]) return;
     
@@ -211,14 +202,12 @@
         [pasteboard setURL:currentURL];
         [pasteboard setString:[currentURL absoluteString]];
         
-        if (hud == nil) {
-            ProgressHUD *copied = [[ProgressHUD alloc] init];
-            [copied setState:kProgressHUDStateCompleted];
-            [copied setText:@"Copied!"];
-            [copied showInWindow:[[self view] window]];
-            [copied dismissAfterDelay:0.8f animated:YES];
-            [copied release];
-        }
+        ProgressHUD *copied = [[ProgressHUD alloc] init];
+        [copied setState:kProgressHUDStateCompleted];
+        [copied setText:@"Copied!"];
+        [copied showInWindow:[[self view] window]];
+        [copied dismissAfterDelay:0.8f animated:YES];
+        [copied release];
     } else if (buttonIndex == first + 2) {
         if ([InstapaperSession currentSession] != nil) {
             [self submitInstapaperRequest];
