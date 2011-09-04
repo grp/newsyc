@@ -20,6 +20,7 @@ typedef NSString *HNEntryListIdentifier;
 #define kHNEntryListIdentifierNewComments @"newcomments"
 #define kHNEntryListIdentifierUserSubmissions @"submitted"
 #define kHNEntryListIdentifierUserComments @"threads"
+#define kHNEntryListIdentifierSaved @"saved"
 
 #define kHNEntryListLoadingStateLoadingMore 0x00010000
 

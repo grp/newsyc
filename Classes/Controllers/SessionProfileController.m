@@ -13,6 +13,7 @@
 #import "HackerNewsLoginController.h"
 #import "NavigationController.h"
 #import "PlacardButton.h"
+#import "SubmissionListController.h"
 
 @implementation SessionProfileController
 
@@ -112,6 +113,36 @@
     [self setSource:[[HNSession currentSession] user]];
     
     [super viewWillAppear:animated];
+}
+
+- (int)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
+    if (section == 1) return [super tableView:table numberOfRowsInSection:section] + 1;
+    else return [super tableView:table numberOfRowsInSection:section];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == 1 && [indexPath row] == [tableView numberOfRowsInSection:[indexPath section]] - 1) {
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+        
+        [[cell textLabel] setText:@"Saved"];
+        
+        return [cell autorelease];
+    } else {
+        return [super tableView:table cellForRowAtIndexPath:indexPath];
+    }
+}
+
+- (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == 1 && [indexPath row] == [tableView numberOfRowsInSection:[indexPath section]] - 1) {
+        HNEntryList *list = [HNEntryList entryListWithIdentifier:kHNEntryListIdentifierSaved user:(HNUser *) source];
+        
+        SubmissionListController *controller = [[SubmissionListController alloc] initWithSource:list];
+        [controller setTitle:@"Saved"];
+        [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+    } else {
+        [super tableView:table didSelectRowAtIndexPath:indexPath];
+    }
 }
 
 - (void)loadView {

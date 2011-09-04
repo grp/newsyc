@@ -58,6 +58,7 @@
         [path isEqual:@"news"] ||
         [path isEqual:@"newest"] ||
         [path isEqual:@"submitted"] ||
+        [path isEqual:@"saved"] ||
         [path isEqual:@"x"] /* XXX: this is EVEN MORE of a hack */) {
         selector = @selector(parseSubmissionsWithString:);
     } else if ([path isEqual:@"bestcomments"] ||
