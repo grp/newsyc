@@ -8,12 +8,13 @@
 
 #import "LoadingController.h"
 #import "PullToRefreshView.h"
+#import "LoadMoreButton.h"
 
 @interface EntryListController : LoadingController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate> {
     UITableView *tableView;
     UILabel *emptyLabel;
     
-    LoadingIndicatorView *moreLoadingIndicator;
+    LoadMoreButton *moreButton;
     PullToRefreshView *pullToRefreshView;
     
     NSArray *entries;

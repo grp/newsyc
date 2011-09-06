@@ -10,7 +10,6 @@
 
 #import "SubmissionListController.h"
 #import "SubmissionTableCell.h"
-#import "LoadingTableCell.h"
 #import "CommentListController.h"
 
 @implementation SubmissionListController

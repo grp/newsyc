@@ -24,7 +24,7 @@
     [tableView release];
     [emptyLabel release];
     [entries release];
-    [moreLoadingIndicator release];
+    [moreButton release];
 
     [super dealloc];
 }
@@ -62,8 +62,8 @@
     pullToRefreshView = nil;
     [tableView release];
     tableView = nil;
-    [moreLoadingIndicator release];
-    moreLoadingIndicator = nil;
+    [moreButton release];
+    moreButton = nil;
     
     [super viewDidUnload];
 }
@@ -84,15 +84,17 @@
     [super sourceFinishedLoading];
     
     [pullToRefreshView finishedLoading];
+    [moreButton stopLoading];
     
     if ([source isKindOfClass:[HNEntryList class]]) {
         if ([(HNEntryList *) source moreToken] != nil) {
-            moreLoadingIndicator = [[LoadingIndicatorView alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 64.0f)];
-            [tableView setTableFooterView:moreLoadingIndicator];
+            moreButton = [[LoadMoreButton alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 64.0f)];
+            [moreButton addTarget:self action:@selector(loadMorePressed) forControlEvents:UIControlEventTouchUpInside];
+            [tableView setTableFooterView:moreButton];
         } else {
             [tableView setTableFooterView:nil];
-            [moreLoadingIndicator release];
-            moreLoadingIndicator = nil;
+            [moreButton release];
+            moreButton = nil;
         }
     }
 }
@@ -213,15 +215,10 @@
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (![scrollView isDragging] && ![scrollView isDecelerating]) return;
-    
-    if ([scrollView contentSize].height - [scrollView contentOffset].y - [scrollView bounds].size.height < [moreLoadingIndicator bounds].size.height) {
-        if ([source isKindOfClass:[HNEntryList class]]) {
-            if ([source isLoaded] && ![(HNEntryList *) source isLoadingMore]) {
-                [(HNEntryList *) source beginLoadingMore];
-            }
-        }
+- (void)loadMorePressed {
+    if ([source isLoaded] && ![(HNEntryList *) source isLoadingMore]) {
+        [(HNEntryList *) source beginLoadingMore];
+        [moreButton startLoading];
     }
 }
 
