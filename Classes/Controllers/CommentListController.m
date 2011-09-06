@@ -249,6 +249,10 @@
     statusFrame.size.height = [tableView bounds].size.height - suggestedHeaderHeight;
     if (statusFrame.size.height < 64.0f) statusFrame.size.height = 64.0f;    
     [statusView setFrame:statusFrame];
+    
+    if ([statusViews count] != 0) {
+        [tableView setTableFooterView:statusView];
+    }
 }
 
 - (void)removeStatusView:(UIView *)view {
