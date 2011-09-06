@@ -39,10 +39,22 @@ typedef enum {
         if ([value hasPrefix:mid]) value = [value substringFromIndex:[mid length]];
         
         if ([key isEqual:@"about"]) {
-            if ([value rangeOfString:@"</textarea>"].location != NSNotFound) {
-                value = [value substringToIndex:[value rangeOfString:@"</textarea>"].location];
+            // XXX: hacky method to extract text from a textarea
+            if ([value rangeOfString:@"<textarea"].location != NSNotFound) {
+                NSString *tempValue = [value substringFromIndex:[value rangeOfString:@"<textarea"].location + [value rangeOfString:@"<textarea"].length];
+                
+                if ([tempValue rangeOfString:@">"].location != NSNotFound) {
+                    tempValue = [tempValue substringFromIndex:[tempValue rangeOfString:@">"].location + [tempValue rangeOfString:@">"].length];
+                    if ([tempValue rangeOfString:@"\n"].location == 0) {
+                        tempValue = [tempValue substringFromIndex:[tempValue rangeOfString:@"\n"].location + [tempValue rangeOfString:@"\n"].length];
+                    }
+                    
+                    if ([tempValue rangeOfString:@"</textarea>"].location != NSNotFound) {
+                        value = [tempValue substringToIndex:[tempValue rangeOfString:@"</textarea>"].location];
+                    }
+                }
             }
-            
+                        
             [result setObject:value forKey:@"about"];
         } else if ([key isEqual:@"karma"]) {
             [result setObject:value forKey:@"karma"];
