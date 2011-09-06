@@ -14,6 +14,7 @@
 	IBOutlet UISegmentedControl *facetControl;
 	IBOutlet UITableView *tableView;
 	IBOutlet UIView *emptyResultsView;
+    IBOutlet UIView *coloredView;
     LoadingIndicatorView *indicator;
 	BOOL searchPerformed;
 	HNAPISearch *searchAPI;
@@ -25,6 +26,7 @@
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (nonatomic, retain) IBOutlet UISegmentedControl *facetControl;
 @property (nonatomic, retain) IBOutlet UIView *emptyResultsView;
+@property (nonatomic, retain) IBOutlet UIView *coloredView;
 @property (nonatomic) BOOL searchPerformed;
 
 - (IBAction)backgroundTouched:(id)sender;

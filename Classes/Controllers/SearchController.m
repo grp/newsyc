@@ -144,10 +144,6 @@
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 - (void)viewDidUnload {
     [super viewDidUnload];
 	self.entries = nil;
@@ -156,17 +152,25 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+    
 	[[self navigationController] setNavigationBarHidden:YES animated:animated];
+    
+    [[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
+        [searchBar setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+        [facetControl setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+        [coloredView setBackgroundColor:[UIColor colorWithRed:(255.0f / 236.0f) green:(255.0f / 141.0f) blue:(255.0f / 91.0f) alpha:1.0f]];
+    } else {
+        [searchBar setTintColor:nil];
+        [facetControl setTintColor:nil];
+        [coloredView setBackgroundColor:[UIColor colorWithRed:(255.0f / 170.0f) green:(255.0f / 180.0f) blue:(255.0f / 190.0f) alpha:1.0f]];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	[[self navigationController] setNavigationBarHidden:NO animated:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
 }
 
 - (void)dealloc {
