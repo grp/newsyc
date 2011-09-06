@@ -18,6 +18,7 @@
 @synthesize emptyResultsView;
 @synthesize entries;
 @synthesize searchPerformed;
+@synthesize coloredView;
 
 - (HNAPISearch *)searchAPI {
 	if (!searchAPI) {
