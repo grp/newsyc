@@ -242,17 +242,30 @@
     [super dealloc];
 }
 
-- (BOOL)hasHeaderAndFooter {
-    return [source isKindOfClass:[HNEntry class]]; 
+- (void)addStatusView:(UIView *)view {
+    [super addStatusView:view];
+    
+    CGRect statusFrame = [statusView frame];
+    statusFrame.size.height = [tableView bounds].size.height - suggestedHeaderHeight;
+    if (statusFrame.size.height < 64.0f) statusFrame.size.height = 64.0f;    
+    [statusView setFrame:statusFrame];
+    
+    if ([statusViews count] != 0) {
+        [tableView setTableFooterView:statusView];
+    }
 }
 
-- (CGFloat)statusOffsetHeight {
-    return suggestedHeaderHeight;
+- (void)removeStatusView:(UIView *)view {
+    [super removeStatusView:view];
+    
+    if ([statusViews count] == 0) {
+        [tableView setTableFooterView:nil];
+    }
 }
 
 - (void)setupHeader {
-    // Don't show the header if it doesn't make sense, and only show it if the source is at least partially loaded.
-    if (![self hasHeaderAndFooter] || [(HNEntry *) source submitter] == nil) return;
+    // Only show it if the source is at least partially loaded.
+    if ([(HNEntry *) source submitter] == nil) return;
     
     [detailsHeaderContainer release];
     detailsHeaderContainer = nil;
@@ -309,6 +322,10 @@
     
     suggestedHeaderHeight = [detailsHeaderView bounds].size.height;
     maximumHeaderHeight = [tableView bounds].size.height - 64.0f;
+    
+    [statusView setBackgroundColor:[UIColor clearColor]];
+    
+    // necessary since the core text view can steal this
     [tableView setScrollsToTop:YES];
 }
 
@@ -335,6 +352,7 @@
     entries = [children copy];
 }
 
+// XXX: this is really really slow :(
 - (int)depthOfEntry:(HNEntry *)entry {
     int depth = 0;
     
@@ -380,10 +398,8 @@
     
     [self setupHeader];
     
-    if ([self hasHeaderAndFooter]) {
-        [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
-        [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
-    }
+    [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
+    [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
 }
 
 - (void)viewDidUnload {

@@ -15,6 +15,8 @@
     HNObject *source;
     
     UIView *statusView;
+    NSMutableSet *statusViews;
+    
     PlacardButton *retryButton;
     LoadingIndicatorView *indicator;
     
@@ -28,7 +30,6 @@
 - (void)finishedLoading;
 
 - (void)addStatusView:(UIView *)view;
-- (void)addStatusView:(UIView *)view resize:(BOOL)resize;
 - (void)removeStatusView:(UIView *)view;
 
 - (void)showError;

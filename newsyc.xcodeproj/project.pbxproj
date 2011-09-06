@@ -76,7 +76,6 @@
 		7D6B9F281347DF2E00CD923C /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9E881347DF2E00CD923C /* NavigationController.m */; };
 		7D6B9F291347DF2E00CD923C /* ProfileController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9E8A1347DF2E00CD923C /* ProfileController.m */; };
 		7D6B9F2A1347DF2E00CD923C /* SessionProfileController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9E8C1347DF2E00CD923C /* SessionProfileController.m */; };
-		7D6B9F2B1347DF2E00CD923C /* SubmissionListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9E8E1347DF2E00CD923C /* SubmissionListController.m */; };
 		7D6B9F2C1347DF2E00CD923C /* SubmissionTextComposeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9E901347DF2E00CD923C /* SubmissionTextComposeController.m */; };
 		7D6B9F2D1347DF2E00CD923C /* SubmissionURLComposeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9E921347DF2E00CD923C /* SubmissionURLComposeController.m */; };
 		7D6B9F2E1347DF2E00CD923C /* CGUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9E951347DF2E00CD923C /* CGUtils.m */; };
@@ -243,8 +242,6 @@
 		7D6B9E8A1347DF2E00CD923C /* ProfileController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileController.m; sourceTree = "<group>"; };
 		7D6B9E8B1347DF2E00CD923C /* SessionProfileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionProfileController.h; sourceTree = "<group>"; };
 		7D6B9E8C1347DF2E00CD923C /* SessionProfileController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionProfileController.m; sourceTree = "<group>"; };
-		7D6B9E8D1347DF2E00CD923C /* SubmissionListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubmissionListController.h; sourceTree = "<group>"; };
-		7D6B9E8E1347DF2E00CD923C /* SubmissionListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubmissionListController.m; sourceTree = "<group>"; };
 		7D6B9E8F1347DF2E00CD923C /* SubmissionTextComposeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubmissionTextComposeController.h; sourceTree = "<group>"; };
 		7D6B9E901347DF2E00CD923C /* SubmissionTextComposeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubmissionTextComposeController.m; sourceTree = "<group>"; };
 		7D6B9E911347DF2E00CD923C /* SubmissionURLComposeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubmissionURLComposeController.h; sourceTree = "<group>"; };
@@ -324,7 +321,7 @@
 		7D6B9EEE1347DF2E00CD923C /* XMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLElement.m; sourceTree = "<group>"; };
 		7D6B9EEF1347DF2E00CD923C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D6B9EF01347DF2E00CD923C /* icon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.psd; sourceTree = "<group>"; };
-		7D6BAB821415B07400C24B8B /* LoadMoreButton.h */ = {isa = PBXFileReference; fileEncoding = 4; path = LoadMoreButton.h; sourceTree = "<group>"; };
+		7D6BAB821415B07400C24B8B /* LoadMoreButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadMoreButton.h; sourceTree = "<group>"; };
 		7D6BAB831415B07400C24B8B /* LoadMoreButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadMoreButton.m; sourceTree = "<group>"; };
 		7D8A660713333A72002012AA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7D8E9EF4134D76DF00A724C5 /* HackerNewsLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HackerNewsLoginController.h; sourceTree = "<group>"; };
@@ -558,8 +555,6 @@
 				7D6B9E801347DF2E00CD923C /* LoadingController.m */,
 				7D6B9E7B1347DF2E00CD923C /* EntryListController.h */,
 				7D6B9E7C1347DF2E00CD923C /* EntryListController.m */,
-				7D6B9E8D1347DF2E00CD923C /* SubmissionListController.h */,
-				7D6B9E8E1347DF2E00CD923C /* SubmissionListController.m */,
 				7D6B9E771347DF2E00CD923C /* CommentListController.h */,
 				7D6B9E781347DF2E00CD923C /* CommentListController.m */,
 				7D6B9E851347DF2E00CD923C /* MoreController.h */,
@@ -885,7 +880,6 @@
 				7D6B9F281347DF2E00CD923C /* NavigationController.m in Sources */,
 				7D6B9F291347DF2E00CD923C /* ProfileController.m in Sources */,
 				7D6B9F2A1347DF2E00CD923C /* SessionProfileController.m in Sources */,
-				7D6B9F2B1347DF2E00CD923C /* SubmissionListController.m in Sources */,
 				7D6B9F2C1347DF2E00CD923C /* SubmissionTextComposeController.m in Sources */,
 				7D6B9F2D1347DF2E00CD923C /* SubmissionURLComposeController.m in Sources */,
 				7D6B9F2E1347DF2E00CD923C /* CGUtils.m in Sources */,

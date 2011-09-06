@@ -13,7 +13,7 @@
 #import "HackerNewsLoginController.h"
 #import "NavigationController.h"
 #import "PlacardButton.h"
-#import "SubmissionListController.h"
+#import "EntryListController.h"
 
 @implementation SessionProfileController
 
@@ -137,7 +137,7 @@
     if ([indexPath section] == 1 && [indexPath row] == [tableView numberOfRowsInSection:[indexPath section]] - 1) {
         HNEntryList *list = [HNEntryList entryListWithIdentifier:kHNEntryListIdentifierSaved user:(HNUser *) source];
         
-        SubmissionListController *controller = [[SubmissionListController alloc] initWithSource:list];
+        EntryListController *controller = [[EntryListController alloc] initWithSource:list];
         [controller setTitle:@"Saved"];
         [[self navigationController] pushViewController:[controller autorelease] animated:YES];
     } else {

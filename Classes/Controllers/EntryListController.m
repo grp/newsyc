@@ -41,7 +41,6 @@
     
     emptyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [emptyLabel setFont:[UIFont boldSystemFontOfSize:17.0f]];
-    [emptyLabel setBackgroundColor:[UIColor whiteColor]];
     [emptyLabel setTextColor:[UIColor grayColor]];
     [emptyLabel setText:@"No items."];
     [emptyLabel setTextAlignment:UITextAlignmentCenter];
@@ -109,39 +108,18 @@
     [source beginLoading];
 }
 
-- (CGFloat)statusOffsetHeight {
-    return 0.0f;
-}
-
-- (void)addStatusView:(UIView *)view resize:(BOOL)resize {
-    CGRect frame = CGRectZero;
-    frame.size.width = [tableView bounds].size.width;
-    CGFloat height = [tableView bounds].size.height - [self statusOffsetHeight];
-    frame.size.height = height >= 50.0f ? height : 50.0f;
-    if (resize) [view setFrame:frame];
-    [statusView setFrame:frame];
-    
-    [view setBackgroundColor:[UIColor clearColor]];
-    
-    [statusView addSubview:view];
-    
-    [tableView setTableFooterView:statusView];
-    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-}
-
-- (void)removeStatusView:(UIView *)view {
-    [super removeStatusView:view];
-    
-    // XXX: this is a hack :(
-    if ([[statusView subviews] count] == 0) {
-        [tableView setTableFooterView:nil];
-        [tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
-    }
-}
-
 - (void)loadEntries {
     [entries release];
     entries = [[(HNEntry *) source entries] copy];
+}
+
+- (void)showEmptyLabel {
+    [self addStatusView:emptyLabel];
+    [emptyLabel setFrame:[statusView bounds]];
+}
+
+- (void)removeEmptyLabel {
+    [self removeStatusView:emptyLabel];
 }
 
 - (void)finishedLoading {
@@ -150,9 +128,9 @@
     [tableView reloadData];
 
     if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
-        [self addStatusView:emptyLabel];
+        [self showEmptyLabel];
     } else {
-        [self removeStatusView:emptyLabel];
+        [self removeEmptyLabel];
     }
 }
 

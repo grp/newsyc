@@ -11,8 +11,7 @@
 #import "MoreController.h"
 #import "ProfileController.h"
 #import "ProfileHeaderView.h"
-#import "SubmissionListController.h"
-#import "CommentListController.h"
+#import "EntryListController.h"
 #import "BrowserController.h"
 
 @implementation MoreController
@@ -123,12 +122,9 @@
 
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     HNEntryListIdentifier type = nil;
-    Class class = nil;
     NSString *title = nil;
     
     if ([indexPath section] == 0) {
-        class = [SubmissionListController class];
-        
         if ([indexPath row] == 0) {
             type = kHNEntryListIdentifierBestSubmissions;
             title = @"Best Submissions";
@@ -143,8 +139,6 @@
             title = @"Ask HN";
         }
     } else if ([indexPath section] == 1) {
-        class = [CommentListController class];
-        
         if ([indexPath row] == 0) {
             type = kHNEntryListIdentifierBestComments;
             title = @"Best Comments";
@@ -169,7 +163,7 @@
     }
     
     HNEntryList *list = [HNEntryList entryListWithIdentifier:type];
-    UIViewController *controller = [[class alloc] initWithSource:list];
+    UIViewController *controller = [[EntryListController alloc] initWithSource:list];
     [controller setTitle:title];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }

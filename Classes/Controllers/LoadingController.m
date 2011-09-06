@@ -47,6 +47,7 @@
     [retryButton release];
     [loadingItem release];
     [statusView release];
+    [statusViews release];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 
@@ -58,20 +59,31 @@
 }
 
 - (void)removeStatusView:(UIView *)view {
+    [statusViews removeObject:view];
     [view removeFromSuperview];
-}
-
-- (void)addStatusView:(UIView *)view resize:(BOOL)resize {
-    if (resize) {
-        [statusView setFrame:[[self view] bounds]];
-        [view setFrame:[[self view] bounds]];
-    }
     
-    [[self view] addSubview:view];
+    if ([statusViews count] == 0) {
+        [statusView setHidden:YES];
+    }
 }
 
 - (void)addStatusView:(UIView *)view {
-    [self addStatusView:view resize:YES];
+    [statusViews addObject:view];
+    [statusView addSubview:view];
+    
+    if ([statusViews count] != 0) {
+        [statusView setHidden:NO];
+    }
+}
+
+- (void)showIndicator {
+    [self addStatusView:indicator];
+    
+    [indicator setFrame:[statusView bounds]];
+}
+
+- (void)removeIndicator {
+    [self removeStatusView:indicator];
 }
 
 - (void)removeError {
@@ -79,13 +91,13 @@
 }
 
 - (void)showError {
-    [self addStatusView:retryButton resize:NO];
+    [self addStatusView:retryButton];
     
     CGRect buttonFrame = [retryButton frame];
     buttonFrame.size.width = 180.0f;
     buttonFrame.size.height = 40.0f;
-    buttonFrame.origin.x = floorf(([[retryButton superview] bounds].size.width / 2) - (buttonFrame.size.width / 2));
-    buttonFrame.origin.y = floorf(([[retryButton superview] bounds].size.height / 2) - (buttonFrame.size.height / 2));
+    buttonFrame.origin.x = floorf(([statusView bounds].size.width / 2) - (buttonFrame.size.width / 2));
+    buttonFrame.origin.y = floorf(([statusView bounds].size.height / 2) - (buttonFrame.size.height / 2));
     [retryButton setFrame:buttonFrame];
 }
 
@@ -98,12 +110,12 @@
     
     if (![source isLoaded]) {
         [self removeError];
-        [self addStatusView:indicator];
+        [self showIndicator];
     }
 }
 
 - (void)sourceFailedLoading {
-    [self removeStatusView:indicator];
+    [self removeIndicator];
     
     // If the source has already loaded before, we have *some* data to show, so
     // just show that. Otherwise, show a dialog to let the user know it failed.
@@ -128,7 +140,7 @@
 }
 
 - (void)sourceFinishedLoading {
-    [self removeStatusView:indicator];
+    [self removeIndicator];
     
     [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
     [self finishedLoading];
@@ -179,7 +191,6 @@
     [super loadView];
     
     indicator = [[LoadingIndicatorView alloc] initWithFrame:CGRectZero];
-    [indicator setBackgroundColor:[UIColor whiteColor]];
     [indicator setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     
     retryButton = [[PlacardButton alloc] initWithFrame:CGRectZero];
@@ -190,9 +201,13 @@
     actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTapped)];
     loadingItem = [[ActivityIndicatorItem alloc] initWithSize:CGSizeMake(27.0f, kActivityIndicatorItemStandardSize.height)];
     
-    statusView = [[UIView alloc] initWithFrame:CGRectZero];
-    [statusView setBackgroundColor:[UIColor clearColor]];
+    statusView = [[UIView alloc] initWithFrame:[self.view bounds]];
+    [statusView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [statusView setBackgroundColor:[UIColor whiteColor]];
+    [statusView setHidden:YES];
     [self.view addSubview:statusView];
+    
+    statusViews = [[NSMutableSet alloc] init];
 }
 
 - (void)viewDidLoad {
@@ -212,18 +227,24 @@
     retryButton = nil;
     [statusView release];
     statusView = nil;
-    
+    [statusViews release];
+    statusViews = nil;
+
     [super viewDidUnload];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (![source isLoaded]) {
-        [source beginLoading];
-    } else {
-        // Fake a finished loading event even if it's  loaded (to show content).
+    if ([source isLoading]) {
+        // Fake a loading started event if it's already loading (show spinners).
+        [self sourceStartedLoading];
+    } else if ([source isLoaded]) {
+        // Fake a finished loading event even if it's loaded (to show content).
         [self finishedLoading];
+    } else {
+        // Start loading if we're not either loading or loaded already.
+        [source beginLoading];
     }
 }
 

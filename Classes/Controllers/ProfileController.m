@@ -10,8 +10,7 @@
 
 #import "ProfileController.h"
 #import "ProfileHeaderView.h"
-#import "SubmissionListController.h"
-#import "CommentListController.h"
+#import "EntryListController.h"
 
 #import "NSString+Tags.h"
 
@@ -139,21 +138,18 @@
     } else {
         HNEntryListIdentifier type = nil;
         NSString *title = nil;
-        Class controllerClass = nil;
         
         if ([indexPath row] == 0) {
             type = kHNEntryListIdentifierUserSubmissions;
             title = @"Submissions";
-            controllerClass = [SubmissionListController class];
         } else if ([indexPath row] == 1) {
             type = kHNEntryListIdentifierUserComments;
             title = @"Comments";
-            controllerClass = [CommentListController class];
         }
         
         HNEntryList *list = [HNEntryList entryListWithIdentifier:type user:(HNUser *) source];
         
-        UIViewController *controller = [[controllerClass alloc] initWithSource:list];
+        EntryListController *controller = [[EntryListController alloc] initWithSource:list];
         [controller setTitle:title];
         [[self navigationController] pushViewController:[controller autorelease] animated:YES];
     }

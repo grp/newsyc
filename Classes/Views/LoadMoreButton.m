@@ -23,7 +23,7 @@
         [moreLabel setText:@"Load More..."];
         [moreLabel setTextAlignment:UITextAlignmentCenter];
         [moreLabel setTextColor:[UIColor grayColor]];
-        [moreLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
+        [moreLabel setFont:[UIFont systemFontOfSize:16.0f]];
         [self addSubview:moreLabel];
     }
     
