@@ -249,17 +249,14 @@
     statusFrame.size.height = [tableView bounds].size.height - suggestedHeaderHeight;
     if (statusFrame.size.height < 64.0f) statusFrame.size.height = 64.0f;    
     [statusView setFrame:statusFrame];
-    
-    if ([statusViews count] != 0) {
-        [tableView setTableFooterView:statusView];
-    }
 }
 
 - (void)removeStatusView:(UIView *)view {
     [super removeStatusView:view];
     
     if ([statusViews count] == 0) {
-        [tableView setTableFooterView:nil];
+        [statusView setFrame:CGRectZero];
+        [tableView setTableFooterView:statusView];
     }
 }
 
@@ -271,26 +268,8 @@
     detailsHeaderContainer = nil;
     [containerContainer release];
     containerContainer = nil;
-    [entryActionsView release];
-    entryActionsView = nil;
     [detailsHeaderView release];
     detailsHeaderView = nil;
-    
-    entryActionsView = [[EntryActionsView alloc] initWithFrame:CGRectZero];
-    [entryActionsView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
-    [entryActionsView sizeToFit];
-    CGRect actionsFrame = [entryActionsView frame];
-    actionsFrame.origin.y = [[self view] frame].size.height - actionsFrame.size.height;
-    actionsFrame.size.width = [[self view] frame].size.width;
-    [entryActionsView setFrame:actionsFrame];
-    [entryActionsView setDelegate:self];
-    [entryActionsView setEntry:(HNEntry *) source];
-    [entryActionsView setEnabled:([(HNEntry *) source destination] == nil) forItem:kEntryActionsViewItemDownvote];
-    [[self view] addSubview:entryActionsView];
-    
-    CGRect tableFrame = [tableView frame];
-    tableFrame.size.height = [[self view] bounds].size.height - actionsFrame.size.height;
-    [tableView setFrame:tableFrame];
     
     detailsHeaderView = [[DetailsHeaderView alloc] initWithEntry:(HNEntry *) source widthWidth:[[self view] bounds].size.width];
     [detailsHeaderView setClipsToBounds:YES];
@@ -323,8 +302,9 @@
     suggestedHeaderHeight = [detailsHeaderView bounds].size.height;
     maximumHeaderHeight = [tableView bounds].size.height - 64.0f;
     
+    // necessary to draw this on top of the other views and look right
     [statusView setBackgroundColor:[UIColor clearColor]];
-    
+        
     // necessary since the core text view can steal this
     [tableView setScrollsToTop:YES];
 }
@@ -397,6 +377,22 @@
     [super loadView];
     
     [self setupHeader];
+        
+    entryActionsView = [[EntryActionsView alloc] initWithFrame:CGRectZero];
+    [entryActionsView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
+    [entryActionsView sizeToFit];
+    CGRect actionsFrame = [entryActionsView frame];
+    actionsFrame.origin.y = [[self view] frame].size.height - actionsFrame.size.height;
+    actionsFrame.size.width = [[self view] frame].size.width;
+    [entryActionsView setFrame:actionsFrame];
+    [entryActionsView setDelegate:self];
+    [entryActionsView setEntry:(HNEntry *) source];
+    [entryActionsView setEnabled:([(HNEntry *) source destination] == nil) forItem:kEntryActionsViewItemDownvote];
+    [[self view] addSubview:entryActionsView];
+    
+    CGRect tableFrame = [tableView frame];
+    tableFrame.size.height = [[self view] bounds].size.height - actionsFrame.size.height;
+    [tableView setFrame:tableFrame];
     
     [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
     [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
@@ -417,6 +413,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
+        [entryActionsView setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+    } else {
+        [entryActionsView setTintColor:nil];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {

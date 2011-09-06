@@ -71,7 +71,6 @@
     CGRect toolbarFrame = [toolbar bounds];
     toolbarFrame.origin.y = [[self view] bounds].size.height - toolbarFrame.size.height;
     [toolbar setFrame:toolbarFrame];
-    [toolbar setTintColor:[[[self navigationController] navigationBar] tintColor]];
     [[self view] addSubview:toolbar];
     
     backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
@@ -102,6 +101,12 @@
     if (![webview request]) {
         NSURLRequest *request = [[NSURLRequest alloc] initWithURL:rootURL];
         [webview loadRequest:[request autorelease]];
+    }
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
+        [toolbar setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+    } else {
+        [toolbar setTintColor:nil];
     }
 }
 

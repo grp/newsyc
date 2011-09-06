@@ -205,7 +205,7 @@
     [statusView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [statusView setBackgroundColor:[UIColor whiteColor]];
     [statusView setHidden:YES];
-    [self.view addSubview:statusView];
+    [[self view] addSubview:statusView];
     
     statusViews = [[NSMutableSet alloc] init];
 }

@@ -8,16 +8,16 @@
 
 #import "NavigationController.h"
 
-#define kNavigationControllerOrangeColor [UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]
-
 @implementation NavigationController
 
-- (id)init {
-    if ((self = [super init])) {
-        [[self navigationBar] setTintColor:kNavigationControllerOrangeColor];
-    }
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
-    return self;
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
+        [[self navigationBar] setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+    } else {
+        [[self navigationBar] setTintColor:nil];
+    }
 }
 
 // Why this isn't delegated by UIKit to the top view controller, I have no clue.

@@ -4,11 +4,37 @@
 <dict>
 	<key>PreferenceSpecifiers</key>
 	<array>
-		<dict>
+        <dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
 			<string>Interface</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>interface-confirm-votes</string>
+			<key>Title</key>
+			<string>Confirm Votes</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+        <dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>disable-orange</string>
+			<key>Title</key>
+			<string>Less Orange</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+        <dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Comment Browsing</string>
 		</dict>
 		<dict>
 			<key>Type</key>
@@ -37,16 +63,6 @@
 			<string>interface-small-text</string>
 			<key>Title</key>
 			<string>Small Text Font</string>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<false/>
-			<key>Key</key>
-			<string>interface-confirm-votes</string>
-			<key>Title</key>
-			<string>Confirm Votes</string>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>

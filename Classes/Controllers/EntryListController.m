@@ -36,7 +36,6 @@
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
-    [tableView setTableFooterView:statusView];
     [[self view] addSubview:tableView];
     
     emptyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -48,6 +47,8 @@
     pullToRefreshView = [[PullToRefreshView alloc] initWithScrollView:tableView];
     [tableView addSubview:pullToRefreshView];
     [pullToRefreshView setDelegate:self];
+    
+    [[self view] bringSubviewToFront:statusView];
 }
 
 - (void)viewDidLoad {

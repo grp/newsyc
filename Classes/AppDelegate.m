@@ -118,6 +118,10 @@
     }
     
     [InstapaperSession logoutIfNecessary];
+    
+    // to apply any necessary color changes
+    [navigationController viewWillAppear:NO];
+    [navigationController viewDidAppear:NO];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
