@@ -407,7 +407,7 @@
     [tableView setFrame:tableFrame];
     
     [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
-    [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
+    [pullToRefreshView setTextShadowColor:[UIColor whiteColor]];
 }
 
 - (void)viewDidUnload {
