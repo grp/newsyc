@@ -45,7 +45,6 @@
     [source release];
     [actionItem release];
     [retryButton release];
-    [loadingItem release];
     [statusView release];
     [statusViews release];
     
@@ -106,8 +105,6 @@
 }
 
 - (void)sourceStartedLoading {
-    [[self navigationItem] setRightBarButtonItem:loadingItem];
-    
     if (![source isLoaded]) {
         [self removeError];
         [self showIndicator];
@@ -129,8 +126,6 @@
         [hud dismissAfterDelay:0.8f animated:YES];
         [hud release];
     }
-    
-    [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
 }
 
 - (void)appRelaunched:(NSNotification *)notification {
@@ -142,7 +137,6 @@
 - (void)sourceFinishedLoading {
     [self removeIndicator];
     
-    [[self navigationItem] setRightBarButtonItem:actionItem animated:YES];
     [self finishedLoading];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appRelaunched:) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -199,7 +193,6 @@
     [retryButton addTarget:self action:@selector(retryPressed) forControlEvents:UIControlEventTouchUpInside];
     
     actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTapped)];
-    loadingItem = [[ActivityIndicatorItem alloc] initWithSize:CGSizeMake(27.0f, kActivityIndicatorItemStandardSize.height)];
     
     statusView = [[UIView alloc] initWithFrame:[self.view bounds]];
     [statusView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -221,8 +214,6 @@
     indicator = nil;
     [actionItem release];
     actionItem = nil;
-    [loadingItem release];
-    loadingItem = nil;
     [retryButton release];
     retryButton = nil;
     [statusView release];

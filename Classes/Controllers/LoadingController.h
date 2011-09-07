@@ -21,7 +21,6 @@
     LoadingIndicatorView *indicator;
     
     UIBarButtonItem *actionItem;
-    ActivityIndicatorItem *loadingItem;
 }
 
 @property (nonatomic, retain) HNObject *source;
