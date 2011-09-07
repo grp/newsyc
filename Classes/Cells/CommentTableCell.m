@@ -14,7 +14,7 @@
 #import "NSString+Entities.h"
 
 @implementation CommentTableCell
-@synthesize comment, indentationLevel;
+@synthesize comment, indentationLevel, showReplies;
 
 - (id)initWithReuseIdentifier:(NSString *)identifier {
     if ((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier])) {
@@ -37,6 +37,12 @@
 - (void)setComment:(HNEntry *)comment_ {
     [comment autorelease];
     comment = [comment_ retain];
+    
+    [self setNeedsDisplay];
+}
+
+- (void)setShowReplies:(BOOL)replies {
+    showReplies = replies;
     
     [self setNeedsDisplay];
 }
@@ -79,6 +85,11 @@
     return [UIFont systemFontOfSize:13.0f];
 }
 
++ (BOOL)entryShowsPoints:(HNEntry *)entry {
+    // Re-enable this for everyone if comment score viewing is re-enabled.
+    return [entry submitter] == [[HNSession currentSession] user];
+}
+
 + (CGFloat)heightForBodyText:(NSString *)text withWidth:(CGFloat)width indentationLevel:(int)indentationLevel {
     CGSize size = CGSizeMake(width - 16.0f, CGFLOAT_MAX);
     size.width -= (indentationLevel * 15.0f);
@@ -93,12 +104,14 @@
     return ceilf([[self formatBodyText:text] sizeWithFont:[self bodyFont] constrainedToSize:size lineBreakMode:UILineBreakModeWordWrap].height);
 }
 
-+ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width indentationLevel:(int)indentationLevel {
-    return [self heightForBodyText:[entry body] withWidth:width indentationLevel:indentationLevel] + 44.0f;
++ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width showReplies:(BOOL)replies indentationLevel:(int)indentationLevel {
+    CGFloat height = [self heightForBodyText:[entry body] withWidth:width indentationLevel:indentationLevel] + 30.0f;
+    if ([self entryShowsPoints:entry] || replies) height += 14.0f;
+    return height;
 }
 
-+ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {
-    return [self heightForEntry:entry withWidth:width indentationLevel:0];
++ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width showReplies:(BOOL)replies {
+    return [self heightForEntry:entry withWidth:width showReplies:replies indentationLevel:0];
 }
 
 - (void)drawContentView:(CGRect)rect {
@@ -136,8 +149,7 @@
     pointsrect.size.width = (bounds.size.width + bounds.origin.x) / 2 - offsets.width * 2;
     pointsrect.origin.x = bounds.origin.x + offsets.width;
     pointsrect.origin.y = bounds.size.height - offsets.height - pointsrect.size.height;
-    // Re-enable this for everyone if comment score viewing is re-enabled.
-    if ([comment submitter] == [[HNSession currentSession] user])
+    if ([[self class] entryShowsPoints:comment])
           [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor grayColor] set];
@@ -146,7 +158,8 @@
     commentsrect.size.width = (bounds.size.width - bounds.origin.x) / 2 - offsets.width * 2;
     commentsrect.origin.x = bounds.size.width - (bounds.size.width - bounds.origin.x) / 2 + offsets.width;
     commentsrect.origin.y = bounds.size.height - offsets.height - commentsrect.size.height;
-    [comments drawInRect:commentsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];    
+    if (showReplies)
+        [comments drawInRect:commentsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];    
 }
 
 - (void)dealloc {

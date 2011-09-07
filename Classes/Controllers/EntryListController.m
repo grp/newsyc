@@ -103,6 +103,7 @@
     [super sourceFailedLoading];
     
     [pullToRefreshView finishedLoading];
+    [moreButton stopLoading];
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
@@ -150,7 +151,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     HNEntry *entry = [self entryAtIndexPath:indexPath];
     if ([entry isSubmission]) return [SubmissionTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
-    else return [CommentTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
+    else return [CommentTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width showReplies:YES];
 }
 
 - (void)configureCell:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
@@ -159,6 +160,8 @@
         [cell_ setSubmission:entry];
     } else if ([entry isComment]) {
         CommentTableCell *cell_ = (CommentTableCell *) cell;
+        [cell_ setIndentationLevel:0];
+        [cell_ setShowReplies:YES];
         [cell_ setComment:entry];
     }
 }

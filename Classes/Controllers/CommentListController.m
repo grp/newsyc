@@ -359,16 +359,24 @@
 
 - (CGFloat)tableView:(UITableView *)table heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     HNEntry *entry = [self entryAtIndexPath:indexPath];
-    if ([entry isComment]) return [CommentTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width indentationLevel:[self depthOfEntry:entry]];
-    else return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+    BOOL showReplies = ![[NSUserDefaults standardUserDefaults] boolForKey:@"show-nested-comments"];
+    
+    if ([entry isComment]) {
+        return [CommentTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width showReplies:showReplies indentationLevel:[self depthOfEntry:entry]];
+    } else {
+        return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+    }
 }
 
-- (void)configureCell:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
-    if ([entry isComment]) {
-        [cell setIndentationLevel:[self depthOfEntry:entry]];
-    }
-    
+- (void)configureCell:(CommentTableCell *)cell forEntry:(HNEntry *)entry {
     [super configureCell:cell forEntry:entry];
+    
+    if ([entry isComment]) {
+        BOOL showReplies = ![[NSUserDefaults standardUserDefaults] boolForKey:@"show-nested-comments"];
+        
+        [cell setIndentationLevel:[self depthOfEntry:entry]];
+        [cell setShowReplies:showReplies];
+    }
 }
 
 - (void)finishedLoading {
