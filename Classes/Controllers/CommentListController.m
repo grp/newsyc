@@ -388,6 +388,8 @@
 - (void)loadView {
     [super loadView];
     
+    [emptyLabel setText:@"No comments."];
+    
     [self setupHeader];
         
     entryActionsView = [[EntryActionsView alloc] initWithFrame:CGRectZero];
