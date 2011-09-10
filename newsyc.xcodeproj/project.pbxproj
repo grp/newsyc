@@ -137,7 +137,6 @@
 		943C1880134E16D700A5977E /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 943C187E134E16D700A5977E /* Default-Landscape.png */; };
 		943C1881134E16D700A5977E /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 943C187F134E16D700A5977E /* Default-Portrait.png */; };
 		CBFCE7AD1398712F007A5DDD /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFCE7AB1398712F007A5DDD /* SearchController.m */; };
-		CBFCE7AE1398712F007A5DDD /* SearchController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBFCE7AC1398712F007A5DDD /* SearchController.xib */; };
 		CBFCE7F613989054007A5DDD /* HNAPISearch.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFCE7F513989054007A5DDD /* HNAPISearch.m */; };
 		FA5F796B134CE04F002EEBCA /* InstapaperLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5F796A134CE04F002EEBCA /* InstapaperLoginController.m */; };
 		FA85248E1357BA73004E5A72 /* NSArray+Strings.m in Sources */ = {isa = PBXBuildFile; fileRef = FA85248D1357BA73004E5A72 /* NSArray+Strings.m */; };
@@ -361,7 +360,6 @@
 		943C187F134E16D700A5977E /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait.png"; sourceTree = "<group>"; };
 		CBFCE7AA1398712F007A5DDD /* SearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchController.h; sourceTree = "<group>"; };
 		CBFCE7AB1398712F007A5DDD /* SearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchController.m; sourceTree = "<group>"; };
-		CBFCE7AC1398712F007A5DDD /* SearchController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchController.xib; sourceTree = "<group>"; };
 		CBFCE7F413989054007A5DDD /* HNAPISearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNAPISearch.h; sourceTree = "<group>"; };
 		CBFCE7F513989054007A5DDD /* HNAPISearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNAPISearch.m; sourceTree = "<group>"; };
 		FA5F7969134CE04F002EEBCA /* InstapaperLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperLoginController.h; sourceTree = "<group>"; };
@@ -581,7 +579,6 @@
 				7D6B9E7E1347DF2E00CD923C /* EntryReplyComposeController.m */,
 				CBFCE7AA1398712F007A5DDD /* SearchController.h */,
 				CBFCE7AB1398712F007A5DDD /* SearchController.m */,
-				CBFCE7AC1398712F007A5DDD /* SearchController.xib */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -844,7 +841,6 @@
 				7D36ADCF13560D87000613B2 /* check@2x.png in Resources */,
 				7D91AAAA135A44B000247D34 /* refresh.png in Resources */,
 				7D91AAAB135A44B000247D34 /* refresh@2x.png in Resources */,
-				CBFCE7AE1398712F007A5DDD /* SearchController.xib in Resources */,
 				7DC4BACD13F51B4700E373C0 /* x.png in Resources */,
 				7DC4BACE13F51B4700E373C0 /* x@2x.png in Resources */,
 			);

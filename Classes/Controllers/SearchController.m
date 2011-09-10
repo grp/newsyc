@@ -12,13 +12,50 @@
 
 @implementation SearchController
 
-@synthesize searchBar;
-@synthesize facetControl;
-@synthesize tableView;
-@synthesize emptyResultsView;
-@synthesize entries;
-@synthesize searchPerformed;
-@synthesize coloredView;
+- (void)loadView {
+    [super loadView];
+    
+    searchBar = [[UISearchBar alloc] init];
+    [searchBar sizeToFit];
+    [searchBar setPlaceholder:@"Search Hacker News"];
+    [searchBar setFrame:CGRectMake(0, 0, [[self view] bounds].size.width, [searchBar bounds].size.height)];
+    [searchBar setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
+    [searchBar setDelegate:self];
+    [[self view] addSubview:searchBar];
+    
+    coloredView = [[UIView alloc] initWithFrame:CGRectMake(0, [searchBar bounds].size.height, [[self view] bounds].size.width, [searchBar bounds].size.height)];
+    [coloredView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
+    [[self view] addSubview:coloredView];
+    
+    facetControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Interesting", @"Recent", nil]];
+    [facetControl addTarget:self action:@selector(facetSelected:) forControlEvents:UIControlEventValueChanged];
+    [facetControl setSegmentedControlStyle:UISegmentedControlStyleBar];
+    [facetControl setSelectedSegmentIndex:0];
+    [facetControl sizeToFit];
+    [facetControl setFrame:CGRectMake(([coloredView bounds].size.height - [facetControl bounds].size.height) / 2, ([coloredView bounds].size.height - [facetControl bounds].size.height) / 2, [coloredView bounds].size.width - ((([coloredView bounds].size.height - [facetControl bounds].size.height) / 2) * 2), [facetControl bounds].size.height)];
+    [coloredView addSubview:facetControl];
+    
+    tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, [searchBar bounds].size.height + [coloredView bounds].size.height, [[self view] bounds].size.width, [[self view] bounds].size.height - [searchBar bounds].size.height - [coloredView bounds].size.height)];
+    [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [tableView setDelegate:self];
+    [tableView setDataSource:self];
+    [[self view] addSubview:tableView];
+    
+    indicator = [[LoadingIndicatorView alloc] initWithFrame:[tableView frame]];
+    [indicator setBackgroundColor:[UIColor whiteColor]];
+    [indicator setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [indicator setHidden:YES];
+    [[self view] addSubview:indicator];
+    
+    emptyResultsView = [[UILabel alloc] initWithFrame:[tableView frame]];
+    [emptyResultsView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [emptyResultsView setText:@"No results."];
+    [emptyResultsView setTextAlignment:UITextAlignmentCenter];
+    [emptyResultsView setFont:[UIFont boldSystemFontOfSize:16.0f]];
+    [emptyResultsView setTextColor:[UIColor grayColor]];
+    [emptyResultsView setFrame:[tableView frame]];
+    [[self view] addSubview:emptyResultsView];
+}
 
 - (HNAPISearch *)searchAPI {
 	if (!searchAPI) {
@@ -27,11 +64,24 @@
 	return searchAPI;
 }
 
-- (IBAction)backgroundTouched:(id)sender {
+- (void)backgroundTouched:(id)sender {
 	[searchBar resignFirstResponder];
 }
 
-- (IBAction)facetSelected:(id)sender {
+- (void)performSearch {
+    if ([[searchBar text] length] > 0) {
+        searchPerformed = YES;
+        [[self searchAPI] performSearch:[searchBar text]];
+        
+        [emptyResultsView setHidden:YES];
+        [indicator setHidden:NO];
+    } else {
+        [indicator setHidden:YES];
+        [emptyResultsView setHidden:NO];
+    }
+}
+
+- (void)facetSelected:(id)sender {
 	[searchBar resignFirstResponder];
 
 	if (facetControl.selectedSegmentIndex == 0) {
@@ -42,19 +92,6 @@
 	if (searchPerformed) {
 		[self performSearch];
 	}
-}
-
-- (void)performSearch {
-    if ([[searchBar text] length] > 0) {
-        self.searchPerformed = YES;
-        [[self searchAPI] performSearch:[searchBar text]];
-    
-        [emptyResultsView setHidden:YES];
-        [indicator setHidden:NO];
-    } else {
-        [indicator setHidden:YES];
-        [emptyResultsView setHidden:NO];
-    }
 }
 
 - (void)searchBarSearchButtonClicked:(id)sender {
@@ -74,16 +111,8 @@
         }
     }
     [searchBarTextField setEnablesReturnKeyAutomatically:NO];
-    
-    indicator = [[LoadingIndicatorView alloc] initWithFrame:[tableView frame]];
-    [indicator setBackgroundColor:[UIColor whiteColor]];
-    [indicator setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-    [self.view addSubview:indicator];
-    [indicator setHidden:YES];
-    
-    [emptyResultsView setFrame:[tableView frame]];
-    
-	self.searchPerformed = NO;
+        
+	searchPerformed = NO;
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	[notificationCenter addObserver:self selector:@selector(receivedResults:) name:@"searchDone" object:nil];
 }
@@ -103,14 +132,15 @@
 		[alert release];
 	} else {
 		NSDictionary *dict = [notification userInfo];
-		self.entries = [dict objectForKey:@"array"];
+        [entries release];
+		entries = [[dict objectForKey:@"array"] retain];
         
 		if ([entries count] != 0) {
 			[emptyResultsView setHidden:YES];
-            [[self tableView] setContentOffset:CGPointZero animated:NO];
+            [tableView setContentOffset:CGPointZero animated:NO];
 		}
 
-        [[self tableView] reloadData];
+        [tableView reloadData];
 	}
 }
 
@@ -130,8 +160,8 @@
     return [SubmissionTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SubmissionTableCell *cell = (SubmissionTableCell *) [[self tableView] dequeueReusableCellWithIdentifier:@"submission"];
+- (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    SubmissionTableCell *cell = (SubmissionTableCell *) [tableView dequeueReusableCellWithIdentifier:@"submission"];
     if (cell == nil) cell = [[[SubmissionTableCell alloc] initWithReuseIdentifier:@"submission"] autorelease];
     HNEntry *entry = [entries objectAtIndex:[indexPath row]];
     [cell setSubmission:entry];
@@ -147,8 +177,21 @@
 
 - (void)viewDidUnload {
     [super viewDidUnload];
-	self.entries = nil;
-    self.searchBar = nil;
+    
+    [entries release];
+    entries = nil;
+    [searchBar release];
+    searchBar = nil;
+    [tableView release];
+    tableView = nil;
+    [facetControl release];
+    facetControl = nil;
+    [emptyResultsView release];
+    emptyResultsView = nil;
+    [coloredView release];
+    coloredView = nil;
+    [indicator release];
+    indicator = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -156,27 +199,39 @@
     
 	[[self navigationController] setNavigationBarHidden:YES animated:animated];
     
-    [[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
         [searchBar setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
         [facetControl setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
-        [coloredView setBackgroundColor:[UIColor colorWithRed:(255.0f / 236.0f) green:(255.0f / 141.0f) blue:(255.0f / 91.0f) alpha:1.0f]];
+        [coloredView setBackgroundColor:[UIColor colorWithRed:(236.0f / 255.0f) green:(141.0f / 255.0f) blue:(91.0f / 255.0f) alpha:1.0f]];
     } else {
         [searchBar setTintColor:nil];
         [facetControl setTintColor:nil];
-        [coloredView setBackgroundColor:[UIColor colorWithRed:(255.0f / 170.0f) green:(255.0f / 180.0f) blue:(255.0f / 190.0f) alpha:1.0f]];
+        [coloredView setBackgroundColor:[UIColor colorWithRed:(170.0f / 255.0f) green:(180.0f / 255.0f) blue:(190.0f / 255.0f) alpha:1.0f]];
     }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [searchBar resignFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
+    
 	[[self navigationController] setNavigationBarHidden:NO animated:animated];
 }
 
 - (void)dealloc {
-	[searchAPI release];
-	[emptyResultsView release];
+    [entries release];
+    [searchBar release];
+    [tableView release];
+    [facetControl release];
+    [emptyResultsView release];
+    [coloredView release];
+    [searchAPI release];
+    [indicator release];
+
     [super dealloc];
 }
 
