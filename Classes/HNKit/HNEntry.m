@@ -50,25 +50,27 @@
     if ([response objectForKey:@"points"] != nil) [self setPoints:[[response objectForKey:@"points"] intValue]];
     if ([response objectForKey:@"parent"] != nil) [self setParent:[HNEntry entryWithIdentifier:[response objectForKey:@"parent"]]];
         
-    NSMutableArray *comments = [NSMutableArray array];
-    for (NSDictionary *child in [response objectForKey:@"children"]) {
-        HNEntry *entry = [HNEntry entryWithIdentifier:[child objectForKey:@"identifier"]];
-        [entry loadFromDictionary:child];
-        [entry setParent:self];
-        
-        if ([child objectForKey:@"children"] != nil) {
-            [entry setIsLoaded:YES];
-        } else {
-            [entry setIsLoaded:NO];
+    if ([response objectForKey:@"children"] != nil) {
+        NSMutableArray *comments = [NSMutableArray array];
+        for (NSDictionary *child in [response objectForKey:@"children"]) {
+            HNEntry *entry = [HNEntry entryWithIdentifier:[child objectForKey:@"identifier"]];
+            [entry loadFromDictionary:child];
+            [entry setParent:self];
+            
+            if ([child objectForKey:@"children"] != nil) {
+                [entry setIsLoaded:YES];
+            } else {
+                [entry setIsLoaded:NO];
+            }
+            
+            [comments addObject:entry];
         }
-        
-        [comments addObject:entry];
-    }
-     
-    if ([[response objectForKey:@"append"] boolValue]) {
-        [self setEntries:[[self entries] arrayByAddingObjectsFromArray:comments]];
-    } else {
-        [self setEntries:comments];
+         
+        if ([[response objectForKey:@"append"] boolValue]) {
+            [self setEntries:[[self entries] arrayByAddingObjectsFromArray:comments]];
+        } else {
+            [self setEntries:comments];
+        }
     }
     
     if ([response objectForKey:@"numchildren"] != nil) {
