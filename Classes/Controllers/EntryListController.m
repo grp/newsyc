@@ -41,6 +41,7 @@
     emptyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [emptyLabel setFont:[UIFont boldSystemFontOfSize:17.0f]];
     [emptyLabel setTextColor:[UIColor grayColor]];
+    [emptyLabel setBackgroundColor:[UIColor clearColor]];
     [emptyLabel setText:@"No items."];
     [emptyLabel setTextAlignment:UITextAlignmentCenter];
     

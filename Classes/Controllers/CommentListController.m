@@ -305,10 +305,7 @@
     
     suggestedHeaderHeight = [detailsHeaderView bounds].size.height;
     maximumHeaderHeight = [tableView bounds].size.height - 64.0f;
-    
-    // necessary to draw this on top of the other views and look right
-    [statusView setBackgroundColor:[UIColor clearColor]];
-        
+            
     // necessary since the core text view can steal this
     [tableView setScrollsToTop:YES];
 }
@@ -389,6 +386,7 @@
     [super loadView];
     
     [emptyLabel setText:@"No comments."];
+    [statusView setBackgroundColor:[UIColor clearColor]];
     
     [self setupHeader];
         
