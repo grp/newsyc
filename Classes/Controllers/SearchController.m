@@ -51,7 +51,7 @@
     [emptyResultsView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [emptyResultsView setText:@"No results."];
     [emptyResultsView setTextAlignment:UITextAlignmentCenter];
-    [emptyResultsView setFont:[UIFont boldSystemFontOfSize:16.0f]];
+    [emptyResultsView setFont:[UIFont boldSystemFontOfSize:18.0f]];
     [emptyResultsView setTextColor:[UIColor grayColor]];
     [emptyResultsView setFrame:[tableView frame]];
     [[self view] addSubview:emptyResultsView];
