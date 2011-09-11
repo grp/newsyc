@@ -9,6 +9,9 @@
 #import "EntryReplyComposeController.h"
 #import "PlaceholderTextView.h"
 
+#import "NSString+Entities.h"
+#import "NSString+Tags.h"
+
 @implementation EntryReplyComposeController
 @synthesize entry;
 
@@ -60,12 +63,56 @@
     }
 }
 
+- (void)loadView {
+    [super loadView];
+    
+    replyLabel = [[UILabel alloc] init];
+    [replyLabel setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
+    [replyLabel setTextAlignment:UITextAlignmentLeft];
+    [replyLabel setLineBreakMode:UILineBreakModeWordWrap];
+    [replyLabel setFont:[UIFont systemFontOfSize:12.0f]];
+    [replyLabel setTextColor:[UIColor darkGrayColor]];
+    [replyLabel setNumberOfLines:0];
+    [tableView addSubview:replyLabel];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    if ([entry body] != nil && ![[entry body] isEqualToString:@""]) {
+        CGFloat replyPadding = 8.0f;
+        
+        NSString *bodyText = [entry body];
+        bodyText = [bodyText stringByReplacingOccurrencesOfString:@"<p>" withString:@"\n\n"];
+        bodyText = [bodyText stringByRemovingHTMLTags];
+        bodyText = [bodyText stringByDecodingHTMLEntities];
+        bodyText = [bodyText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+        NSString *replyText = [NSString stringWithFormat:@"%@: %@", [[entry submitter] identifier], bodyText];
+        [replyLabel setText:replyText];
+        
+        CGRect replyFrame = CGRectMake(replyPadding, -replyPadding, [tableView bounds].size.width - replyPadding - replyPadding, [tableView bounds].size.height / 3.0f);
+        replyFrame.size.height = [[replyLabel text] sizeWithFont:[replyLabel font] constrainedToSize:replyFrame.size lineBreakMode:[replyLabel lineBreakMode]].height;
+        replyFrame.origin.y -= replyFrame.size.height;
+        [replyLabel setFrame:replyFrame];
+    }
+}
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    
+    [replyLabel release];
+    replyLabel = nil;
+}
+
 - (BOOL)ableToSubmit {
     return [[textView text] length] > 0;
 }
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [replyLabel release];
+    
     [super dealloc];
 }
 

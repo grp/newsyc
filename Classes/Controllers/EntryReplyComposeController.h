@@ -10,6 +10,7 @@
 
 @interface EntryReplyComposeController : ComposeController {
     HNEntry *entry;
+    UILabel *replyLabel;
 }
 
 @property (nonatomic, readonly) HNEntry *entry;
