@@ -30,6 +30,8 @@ static HNSession *current = nil;
         [[NSUserDefaults standardUserDefaults] setObject:[[session user] identifier] forKey:@"HNKit:SessionName"];
         [[NSUserDefaults standardUserDefaults] setObject:[session password] forKey:@"HNKit:SessionPassword"];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        [[session user] beginLoading];
     } else {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HNKit:SessionToken"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HNKit:SessionName"];
@@ -39,6 +41,8 @@ static HNSession *current = nil;
         HNSession *session = [[HNAnonymousSession alloc] init];
         [self setCurrentSession:[session autorelease]];
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kHNSessionChangedNotification object:[self currentSession]];
 }
 
 + (void)initialize {

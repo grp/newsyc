@@ -23,19 +23,20 @@
     [loginImage release];
     [logoutItem release];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSessionChangedNotification object:nil];
+    
     [super dealloc];
 }
 
 - (void)setSource:(HNObject *)source_ {
     [super setSource:source_];
     
-    [loginContainer setHidden:source != nil];
-    [[[self tabBarController] navigationItem] setLeftBarButtonItem:source != nil ? logoutItem : nil];
+    [loginContainer setHidden:(source != nil)];
+    if (isVisible) [[[self tabBarController] navigationItem] setLeftBarButtonItem:(source != nil ? logoutItem : nil)];
 }
 
 - (void)logout {
     [HNSession setCurrentSession:nil];
-    [self setSource:nil];
 }
 
 - (void)logoutPressed {
@@ -64,8 +65,6 @@
 
 - (void)loginControllerDidLogin:(LoginController *)controller {
     [[self tabBarController] dismissModalViewControllerAnimated:YES];
-    [self setSource:[[HNSession currentSession] user]];
-    [source beginLoading];
 }
 
 - (void)loginControllerDidCancel:(LoginController *)controller {
@@ -79,7 +78,21 @@
     [[self tabBarController] presentModalViewController:[navigation autorelease] animated:YES];
 }
 
+- (void)sessionChangedWithNotification:(NSNotification *)notification {
+    HNSession *session = [notification object];
+    HNUser *user = [session user];
+    [self setSource:user];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionChangedWithNotification:) name:kHNSessionChangedNotification object:nil];
+}
+
 - (void)viewDidUnload {
+    [super viewDidUnload];
+
     [loginButton release];
     loginButton = nil;
     [loginContainer release];
@@ -89,13 +102,7 @@
     [logoutItem release];
     logoutItem = nil;
     
-    [super viewDidUnload];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [[[self tabBarController] navigationItem] setLeftBarButtonItem:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSessionChangedNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -104,15 +111,17 @@
     // XXX: because this navigation item is shown for every tab, this is a gigantic hack:
     // we are removing it and adding it manually as this view is shown/hidden :(
     // maybe this should be a button in the table view instead?
-    [[[self tabBarController] navigationItem] setLeftBarButtonItem:source != nil ? logoutItem : nil];
+    [[[self tabBarController] navigationItem] setLeftBarButtonItem:(source != nil ? logoutItem : nil)];
+    
+    isVisible = YES;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    // If you logged in somewhere else while this view wasn't visible,
-    // we should reflect that change once it does become visible.
-    [self setSource:[[HNSession currentSession] user]];
-    
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    [[[self tabBarController] navigationItem] setLeftBarButtonItem:nil];
+    
+    isVisible = NO;
 }
 
 - (int)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {

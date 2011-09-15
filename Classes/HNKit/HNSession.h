@@ -9,6 +9,8 @@
 #import "HNKit.h"
 #import "HNSessionAuthenticator.h"
 
+#define kHNSessionChangedNotification @"HNSessionChanged"
+
 @class HNUser, HNEntry, HNSubmission;
 @interface HNSession : NSObject <HNSessionAuthenticatorDelegate> {
     BOOL loaded;

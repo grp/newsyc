@@ -16,6 +16,7 @@
     UIButton *loginButton;
     UIImageView *loginImage;
     UIBarButtonItem *logoutItem;
+    BOOL isVisible;
 }
 
 @end
