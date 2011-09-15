@@ -10,8 +10,10 @@
 #import "ActivityIndicatorItem.h"
 #import "PlacardButton.h"
 
+#import <MessageUI/MFMailComposeViewController.h>
+
 @class LoadingIndicatorView;
-@interface LoadingController : UIViewController <UIActionSheetDelegate> {
+@interface LoadingController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate> {
     HNObject *source;
     
     UIView *statusView;

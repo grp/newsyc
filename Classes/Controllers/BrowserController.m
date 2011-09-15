@@ -196,13 +196,25 @@
     [controller dismissModalViewControllerAnimated:YES];
 }
 
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    [self dismissModalViewControllerAnimated:YES];
+}
+
 - (void)actionSheet:(UIActionSheet *)action clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == [action cancelButtonIndex]) return;
     
-    NSInteger first = [action firstOtherButtonIndex];
-    if (buttonIndex == first) {
+    if (buttonIndex == 0) {
         [[UIApplication sharedApplication] openURL:currentURL];
-    } else if (buttonIndex == first + 1) {
+    } else if ([MFMailComposeViewController canSendMail] && buttonIndex == 1) {
+        MFMailComposeViewController *composeController = [[MFMailComposeViewController alloc] init];
+        [composeController setMailComposeDelegate:self];
+        
+        NSString *urlString = [currentURL absoluteString];
+        NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", urlString, urlString];
+        [composeController setMessageBody:body isHTML:YES];
+        
+        [self presentModalViewController:[composeController autorelease] animated:YES];
+    } else if (([MFMailComposeViewController canSendMail] && buttonIndex == 2) || (![MFMailComposeViewController canSendMail] && buttonIndex == 1)) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         [pasteboard setURL:currentURL];
         [pasteboard setString:[currentURL absoluteString]];
@@ -213,7 +225,7 @@
         [copied showInWindow:[[self view] window]];
         [copied dismissAfterDelay:0.8f animated:YES];
         [copied release];
-    } else if (buttonIndex == first + 2) {
+    } else if (([MFMailComposeViewController canSendMail] && buttonIndex == 3) || (![MFMailComposeViewController canSendMail] && buttonIndex == 2)) {
         if ([InstapaperSession currentSession] != nil) {
             [self submitInstapaperRequest];
         } else {
@@ -246,11 +258,18 @@
     UIActionSheet *sheet = [[UIActionSheet alloc]
         initWithTitle:[currentURL absoluteString]
         delegate:self
-        cancelButtonTitle:@"Cancel"
+        cancelButtonTitle:nil
         destructiveButtonTitle:nil
-        otherButtonTitles:@"Open with Safari", @"Copy Link", @"Read Later", nil
+        otherButtonTitles:nil
     ];
     
+    [sheet addButtonWithTitle:@"Open with Safari"];
+    if ([MFMailComposeViewController canSendMail]) [sheet addButtonWithTitle:@"Mail Link"];
+    [sheet addButtonWithTitle:@"Copy Link"];
+    [sheet addButtonWithTitle:@"Read Later"];
+    [sheet addButtonWithTitle:@"Cancel"];
+    [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:shareItem animated:YES];
     else [sheet showInView:[[self view] window]];
     

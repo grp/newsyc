@@ -146,10 +146,18 @@
     if ([[sheet sheetContext] isEqual:@"link"]) {
         if (index == [sheet cancelButtonIndex]) return;
     
-        NSInteger first = [sheet firstOtherButtonIndex];
-        if (index == first) {
+        if (index == 0) {
             [[UIApplication sharedApplication] openURL:[source URL]];
-        } else if (index == first + 1) {
+        } else if ([MFMailComposeViewController canSendMail] && index == 1) {
+            MFMailComposeViewController *composeController = [[MFMailComposeViewController alloc] init];
+            [composeController setMailComposeDelegate:self];
+            
+            NSString *urlString = [[source URL] absoluteString];
+            NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", urlString, urlString];
+            [composeController setMessageBody:body isHTML:YES];
+            
+            [self presentModalViewController:[composeController autorelease] animated:YES];
+        } else if (([MFMailComposeViewController canSendMail] && index == 2) || (![MFMailComposeViewController canSendMail] && index == 1)) {
             // XXX: find the best way to copy a URL to the clipboard
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             [pasteboard setURL:[source URL]];
@@ -165,8 +173,24 @@
     }
 }
 
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    [self dismissModalViewControllerAnimated:YES];
+}
+
 - (void)actionTapped {
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open in Safari", @"Copy Link", nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc]
+        initWithTitle:nil
+        delegate:self
+        cancelButtonTitle:nil
+        destructiveButtonTitle:nil
+        otherButtonTitles:nil
+    ];
+    
+    [sheet addButtonWithTitle:@"Open in Safari"];
+    if ([MFMailComposeViewController canSendMail]) [sheet addButtonWithTitle:@"Mail Link"];
+    [sheet addButtonWithTitle:@"Copy Link"];
+    [sheet addButtonWithTitle:@"Cancel"];
+    [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:actionItem animated:YES];
     else [sheet showInView:[[self view] window]];
