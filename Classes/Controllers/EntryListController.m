@@ -42,7 +42,7 @@
     [emptyLabel setFont:[UIFont systemFontOfSize:17.0f]];
     [emptyLabel setTextColor:[UIColor grayColor]];
     [emptyLabel setBackgroundColor:[UIColor clearColor]];
-    [emptyLabel setText:@"No items."];
+    [emptyLabel setText:@"No Items"];
     [emptyLabel setTextAlignment:UITextAlignmentCenter];
     
     pullToRefreshView = [[PullToRefreshView alloc] initWithScrollView:tableView];

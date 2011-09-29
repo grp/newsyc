@@ -385,7 +385,7 @@
 - (void)loadView {
     [super loadView];
     
-    [emptyLabel setText:@"No comments."];
+    [emptyLabel setText:@"No Comments"];
     [statusView setBackgroundColor:[UIColor clearColor]];
     
     [self setupHeader];
