@@ -200,6 +200,7 @@ typedef enum {
                 if ([[element2 tagName] isEqualToString:@"a"]) {
                     NSString *morehref = [element2 attributeWithName:@"href"];
                     
+                    // XXX: this breaks the second news page when not logged in, since that now uses /news2 rather than /x?fnid= for performance reasons.
                     if ([morehref hasPrefix:@"/x?fnid="]) {
                         more = [morehref substringFromIndex:[@"/x?fnid=" length]];
                     }
