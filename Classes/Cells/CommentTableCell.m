@@ -54,7 +54,9 @@
 }
 
 + (NSString *)formatBodyText:(NSString *)bodyText {
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"interface-short-comments"]) {
+    NSNumber *shortComments = [[NSUserDefaults standardUserDefaults] objectForKey:@"interface-short-comments"];
+
+    if (shortComments != nil && ![shortComments boolValue]) {
         bodyText = [bodyText stringByReplacingOccurrencesOfString:@"<p>" withString:@"\n\n"];
     }
     
@@ -66,7 +68,9 @@
 }
 
 + (UIFont *)bodyFont {
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"interface-small-text"]) {
+    NSNumber *smallText = [[NSUserDefaults standardUserDefaults] objectForKey:@"interface-small-text"];
+    
+    if (smallText == nil || [smallText boolValue]) {
         return [UIFont systemFontOfSize:12.0f];
     } else {
         return [UIFont systemFontOfSize:14.0f];
@@ -94,7 +98,9 @@
     CGSize size = CGSizeMake(width - 16.0f, CGFLOAT_MAX);
     size.width -= (indentationLevel * 15.0f);
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"interface-short-comments"]) {
+    NSNumber *shortComments = [[NSUserDefaults standardUserDefaults] objectForKey:@"interface-short-comments"];
+    
+    if (shortComments == nil || [shortComments boolValue]) {
         // Show only three lines of text.
         CGFloat singleHeight = [[self bodyFont] lineHeight];
         CGFloat tripleHeight = singleHeight * 3;
@@ -106,7 +112,7 @@
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width showReplies:(BOOL)replies indentationLevel:(int)indentationLevel {
     CGFloat height = [self heightForBodyText:[entry body] withWidth:width indentationLevel:indentationLevel] + 30.0f;
-    if ([self entryShowsPoints:entry] || replies) height += 14.0f;
+    if ([self entryShowsPoints:entry] || (replies && [entry children] > 0)) height += 14.0f;
     return height;
 }
 
