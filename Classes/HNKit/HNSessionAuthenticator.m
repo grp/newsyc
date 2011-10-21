@@ -14,7 +14,7 @@
 #import "NSDictionary+Parameters.h"
 #import "UIApplication+ActivityIndicator.h"
 
-#define kHNWebsiteLoginURL [NSURL URLWithString:[[kHNWebsiteURL absoluteString] stringByAppendingString:@"y"]]
+#define kHNLoginSubmissionURL [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [kHNWebsiteURL absoluteString], @"y"]]
 
 @implementation HNSessionAuthenticator
 @synthesize delegate;
@@ -95,20 +95,21 @@
     return nil;
 }
 
-- (NSString *)_generatePageToken {
+- (NSString *)_generateLoginPageURL {
     NSData *data = [NSData dataWithContentsOfURL:kHNWebsiteURL];
     XMLDocument *document = [[[XMLDocument alloc] initWithHTMLData:data] autorelease];
     if (document == nil) return nil;
     
     // XXX: this xpath is really ugly :(
     XMLElement *element = [document firstElementMatchingPath:@"//table//tr[1]//table//tr//td//span[@class='pagetop']//a[text()='login']"];
-    return [[element attributeWithName:@"href"] substringFromIndex:[@"/x?fnid=" length]];
+    return [element attributeWithName:@"href"];
 }
 
-- (NSString *)_generateLoginTokenWithPageToken:(NSString *)pageToken {
-    if (pageToken == nil) return nil;
+- (NSString *)_generateLoginTokenWithForLoginPage:(NSString *)loginPage {
+    if (loginPage == nil) return nil;
     
-    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@x?fnid=%@", [kHNWebsiteURL absoluteString], pageToken]]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [kHNWebsiteURL absoluteString], loginPage]];
+    NSData *data = [NSData dataWithContentsOfURL:url];
     XMLDocument *document = [[[XMLDocument alloc] initWithHTMLData:data] autorelease];
     if (document == nil) return nil;
     
@@ -124,14 +125,14 @@
 }
 
 - (void)_performAuthentication {
-    NSString *pagefnid = nil;
+    NSString *loginurl = nil;
     NSString *formfnid = nil;
     
-    pagefnid = [self _generatePageToken];
-    formfnid = [self _generateLoginTokenWithPageToken:pagefnid];
+    loginurl = [self _generateLoginPageURL];
+    formfnid = [self _generateLoginTokenWithForLoginPage:loginurl];
     
-    if (pagefnid == nil || formfnid == nil) {
-        [self _failAuthentication];
+    if (loginurl == nil || formfnid == nil) {
+        [self performSelectorOnMainThread:@selector(_failAuthentication) withObject:nil waitUntilDone:YES];
         return;
     }
     
@@ -141,7 +142,7 @@
         password, @"p",
     nil];
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:kHNWebsiteLoginURL];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:kHNLoginSubmissionURL];
     [request setHTTPMethod:@"POST"];
     [request setHTTPShouldHandleCookies:NO];
     
