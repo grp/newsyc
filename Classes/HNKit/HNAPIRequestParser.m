@@ -198,7 +198,11 @@ typedef enum {
         } else if ([[element attributeWithName:@"class"] isEqual:@"title"] && [[[[element content] stringByRemovingHTMLTags] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@"More"]) {
             for (XMLElement *element2 in [element children]) {
                 if ([[element2 tagName] isEqualToString:@"a"]) {
-                    more = [[element2 attributeWithName:@"href"] substringFromIndex:[@"/x?fnid=" length]];
+                    NSString *morehref = [element2 attributeWithName:@"href"];
+                    
+                    if ([morehref hasPrefix:@"/x?fnid="]) {
+                        more = [morehref substringFromIndex:[@"/x?fnid=" length]];
+                    }
                 }
             }
         }
