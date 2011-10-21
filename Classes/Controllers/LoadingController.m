@@ -29,6 +29,16 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceFinishedLoading) name:kHNObjectFinishedLoadingNotification object:source];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceFailedLoading) name:kHNObjectFailedLoadingNotification object:source];
 
+    if ([source isLoading]) {
+        // Fake a loading started event if it's already loading (show spinners).
+        [self sourceStartedLoading];
+    } else if ([source isLoaded]) {
+        // Fake a finished loading event even if it's loaded (to show content).
+        [self finishedLoading];
+    } else {
+        // Start loading if we're not either loading or loaded already.
+        [source beginLoading];
+    }
 }
 
 - (id)initWithSource:(HNObject *)source_ {

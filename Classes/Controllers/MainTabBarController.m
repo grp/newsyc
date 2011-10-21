@@ -45,7 +45,7 @@
         [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Timeline" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
 #endif
 
-        profile = [[[SessionProfileController alloc] initWithSource:[[HNSession currentSession] user]] autorelease];
+        profile = [[[SessionProfileController alloc] initWithSource:nil] autorelease];
         [profile setTitle:@"Profile"];
         [profile setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"person.png"] tag:0] autorelease]];
 

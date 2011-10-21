@@ -87,6 +87,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setSource:[[HNSession currentSession] user]];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionChangedWithNotification:) name:kHNSessionChangedNotification object:nil];
 }
 
