@@ -127,6 +127,11 @@
 		7DCB8115134ED75400B521F2 /* InstapaperAuthenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DCB8110134ED75400B521F2 /* InstapaperAuthenticator.m */; };
 		7DCB8116134ED75400B521F2 /* InstapaperRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DCB8112134ED75400B521F2 /* InstapaperRequest.m */; };
 		7DCB8117134ED75400B521F2 /* InstapaperSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DCB8114134ED75400B521F2 /* InstapaperSession.m */; };
+		7DD03DE914529E880007A069 /* icon-old.psd in Resources */ = {isa = PBXBuildFile; fileRef = 7DD03DE414529E880007A069 /* icon-old.psd */; };
+		7DD03DEA14529E880007A069 /* Icon-small~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD03DE514529E880007A069 /* Icon-small~ipad.png */; };
+		7DD03DEB14529E880007A069 /* Icon-small~ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD03DE614529E880007A069 /* Icon-small~ipad@2x.png */; };
+		7DD03DEC14529E880007A069 /* Icon~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD03DE714529E880007A069 /* Icon~ipad.png */; };
+		7DD03DED14529E880007A069 /* Icon~ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD03DE814529E880007A069 /* Icon~ipad@2x.png */; };
 		7DDFA3B01401A8F300B8E69B /* HNTimeline.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3AF1401A8F300B8E69B /* HNTimeline.m */; };
 		7DDFA3B31401A92400B8E69B /* HNSession+Following.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3B21401A92400B8E69B /* HNSession+Following.m */; };
 		7DDFA3BF1401AAC500B8E69B /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3B61401AAC500B8E69B /* NSObject+SBJSON.m */; };
@@ -342,6 +347,11 @@
 		7DCB8112134ED75400B521F2 /* InstapaperRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InstapaperRequest.m; path = Instapaper/InstapaperRequest.m; sourceTree = "<group>"; };
 		7DCB8113134ED75400B521F2 /* InstapaperSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InstapaperSession.h; path = Instapaper/InstapaperSession.h; sourceTree = "<group>"; };
 		7DCB8114134ED75400B521F2 /* InstapaperSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InstapaperSession.m; path = Instapaper/InstapaperSession.m; sourceTree = "<group>"; };
+		7DD03DE414529E880007A069 /* icon-old.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = "icon-old.psd"; path = "Resources/icon-old.psd"; sourceTree = "<group>"; };
+		7DD03DE514529E880007A069 /* Icon-small~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-small~ipad.png"; sourceTree = "<group>"; };
+		7DD03DE614529E880007A069 /* Icon-small~ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-small~ipad@2x.png"; sourceTree = "<group>"; };
+		7DD03DE714529E880007A069 /* Icon~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon~ipad.png"; sourceTree = "<group>"; };
+		7DD03DE814529E880007A069 /* Icon~ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon~ipad@2x.png"; sourceTree = "<group>"; };
 		7DDFA3AE1401A8F300B8E69B /* HNTimeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HNTimeline.h; path = "Classes/Follow Model/HNTimeline.h"; sourceTree = "<group>"; };
 		7DDFA3AF1401A8F300B8E69B /* HNTimeline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HNTimeline.m; path = "Classes/Follow Model/HNTimeline.m"; sourceTree = "<group>"; };
 		7DDFA3B11401A92400B8E69B /* HNSession+Following.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "HNSession+Following.h"; path = "Classes/Follow Model/HNSession+Following.h"; sourceTree = "<group>"; };
@@ -396,6 +406,7 @@
 				7D6B9E5B1347DF2E00CD923C /* Classes */,
 				7D6B9E361347DF2E00CD923C /* Resources */,
 				7D6B9EEF1347DF2E00CD923C /* Info.plist */,
+				7DD03DE414529E880007A069 /* icon-old.psd */,
 				7D6B9EF01347DF2E00CD923C /* icon.psd */,
 				7D1F98901320CF720059EBBB /* Frameworks */,
 				7D1F988E1320CF720059EBBB /* Products */,
@@ -427,16 +438,10 @@
 		7D6B9E361347DF2E00CD923C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7DD03DF014529EAF0007A069 /* Default */,
 				7D6B9E3B1347DF2E00CD923C /* Images */,
+				7DD03DEF14529E980007A069 /* Icons */,
 				7D6B9E5A1347DF2E00CD923C /* Settings.bundle */,
-				943C187E134E16D700A5977E /* Default-Landscape.png */,
-				943C187F134E16D700A5977E /* Default-Portrait.png */,
-				7D17CA2D134AE22700763741 /* Default.png */,
-				7D17CA2E134AE22700763741 /* Default@2x.png */,
-				7D6B9E371347DF2E00CD923C /* Icon-small.png */,
-				7D6B9E381347DF2E00CD923C /* Icon-small@2x.png */,
-				7D6B9E391347DF2E00CD923C /* Icon.png */,
-				7D6B9E3A1347DF2E00CD923C /* Icon@2x.png */,
 				7D6B9E591347DF2E00CD923C /* iTunesArtwork */,
 			);
 			path = Resources;
@@ -720,6 +725,32 @@
 			name = Instapaper;
 			sourceTree = "<group>";
 		};
+		7DD03DEF14529E980007A069 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				7DD03DE514529E880007A069 /* Icon-small~ipad.png */,
+				7DD03DE614529E880007A069 /* Icon-small~ipad@2x.png */,
+				7DD03DE714529E880007A069 /* Icon~ipad.png */,
+				7DD03DE814529E880007A069 /* Icon~ipad@2x.png */,
+				7D6B9E371347DF2E00CD923C /* Icon-small.png */,
+				7D6B9E381347DF2E00CD923C /* Icon-small@2x.png */,
+				7D6B9E391347DF2E00CD923C /* Icon.png */,
+				7D6B9E3A1347DF2E00CD923C /* Icon@2x.png */,
+			);
+			name = Icons;
+			sourceTree = "<group>";
+		};
+		7DD03DF014529EAF0007A069 /* Default */ = {
+			isa = PBXGroup;
+			children = (
+				943C187E134E16D700A5977E /* Default-Landscape.png */,
+				943C187F134E16D700A5977E /* Default-Portrait.png */,
+				7D17CA2D134AE22700763741 /* Default.png */,
+				7D17CA2E134AE22700763741 /* Default@2x.png */,
+			);
+			name = Default;
+			sourceTree = "<group>";
+		};
 		7DDFA3AC1401A8A100B8E69B /* Follow Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -847,6 +878,11 @@
 				7D91AAAB135A44B000247D34 /* refresh@2x.png in Resources */,
 				7DC4BACD13F51B4700E373C0 /* x.png in Resources */,
 				7DC4BACE13F51B4700E373C0 /* x@2x.png in Resources */,
+				7DD03DE914529E880007A069 /* icon-old.psd in Resources */,
+				7DD03DEA14529E880007A069 /* Icon-small~ipad.png in Resources */,
+				7DD03DEB14529E880007A069 /* Icon-small~ipad@2x.png in Resources */,
+				7DD03DEC14529E880007A069 /* Icon~ipad.png in Resources */,
+				7DD03DED14529E880007A069 /* Icon~ipad@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
