@@ -71,7 +71,7 @@ typedef enum {
 - (HNPageLayoutType)pageLayoutTypeForDocument:(XMLDocument *)document {
     NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
     
-    if ([elements count] >= 3) {
+    if ([elements count] >= 4) {
         XMLElement *tr = [elements objectAtIndex:2];
         XMLElement *td = [[tr children] lastObject];
         
@@ -87,10 +87,10 @@ typedef enum {
                     return [[object tagName] isEqualToString:@"br"];
                 }]];
                 
-                // This is because when there is only a header, we want to make
-                // sure that we don't consider the header to be replying to
-                // itself. There are two <br> tags in that case, so we use those
-                // to guess. This is horrible hack, but so is the rest of this…
+                // XXX: This is horrible hack.
+                // This is because when there is only a header, make sure
+                // that the header isn't considered to be replying to itself
+                // There are two <br> tags in that case, so use those to guess.
                 if ([tables count] >= 2 || [linebreaks count] == 2) {
                     return kHNPageLayoutTypeHeaderFooter;
                 } else if ([tables count] == 1) {
