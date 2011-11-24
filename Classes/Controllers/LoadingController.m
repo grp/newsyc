@@ -164,6 +164,9 @@
             
             NSString *urlString = [[source URL] absoluteString];
             NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", urlString, urlString];
+            if (source && [source isKindOfClass:[HNEntry class]]) {
+                [composeController setSubject:((HNEntry *)source).title];
+            }
             [composeController setMessageBody:body isHTML:YES];
             
             [self presentModalViewController:[composeController autorelease] animated:YES];

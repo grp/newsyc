@@ -158,15 +158,15 @@
         }
     } else if ([indexPath section] == 2) {
         if ([indexPath row] == 0) {
-            BrowserController *controller = [[BrowserController alloc] initWithURL:kHNFAQURL];
+            BrowserController *controller = [[BrowserController alloc] initWithURL:kHNFAQURL andSource:nil];
             [[self navigationController] pushViewController:[controller autorelease] animated:YES];
             return;
         } else if ([indexPath row] == 1) {
-            BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"http://newsyc.me/"]];
+            BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"http://newsyc.me/"] andSource:nil];
             [[self navigationController] pushViewController:[controller autorelease] animated:YES];
             return;
         } else if ([indexPath row] == 2) {
-            BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"https://twitter.com/newsyc_"]];
+            BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"https://twitter.com/newsyc_"] andSource:nil];
             [[self navigationController] pushViewController:[controller autorelease] animated:YES];
             return;
         }

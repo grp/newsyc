@@ -6,6 +6,7 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import "HNKit.h"
 #import "InstapaperRequest.h"
 #import "InstapaperSession.h"
 #import "InstapaperLoginController.h"
@@ -29,12 +30,14 @@
     UIBarButtonItem *spacerItem;
     UIBarButtonItem *readabilityItem;
     NSURL *externalURL;
+    HNObject *source;
     
     int networkRetainCount;
 }
 
 @property (nonatomic, copy) NSURL *currentURL;
+@property (nonatomic, retain) HNObject *source;
 
-- (id)initWithURL:(NSURL *)url;
+- (id)initWithURL:(NSURL *)url andSource:(HNObject *)source_;
 
 @end

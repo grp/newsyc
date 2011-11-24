@@ -25,7 +25,7 @@
 @implementation CommentListController
 
 - (void)detailsHeaderView:(DetailsHeaderView *)header selectedURL:(NSURL *)url {
-    BrowserController *controller = [[BrowserController alloc] initWithURL:url];
+    BrowserController *controller = [[BrowserController alloc] initWithURL:url andSource:source];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
