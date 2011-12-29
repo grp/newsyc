@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6EA197C514AD0C4200B14180 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EA197C414AD0C4100B14180 /* Twitter.framework */; };
 		7D148E65132D68B5008FBF32 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D148E64132D68B5008FBF32 /* libxml2.dylib */; };
 		7D17CA2F134AE22700763741 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D17CA2D134AE22700763741 /* Default.png */; };
 		7D17CA30134AE22700763741 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D17CA2E134AE22700763741 /* Default@2x.png */; };
@@ -151,6 +152,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6EA197C414AD0C4100B14180 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		7D148E64132D68B5008FBF32 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		7D17CA2D134AE22700763741 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		7D17CA2E134AE22700763741 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -387,6 +389,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EA197C514AD0C4200B14180 /* Twitter.framework in Frameworks */,
 				7D148E65132D68B5008FBF32 /* libxml2.dylib in Frameworks */,
 				7D96C60D1426CC1B00A76F04 /* MessageUI.framework in Frameworks */,
 				7D1F98921320CF720059EBBB /* UIKit.framework in Frameworks */,
@@ -424,6 +427,7 @@
 		7D1F98901320CF720059EBBB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6EA197C414AD0C4100B14180 /* Twitter.framework */,
 				7D148E64132D68B5008FBF32 /* libxml2.dylib */,
 				7D96C60C1426CC1B00A76F04 /* MessageUI.framework */,
 				7D8A660713333A72002012AA /* QuartzCore.framework */,
@@ -1035,7 +1039,7 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1055,7 +1059,7 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;

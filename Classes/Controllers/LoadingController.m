@@ -158,7 +158,30 @@
     
         if (index == 0) {
             [[UIApplication sharedApplication] openURL:[source URL]];
-        } else if ([MFMailComposeViewController canSendMail] && index == 1) {
+        } else if(index == 1) {
+            TWTweetComposeViewController *twitter = [[TWTweetComposeViewController alloc] init];
+            
+            [twitter setInitialText:[NSString stringWithFormat:@"%@ via news:yc for iOS", [[source URL] absoluteString]]];
+            
+            [self presentViewController:twitter animated:YES completion:nil];
+            
+            twitter.completionHandler = ^(TWTweetComposeViewControllerResult res) {
+                
+                if(res == TWTweetComposeViewControllerResultDone)
+                {
+                    
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Tweet sent" message:[NSString stringWithFormat:@"The link %@ was tweeted successfully", [[source URL] absoluteString]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    
+                    [alertView show];
+                    
+                }
+                                    
+                [self dismissModalViewControllerAnimated:YES];
+                
+            };
+        }
+        
+        } else if ([MFMailComposeViewController canSendMail] && index == 2) {
             MFMailComposeViewController *composeController = [[MFMailComposeViewController alloc] init];
             [composeController setMailComposeDelegate:self];
             
@@ -167,7 +190,7 @@
             [composeController setMessageBody:body isHTML:YES];
             
             [self presentModalViewController:[composeController autorelease] animated:YES];
-        } else if (([MFMailComposeViewController canSendMail] && index == 2) || (![MFMailComposeViewController canSendMail] && index == 1)) {
+        } else if (([MFMailComposeViewController canSendMail] && index == 3) || (![MFMailComposeViewController canSendMail] && index == 1)) {
             // XXX: find the best way to copy a URL to the clipboard
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             [pasteboard setURL:[source URL]];
@@ -179,8 +202,8 @@
             [hud showInWindow:[self.view window]];
             [hud dismissAfterDelay:0.8f animated:YES];
             [hud release];
+        
         }
-    }
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
@@ -197,6 +220,8 @@
     ];
     
     [sheet addButtonWithTitle:@"Open in Safari"];
+    [sheet addButtonWithTitle:@"Tweet link"];
+
     if ([MFMailComposeViewController canSendMail]) [sheet addButtonWithTitle:@"Mail Link"];
     [sheet addButtonWithTitle:@"Copy Link"];
     [sheet addButtonWithTitle:@"Cancel"];

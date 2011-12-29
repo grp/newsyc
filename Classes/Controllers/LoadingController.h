@@ -9,7 +9,7 @@
 #import "HNKit.h"
 #import "ActivityIndicatorItem.h"
 #import "PlacardButton.h"
-
+#import <Twitter/Twitter.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
 @class LoadingIndicatorView;

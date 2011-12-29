@@ -203,9 +203,32 @@
 - (void)actionSheet:(UIActionSheet *)action clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == [action cancelButtonIndex]) return;
     
+    
     if (buttonIndex == 0) {
         [[UIApplication sharedApplication] openURL:currentURL];
-    } else if ([MFMailComposeViewController canSendMail] && buttonIndex == 1) {
+    } else if(buttonIndex == 1) {
+        TWTweetComposeViewController *twitter = [[TWTweetComposeViewController alloc] init];
+        
+        [twitter setInitialText:[NSString stringWithFormat:@"%@ via news:yc for iOS", [currentURL absoluteString]]];
+        
+        [self presentViewController:twitter animated:YES completion:nil];
+        
+        twitter.completionHandler = ^(TWTweetComposeViewControllerResult res) {
+            
+            if(res == TWTweetComposeViewControllerResultDone)
+            {
+                
+                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Tweet sent" message:[NSString stringWithFormat:@"The link %@ was tweeted successfully", [currentURL absoluteString]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                
+                [alertView show];
+                
+            }
+            
+            [self dismissModalViewControllerAnimated:YES];
+            
+        };
+        
+    } else if ([MFMailComposeViewController canSendMail] && buttonIndex == 2) {
         MFMailComposeViewController *composeController = [[MFMailComposeViewController alloc] init];
         [composeController setMailComposeDelegate:self];
         
@@ -214,7 +237,7 @@
         [composeController setMessageBody:body isHTML:YES];
         
         [self presentModalViewController:[composeController autorelease] animated:YES];
-    } else if (([MFMailComposeViewController canSendMail] && buttonIndex == 2) || (![MFMailComposeViewController canSendMail] && buttonIndex == 1)) {
+    } else if (([MFMailComposeViewController canSendMail] && buttonIndex == 3) || (![MFMailComposeViewController canSendMail] && buttonIndex == 1)) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         [pasteboard setURL:currentURL];
         [pasteboard setString:[currentURL absoluteString]];
@@ -264,6 +287,8 @@
     ];
     
     [sheet addButtonWithTitle:@"Open with Safari"];
+    [sheet addButtonWithTitle:@"Tweet link"];
+
     if ([MFMailComposeViewController canSendMail]) [sheet addButtonWithTitle:@"Mail Link"];
     [sheet addButtonWithTitle:@"Copy Link"];
     [sheet addButtonWithTitle:@"Read Later"];
