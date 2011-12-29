@@ -11,6 +11,7 @@
 #import "InstapaperLoginController.h"
 #import "ProgressHUD.h"
 #import "ActivityIndicatorItem.h"
+#import <Twitter/Twitter.h>
 
 #import <MessageUI/MFMailComposeViewController.h>
 
