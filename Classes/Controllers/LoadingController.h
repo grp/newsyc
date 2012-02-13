@@ -23,6 +23,9 @@
     LoadingIndicatorView *indicator;
     
     UIBarButtonItem *actionItem;
+    int openInSafariIndex;
+    int mailLinkIndex;
+    int copyLinkIndex;
 }
 
 @property (nonatomic, retain) HNObject *source;
@@ -39,5 +42,6 @@
 - (void)sourceStartedLoading;
 - (void)sourceFinishedLoading;
 - (void)sourceFailedLoading;
+- (void)addActions:(UIActionSheet *)sheet;
 
 @end

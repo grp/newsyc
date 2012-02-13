@@ -22,6 +22,9 @@
         
     EntryActionsViewItem savedItem;
     BOOL shouldCompleteOnAppear;
+
+    int goToParentIndex;
+    int goToSubmissionIndex;
 }
 
 @end
