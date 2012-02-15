@@ -148,12 +148,8 @@
         }
     } else if ([[sheet sheetContext] isEqual:@"link"]) {
         if (index == goToParentIndex || index == goToSubmissionIndex) {
-            HNEntry *entry = [(HNEntry *)source parent];
-            if (index == goToSubmissionIndex) {
-                while ([entry parent]) {
-                    entry = [entry parent];
-                }
-            }
+            HNEntry *entry = (HNEntry *)source;
+            entry = (index == goToSubmissionIndex) ? [entry submission] : [entry parent];
 
             CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
             if ([entry isSubmission]) [controller setTitle:@"Submission"];
