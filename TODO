@@ -18,7 +18,6 @@ X preserve newlines in <pre> and <code> tags (this would be in DTAttributedTextV
 X parse and display deleted comments (right now they are ignored)
 parse "more" links in HNAPIParserSubmissionList (required for below item, PLEASE DO THIS)
 X "infinite scrolling" for HNEntryListController, loading more items via the "more" links (depends on "more" links)
-show bodies in Ask HN posts (SubmissionHeaderView, this is easy (same code as CommentHeaderView for the DTAttibutedTextView, maybe a common superclass there?) and another PLEASE DO THIS)
 something seems wrong with the coloring in the Default.png (and Default@2x.png), and I really don't know why.
 anything else you can dream up!
 
