@@ -152,27 +152,33 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appRelaunched:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
+- (void)addActions:(UIActionSheet *)sheet {
+    openInSafariIndex = [sheet addButtonWithTitle:@"Open in Safari"];
+    mailLinkIndex = [MFMailComposeViewController canSendMail] ? [sheet addButtonWithTitle:@"Mail Link"] : -1;
+    copyLinkIndex = [sheet addButtonWithTitle:@"Copy Link"];
+}
+
 - (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
     if ([[sheet sheetContext] isEqual:@"link"]) {
         if (index == [sheet cancelButtonIndex]) return;
-    
-        if (index == 0) {
+
+        if (index == openInSafariIndex) {
             [[UIApplication sharedApplication] openURL:[source URL]];
-        } else if ([MFMailComposeViewController canSendMail] && index == 1) {
+        } else if (index == mailLinkIndex) {
             MFMailComposeViewController *composeController = [[MFMailComposeViewController alloc] init];
             [composeController setMailComposeDelegate:self];
-            
+
             NSString *urlString = [[source URL] absoluteString];
             NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", urlString, urlString];
             [composeController setMessageBody:body isHTML:YES];
-            
+
             [self presentModalViewController:[composeController autorelease] animated:YES];
-        } else if (([MFMailComposeViewController canSendMail] && index == 2) || (![MFMailComposeViewController canSendMail] && index == 1)) {
+        } else if (index == copyLinkIndex) {
             // XXX: find the best way to copy a URL to the clipboard
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             [pasteboard setURL:[source URL]];
             [pasteboard setString:[[source URL] absoluteString]];
-            
+
             ProgressHUD *hud = [[ProgressHUD alloc] init];
             [hud setText:@"Copied!"];
             [hud setState:kProgressHUDStateCompleted];
@@ -195,10 +201,8 @@
         destructiveButtonTitle:nil
         otherButtonTitles:nil
     ];
-    
-    [sheet addButtonWithTitle:@"Open in Safari"];
-    if ([MFMailComposeViewController canSendMail]) [sheet addButtonWithTitle:@"Mail Link"];
-    [sheet addButtonWithTitle:@"Copy Link"];
+
+    [self addActions:sheet];
     [sheet addButtonWithTitle:@"Cancel"];
     [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
     
