@@ -277,7 +277,9 @@ typedef enum {
     NSString *user = nil;
     NSNumber *identifier = nil;
     NSString *date = nil;
-    
+    NSNumber *parent = nil;
+    NSNumber *submission = nil;
+
     for (XMLElement *element in [comment children]) {
         if ([[element attributeWithName:@"class"] isEqual:@"default"]) {
             for (XMLElement *element2 in [element children]) {
@@ -304,6 +306,10 @@ typedef enum {
                                         user = [user stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                                     } else if ([href hasPrefix:@"item?id="] && [content isEqual:@"link"]) {
                                         identifier = [NSNumber numberWithInt:[[href substringFromIndex:[@"item?id=" length]] intValue]];
+                                    } else if ([href hasPrefix:@"item?id="] && [content isEqual:@"parent"]) {
+                                        parent = [NSNumber numberWithInt:[[href substringFromIndex:[@"item?id=" length]] intValue]];
+                                    } else if ([href hasPrefix:@"item?id="]) {
+                                        submission = [NSNumber numberWithInt:[[href substringFromIndex:[@"item?id=" length]] intValue]];
                                     }
                                 } else if ([tag isEqual:@"span"]) {
                                     int end = [content rangeOfString:@" "].location;
@@ -344,6 +350,9 @@ typedef enum {
         if (points != nil) [item setObject:points forKey:@"points"];
         if (depth != nil) [item setObject:[NSMutableArray array] forKey:@"children"];
         if (depth != nil) [item setObject:depth forKey:@"depth"];
+        if (parent != nil) [item setObject:parent forKey:@"parent"];
+        if (submission != nil) [item setObject:submission forKey:@"submission"];
+
         [item setObject:identifier forKey:@"identifier"];
         
         return item;
