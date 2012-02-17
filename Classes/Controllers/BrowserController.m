@@ -229,10 +229,10 @@
         if ([InstapaperSession currentSession] != nil) {
             [self submitInstapaperRequest];
         } else {
-            NavigationController *navigation = [[NavigationController alloc] init];
             InstapaperLoginController *login = [[InstapaperLoginController alloc] init];
             [login setDelegate:self];
-            [navigation setViewControllers:[NSArray arrayWithObject:login]];
+            
+            NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:login];
             [self presentModalViewController:[navigation autorelease] animated:YES];
         }
     } 
@@ -299,7 +299,7 @@
     [self updateToolbarItems];
 }
 
-//These 3 methods from Apple tech doc: http://developer.apple.com/library/ios/#qa/qa1629/_index.html
+// These 3 methods from Apple tech doc: http://developer.apple.com/library/ios/#qa/qa1629/_index.html
 - (void)openExternalURL:(NSURL *)external {
     externalURL = [external retain];
     
@@ -326,7 +326,7 @@
     externalURL = nil;
 }
 
-- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     [alertView release];
 }
 
@@ -335,10 +335,11 @@
     
     NSArray *hosts = [NSArray arrayWithObjects:@"itunes.apple.com", @"phobos.apple.com", @"youtube.com", @"maps.google.com", nil];
     NSURL *url = [request URL];
-    if(navigationType == UIWebViewNavigationTypeLinkClicked && [hosts containsString:[url host]]) {
+    if (navigationType == UIWebViewNavigationTypeLinkClicked && [hosts containsString:[url host]]) {
         [self openExternalURL:url];
         return NO;
     }
+    
     if (navigationType == UIWebViewNavigationTypeLinkClicked ||
         navigationType == UIWebViewNavigationTypeFormSubmitted ||
         navigationType == UIWebViewNavigationTypeFormResubmitted) {

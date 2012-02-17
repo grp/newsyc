@@ -9,11 +9,12 @@
 #import "HNKit.h"
 #import "ActivityIndicatorItem.h"
 #import "PlacardButton.h"
+#import "LoginController.h"
 
 #import <MessageUI/MFMailComposeViewController.h>
 
 @class LoadingIndicatorView;
-@interface LoadingController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate> {
+@interface LoadingController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, LoginControllerDelegate> {
     HNObject *source;
     
     UIView *statusView;
@@ -26,6 +27,7 @@
     int openInSafariIndex;
     int mailLinkIndex;
     int copyLinkIndex;
+    int readLaterIndex;
 }
 
 @property (nonatomic, retain) HNObject *source;

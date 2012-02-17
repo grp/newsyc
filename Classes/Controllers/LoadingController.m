@@ -11,6 +11,12 @@
 #import "UIActionSheet+Context.h"
 #import "ProgressHUD.h"
 
+#import "InstapaperRequest.h"
+#import "InstapaperSession.h"
+
+#import "InstapaperLoginController.h"
+#import "NavigationController.h"
+
 #import "LoadingController.h"
 #import "LoadingIndicatorView.h"
 
@@ -152,9 +158,49 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appRelaunched:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
+- (void)submitInstapaperRequest {
+    InstapaperRequest *request = [[InstapaperRequest alloc] initWithSession:[InstapaperSession currentSession]];
+    
+    ProgressHUD *hud = [[ProgressHUD alloc] init];
+    [hud setText:@"Saving"];
+    [hud showInWindow:[[self view] window]];
+    [hud release];
+    
+    __block id succeededObserver = nil;
+    [[NSNotificationCenter defaultCenter] addObserverForName:kInstapaperRequestSucceededNotification object:request queue:nil usingBlock:^(NSNotification *notification) {
+        [hud setText:@"Saved!"];
+        [hud setState:kProgressHUDStateCompleted];
+        [hud dismissAfterDelay:0.8f animated:YES];
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:succeededObserver];
+    }];
+    
+    __block id failedObserver = nil;
+    failedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kInstapaperRequestFailedNotification object:request queue:nil usingBlock:^(NSNotification *notification) {
+        [hud setText:@"Error Saving"];
+        [hud setState:kProgressHUDStateError];
+        [hud dismissAfterDelay:0.8f animated:YES];
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:failedObserver];
+    }];
+    
+    [request addItemWithURL:[source URL]];
+    [request autorelease];
+}
+
+- (void)loginControllerDidLogin:(LoginController *)controller {
+    [controller dismissModalViewControllerAnimated:YES];
+    [self submitInstapaperRequest];
+}
+
+- (void)loginControllerDidCancel:(LoginController *)controller {
+    [controller dismissModalViewControllerAnimated:YES];
+}
+
 - (void)addActions:(UIActionSheet *)sheet {
     openInSafariIndex = [sheet addButtonWithTitle:@"Open in Safari"];
     mailLinkIndex = [MFMailComposeViewController canSendMail] ? [sheet addButtonWithTitle:@"Mail Link"] : -1;
+    readLaterIndex = [sheet addButtonWithTitle:@"Read Later"];
     copyLinkIndex = [sheet addButtonWithTitle:@"Copy Link"];
 }
 
@@ -185,6 +231,16 @@
             [hud showInWindow:[self.view window]];
             [hud dismissAfterDelay:0.8f animated:YES];
             [hud release];
+        } else if (index == readLaterIndex) {
+            if ([InstapaperSession currentSession] != nil) {
+                [self submitInstapaperRequest];
+            } else {
+                InstapaperLoginController *login = [[InstapaperLoginController alloc] init];
+                [login setDelegate:self];
+                
+                NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:login];
+                [self presentModalViewController:[navigation autorelease] animated:YES];
+            }
         }
     }
 }

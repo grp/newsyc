@@ -120,7 +120,8 @@
 
 - (void)addActions:(UIActionSheet *)sheet {
     [super addActions:sheet];
-    if ([(HNEntry *)source parent]) {
+    
+    if ([(HNEntry *) source parent]) {
         goToParentIndex = [sheet addButtonWithTitle:@"Go to Parent"];
         goToSubmissionIndex = [sheet addButtonWithTitle:@"Go to Submission"];
     }
@@ -148,15 +149,16 @@
         }
     } else if ([[sheet sheetContext] isEqual:@"link"]) {
         if (index == goToParentIndex || index == goToSubmissionIndex) {
-            HNEntry *entry = (HNEntry *)source;
+            HNEntry *entry = (HNEntry *) source;
             entry = (index == goToSubmissionIndex) ? [entry submission] : [entry parent];
 
             CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
+            
             if ([entry isSubmission]) [controller setTitle:@"Submission"];
             if ([entry isComment]) [controller setTitle:@"Replies"];
+            
             [[self navigationController] pushViewController:[controller autorelease] animated:YES];
-
-        } else {
+        } else if ([[[self class] superclass] instancesRespondToSelector:@selector(actionSheet:clickedButtonAtIndex:)]) {
             [super actionSheet:sheet clickedButtonAtIndex:index];
         }
     } else {
