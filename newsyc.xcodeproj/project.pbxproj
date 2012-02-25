@@ -557,40 +557,13 @@
 		7D6B9E741347DF2E00CD923C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				7D6B9E871347DF2E00CD923C /* NavigationController.h */,
-				7D6B9E881347DF2E00CD923C /* NavigationController.m */,
-				7D6B9E831347DF2E00CD923C /* MainTabBarController.h */,
-				7D6B9E841347DF2E00CD923C /* MainTabBarController.m */,
-				7D6B9E7F1347DF2E00CD923C /* LoadingController.h */,
-				7D6B9E801347DF2E00CD923C /* LoadingController.m */,
-				7D6B9E7B1347DF2E00CD923C /* EntryListController.h */,
-				7D6B9E7C1347DF2E00CD923C /* EntryListController.m */,
-				7D6B9E771347DF2E00CD923C /* CommentListController.h */,
-				7D6B9E781347DF2E00CD923C /* CommentListController.m */,
-				7D6B9E851347DF2E00CD923C /* MoreController.h */,
-				7D6B9E861347DF2E00CD923C /* MoreController.m */,
-				7D6B9E891347DF2E00CD923C /* ProfileController.h */,
-				7D6B9E8A1347DF2E00CD923C /* ProfileController.m */,
-				7D6B9E8B1347DF2E00CD923C /* SessionProfileController.h */,
-				7D6B9E8C1347DF2E00CD923C /* SessionProfileController.m */,
+				7DB809B114F89391009668E6 /* Containers */,
+				7DB809B414F893DF009668E6 /* Data */,
+				7DB809B214F893AF009668E6 /* Compose */,
+				7DB809AF14F89387009668E6 /* Login */,
+				7DB809B314F893C9009668E6 /* Tabs */,
 				7D6B9E751347DF2E00CD923C /* BrowserController.h */,
 				7D6B9E761347DF2E00CD923C /* BrowserController.m */,
-				7D6B9E811347DF2E00CD923C /* LoginController.h */,
-				7D6B9E821347DF2E00CD923C /* LoginController.m */,
-				7D8E9EF4134D76DF00A724C5 /* HackerNewsLoginController.h */,
-				7D8E9EF5134D76DF00A724C5 /* HackerNewsLoginController.m */,
-				FA5F7969134CE04F002EEBCA /* InstapaperLoginController.h */,
-				FA5F796A134CE04F002EEBCA /* InstapaperLoginController.m */,
-				7D6B9E791347DF2E00CD923C /* ComposeController.h */,
-				7D6B9E7A1347DF2E00CD923C /* ComposeController.m */,
-				7D6B9E8F1347DF2E00CD923C /* SubmissionTextComposeController.h */,
-				7D6B9E901347DF2E00CD923C /* SubmissionTextComposeController.m */,
-				7D6B9E911347DF2E00CD923C /* SubmissionURLComposeController.h */,
-				7D6B9E921347DF2E00CD923C /* SubmissionURLComposeController.m */,
-				7D6B9E7D1347DF2E00CD923C /* EntryReplyComposeController.h */,
-				7D6B9E7E1347DF2E00CD923C /* EntryReplyComposeController.m */,
-				CBFCE7AA1398712F007A5DDD /* SearchController.h */,
-				CBFCE7AB1398712F007A5DDD /* SearchController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -712,6 +685,73 @@
 				7DDFA3AC1401A8A100B8E69B /* Follow Model */,
 			);
 			name = Experimental;
+			sourceTree = "<group>";
+		};
+		7DB809AF14F89387009668E6 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				7D6B9E811347DF2E00CD923C /* LoginController.h */,
+				7D6B9E821347DF2E00CD923C /* LoginController.m */,
+				7D8E9EF4134D76DF00A724C5 /* HackerNewsLoginController.h */,
+				7D8E9EF5134D76DF00A724C5 /* HackerNewsLoginController.m */,
+				FA5F7969134CE04F002EEBCA /* InstapaperLoginController.h */,
+				FA5F796A134CE04F002EEBCA /* InstapaperLoginController.m */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		7DB809B114F89391009668E6 /* Containers */ = {
+			isa = PBXGroup;
+			children = (
+				7D6B9E871347DF2E00CD923C /* NavigationController.h */,
+				7D6B9E881347DF2E00CD923C /* NavigationController.m */,
+				7D6B9E831347DF2E00CD923C /* MainTabBarController.h */,
+				7D6B9E841347DF2E00CD923C /* MainTabBarController.m */,
+			);
+			name = Containers;
+			sourceTree = "<group>";
+		};
+		7DB809B214F893AF009668E6 /* Compose */ = {
+			isa = PBXGroup;
+			children = (
+				7D6B9E791347DF2E00CD923C /* ComposeController.h */,
+				7D6B9E7A1347DF2E00CD923C /* ComposeController.m */,
+				7D6B9E8F1347DF2E00CD923C /* SubmissionTextComposeController.h */,
+				7D6B9E901347DF2E00CD923C /* SubmissionTextComposeController.m */,
+				7D6B9E911347DF2E00CD923C /* SubmissionURLComposeController.h */,
+				7D6B9E921347DF2E00CD923C /* SubmissionURLComposeController.m */,
+				7D6B9E7D1347DF2E00CD923C /* EntryReplyComposeController.h */,
+				7D6B9E7E1347DF2E00CD923C /* EntryReplyComposeController.m */,
+			);
+			name = Compose;
+			sourceTree = "<group>";
+		};
+		7DB809B314F893C9009668E6 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				7D6B9E851347DF2E00CD923C /* MoreController.h */,
+				7D6B9E861347DF2E00CD923C /* MoreController.m */,
+				7D6B9E8B1347DF2E00CD923C /* SessionProfileController.h */,
+				7D6B9E8C1347DF2E00CD923C /* SessionProfileController.m */,
+				CBFCE7AA1398712F007A5DDD /* SearchController.h */,
+				CBFCE7AB1398712F007A5DDD /* SearchController.m */,
+			);
+			name = Tabs;
+			sourceTree = "<group>";
+		};
+		7DB809B414F893DF009668E6 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				7D6B9E7F1347DF2E00CD923C /* LoadingController.h */,
+				7D6B9E801347DF2E00CD923C /* LoadingController.m */,
+				7D6B9E7B1347DF2E00CD923C /* EntryListController.h */,
+				7D6B9E7C1347DF2E00CD923C /* EntryListController.m */,
+				7D6B9E771347DF2E00CD923C /* CommentListController.h */,
+				7D6B9E781347DF2E00CD923C /* CommentListController.m */,
+				7D6B9E891347DF2E00CD923C /* ProfileController.h */,
+				7D6B9E8A1347DF2E00CD923C /* ProfileController.m */,
+			);
+			name = Data;
 			sourceTree = "<group>";
 		};
 		7DCB8105134EC9AF00B521F2 /* Instapaper */ = {
