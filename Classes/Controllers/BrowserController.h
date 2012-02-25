@@ -18,9 +18,12 @@
 
 @interface BrowserController : UIViewController <UIWebViewDelegate, UIActionSheetDelegate, LoginControllerDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate> {
     UIWebView *webview;
-    UIToolbar *toolbar;
+    
     NSURL *rootURL;
     NSURL *currentURL;
+    NSURL *externalURL;
+    
+    UIToolbar *toolbar;
     UIBarButtonItem *backItem;
     UIBarButtonItem *forwardItem;
     ActivityIndicatorItem *loadingItem;
@@ -28,7 +31,6 @@
     UIBarButtonItem *shareItem;
     UIBarButtonItem *spacerItem;
     UIBarButtonItem *readabilityItem;
-    NSURL *externalURL;
     
     int networkRetainCount;
 }
