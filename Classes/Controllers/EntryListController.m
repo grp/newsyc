@@ -193,8 +193,6 @@
     HNEntry *entry = [self entryAtIndexPath:indexPath];
     
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    if ([entry isSubmission]) [controller setTitle:@"Submission"];
-    if ([entry isComment]) [controller setTitle:@"Replies"];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 

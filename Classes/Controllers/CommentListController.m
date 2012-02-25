@@ -153,10 +153,6 @@
             entry = (index == goToSubmissionIndex) ? [entry submission] : [entry parent];
 
             CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-            
-            if ([entry isSubmission]) [controller setTitle:@"Submission"];
-            if ([entry isComment]) [controller setTitle:@"Replies"];
-            
             [[self navigationController] pushViewController:[controller autorelease] animated:YES];
         } else if ([[[self class] superclass] instancesRespondToSelector:@selector(actionSheet:clickedButtonAtIndex:)]) {
             [super actionSheet:sheet clickedButtonAtIndex:index];
@@ -448,6 +444,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if ([(HNEntry *) source isSubmission]) [self setTitle:@"Submission"];
+    if ([(HNEntry *) source isComment]) [self setTitle:@"Replies"];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -170,8 +170,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     HNEntry *entry = [entries objectAtIndex:[indexPath row]];
+    
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [controller setTitle:@"Submission"];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }
 
