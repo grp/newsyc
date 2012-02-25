@@ -8,4 +8,5 @@ build
 newsyc.xcodeproj/*.mode1v3
 newsyc.xcodeproj/*.pbxuser
 newsyc.xcodeproj/project.xcworkspace/xcuserdata/*
+newsyc.xcodeproj/xcuserdata/*
 

@@ -15,12 +15,16 @@
 
 @implementation BrowserController
 @synthesize currentURL;
+@synthesize source;
 
-- (id)initWithURL:(NSURL *)url {
+- (id)initWithURL:(NSURL *)url andSource:(HNObject *)source_ {
+    
     if ((self = [super init])) {
         rootURL = url;
         [self setCurrentURL:url];
         [self setHidesBottomBarWhenPushed:YES];
+        [source autorelease];
+        source = [source_ retain];
     }
     
     return self;
@@ -58,6 +62,8 @@
     [refreshItem release];
     [loadingItem release];
     [spacerItem release];
+    
+    [source release];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
@@ -220,6 +226,9 @@
         
         NSString *urlString = [currentURL absoluteString];
         NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", urlString, urlString];
+        if (source && [source isKindOfClass:[HNEntry class]]) {
+            [composeController setSubject:((HNEntry *)source).title];
+        }
         [composeController setMessageBody:body isHTML:YES];
         
         [self presentModalViewController:[composeController autorelease] animated:YES];
