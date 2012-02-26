@@ -6,10 +6,11 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "HNObject.h"
+#import "HNShared.h"
+#import "HNContainer.h"
 
 @class HNUser;
-@interface HNEntry : HNObject {
+@interface HNEntry : HNContainer {
     int points;
     int children;
     HNUser *submitter;
@@ -17,7 +18,6 @@
     NSString *posted;
     HNEntry *parent;
     HNEntry *submission;
-    NSMutableArray *entries;
     NSURL *destination;
     NSString *title;
 }
@@ -29,12 +29,10 @@
 @property (nonatomic, retain) NSString *posted;
 @property (nonatomic, retain) HNEntry *parent;
 @property (nonatomic, retain) HNEntry *submission;
-@property (nonatomic, retain) NSArray *entries;
 @property (nonatomic, copy) NSURL *destination;
 @property (nonatomic, copy) NSString *title;
 
-- (void)loadFromDictionary:(NSDictionary *)response;
-- (void)loadFromDictionary:(NSDictionary *)response withSubmission:(HNEntry *)submission_;
+- (void)loadFromDictionary:(NSDictionary *)response entries:(NSArray **)outEntries withSubmission:(HNEntry *)submission_;
 
 - (BOOL)isComment;
 - (BOOL)isSubmission;

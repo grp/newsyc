@@ -52,8 +52,8 @@
     [delegate entryActionsView:self didSelectItem:kEntryActionsViewItemDownvote];
 }
 
-- (void)submitterTapped:(UIButton *)button {
-    [delegate entryActionsView:self didSelectItem:kEntryActionsViewItemSubmitter];
+- (void)actionsTapped:(UIButton *)button {
+    [delegate entryActionsView:self didSelectItem:kEntryActionsViewItemActions];
 }
 
 - (void)updateItems {
@@ -63,9 +63,9 @@
     UIBarButtonItem *upvoteItem = [self createBarButtonItemForItem:kEntryActionsViewItemUpvote];
     UIBarButtonItem *flagItem = [self createBarButtonItemForItem:kEntryActionsViewItemFlag];
     UIBarButtonItem *downvoteItem = [self createBarButtonItemForItem:kEntryActionsViewItemDownvote];
-    UIBarButtonItem *submitterItem = [self createBarButtonItemForItem:kEntryActionsViewItemSubmitter];
+    UIBarButtonItem *actionsItem = [self createBarButtonItemForItem:kEntryActionsViewItemActions];
     
-    [self setItems:[NSArray arrayWithObjects:replyItem, flexibleSpace, upvoteItem, flexibleSpace, flagItem, flexibleSpace, downvoteItem, flexibleSpace, submitterItem, nil]];
+    [self setItems:[NSArray arrayWithObjects:replyItem, flexibleSpace, upvoteItem, flexibleSpace, flagItem, flexibleSpace, downvoteItem, flexibleSpace, actionsItem, nil]];
      
     [flexibleSpace release];
 }
@@ -83,7 +83,7 @@
             return [items objectAtIndex:5];
         case kEntryActionsViewItemDownvote:
             return [items objectAtIndex:7];
-        case kEntryActionsViewItemSubmitter:
+        case kEntryActionsViewItemActions:
             return [items objectAtIndex:9];
         default:
             return nil;
@@ -104,8 +104,8 @@
         case kEntryActionsViewItemDownvote:
             downvoteDisabled = !enabled;
             break;
-        case kEntryActionsViewItemSubmitter:
-            submitterDisabled = !enabled;
+        case kEntryActionsViewItemActions:
+            actionsDisabled = !enabled;
             break;
         default:
             break;
@@ -124,8 +124,8 @@
             return !flagDisabled;
         case kEntryActionsViewItemDownvote:
             return !downvoteDisabled;
-        case kEntryActionsViewItemSubmitter:
-            return !submitterDisabled;
+        case kEntryActionsViewItemActions:
+            return !actionsDisabled;
         default:
             return YES;
     }
@@ -141,8 +141,8 @@
             return [UIImage imageNamed:@"flag.png"];
         case kEntryActionsViewItemDownvote:
             return [UIImage imageNamed:@"downvote.png"];
-        case kEntryActionsViewItemSubmitter:
-            return [UIImage imageNamed:@"profile.png"];
+        case kEntryActionsViewItemActions:
+            return [UIImage imageNamed:@"action.png"];
         default:
             return nil;
     }
@@ -168,8 +168,8 @@
             case kEntryActionsViewItemDownvote:
                 barButtonItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStylePlain target:self action:@selector(downvoteTapped:)];
                 break;
-            case kEntryActionsViewItemSubmitter:
-                barButtonItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStylePlain target:self action:@selector(submitterTapped:)];
+            case kEntryActionsViewItemActions:
+                barButtonItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStylePlain target:self action:@selector(actionsTapped:)];
                 break;
             default:
                 break;
@@ -194,8 +194,8 @@
         case kEntryActionsViewItemDownvote:
             downvoteLoading += 1;
             break;
-        case kEntryActionsViewItemSubmitter:
-            submitterLoading += 1;
+        case kEntryActionsViewItemActions:
+            actionsLoading += 1;
             break;
         default:
             break;
@@ -218,8 +218,8 @@
         case kEntryActionsViewItemDownvote:
             downvoteLoading -= 1;
             break;
-        case kEntryActionsViewItemSubmitter:
-            submitterLoading -= 1;
+        case kEntryActionsViewItemActions:
+            actionsLoading -= 1;
             break;
         default:
             break;
@@ -238,8 +238,8 @@
             return flagLoading > 0;
         case kEntryActionsViewItemDownvote:
             return downvoteLoading > 0;
-        case kEntryActionsViewItemSubmitter:
-            return submitterLoading > 0;
+        case kEntryActionsViewItemActions:
+            return actionsLoading > 0;
         default:
             return NO;
     }

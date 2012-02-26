@@ -14,7 +14,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 
 @class LoadingIndicatorView;
-@interface LoadingController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, LoginControllerDelegate> {
+@interface LoadingController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate> {
     HNObject *source;
     
     UIView *statusView;
@@ -44,6 +44,5 @@
 - (void)sourceStartedLoading;
 - (void)sourceFinishedLoading;
 - (void)sourceFailedLoading;
-- (void)addActions:(UIActionSheet *)sheet;
 
 @end

@@ -158,7 +158,7 @@
 	
 	[self.contentView sizeToFit];
 	
-	self.contentSize = contentView.bounds.size;
+	//self.contentSize = contentView.bounds.size;
 }
 
 - (NSAttributedString *)attributedString
@@ -173,7 +173,7 @@
 	{
 		// TODO: Is there a way to animate content?
 		// if this is not here then the content jumps 
-		[self setContentOffset:CGPointZero];
+		//[self setContentOffset:CGPointZero];
 		
 		CGFloat previousWidth = self.bounds.size.width;
 		
@@ -187,7 +187,7 @@
 		}
 	
 		// always set the content size
-		self.contentSize = contentView.bounds.size;
+		//self.contentSize = contentView.bounds.size;
 
 	}
 }

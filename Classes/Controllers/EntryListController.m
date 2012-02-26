@@ -12,7 +12,6 @@
 #import "LoadingIndicatorView.h"
 #import "PullToRefreshView.h"
 
-#import "CommentTableCell.h"
 #import "SubmissionTableCell.h"
 
 #import "CommentListController.h"
@@ -87,16 +86,14 @@
     [pullToRefreshView finishedLoading];
     [moreButton stopLoading];
     
-    if ([source isKindOfClass:[HNEntryList class]]) {
-        if ([(HNEntryList *) source moreToken] != nil) {
-            moreButton = [[LoadMoreButton alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 64.0f)];
-            [moreButton addTarget:self action:@selector(loadMorePressed) forControlEvents:UIControlEventTouchUpInside];
-            [tableView setTableFooterView:moreButton];
-        } else {
-            [tableView setTableFooterView:nil];
-            [moreButton release];
-            moreButton = nil;
-        }
+    if ([(HNContainer *) source moreToken] != nil) {
+        moreButton = [[LoadMoreButton alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 64.0f)];
+        [moreButton addTarget:self action:@selector(loadMorePressed) forControlEvents:UIControlEventTouchUpInside];
+        [tableView setTableFooterView:moreButton];
+    } else {
+        [tableView setTableFooterView:nil];
+        [moreButton release];
+        moreButton = nil;
     }
 }
 
@@ -149,56 +146,49 @@
     return [entries count];
 }
 
+- (CGFloat)cellHeightForEntry:(HNEntry *)entry {
+    return 0.0f;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     HNEntry *entry = [self entryAtIndexPath:indexPath];
-    if ([entry isSubmission]) return [SubmissionTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
-    else return [CommentTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width showReplies:YES];
+    
+    return [self cellHeightForEntry:entry];
+}
+
++ (Class)cellClass {
+    return nil;
 }
 
 - (void)configureCell:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
-    if ([entry isSubmission]) {
-        SubmissionTableCell *cell_ = (SubmissionTableCell *) cell;
-        [cell_ setSubmission:entry];
-    } else if ([entry isComment]) {
-        CommentTableCell *cell_ = (CommentTableCell *) cell;
-        [cell_ setIndentationLevel:0];
-        [cell_ setShowReplies:YES];
-        [cell_ setComment:entry];
-    }
+    return;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     HNEntry *entry = [self entryAtIndexPath:indexPath];
     
-    if ([entry isSubmission]) {
-        SubmissionTableCell *cell = (SubmissionTableCell *) [tableView dequeueReusableCellWithIdentifier:@"submission"];
-        if (cell == nil) cell = [[[SubmissionTableCell alloc] initWithReuseIdentifier:@"submission"] autorelease];
-        
-        [self configureCell:cell forEntry:entry];
-        
-        return cell;
-    } else if ([entry isComment]) {
-        CommentTableCell *cell = (CommentTableCell *) [tableView dequeueReusableCellWithIdentifier:@"comment"];
-        if (cell == nil) cell = [[[CommentTableCell alloc] initWithReuseIdentifier:@"comment"] autorelease];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"entry-cell"];
+    if (cell == nil) cell = [[[[[self class] cellClass] alloc] initWithReuseIdentifier:@"entry-cell"] autorelease];
 
-        [self configureCell:cell forEntry:entry];
-        
-        return cell;
-    }
+    [self configureCell:cell forEntry:entry];
     
-    return nil;
+    return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
+    return;
+}
+
+- (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     HNEntry *entry = [self entryAtIndexPath:indexPath];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+    [self cellSelected:cell forEntry:entry];
 }
 
 - (void)loadMorePressed {
-    if ([source isLoaded] && ![(HNEntryList *) source isLoadingMore]) {
-        [(HNEntryList *) source beginLoadingMore];
+    if ([source isLoaded] && ![(HNContainer *) source isLoadingMore]) {
+        [(HNContainer *) source beginLoadingMore];
         [moreButton startLoading];
     }
 }

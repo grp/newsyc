@@ -10,6 +10,7 @@
 #import "InstapaperSession.h"
 
 @implementation InstapaperLoginController
+@synthesize pendingURL;
 
 - (void)dealloc {
     [super dealloc];

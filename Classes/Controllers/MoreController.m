@@ -11,7 +11,8 @@
 #import "MoreController.h"
 #import "ProfileController.h"
 #import "ProfileHeaderView.h"
-#import "EntryListController.h"
+#import "SubmissionListController.h"
+#import "CommentListController.h"
 #import "BrowserController.h"
 
 @implementation MoreController
@@ -133,28 +134,35 @@
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     HNEntryListIdentifier type = nil;
     NSString *title = nil;
+    Class controllerClass = nil;
     
     if ([indexPath section] == 0) {
         if ([indexPath row] == 0) {
             type = kHNEntryListIdentifierBestSubmissions;
             title = @"Best Submissions";
+            controllerClass = [SubmissionListController class];
         } else if ([indexPath row] == 1) {
             type = kHNEntryListIdentifierActiveSubmissions;
             title = @"Active";
+            controllerClass = [SubmissionListController class];
         } else if ([indexPath row] == 2) {
             type = kHNEntryListIdentifierClassicSubmissions;
             title = @"Classic";
+            controllerClass = [SubmissionListController class];
         } else if ([indexPath row] == 3) {
             type = kHNEntryListIdentifierAskSubmissions;
             title = @"Ask HN";
+            controllerClass = [SubmissionListController class];
         }
     } else if ([indexPath section] == 1) {
         if ([indexPath row] == 0) {
             type = kHNEntryListIdentifierBestComments;
             title = @"Best Comments";
+            controllerClass = [CommentListController class];
         } else if ([indexPath row] == 1) {
             type = kHNEntryListIdentifierNewComments;
             title = @"New Comments";
+            controllerClass = [CommentListController class];
         }
     } else if ([indexPath section] == 2) {
         if ([indexPath row] == 0) {
@@ -173,7 +181,7 @@
     }
     
     HNEntryList *list = [HNEntryList entryListWithIdentifier:type];
-    UIViewController *controller = [[EntryListController alloc] initWithSource:list];
+    UIViewController *controller = [[controllerClass alloc] initWithSource:list];
     [controller setTitle:title];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
 }

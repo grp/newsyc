@@ -11,7 +11,7 @@
 #import "UIActionSheet+Context.h"
 
 #import "MainTabBarController.h"
-#import "EntryListController.h"
+#import "SubmissionListController.h"
 #import "SessionProfileController.h"
 #import "MoreController.h"
 #import "NavigationController.h"
@@ -29,18 +29,18 @@
 - (id)init {
     if ((self = [super init])) {
         HNEntryList *homeList = [HNEntryList entryListWithIdentifier:kHNEntryListIdentifierSubmissions];
-        home = [[[EntryListController alloc] initWithSource:homeList] autorelease];
+        home = [[[SubmissionListController alloc] initWithSource:homeList] autorelease];
         [home setTitle:@"Hacker News"];
         [home setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Home" image:[UIImage imageNamed:@"home.png"] tag:0] autorelease]];
         
         HNEntryList *newList = [HNEntryList entryListWithIdentifier:kHNEntryListIdentifierNewSubmissions];
-        latest = [[[EntryListController alloc] initWithSource:newList] autorelease];
+        latest = [[[SubmissionListController alloc] initWithSource:newList] autorelease];
         [latest setTitle:@"New Submissions"];
         [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"New" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
     
 #ifdef ENABLE_TIMELINE
         HNEntryList *newList = [HNTimeline timelineForSession:[HNSession currentSession]];
-        latest = [[[EntryListController alloc] initWithSource:newList] autorelease];
+        latest = [[[SubmissionListController alloc] initWithSource:newList] autorelease];
         [latest setTitle:@"Timeline"];
         [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Timeline" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
 #endif

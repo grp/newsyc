@@ -6,6 +6,8 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import "HNShared.h"
+
 typedef enum {
     kHNObjectLoadingStateNotLoaded = 0,
     kHNObjectLoadingStateUnloaded = 0,

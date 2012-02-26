@@ -7,8 +7,10 @@
 //
 
 #import "BrowserController.h"
-#import "InstapaperAPI.h"
+
+#import "InstapaperController.h"
 #import "NavigationController.h"
+
 #import "ProgressHUD.h"
 #import "NSArray+Strings.h"
 #import "UIApplication+ActivityIndicator.h"
@@ -162,47 +164,8 @@
     spacerItem = nil;
 }
 
-- (void)submitInstapaperRequest {
-    InstapaperRequest *request = [[InstapaperRequest alloc] initWithSession:[InstapaperSession currentSession]];
-        
-    ProgressHUD *hud = [[ProgressHUD alloc] init];
-    [hud setText:@"Saving"];
-    [hud showInWindow:[[self view] window]];
-    [hud release];
-    
-    __block id succeededObserver = nil;
-    [[NSNotificationCenter defaultCenter] addObserverForName:kInstapaperRequestSucceededNotification object:request queue:nil usingBlock:^(NSNotification *notification) {
-        [hud setText:@"Saved!"];
-        [hud setState:kProgressHUDStateCompleted];
-        [hud dismissAfterDelay:0.8f animated:YES];
-        
-        [[NSNotificationCenter defaultCenter] removeObserver:succeededObserver];
-    }];
-    
-    __block id failedObserver = nil;
-    failedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kInstapaperRequestFailedNotification object:request queue:nil usingBlock:^(NSNotification *notification) {
-        [hud setText:@"Error Saving"];
-        [hud setState:kProgressHUDStateError];
-        [hud dismissAfterDelay:0.8f animated:YES];
-        
-        [[NSNotificationCenter defaultCenter] removeObserver:failedObserver];
-    }];
-    
-    [request addItemWithURL:currentURL];
-    [request autorelease];
-}
-
 - (void)readability {
     [webview stringByEvaluatingJavaScriptFromString:kReadabilityBookmarkletCode];
-}
-
-- (void)loginControllerDidLogin:(LoginController *)controller {
-    [controller dismissModalViewControllerAnimated:YES];
-    [self submitInstapaperRequest];
-}
-
-- (void)loginControllerDidCancel:(LoginController *)controller {
-    [controller dismissModalViewControllerAnimated:YES];
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
@@ -235,15 +198,7 @@
         [copied dismissAfterDelay:0.8f animated:YES];
         [copied release];
     } else if (([MFMailComposeViewController canSendMail] && buttonIndex == 3) || (![MFMailComposeViewController canSendMail] && buttonIndex == 2)) {
-        if ([InstapaperSession currentSession] != nil) {
-            [self submitInstapaperRequest];
-        } else {
-            InstapaperLoginController *login = [[InstapaperLoginController alloc] init];
-            [login setDelegate:self];
-            
-            NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:login];
-            [self presentModalViewController:[navigation autorelease] animated:YES];
-        }
+        [[InstapaperController sharedInstance] submitURL:currentURL fromController:self];
     } 
 }
 

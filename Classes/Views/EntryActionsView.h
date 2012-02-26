@@ -8,15 +8,12 @@
 
 #import "ActivityIndicatorItem.h"
 
-// XXX: this class should support replacing an item with a spinner
-// while something is loading (e.g. a vote is being submitted)
-
 typedef enum {
     kEntryActionsViewItemUpvote,
     kEntryActionsViewItemReply,
     kEntryActionsViewItemFlag,
     kEntryActionsViewItemDownvote,
-    kEntryActionsViewItemSubmitter
+    kEntryActionsViewItemActions
 } EntryActionsViewItem;
 
 @protocol EntryActionsViewDelegate;
@@ -33,8 +30,8 @@ typedef enum {
     BOOL flagDisabled;
     int downvoteLoading;
     BOOL downvoteDisabled;
-    int submitterLoading;
-    BOOL submitterDisabled;
+    int actionsLoading;
+    BOOL actionsDisabled;
 }
 
 @property (nonatomic, retain) HNEntry *entry;

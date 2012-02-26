@@ -18,7 +18,7 @@
 @end
 
 
-@interface DTAttributedTextView : UIScrollView 
+@interface DTAttributedTextView : UIView 
 {
 	DTAttributedTextContentView *contentView;
 	UIView *backgroundView;

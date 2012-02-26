@@ -11,20 +11,22 @@
 #import "EntryActionsView.h"
 #import "DetailsHeaderView.h"
 #import "LoginController.h"
+#import "CommentTableCell.h"
 
-@interface CommentListController : EntryListController <EntryActionsViewDelegate, DetailsHeaderViewDelegate, LoginControllerDelegate, ComposeControllerDelegate> {
+@interface CommentListController : EntryListController <EntryActionsViewDelegate, DetailsHeaderViewDelegate, LoginControllerDelegate, ComposeControllerDelegate, CommentTableCellDelegate> {
     UIView *detailsHeaderContainer;
     DetailsHeaderView *detailsHeaderView;
     EntryActionsView *entryActionsView;
     UIView *containerContainer;
     CGFloat suggestedHeaderHeight;
     CGFloat maximumHeaderHeight;
-        
-    EntryActionsViewItem savedItem;
-    BOOL shouldCompleteOnAppear;
 
-    int goToParentIndex;
-    int goToSubmissionIndex;
+    void (^savedAction)();
+    void (^savedCompletion)(int);
+    BOOL shouldCompleteOnAppear;
+    
+    HNEntry *expandedEntry;
+    CommentTableCell *expandedCell;
 }
 
 @end

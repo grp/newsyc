@@ -21,6 +21,10 @@
 }
 
 - (HNEntry *)entryAtIndexPath:(NSIndexPath *)indexPath;
+
++ (Class)cellClass;
+- (CGFloat)cellHeightForEntry:(HNEntry *)entry;
 - (void)configureCell:(UITableViewCell *)cell forEntry:(HNEntry *)entry;
+- (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry;
 
 @end

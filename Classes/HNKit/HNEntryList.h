@@ -6,7 +6,9 @@
 //  Copyright (c) 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "HNKit.h"
+#import "HNShared.h"
+#import "HNContainer.h"
+#import "HNUser.h"
 
 typedef NSString *HNEntryListIdentifier;
 
@@ -22,25 +24,13 @@ typedef NSString *HNEntryListIdentifier;
 #define kHNEntryListIdentifierUserComments @"threads"
 #define kHNEntryListIdentifierSaved @"saved"
 
-#define kHNEntryListLoadingStateLoadingMore 0x00010000
-
-@interface HNEntryList : HNObject {
+@interface HNEntryList : HNContainer {
     HNUser *user;
-    NSArray *entries;
-    
-    HNMoreToken moreToken;
-    HNAPIRequest *moreRequest;
 }
 
 @property (nonatomic, retain, readonly) HNUser *user;
-@property (nonatomic, copy) NSArray *entries;
-@property (nonatomic, copy) HNMoreToken moreToken;
 
 + (id)entryListWithIdentifier:(HNEntryListIdentifier)identifier_;
 + (id)entryListWithIdentifier:(HNEntryListIdentifier)identifier_ user:(HNUser *)user_;
-
-- (void)beginLoadingMore;
-- (BOOL)isLoadingMore;
-- (void)cancelLoadingMore;
 
 @end

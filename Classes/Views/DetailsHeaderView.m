@@ -24,8 +24,6 @@
         
         textView = [[DTAttributedTextView alloc] init];
         [textView setTextDelegate:self];
-        [textView setScrollsToTop:NO];
-        [textView setScrollEnabled:NO];
         [self addSubview:textView];
         
         [self setEntry:entry_];
@@ -234,6 +232,5 @@
         [action showFromRect:[button frame] inView:[button superview] animated:YES];
     }
 }
-
 
 @end

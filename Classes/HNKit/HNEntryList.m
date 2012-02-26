@@ -7,8 +7,7 @@
 //
 
 #import "HNEntryList.h"
-
-#import "NSURL+Parameters.h"
+#import "HNEntry.h"
 
 @interface HNEntryList ()
 
@@ -17,7 +16,7 @@
 @end
 
 @implementation HNEntryList
-@synthesize entries, user, moreToken;
+@synthesize user;
 
 + (NSDictionary *)infoDictionaryForURL:(NSURL *)url_ {
     if (![self isValidURL:url_]) return nil;
@@ -74,18 +73,7 @@
     }
 }
 
-- (void)beginLoadingMore {
-    if ([self isLoadingMore] || moreToken == nil || ![self isLoaded]) return;
-    
-    [self addLoadingState:kHNEntryListLoadingStateLoadingMore];
-    
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:moreToken forKey:@"fnid"];
-    
-    moreRequest = [[HNAPIRequest alloc] initWithTarget:self action:@selector(moreRequest:completedWithResponse:error:)];
-    [moreRequest performRequestWithPath:@"x" parameters:parameters];
-}
-
-- (void)loadFromDictionary:(NSDictionary *)response appendChildren:(BOOL)append {
+- (void)loadFromDictionary:(NSDictionary *)response entries:(NSArray **)outEntries {
     NSMutableArray *children = [NSMutableArray array];
     
     for (NSDictionary *entryDictionary in [response objectForKey:@"children"]) {
@@ -96,49 +84,9 @@
         // XXX: should the entry be set to loaded here? probably not, since
         //      it isn't fully loaded (as the loaded state represents).
     }
-    
-    if (append) {
-        [self setEntries:[entries arrayByAddingObjectsFromArray:children]];
-    } else {
-        [self setEntries:children];
-    }
-    
-    [self setMoreToken:[response objectForKey:@"more"]];
-}
 
-- (BOOL)isLoadingMore {
-    return [self hasLoadingState:kHNEntryListLoadingStateLoadingMore];
-}
-
-- (void)cancelLoadingMore {
-    [self clearLoadingState:kHNEntryListLoadingStateLoadingMore];
-    [moreRequest cancelRequest];
-    [moreRequest release];
-    moreRequest = nil;
-}
-
-- (void)beginLoadingWithState:(HNObjectLoadingState)state_ {
-    [self cancelLoadingMore];
-    [super beginLoadingWithState:state_];
-}
-
-- (void)moreRequest:(HNAPIRequest *)request completedWithResponse:(NSDictionary *)response error:(NSError *)error {
-    [self clearLoadingState:kHNEntryListLoadingStateLoadingMore];
-    [moreRequest release];
-    moreRequest = nil;
-    
-    if (error == nil) {
-        [self loadFromDictionary:response appendChildren:YES];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectFinishedLoadingNotification object:self];
-    } else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectFailedLoadingNotification object:self];
-    }
-}
-
-- (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error {
-    if (error == nil) {
-        [self loadFromDictionary:response appendChildren:NO];
+    if (outEntries != NULL) {
+        *outEntries = children;
     }
 }
 

@@ -10,7 +10,9 @@
 #import "InstapaperAuthenticator.h"
 
 @interface InstapaperLoginController : LoginController <LoginControllerDelegate, InstapaperAuthenticatorDelegate> {
-
+    NSURL *pendingURL;
 }
+
+@property (nonatomic, copy) NSURL *pendingURL;
 
 @end
