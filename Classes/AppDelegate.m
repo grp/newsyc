@@ -22,13 +22,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    navigationController = [[NavigationController alloc] init];
-    [window setRootViewController:navigationController];
     
     MainTabBarController *mainTabBarController = [[MainTabBarController alloc] init];
+    navigationController = [[NavigationController alloc] initWithRootViewController:mainTabBarController];
+    [window setRootViewController:[navigationController autorelease]];
     [mainTabBarController setTitle:@"Hacker News"];
-    [navigationController setViewControllers:[NSArray arrayWithObjects:mainTabBarController, nil]];
-    [mainTabBarController release];
     
     if (![[HNSession currentSession] isAnonymous]) {
         [[HNSession currentSession] reloadToken];
