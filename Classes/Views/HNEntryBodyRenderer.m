@@ -232,12 +232,17 @@
     CGContextRestoreGState(context);  
 }
 
+- (void)prepare {
+    attributed = [[self createAttributedString] retain];
+    framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef) attributed);
+}
+
 - (id)initWithEntry:(HNEntry *)entry_ {
     if ((self = [super init])) {
         entry = entry_;
+        [self prepare];
         
-        attributed = [[self createAttributedString] retain];
-        framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef) attributed);
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepare) name:kHNObjectLoadingStateChangedNotification object:entry];
     }
     
     return self;
@@ -246,6 +251,8 @@
 - (void)dealloc {
     CFRelease(framesetter);
     [attributed release];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [super dealloc];
 }
