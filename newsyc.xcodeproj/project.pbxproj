@@ -119,6 +119,7 @@
 		7DD03DEB14529E880007A069 /* Icon-small~ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD03DE614529E880007A069 /* Icon-small~ipad@2x.png */; };
 		7DD03DEC14529E880007A069 /* Icon~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD03DE714529E880007A069 /* Icon~ipad.png */; };
 		7DD03DED14529E880007A069 /* Icon~ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD03DE814529E880007A069 /* Icon~ipad@2x.png */; };
+		7DD1EEA81503894B00C3EC31 /* HNEntryBodyRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD1EEA71503894B00C3EC31 /* HNEntryBodyRenderer.m */; };
 		7DDFA3B01401A8F300B8E69B /* HNTimeline.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3AF1401A8F300B8E69B /* HNTimeline.m */; };
 		7DDFA3B31401A92400B8E69B /* HNSession+Following.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3B21401A92400B8E69B /* HNSession+Following.m */; };
 		7DDFA3BF1401AAC500B8E69B /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3B61401AAC500B8E69B /* NSObject+SBJSON.m */; };
@@ -129,7 +130,6 @@
 		7DF2C44314F8CBE600E01067 /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF2C44114F8CBE600E01067 /* action.png */; };
 		7DF2C44414F8CBE600E01067 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF2C44214F8CBE600E01067 /* action@2x.png */; };
 		7DF2C44814F9BA4800E01067 /* HNContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF2C44714F9BA4800E01067 /* HNContainer.m */; };
-		7DF2C44C14FB121000E01067 /* HNEntryBodyRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF2C44B14FB121000E01067 /* HNEntryBodyRenderer.m */; };
 		7DFFDF0B13325FF20082F55A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DFFDF0A13325FF20082F55A /* CoreText.framework */; };
 		943C1880134E16D700A5977E /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 943C187E134E16D700A5977E /* Default-Landscape.png */; };
 		943C1881134E16D700A5977E /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 943C187F134E16D700A5977E /* Default-Portrait.png */; };
@@ -316,6 +316,8 @@
 		7DD03DE614529E880007A069 /* Icon-small~ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-small~ipad@2x.png"; sourceTree = "<group>"; };
 		7DD03DE714529E880007A069 /* Icon~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon~ipad.png"; sourceTree = "<group>"; };
 		7DD03DE814529E880007A069 /* Icon~ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon~ipad@2x.png"; sourceTree = "<group>"; };
+		7DD1EEA61503894B00C3EC31 /* HNEntryBodyRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNEntryBodyRenderer.h; sourceTree = "<group>"; };
+		7DD1EEA71503894B00C3EC31 /* HNEntryBodyRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNEntryBodyRenderer.m; sourceTree = "<group>"; };
 		7DDFA3AE1401A8F300B8E69B /* HNTimeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HNTimeline.h; path = "Classes/Follow Model/HNTimeline.h"; sourceTree = "<group>"; };
 		7DDFA3AF1401A8F300B8E69B /* HNTimeline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HNTimeline.m; path = "Classes/Follow Model/HNTimeline.m"; sourceTree = "<group>"; };
 		7DDFA3B11401A92400B8E69B /* HNSession+Following.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "HNSession+Following.h"; path = "Classes/Follow Model/HNSession+Following.h"; sourceTree = "<group>"; };
@@ -336,8 +338,6 @@
 		7DF2C44614F9BA4800E01067 /* HNContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNContainer.h; sourceTree = "<group>"; };
 		7DF2C44714F9BA4800E01067 /* HNContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNContainer.m; sourceTree = "<group>"; };
 		7DF2C44914F9BCB400E01067 /* HNShared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNShared.h; sourceTree = "<group>"; };
-		7DF2C44A14FB120F00E01067 /* HNEntryBodyRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HNEntryBodyRenderer.h; path = ../Views/HNEntryBodyRenderer.h; sourceTree = "<group>"; };
-		7DF2C44B14FB121000E01067 /* HNEntryBodyRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HNEntryBodyRenderer.m; path = ../Views/HNEntryBodyRenderer.m; sourceTree = "<group>"; };
 		7DFFDF0A13325FF20082F55A /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		943C187E134E16D700A5977E /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape.png"; sourceTree = "<group>"; };
 		943C187F134E16D700A5977E /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait.png"; sourceTree = "<group>"; };
@@ -572,8 +572,8 @@
 				7D6B9EC01347DF2E00CD923C /* HNAPISubmission.m */,
 				CBFCE7F413989054007A5DDD /* HNAPISearch.h */,
 				CBFCE7F513989054007A5DDD /* HNAPISearch.m */,
-				7DF2C44A14FB120F00E01067 /* HNEntryBodyRenderer.h */,
-				7DF2C44B14FB121000E01067 /* HNEntryBodyRenderer.m */,
+				7DD1EEA61503894B00C3EC31 /* HNEntryBodyRenderer.h */,
+				7DD1EEA71503894B00C3EC31 /* HNEntryBodyRenderer.m */,
 			);
 			path = HNKit;
 			sourceTree = "<group>";
@@ -947,7 +947,7 @@
 				7DB809B714F8A12F009668E6 /* SubmissionListController.m in Sources */,
 				7DB809BA14F8ACEF009668E6 /* InstapaperController.m in Sources */,
 				7DF2C44814F9BA4800E01067 /* HNContainer.m in Sources */,
-				7DF2C44C14FB121000E01067 /* HNEntryBodyRenderer.m in Sources */,
+				7DD1EEA81503894B00C3EC31 /* HNEntryBodyRenderer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
