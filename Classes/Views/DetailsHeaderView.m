@@ -73,10 +73,12 @@
 
 - (CGFloat)suggestedHeightWithWidth:(CGFloat)width {
     CGSize offsets = [[self class] offsets];
+    
     CGFloat body = [[entry renderer] sizeForWidth:(width - offsets.width - offsets.width)].height;
     CGFloat disclosure = [self hasDestination] ? [[[self class] disclosureImage] size].width + offsets.width : 0.0f;
     CGFloat title = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(width - (offsets.width * 2) - disclosure, 400.0f) lineBreakMode:UILineBreakModeWordWrap].height;
-    CGFloat bodyArea = [[entry body] length] > 0 ? offsets.height + body - 12.0f : 0;
+    
+    CGFloat bodyArea = [[entry body] length] > 0 ? offsets.height + body : 0;
     CGFloat titleArea = [[entry title] length] > 0 ? offsets.height + title : 0;
     
     return titleArea + bodyArea + 30.0f + offsets.height + (titleArea > 0 && bodyArea > 0 ? 8.0f : 0);
@@ -131,7 +133,7 @@
     if ([[entry body] length] > 0) {
         HNEntryBodyRenderer *renderer = [entry renderer];
         
-        bodyRect.origin.y = titlerect.origin.y + titlerect.size.height + offsets.height;
+        bodyRect.origin.y = titlerect.origin.y + titlerect.size.height + offsets.height + offsets.height;
         bodyRect.origin.x = offsets.width;
         bodyRect.size.width = bounds.width - offsets.width - offsets.width;
         bodyRect.size.height = [renderer sizeForWidth:bodyRect.size.width].height;
