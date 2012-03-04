@@ -12,11 +12,7 @@
 
 #import "NSString+Tags.h"
 #import "NSString+Entities.h"
-#import "NSAttributedString+HTML.h"
-
-#import "DTCoreTextLayouter.h"
-#import "DTLinkButton.h"
-#import "DTAttributedTextContentView.h"
+#import "UIActionSheet+Context.h"
 
 @implementation CommentTableCell
 @synthesize comment, indentationLevel, delegate, expanded;
@@ -42,19 +38,22 @@
         [self addSubview:toolbarView];
         [self setExpanded:NO];
         
-        textView = [[DTAttributedTextView alloc] init];
-        [textView setTextDelegate:self];
-        [[textView contentView] setEdgeInsets:UIEdgeInsetsZero];
-        [contentView addSubview:textView];
-        
-        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapFromRecognizer:)];
-        [tapRecognizer setNumberOfTapsRequired:2];
-        [tapRecognizer setDelaysTouchesBegan:YES];
-        [contentView addGestureRecognizer:[tapRecognizer autorelease]];
+        UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFromRecognizer:)];
+        [longPressRecognizer setMinimumPressDuration:0.65f];
+        [contentView addGestureRecognizer:[longPressRecognizer autorelease]];
     }
     
     return self;
 }
+
+- (void)dealloc {
+    [comment release];
+    [toolbarView release];
+    
+    [super dealloc];
+}
+
+#pragma mark - Setters
 
 - (void)setExpanded:(BOOL)expanded_ {
     expanded = expanded_;
@@ -78,28 +77,9 @@
     [toolbarView setDelegate:delegate];
 }
 
-- (void)dealloc {
-    [comment release];
-    [textView release];
-    [toolbarView release];
-    
-    [super dealloc];
-}
-
-+ (NSAttributedString *)attributedStringForComment:(HNEntry *)comment {
-    NSString *body = [comment body];
-    NSData *data = [body dataUsingEncoding:NSUTF8StringEncoding];
-    NSAttributedString *attributed = [[NSAttributedString alloc] initWithHTML:data baseURL:kHNWebsiteURL documentAttributes:NULL];
-
-    return [attributed autorelease];
-}
-
 - (void)setComment:(HNEntry *)comment_ {
     [comment autorelease];
     comment = [comment_ retain];
-    
-    NSAttributedString *attributed = [[self class] attributedStringForComment:comment];
-    [textView setAttributedString:attributed];
     
     [toolbarView setEntry:comment_];
     
@@ -111,6 +91,8 @@
     
     [self setNeedsDisplay];
 }
+
+#pragma mark - Configuration
 
 + (UIFont *)userFont {
     return [UIFont boldSystemFontOfSize:13.0f];
@@ -129,23 +111,26 @@
     return [entry submitter] == [[HNSession currentSession] user];
 }
 
+#pragma mark - Height Calculations
+
 + (CGFloat)bodyHeightForComment:(HNEntry *)comment withWidth:(CGFloat)width indentationLevel:(int)indentationLevel {
     width -= (2 * 8.0f);
     width -= (indentationLevel * 15.0f);
     
-    NSAttributedString *attributed = [self attributedStringForComment:comment];
-    DTCoreTextLayouter *layouter = [[DTCoreTextLayouter alloc] initWithAttributedString:attributed];
-    CGFloat height = [layouter suggestedFrameSizeToFitEntireStringConstraintedToWidth:width].height;
+    HNEntryBodyRenderer *renderer = [comment renderer];
+    CGSize size = [renderer sizeForWidth:width];
     
-    return height;
+    return size.height;
 }
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width expanded:(BOOL)expanded indentationLevel:(int)indentationLevel {
     CGFloat height = [self bodyHeightForComment:entry withWidth:width indentationLevel:indentationLevel] + 30.0f;
-    if ([self entryShowsPoints:entry] || ([entry children] > 0)) height += 14.0f;
+    if ([self entryShowsPoints:entry]) height += 14.0f;
     if (expanded) height += 44.0f;
     return height;
 }
+
+#pragma mark - Drawing
 
 - (void)drawContentView:(CGRect)rect {
     CGRect bounds = [self bounds];
@@ -166,14 +151,13 @@
     [date drawAtPoint:CGPointMake(bounds.size.width - datewidth - offsets.width, offsets.height) withFont:[[self class] dateFont]];
     
     if ([[comment body] length] > 0) {
-        CGRect bodyrect;
-        bodyrect.size.height = [[self class] bodyHeightForComment:comment withWidth:bounds.size.width indentationLevel:indentationLevel];
-        bodyrect.size.width = bounds.size.width - bounds.origin.x - offsets.width - offsets.width;
-        bodyrect.origin.x = bounds.origin.x + offsets.width;
-        bodyrect.origin.y = offsets.height + 19.0f;
-        [textView setFrame:bodyrect];
-    } else {
-        [textView setFrame:CGRectZero];
+        bodyRect.size.height = [[self class] bodyHeightForComment:comment withWidth:bounds.size.width indentationLevel:indentationLevel];
+        bodyRect.size.width = bounds.size.width - bounds.origin.x - offsets.width - offsets.width;
+        bodyRect.origin.x = bounds.origin.x + offsets.width;
+        bodyRect.origin.y = offsets.height + 19.0f;
+
+        HNEntryBodyRenderer *renderer = [comment renderer];
+        [renderer renderInContext:UIGraphicsGetCurrentContext() rect:bodyRect];
     }
     
     [[UIColor grayColor] set];
@@ -191,75 +175,124 @@
     commentsrect.size.width = (bounds.size.width - bounds.origin.x) / 2 - offsets.width * 2;
     commentsrect.origin.x = bounds.size.width - (bounds.size.width - bounds.origin.x) / 2 + offsets.width;
     commentsrect.origin.y = bounds.size.height - offsets.height - commentsrect.size.height;
-}
-
-#pragma mark - Links
-
-- (void)prepareForReuse {
-    savedURL = nil;
     
-    [super prepareForReuse];
-}
-
-- (UIView *)attributedTextView:(DTAttributedTextView *)attributedTextView viewForAttributedString:(NSAttributedString *)string frame:(CGRect)frame {
-	NSDictionary *attributes = [string attributesAtIndex:0 effectiveRange:NULL];
-	NSURL *link = [attributes objectForKey:@"DTLink"];
-	
-	if (link != nil) {
-		DTLinkButton *button = [[[DTLinkButton alloc] initWithFrame:frame] autorelease];
-		[button setUrl:link];
-		[button setAlpha:0.4f];
+    // draw link highlight
+    if (highlightedRect.size.width != 0 && highlightedRect.size.height != 0) {
+        [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
         
-		[button addTarget:self action:@selector(linkPushed:) forControlEvents:UIControlEventTouchUpInside];
-		UILongPressGestureRecognizer *longPress = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(linkLongPressed:)] autorelease];
-		[button addGestureRecognizer:longPress];
+        CGRect rect = CGRectInset(highlightedRect, -4.0f, -3.0f);
+        rect.origin.x += bodyRect.origin.x;
+        rect.origin.y += bodyRect.origin.y;
         
-		return button;
-	}
-	
-	return nil;
-}
-
-- (void)linkPushed:(DTLinkButton *)button {
-	if ([delegate respondsToSelector:@selector(commentTableCell:selectedURL:)]) {
-        [delegate commentTableCell:self selectedURL:[button url]];
+        UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:2.0f];
+        [bezierPath fill];
     }
+}
+
+#pragma mark - Tap Handlers
+
+- (void)singleTapped {
+    if ([delegate respondsToSelector:@selector(commentTableCellTapped:)]) {
+        [delegate commentTableCellTapped:self];
+    }
+}
+
+- (void)doubleTapped {
+    if ([delegate respondsToSelector:@selector(commentTableCellDoubleTapped:)]) {
+        [delegate commentTableCellDoubleTapped:self];
+    }
+}
+
+- (CGPoint)bodyPointForPoint:(CGPoint)point {
+    CGPoint bodyPoint;
+    bodyPoint.x = point.x - bodyRect.origin.x;
+    bodyPoint.y = point.y - bodyRect.origin.y;
+    return bodyPoint;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
+    
+    CGRect rect;
+    NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyRect.size.width runRect:&rect];
+
+    if (url != nil) {
+        highlightedRect = rect;
+        [self setNeedsDisplay];
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
+    
+    CGRect rect;
+    NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyRect.size.width runRect:&rect];
+    
+    if (url != nil) {
+        if ([delegate respondsToSelector:@selector(commentTableCell:selectedURL:)]) {
+            [delegate commentTableCell:self selectedURL:url];
+        }
+        
+        highlightedRect = CGRectZero;
+        [self setNeedsDisplay];
+    } else {
+        if ([touch tapCount] == 1) {
+            [self performSelector:@selector(singleTapped) withObject:nil afterDelay:0.35f];
+        } else if ([touch tapCount] == 2) {
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(singleTapped) object:nil];
+
+            [self doubleTapped];
+        }
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    highlightedRect = CGRectZero;
+    [self setNeedsDisplay];
 }
 
 - (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
 	if (index == [sheet cancelButtonIndex]) return;
+    
+    NSURL *url = [NSURL URLWithString:[sheet sheetContext]];
 	
     if (index == [sheet firstOtherButtonIndex]) {
-        [[UIApplication sharedApplication] openURL:savedURL];
+        [[UIApplication sharedApplication] openURL:url];
     } else if (index == [sheet firstOtherButtonIndex] + 1) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        [pasteboard setURL:savedURL];
-        [pasteboard setString:[savedURL absoluteString]];
+        [pasteboard setURL:url];
+        [pasteboard setString:[url absoluteString]];
     }
-    
-    savedURL = nil;
 }
 
-- (void)linkLongPressed:(UILongPressGestureRecognizer *)gesture {
-	if (gesture.state == UIGestureRecognizerStateBegan) {
-		DTLinkButton *button = (id) [gesture view];
-        [button setHighlighted:NO];
-        savedURL = [button url];
-		
-        UIActionSheet *action = [[[UIActionSheet alloc]
-                                  initWithTitle:[[button url] absoluteString]
-                                  delegate:self
-                                  cancelButtonTitle:@"Cancel"
-                                  destructiveButtonTitle:nil
-                                  otherButtonTitles:@"Open in Safari", @"Copy Link", nil
-                                  ] autorelease];
-        [action showFromRect:[button frame] inView:[button superview] animated:YES];
+- (void)longPressFromRecognizer:(UILongPressGestureRecognizer *)gesture {
+	if ([gesture state] == UIGestureRecognizerStateBegan) {
+        CGPoint point = [self bodyPointForPoint:[gesture locationInView:self]];
+        
+        CGRect rect;
+        NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyRect.size.width runRect:&rect];
+        
+        if (url != nil) {
+            UIActionSheet *action = [[[UIActionSheet alloc]
+                initWithTitle:[url absoluteString]
+                delegate:self
+                cancelButtonTitle:@"Cancel"
+                destructiveButtonTitle:nil
+                otherButtonTitles:@"Open in Safari", @"Copy Link", nil
+            ] autorelease];
+        
+            [action setSheetContext:[url absoluteString]];
+            [action showFromRect:rect inView:self animated:YES];
+        }
     }
 }
 
 - (void)doubleTapFromRecognizer:(UITapGestureRecognizer *)recognizer {
-    if ([delegate respondsToSelector:@selector(commentTableCellDoubleTapped:)])
+    if ([delegate respondsToSelector:@selector(commentTableCellDoubleTapped:)]) {
         [delegate commentTableCellDoubleTapped:self];
+    }
 }
 
 @end

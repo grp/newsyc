@@ -193,14 +193,6 @@
     [tableView endUpdates];
 }
 
-- (void)cellSelected:(CommentTableCell *)cell forEntry:(HNEntry *)entry {
-    if (expandedEntry != entry) {
-        [self setExpandedEntry:entry cell:cell];
-    } else {
-        [self setExpandedEntry:nil cell:nil];
-    }
-}
-
 #pragma mark - View Layout
 
 - (void)addStatusView:(UIView *)view {
@@ -284,6 +276,14 @@
 - (void)commentTableCell:(CommentTableCell *)cell selectedURL:(NSURL *)url {
     BrowserController *controller = [[BrowserController alloc] initWithURL:url];
     [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+}
+
+- (void)commentTableCellTapped:(CommentTableCell *)cell {
+    if (expandedEntry != [cell comment]) {
+        [self setExpandedEntry:[cell comment] cell:cell];
+    } else {
+        [self setExpandedEntry:nil cell:nil];
+    }
 }
 
 - (void)commentTableCellDoubleTapped:(CommentTableCell *)cell {

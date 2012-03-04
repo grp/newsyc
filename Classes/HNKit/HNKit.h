@@ -32,3 +32,7 @@
 #import "HNAPIRequestParser.h"
 #import "HNAPISubmission.h"
 
+#ifdef HNKIT_RENDERING_ENABLED
+// rendering
+#import "HNEntryBodyRenderer.h"
+#endif

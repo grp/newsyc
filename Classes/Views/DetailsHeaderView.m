@@ -6,26 +6,21 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "DetailsHeaderView.h"
-#import "NSAttributedString+HTML.h"
-#import "NSString+Entities.h"
-#import "DTLinkButton.h"
 #import "HNKit.h"
 
+#import "DetailsHeaderView.h"
+
+#import "UIActionSheet+Context.h"
+#import "NSString+Entities.h"
+
 @implementation DetailsHeaderView
-@synthesize delegate, entry;
+@synthesize delegate, entry, highlighted;
 
 - (id)initWithEntry:(HNEntry *)entry_ widthWidth:(CGFloat)width {
     if ((self = [super init])) {
         CALayer *layer = [self layer];
         [layer setNeedsDisplayOnBoundsChange:YES];
-        
-        [self addTarget:self action:@selector(viewPressed:withEvent:) forControlEvents:UIControlEventTouchUpInside];
-        
-        textView = [[DTAttributedTextView alloc] init];
-        [textView setTextDelegate:self];
-        [self addSubview:textView];
-        
+                
         [self setEntry:entry_];
         [self setBackgroundColor:[UIColor whiteColor]];
         
@@ -34,6 +29,10 @@
         frame.size.width = width;
         frame.size.height = [self suggestedHeightWithWidth:width];
         [self setFrame:frame];
+        
+        UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFromRecognizer:)];
+        [longPressRecognizer setMinimumPressDuration:0.65f];
+        [self addGestureRecognizer:[longPressRecognizer autorelease]];
     }
     
     return self;
@@ -43,29 +42,14 @@
     return [entry destination] != nil;
 }
 
-- (void)viewPressed:(DetailsHeaderView *)view withEvent:(UIEvent *)event {
-    if (![self hasDestination]) return;
-    
-    if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
-        [delegate detailsHeaderView:self selectedURL:[entry destination]];
-    }
-}
-
 - (void)dealloc {
     [entry release];
-    [textView release];
     
     [super dealloc];
 }
 
 + (CGSize)offsets {
     return CGSizeMake(8.0f, 4.0f);
-}
-
-- (void)setHighlighted:(BOOL)highlighted {
-    [super setHighlighted:highlighted];
-    
-    [self setNeedsDisplay];
 }
 
 + (UIFont *)titleFont {
@@ -80,11 +64,6 @@
     [entry release];
     entry = [entry_ retain];
     
-    NSString *body = [entry body];
-    NSData *data = [body dataUsingEncoding:NSUTF8StringEncoding];
-    NSAttributedString *attributed = [[NSAttributedString alloc] initWithHTML:data baseURL:kHNWebsiteURL documentAttributes:NULL];
-    [textView setAttributedString:[attributed autorelease]];
-    
     [self setNeedsDisplay];
 }
 
@@ -94,7 +73,7 @@
 
 - (CGFloat)suggestedHeightWithWidth:(CGFloat)width {
     CGSize offsets = [[self class] offsets];
-    CGFloat body = [[textView contentView] sizeThatFits:CGSizeMake(width - offsets.width, 0)].height;
+    CGFloat body = [[entry renderer] sizeForWidth:(width - offsets.width - offsets.width)].height;
     CGFloat disclosure = [self hasDestination] ? [[[self class] disclosureImage] size].width + offsets.width : 0.0f;
     CGFloat title = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(width - (offsets.width * 2) - disclosure, 400.0f) lineBreakMode:UILineBreakModeWordWrap].height;
     CGFloat bodyArea = [[entry body] length] > 0 ? offsets.height + body - 12.0f : 0;
@@ -150,14 +129,14 @@
     }
 
     if ([[entry body] length] > 0) {
-        CGRect bodyrect;
-        bodyrect.origin.y = titlerect.origin.y + titlerect.size.height + offsets.height;
-        bodyrect.origin.x = offsets.width / 2;
-        bodyrect.size.width = bounds.width - offsets.width;
-        bodyrect.size.height = [[textView contentView] sizeThatFits:CGSizeMake(bodyrect.size.width, 0)].height;
-        [textView setFrame:bodyrect];
-    } else {
-        [textView setFrame:CGRectZero];
+        HNEntryBodyRenderer *renderer = [entry renderer];
+        
+        bodyRect.origin.y = titlerect.origin.y + titlerect.size.height + offsets.height;
+        bodyRect.origin.x = offsets.width;
+        bodyRect.size.width = bounds.width - offsets.width - offsets.width;
+        bodyRect.size.height = [renderer sizeForWidth:bodyRect.size.width].height;
+            
+        [renderer renderInContext:UIGraphicsGetCurrentContext() rect:bodyRect];
     }
     
     [[UIColor grayColor] set];
@@ -175,61 +154,106 @@
     userrect.origin.x = bounds.width / 2 + offsets.width;
     userrect.origin.y = bounds.height - offsets.height - 2.0f - userrect.size.height;
     [user drawInRect:userrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
-}
-
-- (UIView *)attributedTextView:(DTAttributedTextView *)attributedTextView viewForAttributedString:(NSAttributedString *)string frame:(CGRect)frame {
-	NSDictionary *attributes = [string attributesAtIndex:0 effectiveRange:NULL];
-	NSURL *link = [attributes objectForKey:@"DTLink"];
-	
-	if (link != nil) {
-		DTLinkButton *button = [[[DTLinkButton alloc] initWithFrame:frame] autorelease];
-		[button setUrl:link];
-		[button setAlpha:0.4f];
+    
+    // draw link highlight
+    if (highlightedRect.size.width != 0 && highlightedRect.size.height != 0) {
+        [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
         
-		[button addTarget:self action:@selector(linkPushed:) forControlEvents:UIControlEventTouchUpInside];
-		UILongPressGestureRecognizer *longPress = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(linkLongPressed:)] autorelease];
-		[button addGestureRecognizer:longPress];
+        CGRect rect = CGRectInset(highlightedRect, -4.0f, -3.0f);
+        rect.origin.x += bodyRect.origin.x;
+        rect.origin.y += bodyRect.origin.y;
         
-		return button;
-	}
-	
-	return nil;
-}
-
-- (void)linkPushed:(DTLinkButton *)button {
-	if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
-        [delegate detailsHeaderView:self selectedURL:[button url]];
+        UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:2.0f];
+        [bezierPath fill];
     }
+}
+
+#pragma mark - Links
+
+- (CGPoint)bodyPointForPoint:(CGPoint)point {
+    CGPoint bodyPoint;
+    bodyPoint.x = point.x - bodyRect.origin.x;
+    bodyPoint.y = point.y - bodyRect.origin.y;
+    return bodyPoint;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
+    
+    CGRect rect;
+    NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width runRect:&rect];
+    
+    if (url != nil) {
+        highlightedRect = rect;
+        [self setNeedsDisplay];
+    } else if ([self hasDestination]) {
+        [self setHighlighted:YES];
+        [self setNeedsDisplay];
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
+    
+    CGRect rect;
+    NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width runRect:&rect];
+    
+    if (url != nil) {
+        if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
+            [delegate detailsHeaderView:self selectedURL:url];
+        }
+        
+        highlightedRect = CGRectZero;
+        [self setNeedsDisplay];
+    } else if ([self hasDestination]) {
+        if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
+            [delegate detailsHeaderView:self selectedURL:[entry destination]];
+        }
+
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self setHighlighted:NO];
+    highlightedRect = CGRectZero;
+    [self setNeedsDisplay];
 }
 
 - (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
 	if (index == [sheet cancelButtonIndex]) return;
+    
+    NSURL *url = [NSURL URLWithString:[sheet sheetContext]];
 	
     if (index == [sheet firstOtherButtonIndex]) {
-        [[UIApplication sharedApplication] openURL:savedURL];
+        [[UIApplication sharedApplication] openURL:url];
     } else if (index == [sheet firstOtherButtonIndex] + 1) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        [pasteboard setURL:savedURL];
-        [pasteboard setString:[savedURL absoluteString]];
+        [pasteboard setURL:url];
+        [pasteboard setString:[url absoluteString]];
     }
-    
-    savedURL = nil;
 }
 
-- (void)linkLongPressed:(UILongPressGestureRecognizer *)gesture {
-	if (gesture.state == UIGestureRecognizerStateBegan) {
-		DTLinkButton *button = (id) [gesture view];
-        [button setHighlighted:NO];
-        savedURL = [button url];
-		
-        UIActionSheet *action = [[[UIActionSheet alloc]
-            initWithTitle:[[button url] absoluteString]
-            delegate:self
-            cancelButtonTitle:@"Cancel"
-            destructiveButtonTitle:nil
-            otherButtonTitles:@"Open in Safari", @"Copy Link", nil
-        ] autorelease];
-        [action showFromRect:[button frame] inView:[button superview] animated:YES];
+- (void)longPressFromRecognizer:(UILongPressGestureRecognizer *)gesture {
+	if ([gesture state] == UIGestureRecognizerStateBegan) {
+        CGPoint point = [self bodyPointForPoint:[gesture locationInView:self]];
+        
+        CGRect rect;
+        NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width runRect:&rect];
+        
+        if (url != nil) {
+            UIActionSheet *action = [[[UIActionSheet alloc]
+                                      initWithTitle:[url absoluteString]
+                                      delegate:self
+                                      cancelButtonTitle:@"Cancel"
+                                      destructiveButtonTitle:nil
+                                      otherButtonTitles:@"Open in Safari", @"Copy Link", nil
+                                      ] autorelease];
+            
+            [action setSheetContext:[url absoluteString]];
+            [action showFromRect:rect inView:self animated:YES];
+        }
     }
 }
 

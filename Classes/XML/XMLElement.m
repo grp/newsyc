@@ -44,18 +44,24 @@ static int XMLElementOutputCloseCallback(void *context) {
 - (NSString *)content {
     if (cachedContent != nil) return cachedContent;
     
-    NSMutableString *content = [@"" mutableCopy];
-    xmlNodePtr children = node->children;
+    NSMutableString *content = [[NSMutableString string] retain];
     
-    while (children) {
-        NSMutableData *data = [[NSMutableData alloc] init];
-        xmlOutputBufferPtr buffer = xmlOutputBufferCreateIO(XMLElementOutputWriteCallback, XMLElementOutputCloseCallback, data, NULL);
-        xmlNodeDumpOutput(buffer, [document document], children, 0, 0, "utf-8");
-        xmlOutputBufferFlush(buffer);
-        [content appendString:[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]];
-        xmlOutputBufferClose(buffer);
+    if (![self isTextNode]) {
+        xmlNodePtr children = node->children;
     
-        children = children->next;
+        while (children) {
+            NSMutableData *data = [[NSMutableData alloc] init];
+            xmlOutputBufferPtr buffer = xmlOutputBufferCreateIO(XMLElementOutputWriteCallback, XMLElementOutputCloseCallback, data, NULL);
+            xmlNodeDumpOutput(buffer, [document document], children, 0, 0, "utf-8");
+            xmlOutputBufferFlush(buffer);
+            [content appendString:[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]];
+            xmlOutputBufferClose(buffer);
+            
+            children = children->next;
+        }
+    } else {
+        xmlChar *nodeContent = xmlNodeGetContent(node);
+        [content appendString:[NSString stringWithUTF8String:(char *) nodeContent]];
     }
     
     cachedContent = content;
@@ -64,7 +70,12 @@ static int XMLElementOutputCloseCallback(void *context) {
 
 
 - (NSString *)tagName {
-    NSString *name = [NSString stringWithCString:(const char *) node->name encoding:NSUTF8StringEncoding];
+    if ([self isTextNode]) return nil;
+    
+    char *nodeName = (char *) node->name;
+    if (nodeName == NULL) nodeName = "";
+    
+    NSString *name = [NSString stringWithUTF8String:nodeName];
     return name;
 }
 
@@ -112,6 +123,10 @@ static int XMLElementOutputCloseCallback(void *context) {
 
 - (NSString *)attributeWithName:(NSString *)name {
     return [[self attributes] objectForKey:name];
+}
+
+- (BOOL)isTextNode {
+    return node->type == XML_TEXT_NODE;
 }
 
 @end

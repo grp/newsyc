@@ -7,19 +7,19 @@
 //
 
 #import "ABTableViewCell.h"
-#import "DTAttributedTextView.h"
 #import "EntryActionsView.h"
 
 @protocol CommentTableCellDelegate;
 
 @class HNEntry;
-@interface CommentTableCell : ABTableViewCell <DTAttributedTextViewDelegate, UIActionSheetDelegate> {
+@interface CommentTableCell : ABTableViewCell <UIActionSheetDelegate> {
     HNEntry *comment;
     int indentationLevel;
     
+    CGRect bodyRect;
+    CGRect highlightedRect;
+    
     id<CommentTableCellDelegate> delegate;
-    DTAttributedTextView *textView;
-    NSURL *savedURL;
     
     BOOL expanded;
     EntryActionsView *toolbarView;
@@ -39,6 +39,7 @@
 @protocol CommentTableCellDelegate<EntryActionsViewDelegate>
 @optional
 
+- (void)commentTableCellTapped:(CommentTableCell *)cell;
 - (void)commentTableCellDoubleTapped:(CommentTableCell *)cell;
 - (void)commentTableCell:(CommentTableCell *)cell selectedURL:(NSURL *)url;
 

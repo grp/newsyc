@@ -28,5 +28,6 @@
 - (NSArray *)children;
 - (NSDictionary *)attributes;
 - (NSString *)attributeWithName:(NSString *)name;
+- (BOOL)isTextNode;
 
 @end

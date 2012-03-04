@@ -11,8 +11,23 @@
 #import "HNKit.h"
 #import "HNEntry.h"
 
+#ifdef HNKIT_RENDERING_ENABLED
+#import "HNEntryBodyRenderer.h"
+#endif
+
 @implementation HNEntry
 @synthesize points, children, submitter, body, posted, parent, submission, title, destination;
+
+#ifdef HNKIT_RENDERING_ENABLED
+@synthesize renderer;
+
+- (HNEntryBodyRenderer *)renderer {
+    if (renderer != nil) return renderer;
+    
+    renderer = [[HNEntryBodyRenderer alloc] initWithEntry:self];
+    return renderer;
+}
+#endif
 
 + (id)identifierForURL:(NSURL *)url_ {
     if (![self isValidURL:url_]) return NO;

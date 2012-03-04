@@ -6,20 +6,22 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "DTAttributedTextView.h"
-
 @protocol DetailsHeaderViewDelegate;
 
 @class HNEntry;
-@interface DetailsHeaderView : UIControl <DTAttributedTextViewDelegate, UIActionSheetDelegate> {
+@interface DetailsHeaderView : UIView <UIActionSheetDelegate> {
     HNEntry *entry;
     id<DetailsHeaderViewDelegate> delegate;
-    DTAttributedTextView *textView;
-    NSURL *savedURL;
+
+    CGRect bodyRect;
+    CGRect highlightedRect;
+    
+    BOOL highlighted;
 }
 
 @property (nonatomic, assign) id<DetailsHeaderViewDelegate> delegate;
 @property (nonatomic, retain) HNEntry *entry;
+@property (nonatomic, assign, getter = isHighlighted) BOOL highlighted;
 
 - (id)initWithEntry:(HNEntry *)entry_ widthWidth:(CGFloat)width;
 - (CGFloat)suggestedHeightWithWidth:(CGFloat)width;
