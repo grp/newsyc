@@ -48,37 +48,18 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
     NSString *resp = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
-    SEL selector = NULL;
-    
-    // XXX: This is a gigantic hack.
-    if ([path isEqual:@"active"] ||
-        [path isEqual:@"ask"] ||
-        [path isEqual:@"best"] ||
-        [path isEqual:@"classic"] ||
-        [path isEqual:@"news"] ||
-        [path isEqual:@"newest"] ||
-        [path isEqual:@"submitted"] ||
-        [path isEqual:@"saved"] ||
-        [path isEqual:@"x"] /* XXX: this is EVEN MORE of a hack */) {
-        selector = @selector(parseSubmissionsWithString:);
-    } else if ([path isEqual:@"bestcomments"] ||
-               [path isEqual:@"newcomments"] ||
-               [path isEqual:@"threads"] ||
-               [path isEqual:@"item"]) {
-        selector = @selector(parseCommentTreeWithString:);
-    } else if ([path isEqual:@"user"]) {
-        selector = @selector(parseUserProfileWithString:);
-    }
-    
+        
     BOOL success = YES;
     HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] init];
     NSDictionary *result = nil;
+    
     @try {
-        if (selector != NULL) result = [parser performSelector:selector withObject:resp];
+        result = [parser parseWithString:resp];
     } @catch (NSException *e) {
         NSLog(@"HNAPIRequest: Exception parsing page at /%@ with reason \"%@\".", path, [e reason]);
         success = NO;
     }
+    
     [parser release];
     
     [received release];

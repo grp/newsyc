@@ -121,7 +121,7 @@ typedef enum {
         return elements;
     } else if (type == kHNPageLayoutTypeExposed) {
         NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
-        return [elements subarrayWithRange:NSMakeRange(3, [elements count] - 5)];
+        return [elements subarrayWithRange:NSMakeRange(3, [elements count] - 3)];
     } else if (type == kHNPageLayoutTypeHeaderFooter) {
         NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr[3]/td/table[2]/tr"];
         return elements;
@@ -249,6 +249,16 @@ typedef enum {
 }
 
 - (NSDictionary *)parseCommentWithElement:(XMLElement *)comment {
+    NSNumber *depth = nil;
+    NSNumber *points = [NSNumber numberWithInt:0];
+    NSString *body = nil;
+    NSString *user = nil;
+    NSNumber *identifier = nil;
+    NSString *date = nil;
+    NSNumber *parent = nil;
+    NSNumber *submission = nil;
+    NSString *more = nil;
+    
     for (XMLElement *element in [comment children]) {
         if ([[element tagName] isEqual:@"tr"]) {
             comment = element;
@@ -257,7 +267,17 @@ typedef enum {
     }
     
     for (XMLElement *element in [comment children]) {
-        if ([[element tagName] isEqual:@"td"]) {
+        if ([[element attributeWithName:@"class"] isEqual:@"title"] && [[[[element content] stringByRemovingHTMLTags] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@"More"]) {
+            for (XMLElement *element2 in [element children]) {
+                if ([[element2 tagName] isEqualToString:@"a"]) {
+                    NSString *morehref = [element2 attributeWithName:@"href"];
+                    
+                    if ([morehref hasPrefix:@"/x?fnid="]) {
+                        more = [morehref substringFromIndex:[@"/x?fnid=" length]];
+                    }
+                }
+            }
+        } else if ([[element tagName] isEqual:@"td"]) {
             for (XMLElement *element2 in [element children]) {
                 if ([[element2 tagName] isEqual:@"table"]) {
                     for (XMLElement *element3 in [element2 children]) {
@@ -271,15 +291,6 @@ typedef enum {
         }
     } found:;
     
-    NSNumber *depth = nil;
-    NSNumber *points = [NSNumber numberWithInt:0];
-    NSString *body = nil;
-    NSString *user = nil;
-    NSNumber *identifier = nil;
-    NSString *date = nil;
-    NSNumber *parent = nil;
-    NSNumber *submission = nil;
-
     for (XMLElement *element in [comment children]) {
         if ([[element attributeWithName:@"class"] isEqual:@"default"]) {
             for (XMLElement *element2 in [element children]) {
@@ -323,9 +334,19 @@ typedef enum {
                     body = [element2 content];
                 }
             }
+        } else if ([[element attributeWithName:@"class"] isEqual:@"title"] && [[[[element content] stringByRemovingHTMLTags] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@"More"]) {
+            for (XMLElement *element2 in [element children]) {
+                if ([[element2 tagName] isEqualToString:@"a"]) {
+                    NSString *morehref = [element2 attributeWithName:@"href"];
+                        
+                    if ([morehref hasPrefix:@"/x?fnid="]) {
+                        more = [morehref substringFromIndex:[@"/x?fnid=" length]];
+                    }
+                }
+            }
         } else {
             for (XMLElement *element2 in [element children]) {
-                if ([[element2 tagName] isEqual:@"img"] && [[element2 attributeWithName:@"src"] isEqual:@"http://ycombinator.com/images/s.gif"]) {
+                if ([[element2 tagName] isEqual:@"img"] && [[element2 attributeWithName:@"src"] hasSuffix:@"://ycombinator.com/images/s.gif"]) {
                     // Yes, really: HN uses a 1x1 gif to indent comments. It's like 1999 all over again. :(
                     int width = [[element2 attributeWithName:@"width"] intValue];
                     // Each comment is "indented" by setting the width to "depth * 40", so divide to get the depth.
@@ -341,8 +362,10 @@ typedef enum {
         return nil;
     }
     
-    // XXX: should this be more strict about what's a valid comment?
-    if (user != nil && identifier != nil) {
+    if (more != nil) {
+        return [NSDictionary dictionaryWithObject:more forKey:@"more"];
+    } else if (user != nil && identifier != nil) {
+        // XXX: should this be more strict about what's a valid comment?
         NSMutableDictionary *item = [NSMutableDictionary dictionary];
         [item setObject:user forKey:@"user"];
         if (body != nil) [item setObject:body forKey:@"body"];
@@ -357,13 +380,12 @@ typedef enum {
         
         return item;
     } else {
-        NSLog(@"Bug: Unable to parse comment (more link?).");
+        NSLog(@"Bug: Unable to parse comment.");
         return nil;
     }
 }
 
-- (NSDictionary *)parseCommentTreeWithString:(NSString *)string {
-    XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+- (NSDictionary *)parseCommentTreeInDocument:(XMLDocument *)document {
     HNPageLayoutType type = [self pageLayoutTypeForDocument:document];
     
     XMLElement *rootElement = [self rootElementForDocument:document pageLayoutType:type];
@@ -383,11 +405,18 @@ typedef enum {
     NSMutableArray *lasts = [NSMutableArray array];
     [lasts addObject:root];
     
+    NSString *moreToken = nil;
+    
     for (int i = 0; i < [comments count]; i++) {
         XMLElement *element = [comments objectAtIndex:i];
         if ([[element content] length] == 0) continue;
         NSDictionary *comment = [self parseCommentWithElement:element];
         if (comment == nil) continue;
+        
+        if ([comment objectForKey:@"more"] != nil) {
+            moreToken = [comment objectForKey:@"more"];
+            continue;
+        }
         
         NSDictionary *parent = nil;
         NSNumber *depth = [comment objectForKey:@"depth"];
@@ -406,12 +435,12 @@ typedef enum {
         [children addObject:comment];
     }
     
-    [document release];
+    if (moreToken != nil) [root setObject:moreToken forKey:@"more"];
+    
     return root;
 }
 
-- (NSDictionary *)parseSubmissionsWithString:(NSString *)string {
-    XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+- (NSDictionary *)parseSubmissionsInDocument:(XMLDocument *)document {
     HNPageLayoutType type = [self pageLayoutTypeForDocument:document];
     NSArray *submissions = [self contentRowsForDocument:document pageLayoutType:type];
     
@@ -434,12 +463,30 @@ typedef enum {
         }
     }
     
-    [document release];
-    
     NSMutableDictionary *item = [NSMutableDictionary dictionary];
     [item setObject:result forKey:@"children"];
     if (moreToken != nil) [item setObject:moreToken forKey:@"more"];
     return item;
+}
+
+- (NSDictionary *)parseWithString:(NSString *)string {
+    NSDictionary *result = nil;
+    XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    // XXX: these are quite random and not perfect
+    XMLElement *userLabel = [document firstElementMatchingPath:@"//body/center/table/tr[3]/td/form/table/tr/td"];
+    XMLElement *commentSpan = [document firstElementMatchingPath:@"//span[@class='comment']"];
+        
+    if (userLabel != nil && [[userLabel content] hasPrefix:@"user:"]) {
+        result = [self parseUserProfileWithString:string];
+    } else if (commentSpan != nil) {
+        result = [self parseCommentTreeInDocument:document];
+    } else {
+        result = [self parseSubmissionsInDocument:document];
+    }
+    
+    [document release];
+    return result;
 }
 
 - (void)dealloc {

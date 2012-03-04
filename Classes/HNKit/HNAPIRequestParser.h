@@ -11,8 +11,6 @@
 @interface HNAPIRequestParser : NSObject {
 }
 
-- (NSDictionary *)parseUserProfileWithString:(NSString *)string;
-- (NSDictionary *)parseCommentTreeWithString:(NSString *)string;
-- (NSDictionary *)parseSubmissionsWithString:(NSString *)string;
+- (NSDictionary *)parseWithString:(NSString *)string;
 
 @end
