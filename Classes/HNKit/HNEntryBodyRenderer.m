@@ -79,7 +79,6 @@
         
         [attributes setObject:(id) colorLink forKey:(NSString *) kCTForegroundColorAttributeName];
         if (href != nil) [attributes setObject:href forKey:@"LinkDestination"];
-        else [attributes setObject:@"hi there" forKey:@"LinkDestination"];
     };
 
     void(^formatParagraph)(NSMutableDictionary *, XMLElement *) = ^(NSMutableDictionary *attributes, XMLElement *element) {
