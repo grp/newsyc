@@ -83,12 +83,12 @@
 
     void(^formatParagraph)(NSMutableDictionary *, XMLElement *) = ^(NSMutableDictionary *attributes, XMLElement *element) {
         NSAttributedString *childString = [[NSAttributedString alloc] initWithString:@"\n\n" attributes:nil];
-        [bodyAttributed appendAttributedString:childString];
+        [bodyAttributed appendAttributedString:[childString autorelease]];
     };
     
     void (^formatNewline)(NSMutableDictionary *, XMLElement *) = ^(NSMutableDictionary *attributes, XMLElement *element) {
         NSAttributedString *childString = [[NSAttributedString alloc] initWithString:@"\n" attributes:nil];
-        [bodyAttributed appendAttributedString:childString];
+        [bodyAttributed appendAttributedString:[childString autorelease]];
     };
     
     NSDictionary *tagActions = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -125,7 +125,7 @@
                 }
                 
                 NSAttributedString *childString = [[NSAttributedString alloc] initWithString:content attributes:currentAttributes];
-                [bodyAttributed appendAttributedString:childString];
+                [bodyAttributed appendAttributedString:[childString autorelease]];
             }
         }
     };
@@ -135,6 +135,7 @@
     
     XMLDocument *xml = [[XMLDocument alloc] initWithHTMLData:[body dataUsingEncoding:NSUTF8StringEncoding]];
     formatChildren([xml firstElementMatchingPath:@"/"]);
+    [xml release];
     
     return [bodyAttributed autorelease];
 }
@@ -199,15 +200,21 @@
                         
                         *runrect = runBounds;
                     }
-                                        
+                    
+                    CFRelease(frame);
+                    CFRelease(path);
                     return url;
                 }
             }
             
+            CFRelease(frame);
+            CFRelease(path);
             return nil;
         }
     }
     
+    CFRelease(frame);
+    CFRelease(path);
     return nil;
 }
 

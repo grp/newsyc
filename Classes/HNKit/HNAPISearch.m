@@ -31,22 +31,25 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
 	if (responseData == nil) {
-		self.responseData = [[NSMutableData alloc] init];
+		responseData = [[NSMutableData alloc] init];
 	}
+    
 	[responseData appendData:data];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    [connection release];
 	[responseData release];
 	responseData = nil;
-	[connection release];
+    
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	[notificationCenter postNotificationName:@"searchDone" object:nil userInfo:nil];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    [connection release];
+
 	[self handleResponse];
-	[connection release];
 }
 
 - (void)handleResponse {
@@ -75,8 +78,8 @@
 
 - (NSDictionary *)itemFromRaw:(NSDictionary *)rawDictionary {
 	NSMutableDictionary *item = [NSMutableDictionary dictionary];
-	NSNumber *points = [NSNumber numberWithInt:0];
-    NSNumber *comments = [NSNumber numberWithInt:0];
+	NSNumber *points = nil;
+    NSNumber *comments = nil;
 	NSString *title = nil;
     NSString *user = nil;
     NSNumber *identifier = nil;
@@ -117,7 +120,8 @@
 	NSURL *url = [NSURL URLWithString:urlString];
 
 	NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-	[[NSURLConnection alloc] initWithRequest:request delegate:self];
+	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [connection start];
 	[request release];
 
 	searchQuery = nil;

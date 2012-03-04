@@ -24,7 +24,7 @@
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     MainTabBarController *mainTabBarController = [[MainTabBarController alloc] init];
-    navigationController = [[NavigationController alloc] initWithRootViewController:mainTabBarController];
+    navigationController = [[NavigationController alloc] initWithRootViewController:[mainTabBarController autorelease]];
     [window setRootViewController:[navigationController autorelease]];
     [mainTabBarController setTitle:@"Hacker News"];
     
