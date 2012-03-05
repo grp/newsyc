@@ -40,8 +40,7 @@
     NSString *body = [entry body];
     if ([body length] == 0) return [[[NSAttributedString alloc] init] autorelease];
     
-    NSNumber *fontUseSmall = [[NSUserDefaults standardUserDefaults] objectForKey:@"interface-small-text"] ?: [NSNumber numberWithBool:YES];
-    CGFloat fontSize = [fontUseSmall boolValue] ? 12.0f : 14.0f;
+    CGFloat fontSize = 13.0f;
     
     CTFontRef fontBody = [self fontForFont:[UIFont systemFontOfSize:fontSize]];
     CTFontRef fontCode = [self fontForFont:[UIFont fontWithName:@"Courier New" size:fontSize]];

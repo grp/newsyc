@@ -31,16 +31,6 @@
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
-			<key>DefaultValue</key>
-			<true/>
-			<key>Key</key>
-			<string>interface-small-text</string>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-            <key>Title</key>
-            <string>Small Font</string>
-		</dict>
-		<dict>
 			<key>FooterText</key>
 			<string>Enable this option to log out of Instapaper next time you launch news:yc.</string>
 			<key>Title</key>
