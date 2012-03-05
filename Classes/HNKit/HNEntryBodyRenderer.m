@@ -104,7 +104,7 @@
     __block void(^formatChildren)(XMLElement *) = ^(XMLElement *element) {
         for (XMLElement *child in [element children]) {
             if (![child isTextNode]) {
-                NSMutableDictionary *savedAttributes = [currentAttributes mutableCopy];
+                NSMutableDictionary *savedAttributes = [[currentAttributes mutableCopy] autorelease];
                 
                 NSAttributedString *(^formatAction)(NSMutableDictionary *, XMLElement *element) = [tagActions objectForKey:[child tagName]];
                 if (formatAction != NULL) formatAction(currentAttributes, child);
@@ -136,6 +136,10 @@
     XMLDocument *xml = [[XMLDocument alloc] initWithHTMLData:[body dataUsingEncoding:NSUTF8StringEncoding]];
     formatChildren([xml firstElementMatchingPath:@"/"]);
     [xml release];
+    
+    CFRelease(fontBody);
+    CFRelease(fontCode);
+    CFRelease(fontItalic);
     
     return [bodyAttributed autorelease];
 }
@@ -239,6 +243,9 @@
 }
 
 - (void)prepare {
+    if (framesetter != NULL) CFRelease(framesetter);
+    [attributed release];
+    
     attributed = [[self createAttributedString] retain];
     framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef) attributed);
 }

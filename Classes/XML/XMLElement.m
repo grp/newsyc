@@ -62,6 +62,7 @@ static int XMLElementOutputCloseCallback(void *context) {
     } else {
         xmlChar *nodeContent = xmlNodeGetContent(node);
         [content appendString:[NSString stringWithUTF8String:(char *) nodeContent]];
+        xmlFree(nodeContent);
     }
     
     cachedContent = content;
