@@ -37,10 +37,12 @@
 			<string>interface-small-text</string>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
+            <key>Title</key>
+            <string>Small Font</string>
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Enabling this option will log you out of Instapaper next time you launch news:yc.</string>
+			<string>Enable this option to log out of Instapaper next time you launch news:yc.</string>
 			<key>Title</key>
 			<string>Instapaper</string>
 			<key>Type</key>
@@ -58,15 +60,8 @@
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Includes contributions by many others, see website for more information. Source code is available on GitHub under the BSD license. Contributions are welcome.</string>
-			<key>Title</key>
-			<string></string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
-			<string>news:yc © 2011 Xuzz Productions, LLC
+			<string>news:yc © 2012 Xuzz Productions, LLC
+Source code is on GitHub. BSD licensed.
             </string>
 			<key>Title</key>
 			<string></string>
