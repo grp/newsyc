@@ -92,7 +92,7 @@
     
     NSDictionary *tagActions = [NSDictionary dictionaryWithObjectsAndKeys:
         [[formatParagraph copy] autorelease], @"p",
-        [[formatCode copy] autorelease], @"code",
+        [[formatCode copy] autorelease], @"pre",
         [[formatItalic copy] autorelease], @"i",
         [[formatLink copy] autorelease], @"a",
         [[formatFont copy] autorelease], @"font",
@@ -114,13 +114,22 @@
             } else {
                 NSString *content = [child content];
                 
-                // strip out whitespace not in <code> when 
+                // strip out whitespace not in <pre> when 
                 if (![[currentAttributes objectForKey:@"PreserveWhitepace"] boolValue]) {
                     while ([content rangeOfString:@"  "].location != NSNotFound) {
                         content = [content stringByReplacingOccurrencesOfString:@"  " withString:@" "];
                     }
                     
                     content = [content stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                } else {
+                    NSString *prefix = @"  ";
+                    
+                    if ([content hasPrefix:prefix]) {
+                        content = [content substringFromIndex:[prefix length]];
+                    }
+                    
+                    content = [content stringByReplacingOccurrencesOfString:[@"\n" stringByAppendingString:prefix] withString:@"\n"];
+                    content = [content stringByAppendingString:@"\n"];
                 }
                 
                 NSAttributedString *childString = [[NSAttributedString alloc] initWithString:content attributes:currentAttributes];
