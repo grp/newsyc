@@ -193,8 +193,13 @@
     CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
     
     [self clearHighlightedRects];
-    [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:&highlightedRects];
+    NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:&highlightedRects];
     [highlightedRects retain];
+    
+    // if there's not a URL, click the header
+    if (url == nil && [self hasDestination]) {
+        [self setHighlighted:YES];
+    }
     
     [self setNeedsDisplay];
 }
@@ -211,8 +216,13 @@
         }
         
         [self clearHighlightedRects];
-        [self setNeedsDisplay];
+    } else if ([self hasDestination]) {
+        if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
+            [delegate detailsHeaderView:self selectedURL:[entry destination]];
+        }
     }
+        
+    [self setNeedsDisplay];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
