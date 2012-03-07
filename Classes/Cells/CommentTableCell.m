@@ -144,7 +144,7 @@
     NSString *comments = [comment children] == 0 ? @"" : [comment children] == 1 ? @"1 reply" : [NSString stringWithFormat:@"%d replies", [comment children]];
     
     [[UIColor blackColor] set];
-    [user drawAtPoint:CGPointMake(bounds.origin.x + offsets.width, offsets.height) withFont:[[self class] userFont]];
+    [user drawAtPoint:CGPointMake(bounds.origin.x + offsets.width, offsets.height - 1.0f) withFont:[[self class] userFont]];
     
     [[UIColor lightGrayColor] set];
     CGFloat datewidth = [date sizeWithFont:[[self class] dateFont]].width;
