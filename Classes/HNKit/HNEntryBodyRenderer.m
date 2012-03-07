@@ -45,6 +45,7 @@
     CTFontRef fontBody = [self fontForFont:[UIFont systemFontOfSize:fontSize]];
     CTFontRef fontCode = [self fontForFont:[UIFont fontWithName:@"Courier New" size:fontSize]];
     CTFontRef fontItalic = [self fontForFont:[UIFont italicSystemFontOfSize:fontSize]];
+    CTFontRef fontSmallParagraphBreak = [self fontForFont:[UIFont systemFontOfSize:floorf(fontSize * 2.0f / 3.0f)]];
     
     CGColorRef colorBody = [[UIColor blackColor] CGColor];
     CGColorRef colorLink = [[UIColor blueColor] CGColor];
@@ -82,8 +83,13 @@
     };
 
     void(^formatParagraph)(NSMutableDictionary *, XMLElement *) = ^(NSMutableDictionary *attributes, XMLElement *element) {
-        NSAttributedString *childString = [[NSAttributedString alloc] initWithString:@"\n\n" attributes:nil];
-        [bodyAttributed appendAttributedString:[childString autorelease]];
+        NSAttributedString *newlineString = [[NSAttributedString alloc] initWithString:@"\n" attributes:attributes];
+        [bodyAttributed appendAttributedString:[newlineString autorelease]];
+        
+        NSMutableDictionary *blankLineAttributes = [[attributes mutableCopy] autorelease];
+        [blankLineAttributes setObject:(id) fontSmallParagraphBreak forKey:(NSString *) kCTFontAttributeName];
+        NSAttributedString *blankLineString = [[NSAttributedString alloc] initWithString:@"\n" attributes:blankLineAttributes];
+        [bodyAttributed appendAttributedString:[blankLineString autorelease]];
     };
     
     void (^formatNewline)(NSMutableDictionary *, XMLElement *) = ^(NSMutableDictionary *attributes, XMLElement *element) {
