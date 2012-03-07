@@ -78,6 +78,7 @@
         
         [attributes setObject:(id) colorLink forKey:(NSString *) kCTForegroundColorAttributeName];
         if (href != nil) [attributes setObject:href forKey:@"LinkDestination"];
+        [attributes setObject:[NSNumber numberWithInt:arc4random()] forKey:@"LinkIdentifier"];
     };
 
     void(^formatParagraph)(NSMutableDictionary *, XMLElement *) = ^(NSMutableDictionary *attributes, XMLElement *element) {
@@ -161,7 +162,7 @@
     return size;
 }
 
-- (NSURL *)linkURLAtPoint:(CGPoint)point forWidth:(CGFloat)width runRect:(CGRect *)runrect {
+- (NSURL *)linkURLAtPoint:(CGPoint)point forWidth:(CGFloat)width rects:(NSSet **)rects {
     CGSize size = [self sizeForWidth:width];
     CGRect rect = CGRectMake(0, 0, size.width, size.height);
     
@@ -174,19 +175,38 @@
     CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);    
     NSArray *lines = (NSArray *) CTFrameGetLines(frame);
     
-    CGPoint origins[[lines count]];
+    CGPoint *origins = (CGPoint *) calloc(sizeof(CGPoint), [lines count]);
     CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), origins);
+    
+    CGRect (^computeLineRect)(CTLineRef, int) = ^CGRect (CTLineRef line, int index) {                    
+        CGRect lineRect;
+        lineRect.origin.x = 0;
+        lineRect.origin.y = origins[index].y;
+        
+        CGFloat ascent, descent, leading;
+        lineRect.size.width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
+        lineRect.size.height = ascent + descent;
+        
+        return lineRect;
+    };
+    
+    CGRect (^computeRunRect)(CTRunRef, CTLineRef, CGRect) = ^CGRect (CTRunRef run, CTLineRef line, CGRect lineRect) {                    
+        CGRect runRect;
+        CGFloat ascent, descent;
+        runRect.size.width = CTRunGetTypographicBounds(run, CFRangeMake(0, 0), &ascent, &descent, NULL);
+        runRect.size.height = ascent + descent;
+        runRect.origin.x = lineRect.origin.x + CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL);
+        runRect.origin.y = lineRect.origin.y - descent;
+        
+        return runRect;
+    };
     
     for (int i = 0; i < [lines count]; i++) {
         CTLineRef line = (CTLineRef) [lines objectAtIndex:i];
-        
-        CGRect lineBounds;
-        lineBounds.origin.x = 0;
-        lineBounds.origin.y = origins[i].y;
+        CGRect lineBounds = computeLineRect(line, i);
         
         CGFloat ascent, descent, leading;
-        lineBounds.size.width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-        lineBounds.size.height = ascent + descent;
+        CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
                 
         // if the bottom of the line is less than the point
         if (lineBounds.origin.y - descent < point.y) {
@@ -194,37 +214,56 @@
                         
             for (int j = 0; j < [runs count]; j++) {
                 CTRunRef run = (CTRunRef) [runs objectAtIndex:j];
-                
-                CGRect runBounds;
-                CGFloat ascent, descent;
-                runBounds.size.width = CTRunGetTypographicBounds(run, CFRangeMake(0, 0), &ascent, &descent, NULL);
-                runBounds.size.height = ascent + descent;
-                runBounds.origin.x = lineBounds.origin.x + CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL);
-                runBounds.origin.y = lineBounds.origin.y - descent;
+                CGRect runBounds = computeRunRect(run, line, lineBounds);
                 
                 if (runBounds.origin.x + runBounds.size.width > point.x) {
                     NSDictionary *attributes = (NSDictionary *) CTRunGetAttributes(run);
                     NSURL *url = [NSURL URLWithString:[attributes objectForKey:@"LinkDestination"]];
+                    NSNumber *linkIdentifier = [attributes objectForKey:@"LinkIdentifier"];
                     
-                    if (runrect != NULL) {
-                        // flip it back into the top-left coordinate system
-                        runBounds.origin.y = size.height - (runBounds.origin.y + runBounds.size.height);
+                    if (linkIdentifier != nil && rects != NULL) {
+                        NSMutableSet *runRects = [NSMutableSet set];
                         
-                        *runrect = runBounds;
+                        for (int k = 0; k < [lines count]; k++) {
+                            CTLineRef line = (CTLineRef) [lines objectAtIndex:k];
+                            NSArray *runs = (NSArray *) CTLineGetGlyphRuns(line);
+
+                            for (int l = 0; l < [runs count]; l++) {
+                                CTRunRef run = (CTRunRef) [runs objectAtIndex:l];
+                                NSDictionary *attributes = (NSDictionary *) CTRunGetAttributes(run);
+
+                                NSNumber *runIdentifier = [attributes objectForKey:@"LinkIdentifier"];
+                                if ([runIdentifier isEqual:linkIdentifier]) {
+                                    CGRect lineRect = computeLineRect(line, k);
+                                    CGRect runRect = computeRunRect(run, line, lineRect);
+                                    
+                                    // flip it back into the top-left coordinate system
+                                    runRect.origin.y = size.height - (runRect.origin.y + runRect.size.height);
+                                    
+                                    NSValue *rectValue = [NSValue valueWithCGRect:runRect];
+                                    [runRects addObject:rectValue];
+                                }
+                            }
+                        }
+                        
+                        *rects = (NSSet *) runRects;
                     }
                     
+                    free(origins);
                     CFRelease(frame);
                     CFRelease(path);
                     return url;
                 }
             }
             
+            free(origins);
             CFRelease(frame);
             CFRelease(path);
             return nil;
         }
     }
     
+    free(origins);
     CFRelease(frame);
     CFRelease(path);
     return nil;

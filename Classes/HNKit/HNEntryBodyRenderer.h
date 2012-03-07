@@ -27,7 +27,7 @@
 
 - (CGSize)sizeForWidth:(CGFloat)width;
 - (void)renderInContext:(CGContextRef)context rect:(CGRect)rect;
-- (NSURL *)linkURLAtPoint:(CGPoint)point forWidth:(CGFloat)width runRect:(CGRect *)runrect;
+- (NSURL *)linkURLAtPoint:(CGPoint)point forWidth:(CGFloat)width rects:(NSSet **)rects;
 
 @end
 

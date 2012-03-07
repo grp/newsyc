@@ -17,7 +17,7 @@
     int indentationLevel;
     
     CGRect bodyRect;
-    CGRect highlightedRect;
+    NSSet *highlightedRects;
     
     id<CommentTableCellDelegate> delegate;
     

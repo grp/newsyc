@@ -158,19 +158,28 @@
     [user drawInRect:userrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
     
     // draw link highlight
-    if (highlightedRect.size.width != 0 && highlightedRect.size.height != 0) {
-        [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
+    for (NSValue *rect in highlightedRects) {
+        CGRect highlightedRect = [rect CGRectValue];
         
-        CGRect rect = CGRectInset(highlightedRect, -4.0f, -3.0f);
-        rect.origin.x += bodyRect.origin.x;
-        rect.origin.y += bodyRect.origin.y;
-        
-        UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:2.0f];
-        [bezierPath fill];
+        if (highlightedRect.size.width != 0 && highlightedRect.size.height != 0) {
+            [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
+            
+            CGRect rect = CGRectInset(highlightedRect, -2.0f, -1.5f);
+            rect.origin.x += bodyRect.origin.x;
+            rect.origin.y += bodyRect.origin.y;
+            
+            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:2.0f];
+            [bezierPath fill];
+        }
     }
 }
 
 #pragma mark - Links
+
+- (void)clearHighlightedRects {
+    [highlightedRects release];
+    highlightedRects = nil;
+}
 
 - (CGPoint)bodyPointForPoint:(CGPoint)point {
     CGPoint bodyPoint;
@@ -183,43 +192,33 @@
     UITouch *touch = [touches anyObject];
     CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
     
-    CGRect rect;
-    NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width runRect:&rect];
+    [self clearHighlightedRects];
+    [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:&highlightedRects];
+    [highlightedRects retain];
     
-    if (url != nil) {
-        highlightedRect = rect;
-        [self setNeedsDisplay];
-    } else if ([self hasDestination]) {
-        [self setHighlighted:YES];
-        [self setNeedsDisplay];
-    }
+    [self setNeedsDisplay];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [touches anyObject];
     CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
     
-    CGRect rect;
-    NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width runRect:&rect];
+    NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:NULL];
     
     if (url != nil) {
         if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
             [delegate detailsHeaderView:self selectedURL:url];
         }
         
-        highlightedRect = CGRectZero;
+        [self clearHighlightedRects];
         [self setNeedsDisplay];
-    } else if ([self hasDestination]) {
-        if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
-            [delegate detailsHeaderView:self selectedURL:[entry destination]];
-        }
-
     }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     [self setHighlighted:NO];
-    highlightedRect = CGRectZero;
+    [self clearHighlightedRects];
+    
     [self setNeedsDisplay];
 }
 
@@ -241,10 +240,10 @@
 	if ([gesture state] == UIGestureRecognizerStateBegan) {
         CGPoint point = [self bodyPointForPoint:[gesture locationInView:self]];
         
-        CGRect rect;
-        NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width runRect:&rect];
+        NSSet *rects;
+        NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:&rects];
         
-        if (url != nil) {
+        if (url != nil && [rects count] > 0) {
             UIActionSheet *action = [[[UIActionSheet alloc]
                                       initWithTitle:[url absoluteString]
                                       delegate:self
@@ -254,7 +253,7 @@
                                       ] autorelease];
             
             [action setSheetContext:[url absoluteString]];
-            [action showFromRect:rect inView:self animated:YES];
+            [action showFromRect:[[rects anyObject] CGRectValue] inView:self animated:YES];
         }
     }
 }

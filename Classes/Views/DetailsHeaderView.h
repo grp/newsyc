@@ -14,7 +14,7 @@
     id<DetailsHeaderViewDelegate> delegate;
 
     CGRect bodyRect;
-    CGRect highlightedRect;
+    NSSet *highlightedRects;
     
     BOOL highlighted;
 }
