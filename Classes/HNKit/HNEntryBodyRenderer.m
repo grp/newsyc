@@ -52,6 +52,10 @@
     
     __block NSMutableAttributedString *bodyAttributed = [[NSMutableAttributedString alloc] init];
     __block NSMutableDictionary *currentAttributes = [NSMutableDictionary dictionary];
+    
+    BOOL(^hasContent)() = ^BOOL () {
+        return [[[bodyAttributed string] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] != 0;
+    };
         
     void(^formatBody)(NSMutableDictionary *, XMLElement *) = ^(NSMutableDictionary *attributes, XMLElement *element) {
         [attributes setObject:(id) colorBody forKey:(NSString *) kCTForegroundColorAttributeName];
@@ -83,6 +87,8 @@
     };
 
     void(^formatParagraph)(NSMutableDictionary *, XMLElement *) = ^(NSMutableDictionary *attributes, XMLElement *element) {
+        if (!hasContent()) return;
+        
         NSAttributedString *newlineString = [[NSAttributedString alloc] initWithString:@"\n" attributes:attributes];
         [bodyAttributed appendAttributedString:[newlineString autorelease]];
         
@@ -93,6 +99,8 @@
     };
     
     void (^formatNewline)(NSMutableDictionary *, XMLElement *) = ^(NSMutableDictionary *attributes, XMLElement *element) {
+        if (!hasContent()) return;
+        
         NSAttributedString *childString = [[NSAttributedString alloc] initWithString:@"\n" attributes:nil];
         [bodyAttributed appendAttributedString:[childString autorelease]];
     };
@@ -136,7 +144,10 @@
                     }
                     
                     content = [content stringByReplacingOccurrencesOfString:[@"\n" stringByAppendingString:prefix] withString:@"\n"];
-                    content = [content stringByAppendingString:@"\n"];
+                    
+                    if (hasContent()) {
+                        content = [content stringByAppendingString:@"\n"];
+                    }
                 }
                 
                 NSAttributedString *childString = [[NSAttributedString alloc] initWithString:content attributes:currentAttributes];
