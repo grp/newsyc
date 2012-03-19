@@ -26,7 +26,7 @@
         [layer setNeedsDisplayOnBoundsChange:YES];
         
         toolbarView = [[EntryActionsView alloc] initWithFrame:CGRectZero];
-        [toolbarView setTintColor:[UIColor blackColor]];
+        [toolbarView setStyle:kEntryActionsViewStyleLight];
         [toolbarView sizeToFit];
         
         CGRect toolbarFrame = [toolbarView frame];

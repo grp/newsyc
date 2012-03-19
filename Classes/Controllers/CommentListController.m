@@ -94,9 +94,9 @@
     [super viewWillAppear:animated];
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-        [entryActionsView setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+        [entryActionsView setStyle:kEntryActionsViewStyleOrange];
     } else {
-        [entryActionsView setTintColor:nil];
+        [entryActionsView setStyle:kEntryActionsViewStyleDefault];
     }
 }
 

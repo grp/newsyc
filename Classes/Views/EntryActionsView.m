@@ -11,6 +11,7 @@
 #import "HNKit.h"
 
 #import "EntryActionsView.h"
+#import "UIImage+Colorize.h"
 
 @interface EntryActionsView ()
 
@@ -21,7 +22,7 @@
 @end
 
 @implementation EntryActionsView
-@synthesize entry, delegate;
+@synthesize entry, delegate, style;
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
@@ -68,6 +69,24 @@
     [self setItems:[NSArray arrayWithObjects:replyItem, flexibleSpace, upvoteItem, flexibleSpace, flagItem, flexibleSpace, downvoteItem, flexibleSpace, actionsItem, nil]];
      
     [flexibleSpace release];
+}
+
+- (void)setStyle:(EntryActionsViewStyle)style_ {
+    style = style_;
+    
+    if (style == kEntryActionsViewStyleDefault) {
+        [self setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+        [self setTintColor:nil];
+    } else if (style == kEntryActionsViewStyleOrange) {
+        [self setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+        [self setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+    } else if (style == kEntryActionsViewStyleLight) {
+        UIImage *backgroundImage = [[UIImage imageNamed:@"toolbar-expanded.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
+        [self setBackgroundImage:backgroundImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+        [self setTintColor:[UIColor whiteColor]];
+    }
+    
+    [self updateItems];
 }
 
 // XXX: this is just one giant hack; we should store references to these objects
@@ -148,6 +167,21 @@
     }
 }
 
+- (UIBarButtonItem *)createBarButtonItemWithImage:(UIImage *)image target:(id)target action:(SEL)action {
+    if (style == kEntryActionsViewStyleLight) {
+        image = [image imageTintedToColor:[UIColor darkGrayColor]];
+    }
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setFrame:CGRectMake(0, 0, [image size].width, [image size].height)];
+    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    [button setImage:image forState:UIControlStateNormal];
+    [button setShowsTouchWhenHighlighted:YES];
+    
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:button];
+    return [item autorelease];
+}
+
 - (UIBarButtonItem *)createBarButtonItemForItem:(EntryActionsViewItem)item {
     UIBarButtonItem *barButtonItem = nil;
     UIImage *itemImage = [self imageForItem:item];
@@ -155,29 +189,33 @@
     if ([self itemIsLoading:item]) {
         barButtonItem = [[ActivityIndicatorItem alloc] initWithSize:[itemImage size]];
     } else {
+        SEL action = NULL;
+
         switch (item) {
             case kEntryActionsViewItemReply:
-                barButtonItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStylePlain target:self action:@selector(replyTapped:)];
+                action = @selector(replyTapped:);
                 break;
             case kEntryActionsViewItemUpvote:
-                barButtonItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStylePlain target:self action:@selector(upvoteTapped:)];
+                action = @selector(upvoteTapped:);
                 break;
             case kEntryActionsViewItemFlag:
-                barButtonItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStylePlain target:self action:@selector(flagTapped:)];
+                action = @selector(flagTapped:);
                 break;
             case kEntryActionsViewItemDownvote:
-                barButtonItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStylePlain target:self action:@selector(downvoteTapped:)];
+                action = @selector(downvoteTapped:);
                 break;
             case kEntryActionsViewItemActions:
-                barButtonItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStylePlain target:self action:@selector(actionsTapped:)];
+                action = @selector(actionsTapped:);
                 break;
             default:
                 break;
         }
+        
+        barButtonItem = [self createBarButtonItemWithImage:itemImage target:self action:action];
     }
 
     [barButtonItem setEnabled:[self itemIsEnabled:item]];
-    return [barButtonItem autorelease];
+    return barButtonItem;
 }     
 
 - (void)beginLoadingItem:(EntryActionsViewItem)item {

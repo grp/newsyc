@@ -13,6 +13,8 @@
 		7D1F98921320CF720059EBBB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98911320CF720059EBBB /* UIKit.framework */; };
 		7D1F98941320CF720059EBBB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98931320CF720059EBBB /* Foundation.framework */; };
 		7D1F98961320CF720059EBBB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98951320CF720059EBBB /* CoreGraphics.framework */; };
+		7D341768150AEE53002E284F /* toolbar-expanded.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D341767150AEE53002E284F /* toolbar-expanded.png */; };
+		7D34176C150AEF7B002E284F /* UIImage+Colorize.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D34176B150AEF7B002E284F /* UIImage+Colorize.m */; };
 		7D36ADCA13553935000613B2 /* ProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36ADC913553935000613B2 /* ProgressHUD.m */; };
 		7D36ADCE13560D87000613B2 /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D36ADCC13560D87000613B2 /* check.png */; };
 		7D36ADCF13560D87000613B2 /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D36ADCD13560D87000613B2 /* check@2x.png */; };
@@ -149,6 +151,9 @@
 		7D1F98911320CF720059EBBB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7D1F98931320CF720059EBBB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7D1F98951320CF720059EBBB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		7D341767150AEE53002E284F /* toolbar-expanded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar-expanded.png"; sourceTree = "<group>"; };
+		7D34176A150AEF7B002E284F /* UIImage+Colorize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Colorize.h"; sourceTree = "<group>"; };
+		7D34176B150AEF7B002E284F /* UIImage+Colorize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Colorize.m"; sourceTree = "<group>"; };
 		7D36ADC813553935000613B2 /* ProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressHUD.h; sourceTree = "<group>"; };
 		7D36ADC913553935000613B2 /* ProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressHUD.m; sourceTree = "<group>"; };
 		7D36ADCC13560D87000613B2 /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
@@ -422,6 +427,7 @@
 		7D6B9E3B1347DF2E00CD923C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				7D341767150AEE53002E284F /* toolbar-expanded.png */,
 				7DF2C44114F8CBE600E01067 /* action.png */,
 				7DF2C44214F8CBE600E01067 /* action@2x.png */,
 				7DC4BACB13F51B4600E373C0 /* x.png */,
@@ -508,6 +514,8 @@
 				FA85248D1357BA73004E5A72 /* NSArray+Strings.m */,
 				7D49183C1391E5DA00F05203 /* UIApplication+ActivityIndicator.h */,
 				7D49183D1391E5DA00F05203 /* UIApplication+ActivityIndicator.m */,
+				7D34176A150AEF7B002E284F /* UIImage+Colorize.h */,
+				7D34176B150AEF7B002E284F /* UIImage+Colorize.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -868,6 +876,7 @@
 				7D597A9B14590AFA006915CB /* iTunesArtwork@2x in Resources */,
 				7DF2C44314F8CBE600E01067 /* action.png in Resources */,
 				7DF2C44414F8CBE600E01067 /* action@2x.png in Resources */,
+				7D341768150AEE53002E284F /* toolbar-expanded.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -948,6 +957,7 @@
 				7DB809BA14F8ACEF009668E6 /* InstapaperController.m in Sources */,
 				7DF2C44814F9BA4800E01067 /* HNContainer.m in Sources */,
 				7DD1EEA81503894B00C3EC31 /* HNEntryBodyRenderer.m in Sources */,
+				7D34176C150AEF7B002E284F /* UIImage+Colorize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
