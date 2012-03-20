@@ -85,8 +85,6 @@
         [self setBackgroundImage:backgroundImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
         [self setTintColor:[UIColor whiteColor]];
     }
-    
-    [self updateItems];
 }
 
 // XXX: this is just one giant hack; we should store references to these objects
@@ -168,18 +166,7 @@
 }
 
 - (UIBarButtonItem *)createBarButtonItemWithImage:(UIImage *)image target:(id)target action:(SEL)action {
-    if (style == kEntryActionsViewStyleLight) {
-        image = [image imageTintedToColor:[UIColor darkGrayColor]];
-    }
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setFrame:CGRectMake(0, 0, [image size].width, [image size].height)];
-    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    [button setImage:image forState:UIControlStateNormal];
-    [button setShowsTouchWhenHighlighted:YES];
-    
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:button];
-    return [item autorelease];
+    return [[[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:target action:action] autorelease];
 }
 
 - (UIBarButtonItem *)createBarButtonItemForItem:(EntryActionsViewItem)item {
