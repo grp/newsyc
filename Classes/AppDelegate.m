@@ -189,13 +189,12 @@
     NSString *appv = [self version];
     NSString *sysv = [[UIDevice currentDevice] systemVersion];
     NSString *dev = [[UIDevice currentDevice] model];
-    NSString *udid = [[UIDevice currentDevice] uniqueIdentifier];
     NSString *from = [[NSUserDefaults standardUserDefaults] objectForKey:@"current-version"] ?: @"";
     BOOL seen = [[NSUserDefaults standardUserDefaults] boolForKey:@"initial-install-seen"];
     
     received = [[NSMutableData alloc] init];
     
-    NSString *url = [NSString stringWithFormat:@"http://newsyc.me/ping?appv=%@&sysv=%@&dev=%@&udid=%@&seen=%d&oldv=%@", [appv stringByURLEncodingString], [sysv stringByURLEncodingString], [dev stringByURLEncodingString], [udid stringByURLEncodingString], seen, [from stringByURLEncodingString]];
+    NSString *url = [NSString stringWithFormat:@"http://newsyc.me/ping?appv=%@&sysv=%@&dev=%@&seen=%d&oldv=%@", [appv stringByURLEncodingString], [sysv stringByURLEncodingString], [dev stringByURLEncodingString], seen, [from stringByURLEncodingString]];
     NSURL *requestURL = [NSURL URLWithString:url];
     NSURLRequest *request = [NSURLRequest requestWithURL:requestURL];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
