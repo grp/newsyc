@@ -9,7 +9,6 @@
 #import "InstapaperLoginController.h"
 
 @interface InstapaperController : NSObject <LoginControllerDelegate> {
-    
 }
 
 + (id)sharedInstance;

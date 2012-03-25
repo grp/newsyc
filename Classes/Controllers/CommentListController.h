@@ -12,11 +12,13 @@
 #import "DetailsHeaderView.h"
 #import "LoginController.h"
 #import "CommentTableCell.h"
+#import "BarButtonItem.h"
 
 @interface CommentListController : EntryListController <EntryActionsViewDelegate, DetailsHeaderViewDelegate, LoginControllerDelegate, ComposeControllerDelegate, CommentTableCellDelegate> {
     UIView *detailsHeaderContainer;
     DetailsHeaderView *detailsHeaderView;
     EntryActionsView *entryActionsView;
+    BarButtonItem *entryActionsViewItem;
     UIView *containerContainer;
     CGFloat suggestedHeaderHeight;
     CGFloat maximumHeaderHeight;

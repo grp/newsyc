@@ -29,6 +29,8 @@
 @interface CommentListController ()
 
 - (void)setupHeader;
+- (void)clearSavedAction;
+- (void)clearSavedCompletion;
 
 @end
 
@@ -79,10 +81,16 @@
 }
 
 - (void)viewDidUnload {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [[self navigationItem] removeRightBarButtonItem:entryActionsViewItem];
+    }
+    
     [containerContainer release];
     containerContainer = nil;
     [entryActionsView release];
     entryActionsView = nil;
+    [entryActionsViewItem release];
+    entryActionsViewItem = nil;
     [detailsHeaderView release];
     detailsHeaderView = nil;
     [detailsHeaderContainer release];
@@ -102,8 +110,8 @@
     }
         
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        BarButtonItem *eavItem = [[[BarButtonItem alloc] initWithCustomView:entryActionsView] autorelease];
-        [[self navigationItem] addRightBarButtonItem:eavItem atPosition:UINavigationItemPositionLeft];
+        entryActionsViewItem = [[BarButtonItem alloc] initWithCustomView:entryActionsView];
+        [[self navigationItem] addRightBarButtonItem:entryActionsViewItem atPosition:UINavigationItemPositionLeft];
         [[self navigationItem] setTitle:nil];
     }
 }
@@ -143,12 +151,14 @@
 }
 
 - (void)dealloc {
+    [self clearSavedAction];
+    [self clearSavedCompletion];
+    
     [containerContainer release];
     [detailsHeaderView release];
     [entryActionsView release];
+    [entryActionsViewItem release];
     [detailsHeaderContainer release];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [super dealloc];
 }

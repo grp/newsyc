@@ -253,6 +253,8 @@
 }
 
 - (void)viewDidUnload {
+    [[self navigationItem] removeBarButtonItem:actionItem];
+    
     [indicator release];
     indicator = nil;
     [actionItem release];
@@ -263,7 +265,7 @@
     statusView = nil;
     [statusViews release];
     statusViews = nil;
-
+    
     [super viewDidUnload];
 }
 

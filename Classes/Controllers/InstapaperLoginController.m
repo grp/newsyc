@@ -13,6 +13,8 @@
 @synthesize pendingURL;
 
 - (void)dealloc {
+    [pendingURL release];
+    
     [super dealloc];
 }
 
@@ -29,6 +31,8 @@
     [topLabel setFont:[UIFont fontWithName:@"Georgia" size:36.0f]];
     [bottomLabel setText:@"Enter your password if you have one."];
     [bottomLabel setTextColor:[UIColor blackColor]];
+    
+    [[usernameCell textLabel] setText:@"Email"];
 }
 
 - (NSArray *)gradientColors {

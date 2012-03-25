@@ -25,6 +25,8 @@
     NSURL *externalURL;
     
     UIToolbar *toolbar;
+    BarButtonItem *toolbarItem;
+    
     BarButtonItem *backItem;
     BarButtonItem *forwardItem;
     ActivityIndicatorItem *loadingItem;

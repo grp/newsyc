@@ -20,12 +20,12 @@
 @implementation SessionProfileController
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSessionChangedNotification object:nil];
+    
     [loginContainer release];
     [loginButton release];
     [loginImage release];
     [logoutItem release];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSessionChangedNotification object:nil];
     
     [super dealloc];
 }
@@ -97,6 +97,8 @@
 
 - (void)viewDidUnload {
     [super viewDidUnload];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSessionChangedNotification object:nil];
 
     [loginButton release];
     loginButton = nil;
@@ -106,8 +108,6 @@
     loginImage = nil;
     [logoutItem release];
     logoutItem = nil;
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSessionChangedNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

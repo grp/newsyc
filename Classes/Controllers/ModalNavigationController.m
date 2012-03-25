@@ -24,8 +24,8 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
     
-    [doneItem release];
-    doneItem = nil;
+    // Don't release doneItem here, because we depend on it staying the same
+    // object for the lifetime of this navigation controller (for removal).
 }
 
 - (void)dealloc {

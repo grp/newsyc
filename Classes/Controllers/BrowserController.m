@@ -49,20 +49,20 @@
 }
 
 - (void)dealloc {
+    [webview setDelegate:nil];
     [self releaseNetworkIndicatorCompletely];
     
-    [webview setDelegate:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     [webview release];
     [toolbar release];
-    
+    [toolbarItem release];
     [backItem release];
     [forwardItem release];
     [shareItem release];
     [refreshItem release];
     [loadingItem release];
     [spacerItem release];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [super dealloc];
 }
@@ -139,7 +139,7 @@
         [toolbar setFrame:toolbarFrame];
         
         [toolbar setBackgroundImage:[UIImage imageNamed:@"clear.png"] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-        BarButtonItem *toolbarItem = [[[BarButtonItem alloc] initWithCustomView:toolbar] autorelease];
+        toolbarItem = [[BarButtonItem alloc] initWithCustomView:toolbar];
         [[self navigationItem] addRightBarButtonItem:toolbarItem atPosition:UINavigationItemPositionLeft];
     }
 }
@@ -147,33 +147,29 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
     
+    [webview setDelegate:nil];
     [self releaseNetworkIndicatorCompletely];
     
-    [webview setDelegate:nil];
+    [[self navigationItem] removeRightBarButtonItem:toolbarItem];
+    
     [webview release];
     webview = nil;
-    
     [toolbar release];
     toolbar = nil;
-    
+    [toolbarItem release];
+    toolbarItem = nil;
     [backItem release];
     backItem = nil;
-    
     [forwardItem release];
     forwardItem = nil;
-    
     [readabilityItem release];
     readabilityItem = nil;
-    
     [refreshItem release];
     refreshItem = nil;
-    
     [shareItem release];
     shareItem = nil;
-    
     [loadingItem release];
     loadingItem = nil;
-    
     [spacerItem release];
     spacerItem = nil;
 }
