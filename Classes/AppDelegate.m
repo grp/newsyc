@@ -131,6 +131,7 @@
 
 - (void)splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)pc {
     popoverItem = [barButtonItem retain];
+    // XXX: work around navigation bar shrinking this button
     [popoverItem setTitle:@"HN"];
     popover = [pc retain];
     
@@ -152,6 +153,14 @@
     popoverItem = nil;
     [popover release];
     popover = nil;
+}
+
+- (void)splitViewController:(UISplitViewController *)svc popoverController:(UIPopoverController *)pc willPresentViewController:(UIViewController *)viewController {
+    // XXX: workaround Apple bug causing the controller to stretch to fill
+    // the entire screen after it unloads the view from a memory warning
+    CGRect frame = [[viewController view] frame];
+    frame.size.width = 320.0f;
+    [[viewController view] setFrame:frame];
 }
 
 - (void)pushBranchViewController:(UIViewController *)branchController animated:(BOOL)animated {
