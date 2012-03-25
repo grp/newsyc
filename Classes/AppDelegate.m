@@ -170,7 +170,7 @@
 - (void)setLeafViewController:(UIViewController *)leafController {
     [rightNavigationController setViewControllers:[NSArray arrayWithObject:leafController]];
     
-    if (popoverItem != nil) [[leafController navigationItem] addLeftBarButtonItem:popoverItem atPosition:UINavigationItemPositionRight];
+    if (popoverItem != nil) [[leafController navigationItem] addLeftBarButtonItem:popoverItem atPosition:UINavigationItemPositionLeft];
     if (popover != nil) [popover dismissPopoverAnimated:YES];
 }
 
