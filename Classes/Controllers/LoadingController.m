@@ -248,8 +248,7 @@
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [[self navigationItem] addLeftBarButtonItem:actionItem atPosition:UINavigationItemPositionRight];
     } else {
-        //[[self navigationItem] addRightBarButtonItem:actionItem atPosition:UINavigationItemPositionLeft];
-        [[self navigationItem] setRightBarButtonItem:actionItem];
+        [[self navigationItem] addRightBarButtonItem:actionItem atPosition:UINavigationItemPositionLeft];
     }
 }
 
