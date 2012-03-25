@@ -99,7 +99,7 @@
         [rightNavigationController autorelease];
         
         splitController = [[SplitViewController alloc] init];
-        [splitController setPresentsWithGesture:YES];
+        if ([splitController respondsToSelector:@selector(setPresentsWithGesture:)]) [splitController setPresentsWithGesture:YES];
         [splitController setDelegate:self];
         [splitController setViewControllers:[NSArray arrayWithObjects:navigationController, rightNavigationController, nil]];
         [splitController autorelease];
