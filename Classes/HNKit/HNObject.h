@@ -15,7 +15,7 @@ typedef enum {
     kHNObjectLoadingStateLoadingReload = 1 << 1,
     kHNObjectLoadingStateLoadingOther = 1 << 2,
     kHNObjectLoadingStateLoadingAny = (kHNObjectLoadingStateLoadingInitial | kHNObjectLoadingStateLoadingReload | kHNObjectLoadingStateLoadingOther),
-    kHNOBjectLoadingStateCustom = 0xFFFF0000, /* mask */
+    kHNObjectLoadingStateCustom = 0xFFFF0000, /* mask */
     kHNObjectLoadingStateLoaded = 1 << 15,
 } HNObjectLoadingState;
 
