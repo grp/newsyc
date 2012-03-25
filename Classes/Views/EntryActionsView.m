@@ -16,7 +16,7 @@
 @interface EntryActionsView ()
 
 - (UIImage *)imageForItem:(EntryActionsViewItem)item;
-- (UIBarButtonItem *)createBarButtonItemForItem:(EntryActionsViewItem)item;
+- (BarButtonItem *)createBarButtonItemForItem:(EntryActionsViewItem)item;
 - (void)updateItems;
 
 @end
@@ -58,13 +58,13 @@
 }
 
 - (void)updateItems {
-    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    BarButtonItem *flexibleSpace = [[BarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    UIBarButtonItem *replyItem = [self createBarButtonItemForItem:kEntryActionsViewItemReply];
-    UIBarButtonItem *upvoteItem = [self createBarButtonItemForItem:kEntryActionsViewItemUpvote];
-    UIBarButtonItem *flagItem = [self createBarButtonItemForItem:kEntryActionsViewItemFlag];
-    UIBarButtonItem *downvoteItem = [self createBarButtonItemForItem:kEntryActionsViewItemDownvote];
-    UIBarButtonItem *actionsItem = [self createBarButtonItemForItem:kEntryActionsViewItemActions];
+    BarButtonItem *replyItem = [self createBarButtonItemForItem:kEntryActionsViewItemReply];
+    BarButtonItem *upvoteItem = [self createBarButtonItemForItem:kEntryActionsViewItemUpvote];
+    BarButtonItem *flagItem = [self createBarButtonItemForItem:kEntryActionsViewItemFlag];
+    BarButtonItem *downvoteItem = [self createBarButtonItemForItem:kEntryActionsViewItemDownvote];
+    BarButtonItem *actionsItem = [self createBarButtonItemForItem:kEntryActionsViewItemActions];
     
     [self setItems:[NSArray arrayWithObjects:replyItem, flexibleSpace, upvoteItem, flexibleSpace, flagItem, flexibleSpace, downvoteItem, flexibleSpace, actionsItem, nil]];
      
@@ -84,24 +84,32 @@
         UIImage *backgroundImage = [[UIImage imageNamed:@"toolbar-expanded.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
         [self setBackgroundImage:backgroundImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
         [self setTintColor:[UIColor whiteColor]];
+    } else if (style == kEntryActionsViewStyleTransparentLight) {
+        UIImage *clearImage = [UIImage imageNamed:@"clear.png"];
+        [self setBackgroundImage:clearImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+        [self setTintColor:[UIColor blackColor]];
+    } else if (style == kEntryActionsViewStyleTransparentDark) {
+        UIImage *clearImage = [UIImage imageNamed:@"clear.png"];
+        [self setBackgroundImage:clearImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+        [self setTintColor:nil];
     }
 }
 
 // XXX: this is just one giant hack; we should store references to these objects
-- (UIBarButtonItem *)barButtonItemForItem:(EntryActionsViewItem)item {
+- (BarButtonItem *)barButtonItemForItem:(EntryActionsViewItem)item {
     NSArray *items = [self items];
     
     switch (item) {
         case kEntryActionsViewItemReply:
             return [items objectAtIndex:0];
         case kEntryActionsViewItemUpvote:
-            return [items objectAtIndex:3];
+            return [items objectAtIndex:2];
         case kEntryActionsViewItemFlag:
-            return [items objectAtIndex:5];
+            return [items objectAtIndex:4];
         case kEntryActionsViewItemDownvote:
-            return [items objectAtIndex:7];
+            return [items objectAtIndex:6];
         case kEntryActionsViewItemActions:
-            return [items objectAtIndex:9];
+            return [items objectAtIndex:8];
         default:
             return nil;
     }
@@ -128,7 +136,7 @@
             break;
     }
     
-    [self updateItems];
+    [[self barButtonItemForItem:item] setEnabled:enabled];
 }
 
 - (BOOL)itemIsEnabled:(EntryActionsViewItem)item {
@@ -165,16 +173,16 @@
     }
 }
 
-- (UIBarButtonItem *)createBarButtonItemWithImage:(UIImage *)image target:(id)target action:(SEL)action {
-    return [[[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:target action:action] autorelease];
+- (BarButtonItem *)barButtonItemWithImage:(UIImage *)image target:(id)target action:(SEL)action {
+    return [[[BarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:target action:action] autorelease];
 }
 
-- (UIBarButtonItem *)createBarButtonItemForItem:(EntryActionsViewItem)item {
-    UIBarButtonItem *barButtonItem = nil;
+- (BarButtonItem *)createBarButtonItemForItem:(EntryActionsViewItem)item {
+    BarButtonItem *barButtonItem = nil;
     UIImage *itemImage = [self imageForItem:item];
     
     if ([self itemIsLoading:item]) {
-        barButtonItem = [[ActivityIndicatorItem alloc] initWithSize:[itemImage size]];
+        barButtonItem = [[[ActivityIndicatorItem alloc] initWithSize:[itemImage size]] autorelease];
     } else {
         SEL action = NULL;
 
@@ -198,7 +206,7 @@
                 break;
         }
         
-        barButtonItem = [self createBarButtonItemWithImage:itemImage target:self action:action];
+        barButtonItem = [self barButtonItemWithImage:itemImage target:self action:action];
     }
 
     [barButtonItem setEnabled:[self itemIsEnabled:item]];
@@ -273,8 +281,6 @@
 - (void)setEntry:(HNEntry *)entry_ {
     [entry autorelease];
     entry = [entry_ retain];
-    
-    [self updateItems];
 }
 
 @end

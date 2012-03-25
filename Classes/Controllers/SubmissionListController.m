@@ -11,6 +11,8 @@
 #import "SubmissionTableCell.h"
 #import "CommentListController.h"
 
+#import "AppDelegate.h"
+
 @implementation SubmissionListController
 
 + (Class)cellClass {
@@ -28,7 +30,15 @@
 
 - (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+    [[self navigationController] pushController:[controller autorelease] animated:YES];
 }
+
+- (void)deselectWithAnimation:(BOOL)animated {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+        [super deselectWithAnimation:animated];
+    }
+}
+
+AUTOROTATION_FOR_PAD_ONLY
 
 @end

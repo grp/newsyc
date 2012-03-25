@@ -11,6 +11,7 @@
 #import "HNKit.h"
 
 #import "UIActionSheet+Context.h"
+#import "UINavigationItem+MultipleItems.h"
 
 #import "CommentListController.h"
 #import "CommentTableCell.h"
@@ -21,6 +22,9 @@
 #import "EntryReplyComposeController.h"
 #import "BrowserController.h"
 #import "HackerNewsLoginController.h"
+
+#import "AppDelegate.h"
+#import "ModalNavigationController.h"
 
 @interface CommentListController ()
 
@@ -48,21 +52,29 @@
     
     if ([source isKindOfClass:[HNEntry class]]) {
         entryActionsView = [[EntryActionsView alloc] initWithFrame:CGRectZero];
-        [entryActionsView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
         [entryActionsView sizeToFit];
         
-        CGRect actionsFrame = [entryActionsView frame];
-        actionsFrame.origin.y = [[self view] frame].size.height - actionsFrame.size.height;
-        actionsFrame.size.width = [[self view] frame].size.width;
-        [entryActionsView setFrame:actionsFrame];
         [entryActionsView setDelegate:self];
         [entryActionsView setEntry:(HNEntry *) source];
         [entryActionsView setEnabled:[(HNEntry *) source isComment] forItem:kEntryActionsViewItemDownvote];
         [[self view] addSubview:entryActionsView];
-    
-        CGRect tableFrame = [tableView frame];
-        tableFrame.size.height = [[self view] bounds].size.height - actionsFrame.size.height;
-        [tableView setFrame:tableFrame];
+        
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+            [entryActionsView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
+            
+            CGRect actionsFrame = [entryActionsView frame];
+            actionsFrame.origin.y = [[self view] frame].size.height - actionsFrame.size.height;
+            actionsFrame.size.width = [[self view] frame].size.width;
+            [entryActionsView setFrame:actionsFrame];
+            
+            CGRect tableFrame = [tableView frame];
+            tableFrame.size.height = [[self view] bounds].size.height - actionsFrame.size.height;
+            [tableView setFrame:tableFrame];
+        } else {
+            CGRect actionsFrame = [entryActionsView frame];
+            actionsFrame.size.width = 280.0f;
+            [entryActionsView setFrame:actionsFrame];
+        }
     }
 }
 
@@ -88,15 +100,29 @@
     } else {
         [self setTitle:@"Comments"];
     }
+        
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        BarButtonItem *eavItem = [[[BarButtonItem alloc] initWithCustomView:entryActionsView] autorelease];
+        [[self navigationItem] addRightBarButtonItem:eavItem atPosition:UINavigationItemPositionLeft];
+        [[self navigationItem] setTitle:nil];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-        [entryActionsView setStyle:kEntryActionsViewStyleOrange];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
+            [entryActionsView setStyle:kEntryActionsViewStyleOrange];
+        } else {
+            [entryActionsView setStyle:kEntryActionsViewStyleDefault];
+        }
     } else {
-        [entryActionsView setStyle:kEntryActionsViewStyleDefault];
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
+            [entryActionsView setStyle:kEntryActionsViewStyleTransparentLight];
+        } else {
+            [entryActionsView setStyle:kEntryActionsViewStyleTransparentDark];
+        }
     }
 }
 
@@ -108,6 +134,12 @@
         
         savedAction();
     }
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [self setupHeader];
+    
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 - (void)dealloc {
@@ -270,12 +302,12 @@
 
 - (void)detailsHeaderView:(DetailsHeaderView *)header selectedURL:(NSURL *)url {
     BrowserController *controller = [[BrowserController alloc] initWithURL:url];
-    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+    [[self navigationController] pushController:[controller autorelease] animated:YES];
 }
 
 - (void)commentTableCell:(CommentTableCell *)cell selectedURL:(NSURL *)url {
     BrowserController *controller = [[BrowserController alloc] initWithURL:url];
-    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+    [[self navigationController] pushController:[controller autorelease] animated:YES];
 }
 
 - (void)commentTableCellTapped:(CommentTableCell *)cell {
@@ -289,7 +321,7 @@
 - (void)commentTableCellDoubleTapped:(CommentTableCell *)cell {
     HNEntry *entry = [self entryAtIndexPath:[tableView indexPathForCell:cell]];
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+    [[self navigationController] pushController:[controller autorelease] animated:YES];
 }
 
 #pragma mark - Actions
@@ -466,13 +498,20 @@
             if (index == 0) {
                 ProfileController *controller = [[ProfileController alloc] initWithSource:[entry submitter]];
                 [controller setTitle:@"Profile"];
-                [[this navigationController] pushViewController:[controller autorelease] animated:YES];
+                [controller autorelease];
+                
+                if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+                    [[this navigationController] pushController:controller animated:YES];
+                } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+                    ModalNavigationController *navigation = [[ModalNavigationController alloc] initWithRootViewController:controller];
+                    [self presentModalViewController:[navigation autorelease] animated:YES];
+                }
             } else if (index == 1) {
                 CommentListController *controller = [[CommentListController alloc] initWithSource:[entry parent]];
-                [[this navigationController] pushViewController:[controller autorelease] animated:YES];
+                [[this navigationController] pushController:[controller autorelease] animated:YES];
             } else if (index == 2) {
                 CommentListController *controller = [[CommentListController alloc] initWithSource:[entry submission]];
-                [[this navigationController] pushViewController:[controller autorelease] animated:YES];
+                [[this navigationController] pushController:[controller autorelease] animated:YES];
             }
         }
         
@@ -490,8 +529,8 @@
                 [sheet setCancelButtonIndex:1];
                 [sheet setDelegate:this];
                 [sheet setSheetContext:@"entry-action"];
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:[entryActionsView barButtonItemForItem:item] animated:YES];
-                else [sheet showInView:[[this view] window]];
+                
+                [sheet showFromBarButtonItemInWindow:[eav barButtonItemForItem:item] animated:YES];
                 [sheet release];
             } else {
                 savedCompletion(0);
@@ -504,8 +543,8 @@
             [sheet setCancelButtonIndex:1];
             [sheet setDelegate:this];
             [sheet setSheetContext:@"entry-action"];
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:[entryActionsView barButtonItemForItem:item] animated:YES];
-            else [sheet showInView:[[this view] window]];
+            
+            [sheet showFromBarButtonItemInWindow:[eav barButtonItemForItem:item] animated:YES];
             [sheet release];
         } else if (item == kEntryActionsViewItemActions) {
             UIActionSheet *sheet = [[UIActionSheet alloc] init];
@@ -516,8 +555,8 @@
             [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
             [sheet setDelegate:this];
             [sheet setSheetContext:@"entry-action"];
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:[entryActionsView barButtonItemForItem:item] animated:YES];
-            else [sheet showInView:[[this view] window]];
+            
+            [sheet showFromBarButtonItemInWindow:[eav barButtonItemForItem:item] animated:YES];
             [sheet release];
         } else if (item == kEntryActionsViewItemReply) {
             savedCompletion(0);

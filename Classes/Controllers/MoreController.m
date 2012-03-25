@@ -15,10 +15,13 @@
 #import "CommentListController.h"
 #import "BrowserController.h"
 
+#import "AppDelegate.h"
+
 @implementation MoreController
 
 - (void)dealloc {
     [tableView release];
+    [tableBackgroundView release];
     
     [super dealloc];
 }
@@ -32,10 +35,7 @@
     [tableView setDataSource:self];
     [[self view] addSubview:tableView];
     
-    UIView *backgroundView = [[[UIView alloc] initWithFrame:[tableView bounds]] autorelease];
-    [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [tableView setBackgroundColor:[UIColor clearColor]];
-    [tableView setBackgroundView:backgroundView];
+    tableBackgroundView = [[tableView backgroundView] retain];
 }
 
 - (void)viewDidLoad {
@@ -46,15 +46,24 @@
 
 - (void)viewDidUnload {
     [super viewDidUnload];
+    
+    [tableView release];
+    tableView = nil;
+    [tableBackgroundView release];
+    tableBackgroundView = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-        [[tableView backgroundView] setBackgroundColor:[UIColor colorWithRed:(242.0f / 255.0f) green:(205.0f / 255.0f) blue:(175.0f / 255.0f) alpha:1.0f]];
+        UIView *backgroundView = [[[UIView alloc] initWithFrame:[tableView bounds]] autorelease];
+        [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        [tableView setBackgroundColor:[UIColor clearColor]];
+        [backgroundView setBackgroundColor:[UIColor colorWithRed:(242.0f / 255.0f) green:(205.0f / 255.0f) blue:(175.0f / 255.0f) alpha:1.0f]];
+        [tableView setBackgroundView:backgroundView];
     } else {
-        [[tableView backgroundView] setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+        [tableView setBackgroundView:tableBackgroundView];
     }
     
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
@@ -167,15 +176,15 @@
     } else if ([indexPath section] == 2) {
         if ([indexPath row] == 0) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:kHNFAQURL];
-            [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+            [[self navigationController] pushController:[controller autorelease] animated:YES];
             return;
         } else if ([indexPath row] == 1) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"http://newsyc.me/"]];
-            [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+            [[self navigationController] pushController:[controller autorelease] animated:YES];
             return;
         } else if ([indexPath row] == 2) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"https://twitter.com/newsyc_"]];
-            [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+            [[self navigationController] pushController:[controller autorelease] animated:YES];
             return;
         }
     }
@@ -183,7 +192,12 @@
     HNEntryList *list = [HNEntryList entryListWithIdentifier:type];
     UIViewController *controller = [[controllerClass alloc] initWithSource:list];
     [controller setTitle:title];
-    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+    
+    if (controllerClass == [SubmissionListController class]) {
+        [[self navigationController] pushController:[controller autorelease] animated:YES];
+    } else {
+        [[self navigationController] pushController:[controller autorelease] animated:YES];
+    }
 }
 
 AUTOROTATION_FOR_PAD_ONLY

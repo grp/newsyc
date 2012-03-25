@@ -6,6 +6,7 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import "BarButtonItem.h"
 #import "ActivityIndicatorItem.h"
 
 @protocol LoginControllerDelegate;
@@ -18,8 +19,8 @@
     UITextField *usernameField;
     UITableViewCell *passwordCell;
     UITextField *passwordField;
-    UIBarButtonItem *cancelItem;
-    UIBarButtonItem *completeItem;
+    BarButtonItem *cancelItem;
+    BarButtonItem *completeItem;
     ActivityIndicatorItem *loadingItem;
     id<LoginControllerDelegate> delegate;
     UILabel *topLabel;

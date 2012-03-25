@@ -31,7 +31,7 @@
 
 - (id)init {
     if ((self = [super init])) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
             [self setModalPresentationStyle:UIModalPresentationFormSheet];
     }
     
@@ -94,22 +94,27 @@
     backgroundImageView = [[UIImageView alloc] initWithFrame:[[self view] bounds]];
     [backgroundImageView setImage:background];
     [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         tableView.backgroundView = backgroundImageView;
     else
         [[self view] insertSubview:backgroundImageView atIndex:0];
     
+    // XXX: this is a hack. really, this should calculate the positioning.
+    CGRect fieldRect = CGRectMake(115, 12, -135, 30);
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+        fieldRect = CGRectMake(135, 12, -175, 30);
+    
     usernameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [[usernameCell textLabel] setText:@"Username"];
     usernameField = [self _createCellTextField];
-    usernameField.frame = CGRectMake(115, 12, usernameCell.bounds.size.width - 125, 30);
+    usernameField.frame = CGRectMake(fieldRect.origin.x, fieldRect.origin.y, usernameCell.bounds.size.width + fieldRect.size.width, fieldRect.size.height);
     [usernameField setReturnKeyType:UIReturnKeyNext];
     [usernameCell addSubview:usernameField];
     
     passwordCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [[passwordCell textLabel] setText:@"Password"];
     passwordField = [self _createCellTextField];
-    passwordField.frame = CGRectMake(115, 12, passwordCell.bounds.size.width - 125, 30);
+    passwordField.frame = CGRectMake(fieldRect.origin.x, fieldRect.origin.y, passwordCell.bounds.size.width + fieldRect.size.width, fieldRect.size.height);
     [passwordField setSecureTextEntry:YES];
     [passwordField setReturnKeyType:UIReturnKeyDone];
     [passwordCell addSubview:passwordField];
@@ -120,8 +125,8 @@
     [loadingIndicatorView setCenter:[loadingCell center]];
 	[loadingCell addSubview:[loadingIndicatorView autorelease]];
 		
-    completeItem = [[UIBarButtonItem alloc] initWithTitle:@"Confirm" style:UIBarButtonItemStyleBordered target:self action:@selector(_authenticate)];
-    cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
+    completeItem = [[BarButtonItem alloc] initWithTitle:@"Confirm" style:UIBarButtonItemStyleBordered target:self action:@selector(_authenticate)];
+    cancelItem = [[BarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
     
     bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 15.0f)];
     [bottomLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];

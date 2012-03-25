@@ -11,6 +11,7 @@
 @class ProfileHeaderView;
 @interface ProfileController : LoadingController <UITableViewDelegate, UITableViewDataSource> {
     UITableView *tableView;
+    UIView *tableBackgroundView;
     ProfileHeaderView *header;
 }
 

@@ -13,7 +13,9 @@
 #import "InstapaperController.h"
 #import "LoadingIndicatorView.h"
 #import "ProgressHUD.h"
+
 #import "UIActionSheet+Context.h"
+#import "UINavigationItem+MultipleItems.h"
 
 @implementation LoadingController
 @synthesize source;
@@ -206,11 +208,9 @@
     
     [sheet addButtonWithTitle:@"Cancel"];
     [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:actionItem animated:YES];
-    else [sheet showInView:[[self view] window]];
-    
     [sheet setSheetContext:@"link"];
+    
+    [sheet showFromBarButtonItemInWindow:actionItem animated:YES];
     [sheet release];
 }
 
@@ -231,7 +231,7 @@
     [retryButton setTitle:@"Retry Loading" forState:UIControlStateNormal];
     [retryButton addTarget:self action:@selector(retryPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTapped)];
+    actionItem = [[BarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTapped)];
     
     statusView = [[UIView alloc] initWithFrame:[self.view bounds]];
     [statusView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -245,7 +245,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[self navigationItem] setRightBarButtonItem:actionItem];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [[self navigationItem] addLeftBarButtonItem:actionItem atPosition:UINavigationItemPositionRight];
+    } else {
+        //[[self navigationItem] addRightBarButtonItem:actionItem atPosition:UINavigationItemPositionLeft];
+        [[self navigationItem] setRightBarButtonItem:actionItem];
+    }
 }
 
 - (void)viewDidUnload {

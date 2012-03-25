@@ -10,6 +10,29 @@
 
 @implementation NavigationController
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+
+    [super dealloc];
+}
+
+- (void)enteredForeground {
+    [self viewWillAppear:NO];
+    [self viewDidAppear:NO];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -23,11 +46,17 @@
 // Why this isn't delegated by UIKit to the top view controller, I have no clue.
 // This, however, should unobstrusively add that delegation.
 - (UIModalPresentationStyle)modalPresentationStyle {
-    if ([self topViewController]) {
+    UIModalPresentationStyle style = [super modalPresentationStyle];
+    
+    if (style != UIModalPresentationFullScreen) {
+        return style;
+    } else if ([self topViewController]) {
         return [[self topViewController] modalPresentationStyle];
     } else {
-        return [super modalPresentationStyle];
+        return style;
     }
 }
+
+AUTOROTATION_FOR_PAD_ONLY
 
 @end

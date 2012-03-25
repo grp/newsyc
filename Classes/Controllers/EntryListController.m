@@ -68,10 +68,15 @@
     [super viewDidUnload];
 }
 
+- (void)deselectWithAnimation:(BOOL)animated {
+    NSIndexPath *indexPath = [tableView indexPathForSelectedRow];
+    [tableView deselectRowAtIndexPath:indexPath animated:animated];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+    [self deselectWithAnimation:YES];
 }
 
 - (void)sourceStartedLoading {
@@ -81,8 +86,6 @@
 }
 
 - (void)sourceFinishedLoading {
-    [super sourceFinishedLoading];
-    
     [pullToRefreshView finishedLoading];
     [moreButton stopLoading];
     
@@ -95,6 +98,8 @@
         [moreButton release];
         moreButton = nil;
     }
+    
+    [super sourceFinishedLoading];
 }
 
 - (void)sourceFailedLoading {
@@ -123,15 +128,27 @@
 }
 
 - (void)finishedLoading {
-    [self loadEntries];
+    NSIndexPath *selectedIndexPath = [tableView indexPathForSelectedRow];
+    HNEntry *selected = nil;
+    if (selectedIndexPath != nil) selected = [self entryAtIndexPath:selectedIndexPath];
     
+    [self loadEntries];
     [tableView reloadData];
+    
+    if (selectedIndexPath != nil) {
+        NSIndexPath *indexPathOfSelected = [self indexPathOfEntry:selected];
+        [tableView selectRowAtIndexPath:indexPathOfSelected animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
 
-    if ([tableView numberOfSections] == 0 || [tableView numberOfRowsInSection:0] == 0) {
+    if ([entries count] == 0) {
         [self showEmptyLabel];
     } else {
         [self removeEmptyLabel];
     }
+}
+
+- (NSIndexPath *)indexPathOfEntry:(HNEntry *)entry {
+    return [NSIndexPath indexPathForRow:[entries indexOfObject:entry] inSection:0];
 }
 
 - (HNEntry *)entryAtIndexPath:(NSIndexPath *)indexPath {

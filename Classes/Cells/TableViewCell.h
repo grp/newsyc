@@ -21,64 +21,21 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-//  ABTableViewCell.m
+//  ABTableViewCell.h
 //
 //  Created by Loren Brichter
 //  Copyright 2008 Loren Brichter. All rights reserved.
 //
 
-#import "ABTableViewCell.h"
+#import <UIKit/UIKit.h>
 
-@interface ABTableViewCellView : UIView
-@end
-
-@implementation ABTableViewCellView
-
-- (void)drawRect:(CGRect)r
-{
-	[(ABTableViewCell *)[self superview] drawContentView:r];
+@interface TableViewCell : UITableViewCell {
+	UIView *contentView;
+    BOOL showsDividing;
 }
 
-@end
+@property (nonatomic, assign) BOOL showsDivider;
 
-
-
-@implementation ABTableViewCell
-
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]))
-	{
-		contentView = [[ABTableViewCellView alloc] initWithFrame:CGRectZero];
-		contentView.opaque = YES;
-		[self addSubview:contentView];
-		[contentView release];
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-	[super dealloc];
-}
-
-- (void)setFrame:(CGRect)f
-{
-	[super setFrame:f];
-	CGRect b = [self bounds];
-	b.size.height -= 1; // leave room for the seperator line
-	[contentView setFrame:b];
-}
-
-- (void)setNeedsDisplay
-{
-	[super setNeedsDisplay];
-	[contentView setNeedsDisplay];
-}
-
-- (void)drawContentView:(CGRect)r
-{
-	// subclasses should implement this
-}
+- (void)drawContentView:(CGRect)rect; // subclasses should implement
 
 @end

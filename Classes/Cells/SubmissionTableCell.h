@@ -6,10 +6,10 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "ABTableViewCell.h"
+#import "TableViewCell.h"
 
 @class HNEntry;
-@interface SubmissionTableCell : ABTableViewCell {
+@interface SubmissionTableCell : TableViewCell {
     HNEntry *submission;
 }
 

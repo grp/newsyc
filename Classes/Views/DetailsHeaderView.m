@@ -38,6 +38,12 @@
     return self;
 }
 
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    
+    [self setNeedsDisplay];
+}
+
 - (BOOL)hasDestination {
     return [entry destination] != nil;
 }
@@ -248,7 +254,8 @@
 
 - (void)longPressFromRecognizer:(UILongPressGestureRecognizer *)gesture {
 	if ([gesture state] == UIGestureRecognizerStateBegan) {
-        CGPoint point = [self bodyPointForPoint:[gesture locationInView:self]];
+        CGPoint location = [gesture locationInView:self];
+        CGPoint point = [self bodyPointForPoint:location];
         
         NSSet *rects;
         NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:&rects];
@@ -263,7 +270,12 @@
                                       ] autorelease];
             
             [action setSheetContext:[url absoluteString]];
-            [action showFromRect:[[rects anyObject] CGRectValue] inView:self animated:YES];
+
+            if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+                [action showFromRect:CGRectInset(CGRectMake(location.x, location.y, 0, 0), -4.0f, -4.0f) inView:self animated:YES];
+            } else {
+                [action showInView:self];
+            }
         }
     }
 }

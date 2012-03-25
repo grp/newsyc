@@ -12,12 +12,33 @@
 #import "XMLDocument.h"
 #import "XMLElement.h"
 
+static CGFloat defaultFontSize = 13.0f;
+
 @implementation HNEntryBodyRenderer
 @synthesize entry;
 
++ (CGFloat)defaultFontSize {
+    return defaultFontSize;
+}
+
++ (void)setDefaultFontSize:(CGFloat)size {
+    defaultFontSize = size;
+}
+
 - (CTFontRef)fontForFont:(UIFont *)font {
-    CTFontRef ref = CTFontCreateWithName((CFStringRef) [font fontName], [font pointSize], NULL);
-    return ref;
+    static NSCache *fontCache = nil;
+    if (fontCache == nil) fontCache = [[NSCache alloc] init];
+    
+    // This is okay as we only setup the font based on the name and size anyway.
+    NSArray *key = [NSArray arrayWithObjects:[font fontName], [NSNumber numberWithFloat:[font pointSize]], nil];
+    
+    if ([fontCache objectForKey:font]) {
+        return (CTFontRef) [fontCache objectForKey:key];
+    } else {
+        CTFontRef ref = CTFontCreateWithName((CFStringRef) [font fontName], [font pointSize], NULL);
+        [fontCache setObject:(id) ref forKey:key];
+        return ref;
+    }
 }
 
 - (UIColor *)colorFromHexString:(NSString *)hex {
@@ -40,7 +61,7 @@
     NSString *body = [entry body];
     if ([body length] == 0) return [[[NSAttributedString alloc] init] autorelease];
     
-    CGFloat fontSize = 13.0f;
+    CGFloat fontSize = [[self class] defaultFontSize];
     
     CTFontRef fontBody = [self fontForFont:[UIFont systemFontOfSize:fontSize]];
     CTFontRef fontCode = [self fontForFont:[UIFont fontWithName:@"Courier New" size:fontSize]];
@@ -163,9 +184,9 @@
     formatChildren([xml firstElementMatchingPath:@"/"]);
     [xml release];
     
-    CFRelease(fontBody);
+    /*CFRelease(fontBody);
     CFRelease(fontCode);
-    CFRelease(fontItalic);
+    CFRelease(fontItalic);*/
     
     return [bodyAttributed autorelease];
 }

@@ -8,18 +8,21 @@
 
 #import "HNKit.h"
 
+#import "NSString+Tags.h"
+
 #import "ProfileController.h"
 #import "ProfileHeaderView.h"
 
 #import "SubmissionListController.h"
 #import "CommentListController.h"
 
-#import "NSString+Tags.h"
+#import "AppDelegate.h"
 
 @implementation ProfileController
 
 - (void)dealloc {
     [tableView release];
+    [tableBackgroundView release];
     [header release];
     
     [super dealloc];
@@ -34,11 +37,8 @@
     [tableView setDataSource:self];
     [[self view] addSubview:tableView];
     
-    UIView *backgroundView = [[[UIView alloc] initWithFrame:[tableView bounds]] autorelease];
-    [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [tableView setBackgroundColor:[UIColor clearColor]];
-    [tableView setBackgroundView:backgroundView];
-    
+    tableBackgroundView = [[tableView backgroundView] retain];
+        
     header = [[ProfileHeaderView alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 65.0f)];
     [header setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
     [tableView setTableHeaderView:header];
@@ -50,19 +50,34 @@
     [super viewDidLoad];
     
     [self setTitle:@"Profile"];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [self setModalPresentationStyle:UIModalPresentationFormSheet];
+    }
 }
 
 - (void)viewDidUnload {
     [super viewDidUnload];
+    
+    [tableView release];
+    tableView = nil;
+    [tableBackgroundView release];
+    tableBackgroundView = nil;
+    [header release];
+    header = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-        [[tableView backgroundView] setBackgroundColor:[UIColor colorWithRed:(242.0f / 255.0f) green:(205.0f / 255.0f) blue:(175.0f / 255.0f) alpha:1.0f]];
+        UIView *backgroundView = [[[UIView alloc] initWithFrame:[tableView bounds]] autorelease];
+        [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        [tableView setBackgroundColor:[UIColor clearColor]];
+        [backgroundView setBackgroundColor:[UIColor colorWithRed:(242.0f / 255.0f) green:(205.0f / 255.0f) blue:(175.0f / 255.0f) alpha:1.0f]];
+        [tableView setBackgroundView:backgroundView];
     } else {
-        [[tableView backgroundView] setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+        [tableView setBackgroundView:tableBackgroundView];
     }
     
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
@@ -166,9 +181,9 @@
         
         HNEntryList *list = [HNEntryList entryListWithIdentifier:type user:(HNUser *) source];
         
-        EntryListController *controller = [[controllerClass alloc] initWithSource:list];
+        UIViewController *controller = [[controllerClass alloc] initWithSource:list];
         [controller setTitle:title];
-        [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+        [[self navigationController] pushController:[controller autorelease] animated:YES];
     }
 }
 

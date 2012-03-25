@@ -14,6 +14,7 @@
 #import "ProgressHUD.h"
 #import "NSArray+Strings.h"
 #import "UIApplication+ActivityIndicator.h"
+#import "UINavigationItem+MultipleItems.h"
 
 @implementation BrowserController
 @synthesize currentURL;
@@ -70,7 +71,7 @@
     [backItem setEnabled:[webview canGoBack]];
     [forwardItem setEnabled:[webview canGoForward]];
     
-    UIBarButtonItem *changableItem = nil;
+    BarButtonItem *changableItem = nil;
     if ([webview isLoading]) changableItem = loadingItem;
     else changableItem = refreshItem;
     
@@ -81,26 +82,18 @@
     [super loadView];
     
     toolbar = [[UIToolbar alloc] init];
-    [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
-    
     [toolbar sizeToFit];
-    CGRect toolbarFrame = [toolbar bounds];
-    toolbarFrame.origin.y = [[self view] bounds].size.height - toolbarFrame.size.height;
-    [toolbar setFrame:toolbarFrame];
-    [[self view] addSubview:toolbar];
     
-    backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
-    forwardItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"forward.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goForward)];
-    readabilityItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"readability.png"] style:UIBarButtonItemStylePlain target:self action:@selector(readability)];
-    refreshItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh.png"] style:UIBarButtonItemStylePlain target:self action:@selector(reload)];
-    shareItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionMenu)];
-    spacerItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
+    backItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
+    forwardItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"forward.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goForward)];
+    readabilityItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"readability.png"] style:UIBarButtonItemStylePlain target:self action:@selector(readability)];
+    refreshItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh.png"] style:UIBarButtonItemStylePlain target:self action:@selector(reload)];
+    shareItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"action.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showActionMenu)];
+    spacerItem = [[BarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
     loadingItem = [[ActivityIndicatorItem alloc] initWithSize:[[refreshItem image] size]];
     [self updateToolbarItems];
     
-    CGRect webviewFrame = [[self view] bounds];
-    webviewFrame.size.height -= toolbarFrame.size.height;
-    webview = [[UIWebView alloc] initWithFrame:webviewFrame];
+    webview = [[UIWebView alloc] initWithFrame:[[self view] bounds]];
     [webview setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [webview setDelegate:self];
     [webview setScalesPageToFit:YES];
@@ -128,6 +121,27 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        CGRect toolbarFrame = [toolbar bounds];
+        toolbarFrame.origin.y = [[self view] bounds].size.height - toolbarFrame.size.height;
+        toolbarFrame.size.width = [[self view] bounds].size.width;
+        [toolbar setFrame:toolbarFrame];
+        [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
+        [[self view] addSubview:toolbar];
+        
+        CGRect webviewFrame = [[self view] bounds];
+        webviewFrame.size.height -= toolbarFrame.size.height;
+        [webview setFrame:webviewFrame];
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        CGRect toolbarFrame = [toolbar bounds];
+        toolbarFrame.size.width = 280.0f;
+        [toolbar setFrame:toolbarFrame];
+        
+        [toolbar setBackgroundImage:[UIImage imageNamed:@"clear.png"] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+        BarButtonItem *toolbarItem = [[[BarButtonItem alloc] initWithCustomView:toolbar] autorelease];
+        [[self navigationItem] addRightBarButtonItem:toolbarItem atPosition:UINavigationItemPositionLeft];
+    }
 }
 
 - (void)viewDidUnload {
@@ -234,9 +248,7 @@
     [sheet addButtonWithTitle:@"Cancel"];
     [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:shareItem animated:YES];
-    else [sheet showInView:[[self view] window]];
-    
+    [sheet showFromBarButtonItemInWindow:shareItem animated:YES];    
     [sheet release];
 }
 

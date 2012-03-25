@@ -8,6 +8,7 @@
 
 @interface MoreController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
     UITableView *tableView;
+    UIView *tableBackgroundView;
 }
 
 @end

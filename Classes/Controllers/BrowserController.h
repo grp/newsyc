@@ -11,6 +11,7 @@
 #import "InstapaperLoginController.h"
 #import "ProgressHUD.h"
 #import "ActivityIndicatorItem.h"
+#import "BarButtonItem.h"
 
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -24,13 +25,13 @@
     NSURL *externalURL;
     
     UIToolbar *toolbar;
-    UIBarButtonItem *backItem;
-    UIBarButtonItem *forwardItem;
+    BarButtonItem *backItem;
+    BarButtonItem *forwardItem;
     ActivityIndicatorItem *loadingItem;
-    UIBarButtonItem *refreshItem;
-    UIBarButtonItem *shareItem;
-    UIBarButtonItem *spacerItem;
-    UIBarButtonItem *readabilityItem;
+    BarButtonItem *refreshItem;
+    BarButtonItem *shareItem;
+    BarButtonItem *spacerItem;
+    BarButtonItem *readabilityItem;
     
     int networkRetainCount;
 }

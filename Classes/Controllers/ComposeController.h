@@ -8,6 +8,7 @@
 
 #import "HNKit.h"
 
+#import "BarButtonItem.h"
 #import "ActivityIndicatorItem.h"
 
 @protocol ComposeControllerDelegate;
@@ -17,8 +18,8 @@
     UITableView *tableView;
     NSArray *entryCells;
     PlaceholderTextView *textView;
-    UIBarButtonItem *cancelItem;
-    UIBarButtonItem *completeItem;
+    BarButtonItem *cancelItem;
+    BarButtonItem *completeItem;
     ActivityIndicatorItem *loadingItem;
     BOOL keyboardVisible;
     id<ComposeControllerDelegate> delegate;

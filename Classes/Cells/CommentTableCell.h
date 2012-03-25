@@ -6,13 +6,13 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "ABTableViewCell.h"
+#import "TableViewCell.h"
 #import "EntryActionsView.h"
 
 @protocol CommentTableCellDelegate;
 
 @class HNEntry;
-@interface CommentTableCell : ABTableViewCell <UIActionSheetDelegate> {
+@interface CommentTableCell : TableViewCell <UIActionSheetDelegate> {
     HNEntry *comment;
     int indentationLevel;
     

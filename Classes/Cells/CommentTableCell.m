@@ -94,6 +94,36 @@
 
 #pragma mark - Configuration
 
++ (UIEdgeInsets)margins {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return UIEdgeInsetsMake(18.0f, 21.0f, 23.0f, 20.0f);
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return UIEdgeInsetsMake(8.0f, 10.0f, 12.0f, 10.0);
+    }
+    
+    return UIEdgeInsetsZero;
+}
+
++ (CGSize)offsets {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return CGSizeMake(8.0f, 4.0f);
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return CGSizeMake(8.0f, 4.0f);
+    }
+
+    return CGSizeZero;
+}
+
++ (CGFloat)indentationDepth {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return 40.0f;
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return 15.0f;
+    }
+    
+    return 0.0f;
+}
+
 + (UIFont *)userFont {
     return [UIFont boldSystemFontOfSize:14.0f];
 }
@@ -114,8 +144,8 @@
 #pragma mark - Height Calculations
 
 + (CGFloat)bodyHeightForComment:(HNEntry *)comment withWidth:(CGFloat)width indentationLevel:(int)indentationLevel {
-    width -= (2 * 8.0f);
-    width -= (indentationLevel * 15.0f);
+    width -= ([self margins].left + [self margins].right);
+    width -= (indentationLevel * [self indentationDepth]);
     
     HNEntryBodyRenderer *renderer = [comment renderer];
     CGSize size = [renderer sizeForWidth:width];
@@ -124,9 +154,13 @@
 }
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width expanded:(BOOL)expanded indentationLevel:(int)indentationLevel {
-    CGFloat height = [self bodyHeightForComment:entry withWidth:width indentationLevel:indentationLevel] + 30.0f;
-    if ([self entryShowsPoints:entry]) height += 14.0f;
+    CGFloat height = [self margins].top;
+    height += [[self userFont] lineHeight];
+    height += [self bodyHeightForComment:entry withWidth:width indentationLevel:indentationLevel];
+    if ([self entryShowsPoints:entry]) height += [self offsets].height + [[self subtleFont] lineHeight];
+    height += [self margins].bottom;
     if (expanded) height += 44.0f;
+    
     return height;
 }
 
@@ -134,9 +168,11 @@
 
 - (void)drawContentView:(CGRect)rect {
     CGRect bounds = [self bounds];
-    bounds.origin.x += (indentationLevel * 15.0f);
+    bounds.origin.x += (indentationLevel * [[self class] indentationDepth]);
+    if (expanded) bounds.size.height -= 44.0f;
     
-    CGSize offsets = CGSizeMake(8.0f, 4.0f);
+    CGSize offsets = [[self class] offsets];
+    UIEdgeInsets margins = [[self class] margins];
     
     NSString *user = [[comment submitter] identifier];
     NSString *date = [comment posted];
@@ -144,17 +180,17 @@
     NSString *comments = [comment children] == 0 ? @"" : [comment children] == 1 ? @"1 reply" : [NSString stringWithFormat:@"%d replies", [comment children]];
     
     [[UIColor blackColor] set];
-    [user drawAtPoint:CGPointMake(bounds.origin.x + offsets.width, offsets.height - 1.0f) withFont:[[self class] userFont]];
+    [user drawAtPoint:CGPointMake(bounds.origin.x + margins.left, margins.top) withFont:[[self class] userFont]];
     
     [[UIColor lightGrayColor] set];
-    CGFloat datewidth = [date sizeWithFont:[[self class] dateFont]].width;
-    [date drawAtPoint:CGPointMake(bounds.size.width - datewidth - offsets.width, offsets.height) withFont:[[self class] dateFont]];
+    CGSize dateSize = [date sizeWithFont:[[self class] dateFont]];
+    [date drawAtPoint:CGPointMake(bounds.size.width - dateSize.width - margins.right, margins.top) withFont:[[self class] dateFont]];
     
     if ([[comment body] length] > 0) {
         bodyRect.size.height = [[self class] bodyHeightForComment:comment withWidth:bounds.size.width indentationLevel:indentationLevel];
-        bodyRect.size.width = bounds.size.width - bounds.origin.x - offsets.width - offsets.width;
-        bodyRect.origin.x = bounds.origin.x + offsets.width;
-        bodyRect.origin.y = offsets.height + 19.0f;
+        bodyRect.size.width = bounds.size.width - bounds.origin.x - margins.left - margins.left;
+        bodyRect.origin.x = bounds.origin.x + margins.left;
+        bodyRect.origin.y = margins.top + dateSize.height + offsets.height;
 
         HNEntryBodyRenderer *renderer = [comment renderer];
         [renderer renderInContext:UIGraphicsGetCurrentContext() rect:bodyRect];
@@ -163,18 +199,18 @@
     [[UIColor grayColor] set];
     CGRect pointsrect;
     pointsrect.size.height = [points sizeWithFont:[[self class] subtleFont]].height;
-    pointsrect.size.width = (bounds.size.width + bounds.origin.x) / 2 - offsets.width * 2;
-    pointsrect.origin.x = bounds.origin.x + offsets.width;
-    pointsrect.origin.y = bounds.size.height - offsets.height - pointsrect.size.height;
+    pointsrect.size.width = (bounds.size.width + bounds.origin.x) / 2 - margins.left - offsets.width;
+    pointsrect.origin.x = bounds.origin.x + margins.left;
+    pointsrect.origin.y = bounds.size.height - margins.bottom - pointsrect.size.height;
     if ([[self class] entryShowsPoints:comment])
           [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     
     [[UIColor grayColor] set];
     CGRect commentsrect;
     commentsrect.size.height = [comments sizeWithFont:[[self class] subtleFont]].height;
-    commentsrect.size.width = (bounds.size.width - bounds.origin.x) / 2 - offsets.width * 2;
+    commentsrect.size.width = (bounds.size.width - bounds.origin.x) / 2 - margins.right - offsets.width;
     commentsrect.origin.x = bounds.size.width - (bounds.size.width - bounds.origin.x) / 2 + offsets.width;
-    commentsrect.origin.y = bounds.size.height - offsets.height - commentsrect.size.height;
+    commentsrect.origin.y = bounds.size.height - margins.bottom - commentsrect.size.height;
     
     // draw link highlight
     for (NSValue *rect in highlightedRects) {
@@ -276,7 +312,8 @@
 
 - (void)longPressFromRecognizer:(UILongPressGestureRecognizer *)gesture {
 	if ([gesture state] == UIGestureRecognizerStateBegan) {
-        CGPoint point = [self bodyPointForPoint:[gesture locationInView:self]];
+        CGPoint location = [gesture locationInView:self];
+        CGPoint point = [self bodyPointForPoint:location];
         
         NSSet *rects;
         NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:&rects];
@@ -291,7 +328,12 @@
             ] autorelease];
         
             [action setSheetContext:[url absoluteString]];
-            [action showFromRect:[[rects anyObject] CGRectValue] inView:self animated:YES];
+            
+            if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+                [action showFromRect:CGRectInset(CGRectMake(location.x, location.y, 0, 0), -4.0f, -4.0f) inView:self animated:YES];
+            } else {
+                [action showInView:self];
+            }
         }
     }
 }

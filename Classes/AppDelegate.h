@@ -7,13 +7,33 @@
 //
 
 #import "LoginController.h"
+#import "SplitViewController.h"
+#import "NavigationController.h"
+#import "EmptyController.h"
 
-@class NavigationController;
-@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
+@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate, UISplitViewControllerDelegate> {
     UIWindow *window;
+    
+    SplitViewController *splitController;
+    EmptyController *emptyController;
+    
     NavigationController *navigationController;
+    NavigationController *rightNavigationController;
+    
+    UIPopoverController *popover;
+    UIBarButtonItem *popoverItem;
     
     NSMutableData *received;
 }
+
+- (void)pushBranchViewController:(UIViewController *)branchController animated:(BOOL)animated;
+- (void)pushLeafViewController:(UIViewController *)leafController animated:(BOOL)animated;
+- (void)setLeafViewController:(UIViewController *)leafController;
+
+@end
+
+@interface UINavigationController (AppDelegate)
+
+- (void)pushController:(UIViewController *)controller animated:(BOOL)animated;
 
 @end

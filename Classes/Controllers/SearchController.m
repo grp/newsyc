@@ -10,6 +10,8 @@
 #import "CommentListController.h"
 #import "LoadingIndicatorView.h"
 
+#import "AppDelegate.h"
+
 @implementation SearchController
 
 - (void)loadView {
@@ -28,6 +30,7 @@
     [[self view] addSubview:coloredView];
     
     facetControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Interesting", @"Recent", nil]];
+    [facetControl setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
     [facetControl addTarget:self action:@selector(facetSelected:) forControlEvents:UIControlEventValueChanged];
     [facetControl setSegmentedControlStyle:UISegmentedControlStyleBar];
     [facetControl setSelectedSegmentIndex:0];
@@ -172,7 +175,7 @@
     HNEntry *entry = [entries objectAtIndex:[indexPath row]];
     
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+    [[self navigationController] pushController:[controller autorelease] animated:YES];
 }
 
 - (void)viewDidUnload {
@@ -234,5 +237,7 @@
 
     [super dealloc];
 }
+
+AUTOROTATION_FOR_PAD_ONLY
 
 @end

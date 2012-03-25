@@ -25,7 +25,7 @@
 
 - (id)init {
     if ((self = [super init])) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
             [self setModalPresentationStyle:UIModalPresentationPageSheet];
     }
     return self;
@@ -65,8 +65,7 @@
         [sheet setCancelButtonIndex:1];
         [sheet setSheetContext:@"cancel"];
         [sheet setDelegate:self];
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:cancelItem animated:YES];
-        else [sheet showInView:[[self view] window]];
+        [sheet showFromBarButtonItemInWindow:cancelItem animated:YES];
         [sheet release];
     }
 }
@@ -237,9 +236,9 @@
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [[self view] addSubview:tableView];
     
-    completeItem = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(send)];
+    completeItem = [[BarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(send)];
     [completeItem setEnabled:NO];
-    cancelItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+    cancelItem = [[BarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     loadingItem = [[ActivityIndicatorItem alloc] initWithSize:kActivityIndicatorItemStandardSize];
     
     // Make sure that the text view's height is setup properly.

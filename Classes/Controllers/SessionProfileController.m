@@ -15,6 +15,8 @@
 #import "PlacardButton.h"
 #import "SubmissionListController.h"
 
+#import "AppDelegate.h"
+
 @implementation SessionProfileController
 
 - (void)dealloc {
@@ -41,14 +43,15 @@
 
 - (void)logoutPressed {
     UIActionSheet *sheet = [[UIActionSheet alloc] init];
+    
     [sheet addButtonWithTitle:@"Logout"];
     [sheet addButtonWithTitle:@"Cancel"];
     [sheet setCancelButtonIndex:1];
     [sheet setDestructiveButtonIndex:0];
     [sheet setDelegate:self];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:logoutItem animated:YES];
-    else [sheet showInView:[[self view] window]];
     [sheet setSheetContext:@"logout"];
+    
+    [sheet showFromBarButtonItemInWindow:logoutItem animated:YES];
     [sheet release];
 }
 
@@ -150,7 +153,7 @@
         
         SubmissionListController *controller = [[SubmissionListController alloc] initWithSource:list];
         [controller setTitle:@"Saved"];
-        [[self navigationController] pushViewController:[controller autorelease] animated:YES];
+        [[self navigationController] pushController:[controller autorelease] animated:YES];
     } else {
         [super tableView:table didSelectRowAtIndexPath:indexPath];
     }
@@ -186,7 +189,7 @@
     [loginImage setImage:image];
     [loginContainer addSubview:loginImage];
     
-    logoutItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logoutPressed)];
+    logoutItem = [[BarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logoutPressed)];
     
     [[[self tabBarController] navigationItem] setLeftBarButtonItem:source != nil ? logoutItem : nil];
     [loginContainer setHidden:source != nil];

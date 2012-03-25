@@ -6,12 +6,15 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import <MessageUI/MFMailComposeViewController.h>
+
 #import "HNKit.h"
-#import "ActivityIndicatorItem.h"
-#import "PlacardButton.h"
+
 #import "LoginController.h"
 
-#import <MessageUI/MFMailComposeViewController.h>
+#import "BarButtonItem.h"
+#import "ActivityIndicatorItem.h"
+#import "PlacardButton.h"
 
 @class LoadingIndicatorView;
 @interface LoadingController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate> {
@@ -23,7 +26,7 @@
     PlacardButton *retryButton;
     LoadingIndicatorView *indicator;
     
-    UIBarButtonItem *actionItem;
+    BarButtonItem *actionItem;
     int openInSafariIndex;
     int mailLinkIndex;
     int copyLinkIndex;

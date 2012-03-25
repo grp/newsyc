@@ -6,9 +6,11 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "BarButtonItem.h"
+
 #define kActivityIndicatorItemStandardSize CGSizeMake(20, 20)
 
-@interface ActivityIndicatorItem : UIBarButtonItem {
+@interface ActivityIndicatorItem : BarButtonItem {
     UIActivityIndicatorView *spinner;
     UIView *container;
 }

@@ -23,6 +23,9 @@
 
 @property (nonatomic, readonly, assign) HNEntry *entry;
 
++ (CGFloat)defaultFontSize;
++ (void)setDefaultFontSize:(CGFloat)size;
+
 - (id)initWithEntry:(HNEntry *)entry;
 
 - (CGSize)sizeForWidth:(CGFloat)width;

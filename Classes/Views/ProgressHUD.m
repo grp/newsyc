@@ -62,6 +62,28 @@
     [overlay setFrame:overlayFrame];
 }
 
+- (void)updateForOrientation {
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    
+    switch (orientation) {
+        case UIInterfaceOrientationLandscapeLeft:
+            transform = CGAffineTransformMakeRotation(-M_PI / 2);
+            break;
+        case UIInterfaceOrientationLandscapeRight:
+            transform = CGAffineTransformMakeRotation(M_PI / 2);
+            break;
+        case UIInterfaceOrientationPortraitUpsideDown:
+            transform = CGAffineTransformMakeRotation(M_PI);
+            break;
+        case UIInterfaceOrientationPortrait:
+            transform = CGAffineTransformMakeRotation(0);
+            break;
+    }
+    
+    [self setTransform:transform];
+}
+
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -92,6 +114,9 @@
         [self addSubview:overlay];
         
         [self setState:kProgressHUDStateLoading];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateForOrientation) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+        [self updateForOrientation];
     }
     
     return self;
@@ -166,6 +191,8 @@
     [label release];
     [overlay release];
     [image release];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     
     [super dealloc];
 }

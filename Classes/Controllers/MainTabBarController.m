@@ -84,14 +84,15 @@
 
 - (void)requestSubmissionType {
     UIActionSheet *sheet = [[UIActionSheet alloc] init];
+    
     [sheet addButtonWithTitle:@"Submit URL"];
     [sheet addButtonWithTitle:@"Submit Text"];
     [sheet addButtonWithTitle:@"Cancel"];
     [sheet setCancelButtonIndex:2];
     [sheet setSheetContext:@"compose"];
     [sheet setDelegate:self];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) [sheet showFromBarButtonItem:composeItem animated:YES];
-    else [sheet showInView:[[self view] window]];
+    
+    [sheet showFromBarButtonItemInWindow:composeItem animated:YES];
     [sheet release];
 }
 
@@ -171,7 +172,7 @@
 - (void)loadView {
     [super loadView];
     
-    composeItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composePressed)];
+    composeItem = [[BarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composePressed)];
 }
 
 - (void)viewDidLoad {
@@ -179,5 +180,7 @@
     
     [[self navigationItem] setRightBarButtonItem:composeItem];
 }
+
+AUTOROTATION_FOR_PAD_ONLY
 
 @end

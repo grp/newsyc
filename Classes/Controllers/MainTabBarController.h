@@ -6,6 +6,8 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import "BarButtonItem.h"
+
 #import "LoginController.h"
 
 @class EntryListController, SessionProfileController, MoreController, SearchController;
@@ -18,7 +20,7 @@
     MoreController *more;
     
     NSDate *lastSeen;
-    UIBarButtonItem *composeItem;
+    BarButtonItem *composeItem;
     
     void (^loginCompletionBlock)(void);
 }

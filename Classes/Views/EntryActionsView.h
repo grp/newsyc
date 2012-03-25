@@ -7,6 +7,7 @@
 //
 
 #import "ActivityIndicatorItem.h"
+#import "BarButtonItem.h"
 
 typedef enum {
     kEntryActionsViewItemUpvote,
@@ -19,6 +20,8 @@ typedef enum {
 typedef enum {
     kEntryActionsViewStyleDefault,
     kEntryActionsViewStyleOrange,
+    kEntryActionsViewStyleTransparentLight,
+    kEntryActionsViewStyleTransparentDark,
     kEntryActionsViewStyleLight
 } EntryActionsViewStyle;
 
@@ -51,7 +54,7 @@ typedef enum {
 - (void)beginLoadingItem:(EntryActionsViewItem)item;
 - (void)stopLoadingItem:(EntryActionsViewItem)item;
 - (BOOL)itemIsLoading:(EntryActionsViewItem)item;
-- (UIBarButtonItem *)barButtonItemForItem:(EntryActionsViewItem)item;
+- (BarButtonItem *)barButtonItemForItem:(EntryActionsViewItem)item;
 
 @end
 

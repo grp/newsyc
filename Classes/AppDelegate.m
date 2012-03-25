@@ -7,12 +7,68 @@
 //
 
 #import "AppDelegate.h"
+#import "SplitViewController.h"
 #import "NavigationController.h"
 #import "MainTabBarController.h"
+
+#import "SubmissionListController.h"
+#import "SearchController.h"
+#import "SessionProfileController.h"
+#import "MoreController.h"
 
 #import "HNKit.h"
 #import "InstapaperSession.h"
 #import "JSON.h"
+
+#import "UINavigationItem+MultipleItems.h"
+
+@interface AppDelegate ()
+- (void)startConnection;
+@end
+
+@implementation UINavigationController (AppDelegate)
+
+- (BOOL)controllerBelongsOnLeft:(UIViewController *)controller {
+    return [controller isKindOfClass:[MainTabBarController class]]
+        || [controller isKindOfClass:[SearchController class]]
+        || [controller isKindOfClass:[ProfileController class]]
+        || [controller isKindOfClass:[MoreController class]]
+        || [controller isKindOfClass:[SubmissionListController class]];
+}
+
+- (void)pushController:(UIViewController *)controller animated:(BOOL)animated {
+    AppDelegate *delegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        if ([self presentingViewController] == nil) {
+            if ([self controllerBelongsOnLeft:controller]) {
+                [delegate pushBranchViewController:controller animated:animated];
+            } else if ([self controllerBelongsOnLeft:[self topViewController]]) {
+                [delegate setLeafViewController:controller];
+            } else {
+                [delegate pushLeafViewController:controller animated:animated];
+            }
+        } else {
+            if (![self controllerBelongsOnLeft:controller]) {
+                if ([[self presentingViewController] presentingViewController] != nil && [[self presentingViewController] isKindOfClass:[UINavigationController class]]) {
+                    // If we are a double-stacked modal controller, push on the bottom controller.
+                    UINavigationController *presenting = (UINavigationController *) [self presentingViewController];
+                    [presenting pushViewController:controller animated:animated];
+                } else {
+                    [delegate pushLeafViewController:controller animated:animated];
+                }
+                
+                [self dismissModalViewControllerAnimated:animated];
+            } else {
+                [self pushViewController:controller animated:animated];
+            }
+        }
+    } else {
+        [delegate pushBranchViewController:controller animated:animated];
+    }
+}
+
+@end
 
 @implementation AppDelegate
 
@@ -24,9 +80,36 @@
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     MainTabBarController *mainTabBarController = [[MainTabBarController alloc] init];
-    navigationController = [[NavigationController alloc] initWithRootViewController:[mainTabBarController autorelease]];
-    [window setRootViewController:[navigationController autorelease]];
     [mainTabBarController setTitle:@"Hacker News"];
+    [mainTabBarController autorelease];
+    
+    navigationController = [[NavigationController alloc] initWithRootViewController:mainTabBarController];
+    [navigationController autorelease];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        [window setRootViewController:navigationController];
+        
+        [HNEntryBodyRenderer setDefaultFontSize:13.0f];
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        emptyController = [[EmptyController alloc] init];
+        [emptyController autorelease];
+        
+        rightNavigationController = [[NavigationController alloc] initWithRootViewController:emptyController];
+        [rightNavigationController setDelegate:self];
+        [rightNavigationController autorelease];
+        
+        splitController = [[SplitViewController alloc] init];
+        [splitController setPresentsWithGesture:YES];
+        [splitController setDelegate:self];
+        [splitController setViewControllers:[NSArray arrayWithObjects:navigationController, rightNavigationController, nil]];
+        [splitController autorelease];
+        
+        [window setRootViewController:splitController];
+        
+        [HNEntryBodyRenderer setDefaultFontSize:14.0f];
+    } else {
+        NSLog(@"Error: what kind of device /is/ this, anyway?");
+    }
     
     if (![[HNSession currentSession] isAnonymous]) {
         [[HNSession currentSession] reloadToken];
@@ -35,7 +118,65 @@
     [InstapaperSession logoutIfNecessary];
                   
     [window makeKeyAndVisible];
+    [self startConnection];
+        
+    return YES;
+}
+         
+#pragma mark - View Controllers
+         
+- (BOOL)splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation {
+    return UIInterfaceOrientationIsPortrait(orientation);
+}
+
+- (void)splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)pc {
+    popoverItem = [barButtonItem retain];
+    [popoverItem setTitle:@"HN"];
+    popover = [pc retain];
     
+    NSArray *controllers = [rightNavigationController viewControllers];
+    if ([controllers count] > 0) {
+        UIViewController *root = [controllers objectAtIndex:0];
+        [[root navigationItem] addLeftBarButtonItem:popoverItem atPosition:UINavigationItemPositionLeft];
+    }
+}
+
+- (void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)button {
+    NSArray *controllers = [rightNavigationController viewControllers];
+    if ([controllers count] > 0) {
+        UIViewController *root = [controllers objectAtIndex:0];
+        [[root navigationItem] removeLeftBarButtonItem:popoverItem];
+    }
+    
+    [popoverItem release];
+    popoverItem = nil;
+    [popover release];
+    popover = nil;
+}
+
+- (void)pushBranchViewController:(UIViewController *)branchController animated:(BOOL)animated {
+    [navigationController pushViewController:branchController animated:animated];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [[branchController navigationItem] setRightBarButtonItems:[[branchController navigationItem] leftBarButtonItems]];
+        [[branchController navigationItem] setLeftBarButtonItems:nil];
+    }
+}
+
+- (void)pushLeafViewController:(UIViewController *)leafController animated:(BOOL)animated {
+    [rightNavigationController pushViewController:leafController animated:animated];
+}
+
+- (void)setLeafViewController:(UIViewController *)leafController {
+    [rightNavigationController setViewControllers:[NSArray arrayWithObject:leafController]];
+    
+    if (popoverItem != nil) [[leafController navigationItem] addLeftBarButtonItem:popoverItem atPosition:UINavigationItemPositionRight];
+    if (popover != nil) [popover dismissPopoverAnimated:YES];
+}
+
+#pragma mark - Startup Connection
+
+- (void)startConnection {
     NSString *appv = [self version];
     NSString *sysv = [[UIDevice currentDevice] systemVersion];
     NSString *dev = [[UIDevice currentDevice] model];
@@ -50,9 +191,8 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:requestURL];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
     [connection start];
-    
-    return YES;
 }
+
 - (void)connection:(NSURLConnection *)connection_ didReceiveData:(NSData *)data {
     [received appendData:data];
 }
@@ -100,6 +240,8 @@
     received = nil;
 }
 
+#pragma mark - Application Lifecycle
+
 - (void)applicationWillResignActive:(UIApplication *)application {
 
 }
@@ -116,10 +258,6 @@
     }
     
     [InstapaperSession logoutIfNecessary];
-    
-    // to apply any necessary color changes
-    [navigationController viewWillAppear:NO];
-    [navigationController viewDidAppear:NO];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -133,6 +271,8 @@
 - (void)dealloc {
     [window release];
     [navigationController release];
+    [rightNavigationController release];
+    [splitController release];
 
     [super dealloc];
 }
