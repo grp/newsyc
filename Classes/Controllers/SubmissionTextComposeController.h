@@ -10,7 +10,7 @@
 #import "HNKit.h"
 
 @interface SubmissionTextComposeController : ComposeController {
-    UITextField *titleField;
+    __weak UITextField *titleField;
 }
 
 @end

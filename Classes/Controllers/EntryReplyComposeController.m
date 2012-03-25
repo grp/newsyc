@@ -17,7 +17,7 @@
 
 - (id)initWithEntry:(HNEntry *)entry_ {
     if ((self = [super init])) {
-        entry = entry_;
+        entry = [entry_ retain];
     }
     
     return self;
@@ -43,10 +43,16 @@
 
 - (void)replySucceededWithNotification:(NSNotification *)notification {
     [self sendComplete];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionSuccessNotification object:[notification object]];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionFailureNotification object:[notification object]];
 }
 
 - (void)replyFailedWithNotification:(NSNotification *)notification {
     [self sendFailed];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionSuccessNotification object:[notification object]];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionFailureNotification object:[notification object]];
 }
 
 - (void)performSubmission {
@@ -114,6 +120,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionFailureNotification object:nil];
     
     [replyLabel release];
+    [entry release];
     
     [super dealloc];
 }

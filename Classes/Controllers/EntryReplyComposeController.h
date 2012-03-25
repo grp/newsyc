@@ -13,7 +13,7 @@
     UILabel *replyLabel;
 }
 
-@property (nonatomic, readonly) HNEntry *entry;
+@property (nonatomic, readonly, retain) HNEntry *entry;
 
 - (id)initWithEntry:(HNEntry *)entry_;
 

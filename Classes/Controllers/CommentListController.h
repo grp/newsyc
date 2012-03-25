@@ -21,7 +21,6 @@
     BarButtonItem *entryActionsViewItem;
     UIView *containerContainer;
     CGFloat suggestedHeaderHeight;
-    CGFloat maximumHeaderHeight;
 
     void (^savedAction)();
     void (^savedCompletion)(int);

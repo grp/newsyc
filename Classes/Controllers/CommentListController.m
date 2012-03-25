@@ -81,10 +81,13 @@
 }
 
 - (void)viewDidUnload {
+    [super viewDidUnload];
+    
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [[self navigationItem] removeRightBarButtonItem:entryActionsViewItem];
     }
     
+    expandedCell = nil;
     [containerContainer release];
     containerContainer = nil;
     [entryActionsView release];
@@ -95,8 +98,6 @@
     detailsHeaderView = nil;
     [detailsHeaderContainer release];
     detailsHeaderContainer = nil;
-    
-    [super viewDidUnload];
 }
 
 - (void)viewDidLoad {
@@ -113,6 +114,25 @@
         entryActionsViewItem = [[BarButtonItem alloc] initWithCustomView:entryActionsView];
         [[self navigationItem] addRightBarButtonItem:entryActionsViewItem atPosition:UINavigationItemPositionLeft];
         [[self navigationItem] setTitle:nil];
+    }
+    
+    // reload here so the code below has access to the loaded table cells
+    // to properly re-expand the saved expanded cell from before the unload
+    [tableView reloadData];
+    
+    // retore expanded cell after memory warning
+    if (expandedEntry != nil) {
+        NSIndexPath *indexPath = [self indexPathOfEntry:expandedEntry];
+        
+        if (indexPath != nil) {
+            // expand the old expanded cell
+            CommentTableCell *cell = (CommentTableCell *) [tableView cellForRowAtIndexPath:indexPath];
+            [self setExpandedEntry:expandedEntry cell:cell];
+        } else {
+            // could not find entry, maybe it disappeared
+            expandedEntry = nil;
+            expandedCell = nil;
+        }
     }
 }
 
@@ -238,16 +258,16 @@
 #pragma mark - View Layout
 
 - (void)addStatusView:(UIView *)view {
-    [super addStatusView:view];
-    
     CGRect statusFrame = [statusView frame];
     statusFrame.size.height = [tableView bounds].size.height - suggestedHeaderHeight;
     if (statusFrame.size.height < 64.0f) statusFrame.size.height = 64.0f;    
     [statusView setFrame:statusFrame];
     
-    if ([statusViews count] != 0) {
+    if (view != nil) {
         [tableView setTableFooterView:statusView];
     }
+    
+    [super addStatusView:view];
 }
 
 - (void)removeStatusView:(UIView *)view {
@@ -302,10 +322,6 @@
     [tableView setTableHeaderView:containerContainer];
     
     suggestedHeaderHeight = [detailsHeaderView bounds].size.height;
-    maximumHeaderHeight = [tableView bounds].size.height - 64.0f;
-    
-    // necessary since the core text view can steal this
-    [tableView setScrollsToTop:YES];
 }
 
 #pragma mark - Delegates

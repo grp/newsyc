@@ -14,15 +14,6 @@
 @implementation ComposeController
 @synthesize delegate;
 
-- (void)dealloc {
-    [tableView release];
-    [completeItem release];
-    [cancelItem release];
-    [loadingItem release];
-    
-    [super dealloc];
-}
-
 - (id)init {
     if ((self = [super init])) {
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
@@ -263,17 +254,19 @@
     [self setTitle:[self title]];
 }
 
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    
+- (void)viewDidUnload {    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:[[self view] window]];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:[[self view] window]];
+
+    [super viewDidUnload];
     
     [[self navigationItem] setLeftBarButtonItem:nil];
     [[self navigationItem] setRightBarButtonItem:nil];
     
     [tableView release];
     tableView = nil;
+    [textView release];
+    textView = nil;
     [loadingItem release];
     loadingItem = nil;
     [cancelItem release];
@@ -282,6 +275,20 @@
     completeItem = nil;
     [entryCells release];
     entryCells = nil;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:[[self view] window]];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:[[self view] window]];
+    
+    [tableView release];
+    [completeItem release];
+    [cancelItem release];
+    [textView release];
+    [loadingItem release];
+    [entryCells release];
+    
+    [super dealloc];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
@@ -342,7 +349,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
     
     [[self initialFirstResponder] becomeFirstResponder];
 }

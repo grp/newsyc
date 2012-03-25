@@ -40,9 +40,7 @@
 
 - (void)addStatusView:(UIView *)view;
 - (void)removeStatusView:(UIView *)view;
-
-- (void)showError;
-- (void)removeError;
+- (void)updateStatusDisplay;
 
 - (void)sourceStartedLoading;
 - (void)sourceFinishedLoading;

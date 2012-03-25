@@ -39,10 +39,16 @@
 
 - (void)submissionSucceededWithNotification:(NSNotification *)notification {
     [self sendComplete];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionFailureNotification object:[notification object]];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionSuccessNotification object:[notification object]];
 }
 
 - (void)submissionFailedWithNotification:(NSNotification *)notification {
     [self sendFailed];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionFailureNotification object:[notification object]];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionSuccessNotification object:[notification object]];
 }
 
 - (void)performSubmission {
@@ -53,8 +59,10 @@
         [submission setTitle:[titleField text]];
         [submission setBody:[textView text]];
         [[HNSession currentSession] performSubmission:submission];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionSucceededWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionFailedWithNotification:) name:kHNSubmissionFailureNotification object:submission];
+        
         [submission release];
     }
 }
@@ -63,8 +71,19 @@
     return !([[titleField text] length] == 0 || [[textView text] length] == 0);
 }
 
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+    
+    titleField = nil;
+}
+
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionFailureNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionSuccessNotification object:nil];
+    
     [super dealloc];
 }
 

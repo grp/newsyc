@@ -9,7 +9,6 @@
 #import "EntryListController.h"
 
 @interface SubmissionListController : EntryListController {
-    
 }
 
 @end

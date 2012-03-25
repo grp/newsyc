@@ -18,15 +18,7 @@
 
 @implementation EntryListController
 
-- (void)dealloc {
-    [pullToRefreshView release];
-    [tableView release];
-    [emptyLabel release];
-    [entries release];
-    [moreButton release];
-
-    [super dealloc];
-}
+#pragma mark - Lifecycle
 
 - (void)loadView {
     [super loadView];
@@ -43,6 +35,9 @@
     [emptyLabel setBackgroundColor:[UIColor clearColor]];
     [emptyLabel setText:@"No Items"];
     [emptyLabel setTextAlignment:UITextAlignmentCenter];
+    
+    moreCell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    [[moreCell button] addTarget:self action:@selector(loadMorePressed) forControlEvents:UIControlEventTouchUpInside];
     
     pullToRefreshView = [[PullToRefreshView alloc] initWithScrollView:tableView];
     [tableView addSubview:pullToRefreshView];
@@ -62,10 +57,20 @@
     pullToRefreshView = nil;
     [tableView release];
     tableView = nil;
-    [moreButton release];
-    moreButton = nil;
+    [moreCell release];
+    moreCell = nil;
     
     [super viewDidUnload];
+}
+
+- (void)dealloc {
+    [pullToRefreshView release];
+    [tableView release];
+    [emptyLabel release];
+    [entries release];
+    [moreCell release];
+    
+    [super dealloc];
 }
 
 - (void)deselectWithAnimation:(BOOL)animated {
@@ -79,6 +84,8 @@
     [self deselectWithAnimation:YES];
 }
 
+#pragma mark - Loading
+
 - (void)sourceStartedLoading {
     [super sourceStartedLoading];
     
@@ -87,17 +94,7 @@
 
 - (void)sourceFinishedLoading {
     [pullToRefreshView finishedLoading];
-    [moreButton stopLoading];
-    
-    if ([(HNContainer *) source moreToken] != nil) {
-        moreButton = [[LoadMoreButton alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 64.0f)];
-        [moreButton addTarget:self action:@selector(loadMorePressed) forControlEvents:UIControlEventTouchUpInside];
-        [tableView setTableFooterView:moreButton];
-    } else {
-        [tableView setTableFooterView:nil];
-        [moreButton release];
-        moreButton = nil;
-    }
+    [[moreCell button] stopLoading];
     
     [super sourceFinishedLoading];
 }
@@ -106,7 +103,7 @@
     [super sourceFailedLoading];
     
     [pullToRefreshView finishedLoading];
-    [moreButton stopLoading];
+    [[moreCell button] stopLoading];
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
@@ -118,13 +115,14 @@
     entries = [[(HNEntry *) source entries] copy];
 }
 
-- (void)showEmptyLabel {
-    [self addStatusView:emptyLabel];
-    [emptyLabel setFrame:[statusView bounds]];
-}
-
-- (void)removeEmptyLabel {
+- (void)updateStatusDisplay {
     [self removeStatusView:emptyLabel];
+    
+    [super updateStatusDisplay];
+    
+    if ([source isLoaded] && [entries count] == 0) {
+        [self addStatusView:emptyLabel];
+    }
 }
 
 - (void)finishedLoading {
@@ -139,13 +137,9 @@
         NSIndexPath *indexPathOfSelected = [self indexPathOfEntry:selected];
         [tableView selectRowAtIndexPath:indexPathOfSelected animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
-
-    if ([entries count] == 0) {
-        [self showEmptyLabel];
-    } else {
-        [self removeEmptyLabel];
-    }
 }
+
+#pragma mark - Table View
 
 - (NSIndexPath *)indexPathOfEntry:(HNEntry *)entry {
     return [NSIndexPath indexPathForRow:[entries indexOfObject:entry] inSection:0];
@@ -156,11 +150,24 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
-    return [source isLoaded] ? 1 : 0;
+    if ([source isLoaded]) {
+        if ([(HNContainer *) source moreToken] != nil) {
+            // Show more token if available.
+            return 2;
+        } else {
+            return 1;
+        }
+    } else {
+        return 0;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [entries count];
+    if (section == 0) {
+        return [entries count];
+    } else {
+        return 1;
+    }
 }
 
 - (CGFloat)cellHeightForEntry:(HNEntry *)entry {
@@ -168,9 +175,13 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    HNEntry *entry = [self entryAtIndexPath:indexPath];
+    if ([indexPath section] == 0) {
+        HNEntry *entry = [self entryAtIndexPath:indexPath];
     
-    return [self cellHeightForEntry:entry];
+        return [self cellHeightForEntry:entry];
+    } else {
+        return 64.0f;
+    }
 }
 
 + (Class)cellClass {
@@ -182,14 +193,18 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    HNEntry *entry = [self entryAtIndexPath:indexPath];
+    if ([indexPath section] == 0) {
+        HNEntry *entry = [self entryAtIndexPath:indexPath];
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"entry-cell"];
-    if (cell == nil) cell = [[[[[self class] cellClass] alloc] initWithReuseIdentifier:@"entry-cell"] autorelease];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"entry-cell"];
+        if (cell == nil) cell = [[[[[self class] cellClass] alloc] initWithReuseIdentifier:@"entry-cell"] autorelease];
 
-    [self configureCell:cell forEntry:entry];
+        [self configureCell:cell forEntry:entry];
     
-    return cell;
+        return cell;
+    } else {
+        return moreCell;
+    }
 }
 
 - (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
@@ -206,7 +221,7 @@
 - (void)loadMorePressed {
     if ([source isLoaded] && ![(HNContainer *) source isLoadingMore]) {
         [(HNContainer *) source beginLoadingMore];
-        [moreButton startLoading];
+        [[moreCell button] startLoading];
     }
 }
 

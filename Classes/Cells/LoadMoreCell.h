@@ -7,7 +7,12 @@
 //
 
 #import "TableViewCell.h"
+#import "LoadMoreButton.h"
 
-@interface LoadMoreCell : TableViewCell
+@interface LoadMoreCell : TableViewCell {
+    LoadMoreButton *button;
+}
+
+@property (nonatomic, readonly, retain) LoadMoreButton *button;
 
 @end

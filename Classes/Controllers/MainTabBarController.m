@@ -40,7 +40,7 @@
     
 #ifdef ENABLE_TIMELINE
         HNEntryList *newList = [HNTimeline timelineForSession:[HNSession currentSession]];
-        latest = [[[SubmissionListController alloc] initWithSource:newList] autorelease];
+        latest = [[[CommentListController alloc] initWithSource:newList] autorelease];
         [latest setTitle:@"Timeline"];
         [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Timeline" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
 #endif
@@ -107,6 +107,9 @@
 
 - (void)loginControllerDidCancel:(LoginController *)controller {
     [self dismissModalViewControllerAnimated:YES];
+    
+    [loginCompletionBlock release];
+    loginCompletionBlock = nil;
 }
 
 - (void)showLoginController {
@@ -143,6 +146,7 @@
 }
 
 - (void)dealloc {
+    [loginCompletionBlock release];
     [composeItem release];
     [lastSeen release];
     
@@ -164,7 +168,7 @@
         [[home source] beginLoading];
         [[latest source] beginLoading];
     }
-        
+
     [lastSeen release];
     lastSeen = [[NSDate date] retain];
 }
@@ -173,6 +177,15 @@
     [super loadView];
     
     composeItem = [[BarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composePressed)];
+}
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    
+    [[self navigationItem] setRightBarButtonItem:nil];
+    
+    [composeItem release];
+    composeItem = nil;
 }
 
 - (void)viewDidLoad {
