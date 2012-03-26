@@ -20,6 +20,7 @@
 		7D2BB6C0151FE506003D98B9 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D2BB6BC151FE506003D98B9 /* Default-Portrait.png */; };
 		7D2BB6C1151FE506003D98B9 /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D2BB6BD151FE506003D98B9 /* Default-Landscape@2x.png */; };
 		7D2BB6C2151FE506003D98B9 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D2BB6BE151FE506003D98B9 /* Default-Landscape.png */; };
+		7D2BB6C71520E777003D98B9 /* OrangeTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2BB6C61520E777003D98B9 /* OrangeTableView.m */; };
 		7D341768150AEE53002E284F /* toolbar-expanded.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D341767150AEE53002E284F /* toolbar-expanded.png */; };
 		7D34176C150AEF7B002E284F /* UIImage+Colorize.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D34176B150AEF7B002E284F /* UIImage+Colorize.m */; };
 		7D36ADCA13553935000613B2 /* ProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36ADC913553935000613B2 /* ProgressHUD.m */; };
@@ -169,6 +170,8 @@
 		7D2BB6BC151FE506003D98B9 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait.png"; sourceTree = "<group>"; };
 		7D2BB6BD151FE506003D98B9 /* Default-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x.png"; sourceTree = "<group>"; };
 		7D2BB6BE151FE506003D98B9 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape.png"; sourceTree = "<group>"; };
+		7D2BB6C51520E777003D98B9 /* OrangeTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrangeTableView.h; sourceTree = "<group>"; };
+		7D2BB6C61520E777003D98B9 /* OrangeTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrangeTableView.m; sourceTree = "<group>"; };
 		7D341767150AEE53002E284F /* toolbar-expanded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar-expanded.png"; sourceTree = "<group>"; };
 		7D34176A150AEF7B002E284F /* UIImage+Colorize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Colorize.h"; sourceTree = "<group>"; };
 		7D34176B150AEF7B002E284F /* UIImage+Colorize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Colorize.m"; sourceTree = "<group>"; };
@@ -642,6 +645,8 @@
 				7D6BAB831415B07400C24B8B /* LoadMoreButton.m */,
 				7D977AC0151E8F6600FD7360 /* BarButtonItem.h */,
 				7D977AC1151E8F6700FD7360 /* BarButtonItem.m */,
+				7D2BB6C51520E777003D98B9 /* OrangeTableView.h */,
+				7D2BB6C61520E777003D98B9 /* OrangeTableView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1006,6 +1011,7 @@
 				7D977ABF151D4ED000FD7360 /* UINavigationItem+MultipleItems.m in Sources */,
 				7D977AC2151E8F6700FD7360 /* BarButtonItem.m in Sources */,
 				7D2BB6B9151FD27C003D98B9 /* LoadMoreCell.m in Sources */,
+				7D2BB6C71520E777003D98B9 /* OrangeTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,11 +7,11 @@
 //
 
 #import "LoadingController.h"
+#import "OrangeTableView.h"
 
 @class ProfileHeaderView;
 @interface ProfileController : LoadingController <UITableViewDelegate, UITableViewDataSource> {
-    UITableView *tableView;
-    UIView *tableBackgroundView;
+    OrangeTableView *tableView;
     ProfileHeaderView *header;
 }
 

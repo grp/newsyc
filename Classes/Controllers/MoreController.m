@@ -21,7 +21,6 @@
 
 - (void)dealloc {
     [tableView release];
-    [tableBackgroundView release];
     
     [super dealloc];
 }
@@ -29,13 +28,11 @@
 - (void)loadView {
     [super loadView];
     
-    tableView = [[UITableView alloc] initWithFrame:[[self view] bounds] style:UITableViewStyleGrouped];
+    tableView = [[OrangeTableView alloc] initWithFrame:[[self view] bounds]];
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
     [[self view] addSubview:tableView];
-    
-    tableBackgroundView = [[tableView backgroundView] retain];
 }
 
 - (void)viewDidLoad {
@@ -49,23 +46,12 @@
     
     [tableView release];
     tableView = nil;
-    [tableBackgroundView release];
-    tableBackgroundView = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-        UIView *backgroundView = [[[UIView alloc] initWithFrame:[tableView bounds]] autorelease];
-        [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        [tableView setBackgroundColor:[UIColor clearColor]];
-        [backgroundView setBackgroundColor:[UIColor colorWithRed:(234.0f / 255.0f) green:(232.0f / 255.0f) blue:(224.0f / 255.0f) alpha:1.0f]];
-        [tableView setBackgroundView:backgroundView];
-    } else {
-        [tableView setBackgroundView:tableBackgroundView];
-    }
-    
+    [tableView setOrange:![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]];
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
 }
 

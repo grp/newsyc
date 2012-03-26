@@ -6,12 +6,10 @@
 //  Copyright (c) 2012 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OrangeTableView.h"
 
 @interface EmptyController : UIViewController {
-    UITableView *tableView;
-    UIView *tableBackgroundView;
-    
+    OrangeTableView *tableView;    
     UILabel *emptyLabel;
 }
 

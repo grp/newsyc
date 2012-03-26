@@ -6,9 +6,10 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import "OrangeTableView.h"
+
 @interface MoreController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-    UITableView *tableView;
-    UIView *tableBackgroundView;
+    OrangeTableView *tableView;
 }
 
 @end

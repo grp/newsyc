@@ -12,7 +12,6 @@
 
 - (void)dealloc {
     [tableView release];
-    [tableBackgroundView release];
     [emptyLabel release];
     
     [super dealloc];
@@ -23,8 +22,6 @@
     
     [tableView release];
     tableView = nil;
-    [tableBackgroundView release];
-    tableBackgroundView = nil;
     [emptyLabel release];
     emptyLabel = nil;
 }
@@ -32,11 +29,9 @@
 - (void)loadView {
     [super loadView];
         
-    tableView = [[UITableView alloc] initWithFrame:[[self view] bounds] style:UITableViewStyleGrouped];
+    tableView = [[OrangeTableView alloc] initWithFrame:[[self view] bounds]];
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [[self view] addSubview:tableView];
-    
-    tableBackgroundView = [[tableView backgroundView] retain];
     
     emptyLabel = [[UILabel alloc] initWithFrame:[[self view] bounds]];
     [emptyLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -52,17 +47,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [tableView setOrange:![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]];
+    
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-        UIView *backgroundView = [[[UIView alloc] initWithFrame:[tableView bounds]] autorelease];
-        [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        [tableView setBackgroundColor:[UIColor clearColor]];
-        [backgroundView setBackgroundColor:[UIColor colorWithRed:(234.0f / 255.0f) green:(232.0f / 255.0f) blue:(224.0f / 255.0f) alpha:1.0f]];
-        [tableView setBackgroundView:backgroundView];
-        
         [emptyLabel setTextColor:[UIColor grayColor]];
     } else {
-        [tableView setBackgroundView:tableBackgroundView];
-        
         [emptyLabel setTextColor:[UIColor grayColor]];
     }
 }
