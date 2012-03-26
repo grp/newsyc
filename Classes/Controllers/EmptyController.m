@@ -40,12 +40,12 @@
     
     emptyLabel = [[UILabel alloc] initWithFrame:[[self view] bounds]];
     [emptyLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [emptyLabel setText:@"Welcome to news:yc!"];
+    [emptyLabel setText:@"No Submission Selected"];
     [emptyLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
     [emptyLabel setTextAlignment:UITextAlignmentCenter];
-    [emptyLabel setTextColor:[UIColor darkGrayColor]];
     [emptyLabel setShadowColor:[UIColor whiteColor]];
     [emptyLabel setShadowOffset:CGSizeMake(0, 1)];
+    [emptyLabel setBackgroundColor:[UIColor clearColor]];
     [[self view] addSubview:emptyLabel];
 }
 
@@ -56,10 +56,14 @@
         UIView *backgroundView = [[[UIView alloc] initWithFrame:[tableView bounds]] autorelease];
         [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         [tableView setBackgroundColor:[UIColor clearColor]];
-        [backgroundView setBackgroundColor:[UIColor colorWithRed:(242.0f / 255.0f) green:(205.0f / 255.0f) blue:(175.0f / 255.0f) alpha:1.0f]];
+        [backgroundView setBackgroundColor:[UIColor whiteColor]];
         [tableView setBackgroundView:backgroundView];
+        
+        [emptyLabel setTextColor:[UIColor lightGrayColor]];
     } else {
         [tableView setBackgroundView:tableBackgroundView];
+        
+        [emptyLabel setTextColor:[UIColor grayColor]];
     }
 }
 
