@@ -56,10 +56,10 @@
         UIView *backgroundView = [[[UIView alloc] initWithFrame:[tableView bounds]] autorelease];
         [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         [tableView setBackgroundColor:[UIColor clearColor]];
-        [backgroundView setBackgroundColor:[UIColor whiteColor]];
+        [backgroundView setBackgroundColor:[UIColor colorWithRed:(234.0f / 255.0f) green:(232.0f / 255.0f) blue:(224.0f / 255.0f) alpha:1.0f]];
         [tableView setBackgroundView:backgroundView];
         
-        [emptyLabel setTextColor:[UIColor lightGrayColor]];
+        [emptyLabel setTextColor:[UIColor grayColor]];
     } else {
         [tableView setBackgroundView:tableBackgroundView];
         

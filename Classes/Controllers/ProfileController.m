@@ -74,7 +74,7 @@
         UIView *backgroundView = [[[UIView alloc] initWithFrame:[tableView bounds]] autorelease];
         [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         [tableView setBackgroundColor:[UIColor clearColor]];
-        [backgroundView setBackgroundColor:[UIColor colorWithRed:(242.0f / 255.0f) green:(205.0f / 255.0f) blue:(175.0f / 255.0f) alpha:1.0f]];
+        [backgroundView setBackgroundColor:[UIColor colorWithRed:(234.0f / 255.0f) green:(232.0f / 255.0f) blue:(224.0f / 255.0f) alpha:1.0f]];
         [tableView setBackgroundView:backgroundView];
     } else {
         [tableView setBackgroundView:tableBackgroundView];
