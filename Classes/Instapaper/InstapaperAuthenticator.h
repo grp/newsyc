@@ -3,7 +3,7 @@
 //  newsyc
 //
 //  Created by Grant Paul on 4/7/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
 #import "InstapaperAPI.h"
