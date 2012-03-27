@@ -11,7 +11,7 @@
 #import "NavigationController.h"
 #import "EmptyController.h"
 
-@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate, UISplitViewControllerDelegate> {
+@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate, UISplitViewControllerDelegate, UIAlertViewDelegate> {
     UIWindow *window;
     
     SplitViewController *splitController;
@@ -24,6 +24,7 @@
     UIBarButtonItem *popoverItem;
     
     NSMutableData *received;
+    NSURL *moreInfoURL;
 }
 
 - (void)pushBranchViewController:(UIViewController *)branchController animated:(BOOL)animated;

@@ -14,6 +14,7 @@
 #import "SubmissionListController.h"
 #import "SearchController.h"
 #import "SessionProfileController.h"
+#import "BrowserController.h"
 #import "MoreController.h"
 
 #import "HNKit.h"
@@ -99,9 +100,9 @@
         [rightNavigationController autorelease];
         
         splitController = [[SplitViewController alloc] init];
+        [splitController setViewControllers:[NSArray arrayWithObjects:navigationController, rightNavigationController, nil]];
         if ([splitController respondsToSelector:@selector(setPresentsWithGesture:)]) [splitController setPresentsWithGesture:YES];
         [splitController setDelegate:self];
-        [splitController setViewControllers:[NSArray arrayWithObjects:navigationController, rightNavigationController, nil]];
         [splitController autorelease];
         
         [window setRootViewController:splitController];
@@ -218,6 +219,8 @@
         NSString *message = [representation objectForKey:@"message"];
         NSString *title = [representation objectForKey:@"title"];
         NSString *button = [representation objectForKey:@"button"];
+        NSString *moreButton = [representation objectForKey:@"more-button"];
+        NSString *moreURL = [representation objectForKey:@"more-url"];
         
         BOOL locked = [[representation objectForKey:@"locked"] boolValue];
         
@@ -233,9 +236,18 @@
             if (button == nil) button = @"Continue";
             
             UIAlertView *alert = [[UIAlertView alloc] init];
+            [alert setDelegate:self];
             [alert setTitle:title];
             [alert setMessage:message];
-            if (!locked) [alert addButtonWithTitle:button];
+            if (!locked) {
+                [alert addButtonWithTitle:button];
+                
+                if (moreButton != nil && moreURL != nil) {
+                    [alert addButtonWithTitle:moreButton];
+                    
+                    moreInfoURL = [[NSURL URLWithString:moreURL] retain];
+                }
+            }
             [alert show];
             [alert release];
         }
@@ -246,6 +258,17 @@
     
     [received release];
     received = nil;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {    
+        BrowserController *browser = [[BrowserController alloc] initWithURL:moreInfoURL];
+        [navigationController pushController:browser animated:YES];
+        [browser release];
+    }
+    
+    [moreInfoURL release];
+    moreInfoURL = nil;
 }
 
 #pragma mark - Application Lifecycle
