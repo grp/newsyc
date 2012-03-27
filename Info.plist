@@ -35,7 +35,7 @@
 	<key>UIRequiresPersistentWiFi</key>
 	<true/>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2 rc 1</string>
+	<string>1.2</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
