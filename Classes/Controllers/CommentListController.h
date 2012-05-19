@@ -30,4 +30,7 @@
     CommentTableCell *expandedCell;
 }
 
+@property (nonatomic, retain) DetailsHeaderView *detailsHeaderView;
+@property (nonatomic) BOOL goesDirectlyToArticle;
+
 @end

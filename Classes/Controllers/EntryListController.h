@@ -26,7 +26,7 @@
 + (Class)cellClass;
 - (CGFloat)cellHeightForEntry:(HNEntry *)entry;
 - (void)configureCell:(UITableViewCell *)cell forEntry:(HNEntry *)entry;
-- (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry;
+- (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry goesDirectlyToArticle:(BOOL)direct;
 - (void)deselectWithAnimation:(BOOL)animated;
 
 @end
