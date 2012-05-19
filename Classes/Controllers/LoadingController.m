@@ -264,6 +264,17 @@
 
             NSString *urlString = [[source URL] absoluteString];
             NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", urlString, urlString];
+
+            //Make sure that the source is actually an HNEntry before casting it and using the title property.
+            if([source class] == [HNEntry class])
+            {
+              HNEntry *mailingSource = (HNEntry *)source;
+              NSString *subject = mailingSource.title;
+              body = [NSString stringWithFormat:@"<br /><br /><strong>%@</strong><br /><a href=\"%@\">%@</a><br /><br />---<br />Sent from <a href=\"http://newsyc.me/\">news:yc</a>: The open source Hacker News client for your iOS device.<br />Available in the <a href=\"http://itunes.apple.com/us/app/news-yc/id434787119?mt=8\">App Store</a> and on <a href=\"https://github.com/newsyc/newsyc/\">Github</a>", subject, urlString, urlString];
+            
+              [composeController setSubject:subject];
+            }
+
             [composeController setMessageBody:body isHTML:YES];
 
             [self presentModalViewController:[composeController autorelease] animated:YES];
