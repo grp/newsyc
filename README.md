@@ -14,16 +14,16 @@ You can also purchase news:yc from the [iTunes App Store](http://itunes.apple.co
 
 1. Check out the [issue tracker](https://github.com/newsyc/newsyc/issues) and give a vote for a feature
 2. Submit a new feature request or bug report using the [issue tracker](https://github.com/newsyc/newsyc/issues).
-3. Pick a feature or bug and fix it. You can find things to work on both in the issue tracker and in the [TODO](https://github.com/newsyc/newsyc/blob/master/TODO) file. _When sending pull requests, please make sure that the code conforms to the current coding standardsin the app and doesn't include extraneous code._
+3. Pick a feature or bug and fix it. You can find things to work on both in the issue tracker and in the [TODO](https://github.com/newsyc/newsyc/blob/master/TODO) file. _When sending pull requests, please make sure that the code conforms to the current coding standards in the app and doesn't include extraneous code._
 4. Tell your friends!
 
 ## Screenshots:
 
 ### iPad
 
-![](http://i.imgur.com/A25eN.png)
+![](http://i.imgur.com/LBBzz.png)
 
-![](http://i.imgur.com/rMGJn.png)
+![](http://i.imgur.com/PWEsU.png)
 
 ### iPhone
 
