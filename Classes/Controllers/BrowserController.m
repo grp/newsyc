@@ -11,6 +11,9 @@
 #import "InstapaperController.h"
 #import "NavigationController.h"
 
+#import <Twitter/Twitter.h> 
+#import <Accounts/Accounts.h>
+
 #import "ProgressHUD.h"
 #import "NSArray+Strings.h"
 #import "UIApplication+ActivityIndicator.h"
@@ -209,7 +212,23 @@
         [copied release];
     } else if (([MFMailComposeViewController canSendMail] && buttonIndex == 3) || (![MFMailComposeViewController canSendMail] && buttonIndex == 2)) {
         [[InstapaperController sharedInstance] submitURL:currentURL fromController:self];
-    } 
+    } else if (buttonIndex == 4 ) {
+        NSString *teaserText = [webview stringByEvaluatingJavaScriptFromString:@"document.title"];
+        TWTweetComposeViewController *tweet = [[TWTweetComposeViewController alloc] init];
+        [tweet setInitialText:[NSString stringWithFormat:@"%@ - via @newsyc_ ", teaserText]];
+        [tweet addURL:currentURL];
+        [tweet setCompletionHandler:^(TWTweetComposeViewControllerResult result) {
+            if (result == TWTweetComposeViewControllerResultDone) {
+                ProgressHUD *sent = [[ProgressHUD alloc] init];
+                [sent setState:kProgressHUDStateCompleted];
+                [sent setText:@"Tweet sent!"];
+                [sent showInWindow:[[self view] window]];
+                [sent dismissAfterDelay:0.8f animated:YES];
+                [sent release];
+            }
+        [self dismissModalViewControllerAnimated:YES]; }];
+        [self presentModalViewController:tweet animated:YES];
+    }
 }
 
 - (void)reload {
@@ -241,6 +260,7 @@
     if ([MFMailComposeViewController canSendMail]) [sheet addButtonWithTitle:@"Mail Link"];
     [sheet addButtonWithTitle:@"Copy Link"];
     [sheet addButtonWithTitle:@"Read Later"];
+    [sheet addButtonWithTitle:@"Tweet"];
     [sheet addButtonWithTitle:@"Cancel"];
     [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
 
