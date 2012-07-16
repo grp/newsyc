@@ -29,7 +29,7 @@ typedef enum {
 @class HNEntry;
 @interface EntryActionsView : UIToolbar {
     HNEntry *entry;
-    id<EntryActionsViewDelegate> delegate;
+    __weak id<EntryActionsViewDelegate> delegate;
     
     int upvoteLoading;
     BOOL upvoteDisabled;

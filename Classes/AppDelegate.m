@@ -109,7 +109,7 @@
         
         [HNEntryBodyRenderer setDefaultFontSize:14.0f];
     } else {
-        NSLog(@"Error: what kind of device /is/ this, anyway?");
+        NSLog(@"Error: what kind of device is this?");
     }
     
     if (![[HNSession currentSession] isAnonymous]) {

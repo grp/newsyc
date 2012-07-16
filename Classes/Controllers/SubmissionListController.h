@@ -8,7 +8,6 @@
 
 #import "EntryListController.h"
 
-@interface SubmissionListController : EntryListController {
-}
+@interface SubmissionListController : EntryListController
 
 @end

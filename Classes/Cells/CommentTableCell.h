@@ -16,10 +16,10 @@
     HNEntry *comment;
     int indentationLevel;
     
-    CGRect bodyRect;
+    CGRect bodyrect;
     NSSet *highlightedRects;
     
-    id<CommentTableCellDelegate> delegate;
+    __weak id<CommentTableCellDelegate> delegate;
     
     BOOL expanded;
     EntryActionsView *toolbarView;
@@ -36,7 +36,7 @@
 
 @end
 
-@protocol CommentTableCellDelegate<EntryActionsViewDelegate>
+@protocol CommentTableCellDelegate <EntryActionsViewDelegate>
 @optional
 
 - (void)commentTableCellTapped:(CommentTableCell *)cell;

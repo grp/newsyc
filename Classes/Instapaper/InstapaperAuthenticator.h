@@ -12,7 +12,8 @@
 @interface InstapaperAuthenticator : NSObject {
     NSString *username;
     NSString *password;
-    id<InstapaperAuthenticatorDelegate> delegate;
+
+    __weak id<InstapaperAuthenticatorDelegate> delegate;
 }
 
 @property (nonatomic, assign) id<InstapaperAuthenticatorDelegate> delegate;

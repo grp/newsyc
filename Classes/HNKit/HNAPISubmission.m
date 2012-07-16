@@ -26,14 +26,14 @@
 - (id)initWithSubmission:(HNSubmission *)submission_ {
     if ((self = [super init])) {
         submission = [submission_ retain];
-        loadingState = 0;
+        loadingState = kHNAPISubmissionLoadingStateReady;
     }
     
     return self;
 }
 
 - (void)_completedSuccessfully:(BOOL)successfully withError:(NSError *)error {
-    loadingState = 0;
+    loadingState = kHNAPISubmissionLoadingStateReady;
 
     if ([submission respondsToSelector:@selector(submissionCompletedSuccessfully:withError:)])
         [submission submissionCompletedSuccessfully:successfully withError:error];
@@ -48,8 +48,8 @@
     [connection release];
     connection = nil;
     
-    if (loadingState == 1) {
-        loadingState = 2;
+    if (loadingState == kHNAPISubmissionLoadingStateFormTokens) {
+        loadingState = kHNAPISubmissionLoadingStateFormSubmit;
         
         XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[result dataUsingEncoding:NSUTF8StringEncoding]];
         [document autorelease];
@@ -119,7 +119,7 @@
         [connection start];
         
         [[UIApplication sharedApplication] retainNetworkActivityIndicator];
-    } else if (loadingState == 2) {
+    } else if (loadingState == kHNAPISubmissionLoadingStateFormSubmit) {
         [self _completedSuccessfully:YES withError:nil];
     }
 }
@@ -140,7 +140,7 @@
 - (void)performSubmission {
     received = [[NSMutableData alloc] init];
     
-    loadingState = 1;
+    loadingState = kHNAPISubmissionLoadingStateFormTokens;
     
     NSURL *url = nil;
     
@@ -161,7 +161,7 @@
 }
 
 - (BOOL)isLoading {
-    return loadingState > 0;
+    return loadingState != kHNAPISubmissionLoadingStateReady;
 }
 
 @end

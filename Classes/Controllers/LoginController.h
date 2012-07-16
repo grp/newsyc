@@ -22,7 +22,7 @@
     BarButtonItem *cancelItem;
     BarButtonItem *completeItem;
     ActivityIndicatorItem *loadingItem;
-    id<LoginControllerDelegate> delegate;
+    __weak id<LoginControllerDelegate> delegate;
     UILabel *topLabel;
     UILabel *bottomLabel;
 	

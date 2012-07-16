@@ -14,7 +14,7 @@
 @interface HNSessionAuthenticator : NSObject {
     NSURLConnection *connection;
     
-    id<HNSessionAuthenticatorDelegate> delegate;
+    __weak id<HNSessionAuthenticatorDelegate> delegate;
     NSString *username;
     NSString *password;
 }

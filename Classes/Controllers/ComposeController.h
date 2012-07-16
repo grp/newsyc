@@ -22,7 +22,7 @@
     BarButtonItem *completeItem;
     ActivityIndicatorItem *loadingItem;
     BOOL keyboardVisible;
-    id<ComposeControllerDelegate> delegate;
+    __weak id<ComposeControllerDelegate> delegate;
 }
 
 @property (nonatomic, assign) id<ComposeControllerDelegate> delegate;

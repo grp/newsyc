@@ -8,7 +8,6 @@
 
 // An orange navigation controller. Sometimes.
 
-@interface NavigationController : UINavigationController {
-}
+@interface NavigationController : UINavigationController
 
 @end

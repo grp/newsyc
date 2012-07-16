@@ -12,7 +12,7 @@
 #import "HNKit.h"
 #import "HNObject.h"
 
-@interface HNObjectCache : NSObject {
+@interface HNObjectCache : NSObject <NSCopying> {
     Class cls;
     id identifier;
     NSDictionary *info;

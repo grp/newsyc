@@ -8,8 +8,7 @@
 
 #import "HNKit.h"
 
-@interface HNAPIRequestParser : NSObject {
-}
+@interface HNAPIRequestParser : NSObject
 
 - (NSDictionary *)parseWithString:(NSString *)string;
 

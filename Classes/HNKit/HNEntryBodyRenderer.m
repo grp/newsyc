@@ -6,6 +6,10 @@
 //  Copyright (c) 2012 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import "HNShared.h"
+
+#ifdef HNKIT_RENDERING_ENABLED
+
 #import "HNEntryBodyRenderer.h"
 #import "HNEntry.h"
 
@@ -356,3 +360,5 @@ static CGFloat defaultFontSize = 13.0f;
 }
 
 @end
+
+#endif

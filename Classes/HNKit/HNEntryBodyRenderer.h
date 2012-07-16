@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import <CoreText/CoreText.h>
-
 #import "HNShared.h"
 
-@class HNEntry;
-
 #ifdef HNKIT_RENDERING_ENABLED
+
+#import <CoreText/CoreText.h>
+
+@class HNEntry;
 
 @interface HNEntryBodyRenderer : NSObject {
     HNEntry *entry;

@@ -11,7 +11,7 @@
 @class HNEntry;
 @interface DetailsHeaderView : UIView <UIActionSheetDelegate> {
     HNEntry *entry;
-    id<DetailsHeaderViewDelegate> delegate;
+    __weak id<DetailsHeaderViewDelegate> delegate;
 
     CGRect bodyRect;
     NSSet *highlightedRects;

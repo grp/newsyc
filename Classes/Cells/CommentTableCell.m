@@ -96,9 +96,9 @@
 
 + (UIEdgeInsets)margins {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return UIEdgeInsetsMake(18.0f, 21.0f, 23.0f, 20.0f);
+        return UIEdgeInsetsMake(18.0f, 21.0f, 25.0f, 20.0f);
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return UIEdgeInsetsMake(8.0f, 10.0f, 12.0f, 10.0);
+        return UIEdgeInsetsMake(8.0f, 10.0f, 13.0f, 10.0);
     }
     
     return UIEdgeInsetsZero;
@@ -179,23 +179,29 @@
     NSString *points = [comment points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [comment points]];
     NSString *comments = [comment children] == 0 ? @"" : [comment children] == 1 ? @"1 reply" : [NSString stringWithFormat:@"%d replies", [comment children]];
     
+    // draw username
     [[UIColor blackColor] set];
     [user drawAtPoint:CGPointMake(bounds.origin.x + margins.left, margins.top) withFont:[[self class] userFont]];
     
+    // draw date
     [[UIColor lightGrayColor] set];
-    CGSize dateSize = [date sizeWithFont:[[self class] dateFont]];
-    [date drawAtPoint:CGPointMake(bounds.size.width - dateSize.width - margins.right, margins.top) withFont:[[self class] dateFont]];
+    CGRect daterect;
+    daterect.size = [date sizeWithFont:[[self class] dateFont]];
+    daterect.origin = CGPointMake(bounds.size.width - daterect.size.width - margins.right, margins.top);
+    [date drawInRect:daterect withFont:[[self class] dateFont]];
     
+    // draw comment body
     if ([[comment body] length] > 0) {
-        bodyRect.size.height = [[self class] bodyHeightForComment:comment withWidth:bounds.size.width indentationLevel:indentationLevel];
-        bodyRect.size.width = bounds.size.width - bounds.origin.x - margins.left - margins.left;
-        bodyRect.origin.x = bounds.origin.x + margins.left;
-        bodyRect.origin.y = margins.top + dateSize.height + offsets.height;
+        bodyrect.size.height = [[self class] bodyHeightForComment:comment withWidth:bounds.size.width indentationLevel:indentationLevel];
+        bodyrect.size.width = bounds.size.width - bounds.origin.x - margins.left - margins.left;
+        bodyrect.origin.x = bounds.origin.x + margins.left;
+        bodyrect.origin.y = margins.top + daterect.size.height + offsets.height;
 
         HNEntryBodyRenderer *renderer = [comment renderer];
-        [renderer renderInContext:UIGraphicsGetCurrentContext() rect:bodyRect];
+        [renderer renderInContext:UIGraphicsGetCurrentContext() rect:bodyrect];
     }
     
+    // draw points
     [[UIColor grayColor] set];
     CGRect pointsrect;
     pointsrect.size.height = [points sizeWithFont:[[self class] subtleFont]].height;
@@ -205,6 +211,7 @@
     if ([[self class] entryShowsPoints:comment])
           [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     
+    // draw replies count
     [[UIColor grayColor] set];
     CGRect commentsrect;
     commentsrect.size.height = [comments sizeWithFont:[[self class] subtleFont]].height;
@@ -220,12 +227,23 @@
             [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
             
             CGRect rect = CGRectInset(highlightedRect, -2.0f, -1.5f);
-            rect.origin.x += bodyRect.origin.x;
-            rect.origin.y += bodyRect.origin.y;
+            rect.origin.x += bodyrect.origin.x;
+            rect.origin.y += bodyrect.origin.y;
             
             UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:2.0f];
             [bezierPath fill];
         }
+    }
+    
+    // draw divider line
+    CGRect linerect;
+    linerect.origin.x = bodyrect.origin.x;
+    linerect.size.width = bodyrect.size.width;
+    linerect.origin.y = bounds.size.height - 1.0f;
+    linerect.size.height = 1.0f;
+    if (!expanded) {
+        [[UIColor lightGrayColor] set];
+        UIRectFill(linerect);
     }
 }
 
@@ -250,8 +268,8 @@
 
 - (CGPoint)bodyPointForPoint:(CGPoint)point {
     CGPoint bodyPoint;
-    bodyPoint.x = point.x - bodyRect.origin.x;
-    bodyPoint.y = point.y - bodyRect.origin.y;
+    bodyPoint.x = point.x - bodyrect.origin.x;
+    bodyPoint.y = point.y - bodyrect.origin.y;
     return bodyPoint;
 }
 
@@ -260,7 +278,7 @@
     CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
     
     [self clearHighlightedRects];
-    [[comment renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:&highlightedRects];
+    [[comment renderer] linkURLAtPoint:point forWidth:bodyrect.size.width rects:&highlightedRects];
     [highlightedRects retain];
     
     [self setNeedsDisplay];
@@ -270,7 +288,7 @@
     UITouch *touch = [touches anyObject];
     CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
     
-    NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:NULL];
+    NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyrect.size.width rects:NULL];
     
     if (url != nil) {
         if ([delegate respondsToSelector:@selector(commentTableCell:selectedURL:)]) {
@@ -316,7 +334,7 @@
         CGPoint point = [self bodyPointForPoint:location];
         
         NSSet *rects;
-        NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:&rects];
+        NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyrect.size.width rects:&rects];
         
         if (url != nil && [rects count] > 0) {
             UIActionSheet *action = [[[UIActionSheet alloc]

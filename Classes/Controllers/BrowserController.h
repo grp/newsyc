@@ -35,7 +35,7 @@
     BarButtonItem *spacerItem;
     BarButtonItem *readabilityItem;
     
-    int networkRetainCount;
+    NSInteger networkRetainCount;
 }
 
 @property (nonatomic, copy) NSURL *currentURL;

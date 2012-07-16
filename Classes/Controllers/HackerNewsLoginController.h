@@ -9,7 +9,6 @@
 #import "HNKit.h"
 #import "LoginController.h"
 
-@interface HackerNewsLoginController : LoginController <HNSessionAuthenticatorDelegate> {
-}
+@interface HackerNewsLoginController : LoginController <HNSessionAuthenticatorDelegate>
 
 @end

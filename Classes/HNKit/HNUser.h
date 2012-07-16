@@ -11,13 +11,13 @@
 #import "HNObject.h"
 
 @interface HNUser : HNObject {
-    int karma;
+    NSInteger karma;
     float average;
     NSString *created;
     NSString *about;
 }
 
-@property (nonatomic, assign) int karma;
+@property (nonatomic, assign) NSInteger karma;
 @property (nonatomic, assign) float average;
 @property (nonatomic, copy) NSString *created;
 @property (nonatomic, copy) NSString *about;

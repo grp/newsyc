@@ -841,7 +841,7 @@
 		7D1F98841320CF720059EBBB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = 7D1F98871320CF720059EBBB /* Build configuration list for PBXProject "newsyc" */;
 			compatibilityVersion = "Xcode 3.2";

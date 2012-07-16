@@ -9,14 +9,12 @@
 #import "HNKit.h"
 #import "HNSession.h"
 
-@interface HNSession (HNAnonymousSession)
-
-@property (nonatomic, readonly) BOOL isAnonymous;
+@interface HNAnonymousSession : HNSession
 
 @end
 
-@interface HNAnonymousSession : HNSession {
-    
-}
+@interface HNSession (HNAnonymousSession)
+
+@property (nonatomic, readonly) BOOL isAnonymous;
 
 @end

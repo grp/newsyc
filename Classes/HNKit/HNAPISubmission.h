@@ -8,11 +8,17 @@
 
 @protocol HNAPISubmissionDelegate;
 
+typedef enum {
+    kHNAPISubmissionLoadingStateReady,
+    kHNAPISubmissionLoadingStateFormTokens,
+    kHNAPISubmissionLoadingStateFormSubmit
+} HNAPISubmissionLoadingState;
+
 @class HNSubmission;
 @interface HNAPISubmission : NSObject {
     HNSubmission *submission;
     
-    int loadingState;
+    HNAPISubmissionLoadingState loadingState;
     NSMutableData *received;
     NSURLConnection *connection;
 }
