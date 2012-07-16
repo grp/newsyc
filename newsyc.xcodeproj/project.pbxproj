@@ -122,6 +122,7 @@
 		7D977AC2151E8F6700FD7360 /* BarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D977AC1151E8F6700FD7360 /* BarButtonItem.m */; };
 		7DB809B714F8A12F009668E6 /* SubmissionListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB809B614F8A12F009668E6 /* SubmissionListController.m */; };
 		7DB809BA14F8ACEF009668E6 /* InstapaperController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB809B914F8ACEF009668E6 /* InstapaperController.m */; };
+		7DBD537F15B3E27600E3D496 /* HNObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBD537E15B3E27500E3D496 /* HNObjectCache.m */; };
 		7DC4BACD13F51B4700E373C0 /* x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC4BACB13F51B4600E373C0 /* x.png */; };
 		7DC4BACE13F51B4700E373C0 /* x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC4BACC13F51B4700E373C0 /* x@2x.png */; };
 		7DC4BAD113F5F70C00E373C0 /* HNEntryList.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC4BAD013F5F70A00E373C0 /* HNEntryList.m */; };
@@ -334,6 +335,8 @@
 		7DB809B614F8A12F009668E6 /* SubmissionListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubmissionListController.m; sourceTree = "<group>"; };
 		7DB809B814F8ACEE009668E6 /* InstapaperController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperController.h; sourceTree = "<group>"; };
 		7DB809B914F8ACEF009668E6 /* InstapaperController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperController.m; sourceTree = "<group>"; };
+		7DBD537D15B3E27500E3D496 /* HNObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNObjectCache.h; sourceTree = "<group>"; };
+		7DBD537E15B3E27500E3D496 /* HNObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNObjectCache.m; sourceTree = "<group>"; };
 		7DC4BACB13F51B4600E373C0 /* x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x.png; sourceTree = "<group>"; };
 		7DC4BACC13F51B4700E373C0 /* x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x@2x.png"; sourceTree = "<group>"; };
 		7DC4BACF13F5F70900E373C0 /* HNEntryList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNEntryList.h; sourceTree = "<group>"; };
@@ -588,6 +591,8 @@
 			children = (
 				7D6B9EC31347DF2E00CD923C /* HNKit.h */,
 				7DF2C44914F9BCB400E01067 /* HNShared.h */,
+				7DBD537D15B3E27500E3D496 /* HNObjectCache.h */,
+				7DBD537E15B3E27500E3D496 /* HNObjectCache.m */,
 				7D6B9EC41347DF2E00CD923C /* HNObject.h */,
 				7D6B9EC51347DF2E00CD923C /* HNObject.m */,
 				7D6B9ECC1347DF2E00CD923C /* HNUser.h */,
@@ -1012,6 +1017,7 @@
 				7D977AC2151E8F6700FD7360 /* BarButtonItem.m in Sources */,
 				7D2BB6B9151FD27C003D98B9 /* LoadMoreCell.m in Sources */,
 				7D2BB6C71520E777003D98B9 /* OrangeTableView.m in Sources */,
+				7DBD537F15B3E27600E3D496 /* HNObjectCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

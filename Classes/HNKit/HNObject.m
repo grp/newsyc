@@ -11,103 +11,11 @@
 
 #import "HNKit.h"
 #import "HNObject.h"
-
-@interface HNObjectCache : NSObject <NSCopying> {
-    Class cls;
-    id identifier;
-    NSDictionary *info;
-}
-
-@property (nonatomic, retain) HNObject *object;
-
-@end
-
-@implementation HNObjectCache
-@synthesize object;
-
-+ (NSMutableDictionary *)cacheDictionary {
-    static NSMutableDictionary *objectCache = nil;
-    if (objectCache == nil) objectCache = [[NSMutableDictionary alloc] init];
-    return objectCache;
-}
-
-+ (void)initialize {
-    // inititalize the cache
-    [self cacheDictionary];
-}
-
-- (id)initWithClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info_ {
-    if ((self = [super init])) {
-        cls = cls_;
-        identifier = [identifier_ copy];
-        info = [info_ copy];
-    }
-    
-    return self;
-}
-
-- (void)dealloc {
-    [identifier release];
-    [info release];
-    
-    [super dealloc];
-}
-
-+ (id)objectCacheWithClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
-    return [[[self alloc] initWithClass:cls_ identifier:identifier_ infoDictionary:info] autorelease];
-}
-
-+ (void)addObjectToCache:(HNObject *)object_ {
-    HNObjectCache *key = [self objectCacheWithClass:[object_ class] identifier:[object_ identifier] infoDictionary:[object_ infoDictionary]];
-    [key setObject:object_];
-    
-    NSMutableDictionary *cache = [self cacheDictionary];
-    [cache setObject:object_ forKey:key];
-}
-
-+ (HNObject *)objectFromCacheWithClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
-    HNObjectCache *key = [self objectCacheWithClass:cls_ identifier:identifier_ infoDictionary:info];
-    NSMutableDictionary *cache = [self cacheDictionary];
-    HNObject *cached = [cache objectForKey:key];
-    return cached;
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-    return [[[self class] allocWithZone:zone] initWithClass:cls identifier:identifier infoDictionary:info];
-}
-
-- (Class)objectClass {
-    return cls;
-}
-
-- (id)objectIdentifier {
-    return identifier;
-}
-
-- (NSDictionary *)objectInfoDictionary {
-    return info;
-}
-
-- (BOOL)isEqual:(id)object_ {
-    BOOL classes = cls == [object_ objectClass];
-    BOOL identifiers = [identifier isEqual:[object_ objectIdentifier]];
-    BOOL infos = [info isEqualToDictionary:[object_ objectInfoDictionary]] || (info == nil && [object_ objectInfoDictionary] == nil);
-
-    return classes && identifiers && infos;
-}
-
-- (NSUInteger)hash {
-    return [cls hash] ^ [identifier hash] ^ [info hash];
-}
-
-- (NSString *)description {
-    return [NSString stringWithFormat:@"<%@:%p identifier=%@ info=%p>", [self class], self, identifier, info];
-}
-
-@end
+#import "HNObjectCache.h"
 
 @implementation HNObject
-@synthesize identifier, loadingState, URL=url;
+@synthesize identifier, URL=url;
+@synthesize loadingState;
 
 + (BOOL)isValidURL:(NSURL *)url_ {
     if (url_ == nil) return NO;
@@ -197,8 +105,7 @@
     return [NSString stringWithFormat:@"<%@:%p %@ %@>", [self class], self, identifier_, other];
 }
 
-#pragma mark -
-#pragma mark Loading
+#pragma mark - Loading
 
 - (void)clearLoadingState:(HNObjectLoadingState)state_ {
     loadingState &= ~state_;

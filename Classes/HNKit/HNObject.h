@@ -29,15 +29,15 @@ typedef enum {
 @interface HNObject : NSObject {
     id identifier;
     NSURL *url;
-    
+
     HNObjectLoadingState loadingState;
     
     HNAPIRequest *apiRequest;
 }
 
-@property (nonatomic, readonly) HNObjectLoadingState loadingState;
 @property (nonatomic, copy) id identifier;
 @property (nonatomic, copy) NSURL *URL;
+@property (nonatomic, readonly) HNObjectLoadingState loadingState;
 
 + (BOOL)isValidURL:(NSURL *)url_;
 + (NSDictionary *)infoDictionaryForURL:(NSURL *)url_;
@@ -66,14 +66,18 @@ typedef enum {
 - (void)cancelLoading;
 - (void)beginLoading;
 
-// Subclasses only below:
+@end
+
+@interface HNObject (Subclassing)
+
+@property (nonatomic, copy) NSDictionary *contentsDictionary;
+
 - (void)beginLoadingWithState:(HNObjectLoadingState)state_;
-
-- (void)loadInfoDictionary:(NSDictionary *)info;
-
 - (void)addLoadingState:(HNObjectLoadingState)state_;
 - (void)clearLoadingState:(HNObjectLoadingState)state_;
 - (BOOL)hasLoadingState:(HNObjectLoadingState)state_;
+
+- (void)loadInfoDictionary:(NSDictionary *)info;
 
 @end
 
