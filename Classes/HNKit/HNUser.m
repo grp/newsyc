@@ -34,13 +34,25 @@
     return [self objectWithIdentifier:identifier_];
 }
 
-- (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error {
-    if (error == nil) {
-        [self setAbout:[response objectForKey:@"about"]];
-        [self setKarma:[[response objectForKey:@"karma"] intValue]];
-        [self setAverage:[[response objectForKey:@"average"] floatValue]];
-        [self setCreated:[[response objectForKey:@"created"] stringByRemovingSuffix:@" ago"]];
-    }
+- (void)loadContentsDictionary:(NSDictionary *)contents {
+    [self setAbout:[contents objectForKey:@"about"]];
+    [self setKarma:[[contents objectForKey:@"karma"] intValue]];
+    [self setAverage:[[contents objectForKey:@"average"] floatValue]];
+    // FIXME: make this a date
+    [self setCreated:[[contents objectForKey:@"created"] stringByRemovingSuffix:@" ago"]];
+
+    [super loadContentsDictionary:contents];
+}
+
+- (NSDictionary *)contentsDictionary {
+    NSMutableDictionary *dictionary = [[[super contentsDictionary] mutableCopy] autorelease];
+
+    if (about != nil) [dictionary setObject:about forKey:@"about"];
+    [dictionary setObject:[NSNumber numberWithInt:karma] forKey:@"karma"];
+    [dictionary setObject:[NSNumber numberWithFloat:average] forKey:@"average"];
+    if (created != nil) [dictionary setObject:created forKey:@"created"];
+
+    return dictionary;
 }
 
 @end

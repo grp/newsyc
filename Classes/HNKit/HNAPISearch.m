@@ -63,7 +63,7 @@
 		NSDictionary *item = [self itemFromRaw:[result objectForKey:@"item"]];
 		HNEntry *entry = [HNEntry entryWithIdentifier:[item objectForKey:@"identifier"]];
 
-		[entry loadFromDictionary:item];
+		[entry loadContentsDictionary:item];
 		[entries addObject:entry];
 	}
 	[responseString release];

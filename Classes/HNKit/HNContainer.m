@@ -28,25 +28,43 @@
     [moreRequest performRequestWithPath:@"x" parameters:parameters];
 }
 
-- (void)loadFromDictionary:(NSDictionary *)response entries:(NSArray **)outEntries {
+- (void)loadContentsDictionary:(NSDictionary *)contents entries:(NSArray **)outEntries {
     return;
 }
 
-- (void)loadFromDictionary:(NSDictionary *)response {
-    [self loadFromDictionary:response entries:NULL];
-}
-
-- (void)loadFromDictionary:(NSDictionary *)response append:(BOOL)append {
+- (void)loadContentsDictionary:(NSDictionary *)contents {
     NSArray *children = nil;
-    [self loadFromDictionary:response entries:&children];
-    
-    if (append) {
+    [self loadContentsDictionary:contents entries:&children];
+
+    if ([[contents objectForKey:@"append"] boolValue]) {
         [self setEntries:[entries arrayByAddingObjectsFromArray:children]];
     } else {
         [self setEntries:children];
     }
-    
-    [self setMoreToken:[response objectForKey:@"more"]];
+
+    [self setMoreToken:[contents objectForKey:@"more"]];
+
+    [super loadContentsDictionary:contents];
+}
+
+- (void)loadContentsDictionary:(NSDictionary *)contents append:(BOOL)append {
+    NSMutableDictionary *mutableContents = [[contents mutableCopy] autorelease];
+    [mutableContents setObject:[NSNumber numberWithBool:append] forKey:@"append"];
+    [self loadContentsDictionary:mutableContents];
+}
+
+- (NSDictionary *)contentsDictionary {
+    NSMutableDictionary *dictionary = [[[super contentsDictionary] mutableCopy] autorelease];
+
+    if (moreToken != nil) [dictionary setObject:moreToken forKey:@"more"];
+
+    NSMutableArray *children = [NSMutableArray array];
+    for (HNEntry *child in entries) {
+        [children addObject:[child contentsDictionary]];
+    }
+    [dictionary setObject:children forKey:@"children"];
+
+    return dictionary;
 }
 
 - (void)cancelLoadingMore {
@@ -67,7 +85,7 @@
     moreRequest = nil;
     
     if (error == nil) {
-        [self loadFromDictionary:response append:YES];
+        [self loadContentsDictionary:response append:YES];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectFinishedLoadingNotification object:self];
     } else {
@@ -77,7 +95,7 @@
 
 - (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error {
     if (error == nil) {
-        [self loadFromDictionary:response append:NO];
+        [self loadContentsDictionary:response append:NO];
     }
 }
 

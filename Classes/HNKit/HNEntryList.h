@@ -12,6 +12,8 @@
 
 typedef NSString *HNEntryListIdentifier;
 
+#define kHNContainerLoadingStatePartial (0x1 << 17)
+
 #define kHNEntryListIdentifierSubmissions @"news"
 #define kHNEntryListIdentifierNewSubmissions @"newest"
 #define kHNEntryListIdentifierBestSubmissions @"best"

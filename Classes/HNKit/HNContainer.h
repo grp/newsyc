@@ -9,7 +9,7 @@
 #import "HNShared.h"
 #import "HNObject.h"
 
-#define kHNContainerLoadingStateLoadingMore 0x00010000
+#define kHNContainerLoadingStateLoadingMore (0x1 << 16)
 
 @interface HNContainer : HNObject {
     NSArray *entries;
@@ -25,7 +25,6 @@
 - (BOOL)isLoadingMore;
 - (void)cancelLoadingMore;
 
-- (void)loadFromDictionary:(NSDictionary *)response;
-- (void)loadFromDictionary:(NSDictionary *)response entries:(NSArray **)outEntries;
+- (void)loadContentsDictionary:(NSDictionary *)contents entries:(NSArray **)outEntries;
 
 @end

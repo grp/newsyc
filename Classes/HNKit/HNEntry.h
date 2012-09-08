@@ -42,7 +42,7 @@
 @property (nonatomic, readonly) HNEntryBodyRenderer *renderer;
 #endif
 
-- (void)loadFromDictionary:(NSDictionary *)response entries:(NSArray **)outEntries withSubmission:(HNEntry *)submission_;
+- (void)loadContentsDictionary:(NSDictionary *)response entries:(NSArray **)outEntries withSubmission:(HNEntry *)submission_;
 
 - (BOOL)isComment;
 - (BOOL)isSubmission;

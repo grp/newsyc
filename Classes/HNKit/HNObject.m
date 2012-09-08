@@ -15,37 +15,9 @@
 
 @implementation HNObject
 @synthesize identifier, URL=url;
-@synthesize loadingState;
+@synthesize loadingState, lastUpdatedDate;
 
-+ (BOOL)isValidURL:(NSURL *)url_ {
-    if (url_ == nil) return NO;
-    if (![[url_ scheme] isEqualToString:@"http"] && ![[url_ scheme] isEqualToString:@"https"]) return NO;
-    if (![[url_ host] isEqualToString:kHNWebsiteHost]) return NO;
-    
-    return YES;
-}
-
-+ (NSDictionary *)infoDictionaryForURL:(NSURL *)url_ {
-    return nil;
-}
-
-+ (id)identifierForURL:(NSURL *)url_ {
-    return nil;
-}
-
-+ (NSString *)pathForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
-    return nil;
-}
-
-+ (NSDictionary *)parametersForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
-    return nil;
-}
-
-+ (NSURL *)generateURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
-    NSDictionary *parameters = [self parametersForURLWithIdentifier:identifier_ infoDictionary:info];
-    NSString *path = [self pathForURLWithIdentifier:identifier_ infoDictionary:info];
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", [kHNWebsiteURL absoluteString], path, [parameters queryString]]];
-}
+#pragma mark - Initialization
 
 + (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info URL:(NSURL *)url_ {
     HNObject *object = [HNObjectCache objectFromCacheWithClass:self identifier:identifier_ infoDictionary:info];
@@ -80,18 +52,6 @@
     return [self objectWithIdentifier:identifier_ infoDictionary:info URL:url_];
 }
 
-+ (NSString *)pathWithIdentifier:(id)identifier {
-    return nil;
-}
-
-- (NSDictionary *)infoDictionary {
-    return nil;
-}
-
-- (void)loadInfoDictionary:(NSDictionary *)info {
-    return;
-}
-
 - (NSString *)description {
     NSString *other = nil;
     
@@ -105,24 +65,86 @@
     return [NSString stringWithFormat:@"<%@:%p %@ %@>", [self class], self, identifier_, other];
 }
 
+#pragma mark - URLs
+
++ (BOOL)isValidURL:(NSURL *)url_ {
+    if (url_ == nil) return NO;
+    if (![[url_ scheme] isEqualToString:@"http"] && ![[url_ scheme] isEqualToString:@"https"]) return NO;
+    if (![[url_ host] isEqualToString:kHNWebsiteHost]) return NO;
+
+    return YES;
+}
+
++ (NSDictionary *)infoDictionaryForURL:(NSURL *)url_ {
+    return nil;
+}
+
++ (id)identifierForURL:(NSURL *)url_ {
+    return nil;
+}
+
++ (NSString *)pathForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+    return nil;
+}
+
++ (NSDictionary *)parametersForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+    return nil;
+}
+
++ (NSURL *)generateURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+    NSDictionary *parameters = [self parametersForURLWithIdentifier:identifier_ infoDictionary:info];
+    NSString *path = [self pathForURLWithIdentifier:identifier_ infoDictionary:info];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", [kHNWebsiteURL absoluteString], path, [parameters queryString]]];
+}
+
+#pragma mark - Dictionaries
+
+- (NSDictionary *)infoDictionary {
+    return nil;
+}
+
+- (void)loadInfoDictionary:(NSDictionary *)info {
+    return;
+}
+
+- (NSDictionary *)contentsDictionary {
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+                lastUpdatedDate, @"lastUpdatedDate",
+                [NSNumber numberWithInt:loadingState], @"loadingState",
+                identifier, @"identifier",
+            nil];
+}
+
+- (void)loadContentsDictionary:(NSDictionary *)contents {
+    lastUpdatedDate = [contents objectForKey:@"lastUpdatedDate"];
+    [self setLoadingState:[[contents objectForKey:@"loadingState"] intValue]];
+}
+
 #pragma mark - Loading
 
-- (void)clearLoadingState:(HNObjectLoadingState)state_ {
-    loadingState &= ~state_;
-    
+- (void)setLoadingState:(HNObjectLoadingState)state_ {
+    BOOL loaded = (state_ & kHNObjectLoadingStateLoaded) > 0 && !((loadingState & kHNObjectLoadingStateLoaded) > 0);
+    BOOL loading = (state_ & kHNObjectLoadingStateLoadingAny) > 0 && !((loadingState & kHNObjectLoadingStateLoadingAny) > 0);
+
+    loadingState = state_;
+
+    if (loaded) {
+        lastUpdatedDate = [NSDate date];
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectFinishedLoadingNotification object:self];
+    } else if (loading) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectStartedLoadingNotification object:self];
+    }
+
     [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectLoadingStateChangedNotification object:self];
 }
 
+- (void)clearLoadingState:(HNObjectLoadingState)state_ {
+    [self setLoadingState:(loadingState & ~state_)];
+}
+
 - (void)addLoadingState:(HNObjectLoadingState)state_ {
-    loadingState |= state_;
-    
-    if ((state_ & kHNObjectLoadingStateLoaded) > 0) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectFinishedLoadingNotification object:self];
-    } else if ((state_ & kHNObjectLoadingStateLoadingAny) > 0) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectStartedLoadingNotification object:self];
-    }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectLoadingStateChangedNotification object:self];
+    [self setLoadingState:(loadingState | state_)];
 }
 
 - (BOOL)hasLoadingState:(HNObjectLoadingState)state_ {

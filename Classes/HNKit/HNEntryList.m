@@ -73,21 +73,26 @@
     }
 }
 
-- (void)loadFromDictionary:(NSDictionary *)response entries:(NSArray **)outEntries {
+- (void)loadContentsDictionary:(NSDictionary *)contents entries:(NSArray **)outEntries {
     NSMutableArray *children = [NSMutableArray array];
     
-    for (NSDictionary *entryDictionary in [response objectForKey:@"children"]) {
+    for (NSDictionary *entryDictionary in [contents objectForKey:@"children"]) {
         HNEntry *entry = [HNEntry entryWithIdentifier:[entryDictionary objectForKey:@"identifier"]];
-        [entry loadFromDictionary:entryDictionary];
+        [entry loadContentsDictionary:entryDictionary];
         [children addObject:entry];
-        
-        // XXX: should the entry be set to loaded here? probably not, since
-        //      it isn't fully loaded (as the loaded state represents).
+
+        [entry addLoadingState:kHNContainerLoadingStatePartial];
     }
 
     if (outEntries != NULL) {
         *outEntries = children;
     }
+}
+
+- (NSDictionary *)contentsDictionary {
+    NSMutableDictionary *dictionary = [[[super contentsDictionary] mutableCopy] autorelease];
+
+    return dictionary;
 }
 
 @end

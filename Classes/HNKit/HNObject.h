@@ -30,6 +30,7 @@ typedef enum {
     id identifier;
     NSURL *url;
 
+    NSDate *lastUpdatedDate;
     HNObjectLoadingState loadingState;
     
     HNAPIRequest *apiRequest;
@@ -38,14 +39,7 @@ typedef enum {
 @property (nonatomic, copy) id identifier;
 @property (nonatomic, copy) NSURL *URL;
 @property (nonatomic, readonly) HNObjectLoadingState loadingState;
-
-+ (BOOL)isValidURL:(NSURL *)url_;
-+ (NSDictionary *)infoDictionaryForURL:(NSURL *)url_;
-+ (id)identifierForURL:(NSURL *)url_;
-
-+ (NSString *)pathForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
-+ (NSDictionary *)parametersForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
-+ (NSURL *)generateURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
+@property (nonatomic, readonly) NSDate *lastUpdatedDate;
 
 // These methods don't necessarily create a new instance if it's already in the
 // cache. The cache's keyed on (class, identifier, info) tuples inside HNObject.
@@ -68,16 +62,26 @@ typedef enum {
 
 @end
 
-@interface HNObject (Subclassing)
+@interface HNObject (Private)
 
-@property (nonatomic, copy) NSDictionary *contentsDictionary;
++ (NSString *)pathForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
++ (NSDictionary *)parametersForURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
++ (NSURL *)generateURLWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
+
++ (BOOL)isValidURL:(NSURL *)url_;
++ (id)identifierForURL:(NSURL *)url_;
++ (NSDictionary *)infoDictionaryForURL:(NSURL *)url_;
 
 - (void)beginLoadingWithState:(HNObjectLoadingState)state_;
 - (void)addLoadingState:(HNObjectLoadingState)state_;
 - (void)clearLoadingState:(HNObjectLoadingState)state_;
 - (BOOL)hasLoadingState:(HNObjectLoadingState)state_;
 
+- (NSDictionary *)infoDictionary;
 - (void)loadInfoDictionary:(NSDictionary *)info;
+
+- (NSDictionary *)contentsDictionary;
+- (void)loadContentsDictionary:(NSDictionary *)contents;
 
 @end
 
