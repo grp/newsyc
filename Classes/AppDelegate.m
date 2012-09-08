@@ -6,6 +6,9 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
 #import "AppDelegate.h"
 #import "SplitViewController.h"
 #import "NavigationController.h"
@@ -77,7 +80,24 @@
     return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
+- (NSString *)bundleIdentifier {
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+}
+
+- (NSString *) platform {
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    
+    char *machine = malloc(size);
+    sysctlbyname("hw.machine", machine, &size, NULL, 0);
+    
+    NSString *platform = [NSString stringWithUTF8String:machine];
+    free(machine);
+    
+    return platform;
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     MainTabBarController *mainTabBarController = [[MainTabBarController alloc] init];
@@ -190,12 +210,14 @@
     NSString *appv = [self version];
     NSString *sysv = [[UIDevice currentDevice] systemVersion];
     NSString *dev = [[UIDevice currentDevice] model];
+    NSString *bundle = [self bundleIdentifier];
+    NSString *platform = [self platform];
     NSString *from = [[NSUserDefaults standardUserDefaults] objectForKey:@"current-version"] ?: @"";
     BOOL seen = [[NSUserDefaults standardUserDefaults] boolForKey:@"initial-install-seen"];
     
     received = [[NSMutableData alloc] init];
     
-    NSString *url = [NSString stringWithFormat:@"http://newsyc.me/ping?appv=%@&sysv=%@&dev=%@&seen=%d&oldv=%@", [appv stringByURLEncodingString], [sysv stringByURLEncodingString], [dev stringByURLEncodingString], seen, [from stringByURLEncodingString]];
+    NSString *url = [NSString stringWithFormat:@"http://newsyc.me/ping?appv=%@&sysv=%@&dev=%@&seen=%d&oldv=%@&bundle=%@&platform=%@", [appv stringByURLEncodingString], [sysv stringByURLEncodingString], [dev stringByURLEncodingString], seen, [from stringByURLEncodingString], [bundle stringByURLEncodingString], [platform stringByURLEncodingString]];
     NSURL *requestURL = [NSURL URLWithString:url];
     NSURLRequest *request = [NSURLRequest requestWithURL:requestURL];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
