@@ -173,6 +173,10 @@
     }
 }
 
+- (NSString *)sourceTitle {
+    return [(HNUser *) source identifier];
+}
+
 AUTOROTATION_FOR_PAD_ONLY
 
 @end

@@ -190,7 +190,9 @@
     } else if ([MFMailComposeViewController canSendMail] && buttonIndex == 1) {
         MFMailComposeViewController *composeController = [[MFMailComposeViewController alloc] init];
         [composeController setMailComposeDelegate:self];
-        
+
+        [composeController setSubject:[webview stringByEvaluatingJavaScriptFromString:@"document.title"]];
+
         NSString *urlString = [currentURL absoluteString];
         NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", urlString, urlString];
         [composeController setMessageBody:body isHTML:YES];

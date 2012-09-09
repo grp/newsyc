@@ -36,6 +36,7 @@
 @property (nonatomic, retain) HNObject *source;
 
 - (id)initWithSource:(HNObject *)source_;
+- (NSString *)sourceTitle;
 - (void)finishedLoading;
 
 - (void)addStatusView:(UIView *)view;

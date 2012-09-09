@@ -601,6 +601,20 @@
     }
 }
 
+- (NSString *)sourceTitle {
+    if ([source isKindOfClass:[HNEntry class]]) {
+        if ([(HNEntry *) source isSubmission]) {
+            NSString *title = [(HNEntry *) source title];
+            return title;
+        } else {
+            NSString *name = [[(HNEntry *) source submitter] identifier];
+            return [NSString stringWithFormat:@"Comment by %@", name];
+        }
+    } else {
+        return [self title];
+    }
+
+}
 
 AUTOROTATION_FOR_PAD_ONLY
 

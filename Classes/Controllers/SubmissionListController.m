@@ -39,6 +39,10 @@
     }
 }
 
+- (NSString *)sourceTitle {
+    return [self title];
+}
+
 AUTOROTATION_FOR_PAD_ONLY
 
 @end

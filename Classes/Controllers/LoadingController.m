@@ -46,6 +46,10 @@
     }
 }
 
+- (NSString *)sourceTitle {
+    return nil;
+}
+
 - (id)initWithSource:(HNObject *)source_ {
     if ((self = [super init])) {
         [self setSource:source_];
@@ -261,6 +265,8 @@
         } else if (index == mailLinkIndex) {
             MFMailComposeViewController *composeController = [[MFMailComposeViewController alloc] init];
             [composeController setMailComposeDelegate:self];
+
+            [composeController setSubject:[self sourceTitle]];
 
             NSString *urlString = [[source URL] absoluteString];
             NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", urlString, urlString];
