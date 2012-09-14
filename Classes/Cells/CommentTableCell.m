@@ -38,9 +38,23 @@
         [self addSubview:toolbarView];
         [self setExpanded:NO];
         
-        UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFromRecognizer:)];
-        [longPressRecognizer setMinimumPressDuration:0.65f];
-        [contentView addGestureRecognizer:[longPressRecognizer autorelease]];
+        linkLongPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFromRecognizer:)];
+        [linkLongPressRecognizer setMinimumPressDuration:0.65f];
+        [linkLongPressRecognizer setCancelsTouchesInView:NO];
+        [contentView addGestureRecognizer:linkLongPressRecognizer];
+
+        doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapFromRecognizer:)];
+        [doubleTapRecognizer setNumberOfTapsRequired:2];
+        [contentView addGestureRecognizer:doubleTapRecognizer];
+
+        tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFromRecognizer:)];
+        [tapRecognizer setNumberOfTapsRequired:1];
+        [tapRecognizer setCancelsTouchesInView:NO];
+        [tapRecognizer requireGestureRecognizerToFail:doubleTapRecognizer];
+        [contentView addGestureRecognizer:tapRecognizer];
+
+        [tapRecognizer setEnabled:YES];
+        [doubleTapRecognizer setEnabled:YES];
     }
     
     return self;
@@ -49,7 +63,10 @@
 - (void)dealloc {
     [comment release];
     [toolbarView release];
-    
+    [doubleTapRecognizer release];
+    [linkLongPressRecognizer release];
+    [tapRecognizer release];
+
     [super dealloc];
 }
 
@@ -251,8 +268,14 @@
 #pragma mark - Tap Handlers
 
 - (void)clearHighlightedRects {
-    [highlightedRects release];
-    highlightedRects = nil;
+    if (highlightedRects != nil) {
+        [tapRecognizer setEnabled:YES];
+        [doubleTapRecognizer setEnabled:YES];
+
+        [highlightedRects release];
+        highlightedRects = nil;
+        [self setNeedsDisplay];
+    }
 }
 
 - (void)singleTapped {
@@ -275,57 +298,52 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self clearHighlightedRects];
+
     UITouch *touch = [touches anyObject];
     CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
     
-    [self clearHighlightedRects];
     [[comment renderer] linkURLAtPoint:point forWidth:bodyrect.size.width rects:&highlightedRects];
-    [highlightedRects retain];
-    
-    [self setNeedsDisplay];
+
+    if (highlightedRects != nil) {
+        [highlightedRects retain];
+        [self setNeedsDisplay];
+
+        [tapRecognizer setEnabled:NO];
+        [doubleTapRecognizer setEnabled:NO];
+    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [touches anyObject];
-    CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
-    
-    NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyrect.size.width rects:NULL];
-    
-    if (url != nil) {
-        if ([delegate respondsToSelector:@selector(commentTableCell:selectedURL:)]) {
-            [delegate commentTableCell:self selectedURL:url];
-        }
+    if (highlightedRects != nil) {
+        UITouch *touch = [touches anyObject];
+        CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
         
-        [self clearHighlightedRects];
-        [self setNeedsDisplay];
-    } else {
-        if ([touch tapCount] == 1) {
-            [self performSelector:@selector(singleTapped) withObject:nil afterDelay:0.35f];
-        } else if ([touch tapCount] == 2) {
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(singleTapped) object:nil];
-
-            [self doubleTapped];
+        NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyrect.size.width rects:NULL];
+        
+        if (url != nil) {
+            if ([delegate respondsToSelector:@selector(commentTableCell:selectedURL:)]) {
+                [delegate commentTableCell:self selectedURL:url];
+            }
         }
     }
+
+    [self clearHighlightedRects];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     [self clearHighlightedRects];
-    
-    [self setNeedsDisplay];
 }
 
-- (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
-	if (index == [sheet cancelButtonIndex]) return;
-    
-    NSURL *url = [NSURL URLWithString:[sheet sheetContext]];
-	
-    if (index == [sheet firstOtherButtonIndex]) {
-        [[UIApplication sharedApplication] openURL:url];
-    } else if (index == [sheet firstOtherButtonIndex] + 1) {
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        [pasteboard setURL:url];
-        [pasteboard setString:[url absoluteString]];
+- (void)tapFromRecognizer:(UITapGestureRecognizer *)gesture {
+    if (highlightedRects == nil) {
+        [self singleTapped];
+    }
+}
+
+- (void)doubleTapFromRecognizer:(UITapGestureRecognizer *)gesture {
+    if (highlightedRects == nil) {
+        [self doubleTapped];
     }
 }
 
@@ -357,9 +375,17 @@
     }
 }
 
-- (void)doubleTapFromRecognizer:(UITapGestureRecognizer *)recognizer {
-    if ([delegate respondsToSelector:@selector(commentTableCellDoubleTapped:)]) {
-        [delegate commentTableCellDoubleTapped:self];
+- (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
+	if (index == [sheet cancelButtonIndex]) return;
+
+    NSURL *url = [NSURL URLWithString:[sheet sheetContext]];
+
+    if (index == [sheet firstOtherButtonIndex]) {
+        [[UIApplication sharedApplication] openURL:url];
+    } else if (index == [sheet firstOtherButtonIndex] + 1) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        [pasteboard setURL:url];
+        [pasteboard setString:[url absoluteString]];
     }
 }
 

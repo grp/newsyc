@@ -23,6 +23,10 @@
     
     BOOL expanded;
     EntryActionsView *toolbarView;
+
+    UITapGestureRecognizer *tapRecognizer;
+    UITapGestureRecognizer *doubleTapRecognizer;
+    UILongPressGestureRecognizer *linkLongPressRecognizer;
 }
 
 @property (nonatomic, assign) id<CommentTableCellDelegate> delegate;
