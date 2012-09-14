@@ -7,6 +7,7 @@
 //
 
 #import <MessageUI/MFMailComposeViewController.h>
+#import <Twitter/Twitter.h>
 
 #import "HNKit.h"
 
@@ -31,6 +32,7 @@
     int mailLinkIndex;
     int copyLinkIndex;
     int readLaterIndex;
+	int tweetLinkIndex;
 }
 
 @property (nonatomic, retain) HNObject *source;
