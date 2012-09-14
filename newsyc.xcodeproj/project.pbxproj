@@ -142,6 +142,7 @@
 		7DDFA3C11401AAC500B8E69B /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3BA1401AAC500B8E69B /* SBJsonBase.m */; };
 		7DDFA3C21401AAC500B8E69B /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3BC1401AAC500B8E69B /* SBJsonParser.m */; };
 		7DDFA3C31401AAC500B8E69B /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3BE1401AAC500B8E69B /* SBJsonWriter.m */; };
+		7DF10FC91602BA2A001830FE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF10FC81602BA2A001830FE /* Default-568h@2x.png */; };
 		7DF2C44314F8CBE600E01067 /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF2C44114F8CBE600E01067 /* action.png */; };
 		7DF2C44414F8CBE600E01067 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF2C44214F8CBE600E01067 /* action@2x.png */; };
 		7DF2C44814F9BA4800E01067 /* HNContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF2C44714F9BA4800E01067 /* HNContainer.m */; };
@@ -370,6 +371,7 @@
 		7DDFA3BC1401AAC500B8E69B /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SBJsonParser.m; path = JSON/SBJsonParser.m; sourceTree = "<group>"; };
 		7DDFA3BD1401AAC500B8E69B /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SBJsonWriter.h; path = JSON/SBJsonWriter.h; sourceTree = "<group>"; };
 		7DDFA3BE1401AAC500B8E69B /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SBJsonWriter.m; path = JSON/SBJsonWriter.m; sourceTree = "<group>"; };
+		7DF10FC81602BA2A001830FE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		7DF2C44114F8CBE600E01067 /* action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action.png; sourceTree = "<group>"; };
 		7DF2C44214F8CBE600E01067 /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action@2x.png"; sourceTree = "<group>"; };
 		7DF2C44614F9BA4800E01067 /* HNContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNContainer.h; sourceTree = "<group>"; };
@@ -780,6 +782,7 @@
 		7DD03DF014529EAF0007A069 /* Default */ = {
 			isa = PBXGroup;
 			children = (
+				7DF10FC81602BA2A001830FE /* Default-568h@2x.png */,
 				7D2BB6BB151FE506003D98B9 /* Default-Portrait@2x.png */,
 				7D2BB6BC151FE506003D98B9 /* Default-Portrait.png */,
 				7D2BB6BD151FE506003D98B9 /* Default-Landscape@2x.png */,
@@ -929,6 +932,7 @@
 				7D2BB6C0151FE506003D98B9 /* Default-Portrait.png in Resources */,
 				7D2BB6C1151FE506003D98B9 /* Default-Landscape@2x.png in Resources */,
 				7D2BB6C2151FE506003D98B9 /* Default-Landscape.png in Resources */,
+				7DF10FC91602BA2A001830FE /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

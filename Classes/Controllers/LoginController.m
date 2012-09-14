@@ -25,7 +25,11 @@
     [cancelItem release];
     [completeItem release];
     [loadingItem release];
-    
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+
     [super dealloc];
 }
 
@@ -81,23 +85,25 @@
     CGColorSpaceRelease(rgb);
 	UIImage *background = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
-    
+
+    backgroundImageView = [[UIImageView alloc] initWithFrame:[[self view] bounds]];
+    [backgroundImageView setImage:background];
+    [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [[self view] addSubview:backgroundImageView];
+
+    tableContainerView = [[UIView alloc] initWithFrame:[[self view] bounds]];
+    [tableContainerView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [[self view] addSubview:tableContainerView];
+
     tableView = [[UITableView alloc] initWithFrame:[[self view] bounds] style:UITableViewStyleGrouped];
     [tableView setBackgroundColor:[UIColor clearColor]];
-    [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
+    [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
     [tableView setScrollEnabled:NO];
     [tableView setAllowsSelection:NO];
-    [[self view] addSubview:tableView];
-    
-    backgroundImageView = [[UIImageView alloc] initWithFrame:[[self view] bounds]];
-    [backgroundImageView setImage:background];
-    [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
-        tableView.backgroundView = backgroundImageView;
-    else
-        [[self view] insertSubview:backgroundImageView atIndex:0];
+    [tableContainerView addSubview:tableView];
     
     // XXX: this is a hack. really, this should calculate the positioning.
     CGRect fieldRect = CGRectMake(115, 12, -135, 30);
@@ -125,9 +131,6 @@
     [loadingIndicatorView setCenter:[loadingCell center]];
 	[loadingCell addSubview:[loadingIndicatorView autorelease]];
 		
-    completeItem = [[BarButtonItem alloc] initWithTitle:@"Confirm" style:UIBarButtonItemStyleBordered target:self action:@selector(_authenticate)];
-    cancelItem = [[BarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
-    
     bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 15.0f)];
     [bottomLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
     [bottomLabel setTextAlignment:UITextAlignmentCenter];
@@ -141,9 +144,15 @@
     [topLabel setShadowColor:[UIColor clearColor]];
     [topLabel setShadowOffset:CGSizeMake(0, 1.0f)];
     [topLabel setFont:[UIFont boldSystemFontOfSize:30.0f]];
-	
+
+    [tableView layoutIfNeeded];
+    CGFloat tableViewHeight = [tableView contentSize].height;
+    [tableView setFrame:CGRectMake(0, floorf((backgroundImageView.bounds.size.height - tableViewHeight) / 2), backgroundImageView.bounds.size.width, tableViewHeight)];
+
+    completeItem = [[BarButtonItem alloc] initWithTitle:@"Confirm" style:UIBarButtonItemStyleBordered target:self action:@selector(_authenticate)];
+    cancelItem = [[BarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
+
 	loadingItem = [[ActivityIndicatorItem alloc] initWithSize:kActivityIndicatorItemStandardSize];
-        
 }
 
 - (void)viewDidLoad {
@@ -152,7 +161,11 @@
     [[self navigationItem] setRightBarButtonItem:completeItem];
     [[self navigationItem] setLeftBarButtonItem:cancelItem];
     [self _updateCompleteItem];
-    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHideWithNotification:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShowWithNotification:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrameWithNotification:) name:UIKeyboardWillChangeFrameNotification object:nil];
+
     [self setTitle:@"Login"];
 }
 
@@ -179,6 +192,10 @@
     backgroundImageView = nil;
     [tableView release];
     tableView = nil;
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -301,6 +318,37 @@
     } else {
         return nil;
     }
+}
+
+- (void)updateForKeyboardNotification:(NSNotification *)notification {
+    NSDictionary *userInfo = [notification userInfo];
+
+    UIViewAnimationCurve curve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
+    NSTimeInterval duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    CGRect endingFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect windowEndingFrame = [[backgroundImageView window] convertRect:endingFrame fromWindow:nil];
+    CGRect viewEndingFrame = [backgroundImageView convertRect:windowEndingFrame fromView:nil];
+
+    CGRect viewFrame = [[self view] bounds];
+    CGRect endingIntersectionRect = CGRectIntersection(viewFrame, viewEndingFrame);
+    viewFrame.size.height -= endingIntersectionRect.size.height;
+
+    [UIView animateWithDuration:duration delay:0 options:(curve << 16) animations:^{
+        [tableContainerView setFrame:viewFrame];
+    } completion:NULL];
+}
+
+- (void)keyboardWillHideWithNotification:(NSNotification *)notification {
+    [self updateForKeyboardNotification:notification];
+}
+
+- (void)keyboardWillShowWithNotification:(NSNotification *)notification {
+    [self updateForKeyboardNotification:notification];
+}
+
+- (void)keyboardWillChangeFrameWithNotification:(NSNotification *)notification {
+    [self updateForKeyboardNotification:notification];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

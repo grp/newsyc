@@ -163,10 +163,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    // Fix iOS 6 bug with a tab bar controller in a navigation controller.
+    // XXX: Fix iOS 6 bug with a tab bar controller in a navigation controller.
+    [self setViewControllers:[self viewControllers]];
     [[self selectedViewController] setWantsFullScreenLayout:YES];
 
-    // XXX: is 15 inutes the optimal time here?
+    // XXX: Is 15 inutes the optimal time here?
     if ([lastSeen timeIntervalSinceNow] < -(15 * 60)) {
         [[home source] beginLoading];
         [[latest source] beginLoading];

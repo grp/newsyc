@@ -220,21 +220,22 @@
     commentsrect.origin.y = bounds.size.height - margins.bottom - commentsrect.size.height;
     
     // draw link highlight
+    UIBezierPath *highlightBezierPath = [UIBezierPath bezierPath];
     for (NSValue *rect in highlightedRects) {
         CGRect highlightedRect = [rect CGRectValue];
         
-        if (highlightedRect.size.width != 0 && highlightedRect.size.height != 0) {
-            [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
-            
-            CGRect rect = CGRectInset(highlightedRect, -2.0f, -1.5f);
+        if (highlightedRect.size.width != 0 && highlightedRect.size.height != 0) {            
+            CGRect rect = CGRectInset(highlightedRect, -4.0f, -4.0f);
             rect.origin.x += bodyrect.origin.x;
             rect.origin.y += bodyrect.origin.y;
             
-            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:2.0f];
-            [bezierPath fill];
+            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:3.0f];
+            [highlightBezierPath appendPath:bezierPath];
         }
     }
-    
+    [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
+    [highlightBezierPath fill];
+
     // draw divider line
     CGRect linerect;
     linerect.origin.x = bodyrect.origin.x;

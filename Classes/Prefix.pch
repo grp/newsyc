@@ -4,8 +4,8 @@
 
 #import <Availability.h>
 
-#ifndef __IPHONE_4_0
-#warning "This is probably not going to go well. Might want to try iOS 4.0 or later."
+#ifndef __IPHONE_5_0
+#warning "This is probably not going to go well. Might want to try iOS 5.0 or later."
 #endif
 
 #ifdef __OBJC__
@@ -13,9 +13,13 @@
     #import <Foundation/Foundation.h>
     #import <QuartzCore/QuartzCore.h>
 
+// Use -shouldAutorotateToInterfaceOrientation: for iOS 5 and -supportedInterfaceOrientations for iOS 6
 #define AUTOROTATION_FOR_PAD_ONLY \
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation { \
     return ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) || (toInterfaceOrientation == UIInterfaceOrientationPortrait); \
+} \
+- (NSUInteger)supportedInterfaceOrientations { \
+    return ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskPortrait); \
 }
 
 #endif
