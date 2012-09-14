@@ -211,7 +211,17 @@
         [copied release];
     } else if (([MFMailComposeViewController canSendMail] && buttonIndex == 3) || (![MFMailComposeViewController canSendMail] && buttonIndex == 2)) {
         [[InstapaperController sharedInstance] submitURL:currentURL fromController:self];
-    } 
+    } else if (([TWTweetComposeViewController canSendTweet] && buttonIndex == 4) || (![TWTweetComposeViewController canSendTweet] && buttonIndex == 3)) {
+		TWTweetComposeViewController *twitter = [[TWTweetComposeViewController alloc] init];
+		[twitter setInitialText:[webview stringByEvaluatingJavaScriptFromString:@"document.title"]];
+		[twitter addURL:currentURL];
+		[self presentModalViewController:twitter animated:YES];
+		[twitter release];
+		twitter.completionHandler = ^(TWTweetComposeViewControllerResult result)
+		{
+			[self dismissModalViewControllerAnimated:YES];
+		};
+	}
 }
 
 - (void)reload {
@@ -243,9 +253,10 @@
     if ([MFMailComposeViewController canSendMail]) [sheet addButtonWithTitle:@"Mail Link"];
     [sheet addButtonWithTitle:@"Copy Link"];
     [sheet addButtonWithTitle:@"Read Later"];
+	if ([TWTweetComposeViewController canSendTweet]) [sheet addButtonWithTitle:@"Tweet Link"];
     [sheet addButtonWithTitle:@"Cancel"];
     [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
-
+	
     [sheet showFromBarButtonItemInWindow:shareItem animated:YES];    
     [sheet release];
 }

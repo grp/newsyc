@@ -242,12 +242,12 @@
                             destructiveButtonTitle:nil
                             otherButtonTitles:nil
                             ];
-    
+	
     openInSafariIndex = [sheet addButtonWithTitle:@"Open in Safari"];
     mailLinkIndex = [MFMailComposeViewController canSendMail] ? [sheet addButtonWithTitle:@"Mail Link"] : -1;
     readLaterIndex = [sheet addButtonWithTitle:@"Read Later"];
     copyLinkIndex = [sheet addButtonWithTitle:@"Copy Link"];
-	tweetLinkIndex = [TWTweetComposeViewController canSendTweet] ? [sheet addButtonWithTitle:@"Tweet Link"] : -1;;
+	tweetLinkIndex = [TWTweetComposeViewController canSendTweet] ? [sheet addButtonWithTitle:@"Tweet Link"] : -1;
     
     [sheet addButtonWithTitle:@"Cancel"];
     [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
