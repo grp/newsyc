@@ -247,6 +247,7 @@
     mailLinkIndex = [MFMailComposeViewController canSendMail] ? [sheet addButtonWithTitle:@"Mail Link"] : -1;
     readLaterIndex = [sheet addButtonWithTitle:@"Read Later"];
     copyLinkIndex = [sheet addButtonWithTitle:@"Copy Link"];
+	tweetLinkIndex = [TWTweetComposeViewController canSendTweet] ? [sheet addButtonWithTitle:@"Tweet Link"] : -1;;
     
     [sheet addButtonWithTitle:@"Cancel"];
     [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
@@ -287,7 +288,17 @@
             [hud release];
         } else if (index == readLaterIndex) {
             [[InstapaperController sharedInstance] submitURL:[source URL] fromController:self];
-        }
+		} else if (index == tweetLinkIndex) {
+			TWTweetComposeViewController *twitter = [[TWTweetComposeViewController alloc] init];
+			[twitter setInitialText:[self sourceTitle]];
+			[twitter addURL:[source URL]];
+			[self presentModalViewController:twitter animated:YES];
+			[twitter release];
+			twitter.completionHandler = ^(TWTweetComposeViewControllerResult result)
+			{
+				[self dismissModalViewControllerAnimated:YES];
+			};
+		}
     }
 }
 
