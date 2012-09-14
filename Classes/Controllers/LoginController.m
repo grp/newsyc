@@ -91,11 +91,16 @@
     [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [[self view] addSubview:backgroundImageView];
 
-    tableContainerView = [[UIView alloc] initWithFrame:[[self view] bounds]];
-    [tableContainerView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [[self view] addSubview:tableContainerView];
+    CGRect centeringAlignmentFrame = CGRectMake(0, 0, [[self view] bounds].size.width, [[self view] bounds].size.height - 80.0f);
+    centeringAlignmentView = [[UIView alloc] initWithFrame:centeringAlignmentFrame];
+    [centeringAlignmentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [[self view] addSubview:centeringAlignmentView];
 
-    tableView = [[UITableView alloc] initWithFrame:[[self view] bounds] style:UITableViewStyleGrouped];
+    tableContainerView = [[UIView alloc] initWithFrame:[centeringAlignmentView bounds]];
+    [tableContainerView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [centeringAlignmentView addSubview:tableContainerView];
+
+    tableView = [[UITableView alloc] initWithFrame:[tableContainerView bounds] style:UITableViewStyleGrouped];
     [tableView setBackgroundColor:[UIColor clearColor]];
     [tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
@@ -147,7 +152,7 @@
 
     [tableView layoutIfNeeded];
     CGFloat tableViewHeight = [tableView contentSize].height;
-    [tableView setFrame:CGRectMake(0, floorf((backgroundImageView.bounds.size.height - tableViewHeight) / 2), backgroundImageView.bounds.size.width, tableViewHeight)];
+    [tableView setFrame:CGRectMake(0, floorf((tableContainerView.bounds.size.height - tableViewHeight) / 2), tableContainerView.bounds.size.width, tableViewHeight)];
 
     completeItem = [[BarButtonItem alloc] initWithTitle:@"Confirm" style:UIBarButtonItemStyleBordered target:self action:@selector(_authenticate)];
     cancelItem = [[BarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
@@ -327,10 +332,10 @@
     NSTimeInterval duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
     CGRect endingFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGRect windowEndingFrame = [[backgroundImageView window] convertRect:endingFrame fromWindow:nil];
-    CGRect viewEndingFrame = [backgroundImageView convertRect:windowEndingFrame fromView:nil];
+    CGRect windowEndingFrame = [[centeringAlignmentView window] convertRect:endingFrame fromWindow:nil];
+    CGRect viewEndingFrame = [centeringAlignmentView convertRect:windowEndingFrame fromView:nil];
 
-    CGRect viewFrame = [[self view] bounds];
+    CGRect viewFrame = [centeringAlignmentView bounds];
     CGRect endingIntersectionRect = CGRectIntersection(viewFrame, viewEndingFrame);
     viewFrame.size.height -= endingIntersectionRect.size.height;
 

@@ -13,6 +13,7 @@
 
 @interface LoginController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate> {
     UIImageView *backgroundImageView;
+    UIView *centeringAlignmentView;
     UIView *tableContainerView;
     UITableView *tableView;
     
