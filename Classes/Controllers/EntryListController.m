@@ -225,6 +225,18 @@
     }
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    UITableView *tableViewCast = (UITableView *)scrollView;
+    NSIndexPath *lastCellIndexPath = [NSIndexPath indexPathForRow:([tableViewCast numberOfRowsInSection:0]-1) inSection:0];
+    NSArray *indexes = [tableView indexPathsForVisibleRows];
+    for (NSIndexPath *index in indexes) {
+        if (index.row == lastCellIndexPath.row) {
+            [self loadMorePressed];
+            return;
+        }
+    }
+}
+
 AUTOROTATION_FOR_PAD_ONLY
 
 @end
