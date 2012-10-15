@@ -175,6 +175,12 @@
 
     [lastSeen release];
     lastSeen = [[NSDate date] retain];
+
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
+      [[self tabBar] setSelectedImageTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+    } else {
+      [[self tabBar] setSelectedImageTintColor:nil];
+    }
 }
 
 - (void)loadView {
