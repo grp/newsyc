@@ -225,6 +225,14 @@
     }
 }
 
+- (void)tableView:(UITableView *)tView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSIndexPath *lastCellIndexPath = [NSIndexPath indexPathForRow:([tView numberOfRowsInSection:0]-1) inSection:0];
+    if (indexPath.row == lastCellIndexPath.row) {
+        [self loadMorePressed];
+        return;
+    }
+}
+
 AUTOROTATION_FOR_PAD_ONLY
 
 @end
