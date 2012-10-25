@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D2623631635956A001E7E39 /* ReadLaterActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D2623621635956A001E7E39 /* ReadLaterActivity.m */; };
+		4D2623761635A335001E7E39 /* instapaper-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2623721635A335001E7E39 /* instapaper-ipad.png */; };
+		4D2623771635A335001E7E39 /* instapaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2623731635A335001E7E39 /* instapaper.png */; };
+		4D2623781635A335001E7E39 /* instapaper-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2623741635A335001E7E39 /* instapaper-ipad@2x.png */; };
+		4D2623791635A335001E7E39 /* instapaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2623751635A335001E7E39 /* instapaper@2x.png */; };
 		7D148E65132D68B5008FBF32 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D148E64132D68B5008FBF32 /* libxml2.dylib */; };
 		7D17CA2F134AE22700763741 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D17CA2D134AE22700763741 /* Default.png */; };
 		7D17CA30134AE22700763741 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D17CA2E134AE22700763741 /* Default@2x.png */; };
@@ -156,6 +161,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4D2623611635956A001E7E39 /* ReadLaterActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadLaterActivity.h; sourceTree = "<group>"; };
+		4D2623621635956A001E7E39 /* ReadLaterActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadLaterActivity.m; sourceTree = "<group>"; };
+		4D2623721635A335001E7E39 /* instapaper-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "instapaper-ipad.png"; sourceTree = "<group>"; };
+		4D2623731635A335001E7E39 /* instapaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instapaper.png; sourceTree = "<group>"; };
+		4D2623741635A335001E7E39 /* instapaper-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "instapaper-ipad@2x.png"; sourceTree = "<group>"; };
+		4D2623751635A335001E7E39 /* instapaper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "instapaper@2x.png"; sourceTree = "<group>"; };
 		7D148E64132D68B5008FBF32 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		7D17CA2D134AE22700763741 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		7D17CA2E134AE22700763741 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -408,6 +419,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D262360163594EF001E7E39 /* Activities */ = {
+			isa = PBXGroup;
+			children = (
+				4D2623611635956A001E7E39 /* ReadLaterActivity.h */,
+				4D2623621635956A001E7E39 /* ReadLaterActivity.m */,
+			);
+			name = Activities;
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		7D1F98821320CF720059EBBB = {
 			isa = PBXGroup;
 			children = (
@@ -515,6 +536,7 @@
 				7DCB8105134EC9AF00B521F2 /* Instapaper */,
 				7D6B9ED41347DF2E00CD923C /* Views */,
 				7D6B9E6D1347DF2E00CD923C /* Cells */,
+				4D262360163594EF001E7E39 /* Activities */,
 				7D6B9E741347DF2E00CD923C /* Controllers */,
 				7D6B9ED01347DF2E00CD923C /* Prefix.pch */,
 				7D6B9ED11347DF2E00CD923C /* AppDelegate.h */,
@@ -767,6 +789,10 @@
 		7DD03DEF14529E980007A069 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				4D2623721635A335001E7E39 /* instapaper-ipad.png */,
+				4D2623731635A335001E7E39 /* instapaper.png */,
+				4D2623741635A335001E7E39 /* instapaper-ipad@2x.png */,
+				4D2623751635A335001E7E39 /* instapaper@2x.png */,
 				7DD03DE514529E880007A069 /* Icon-Small-50.png */,
 				7DD03DE614529E880007A069 /* Icon-Small-50@2x.png */,
 				7DD03DE714529E880007A069 /* Icon-72.png */,
@@ -933,6 +959,10 @@
 				7D2BB6C1151FE506003D98B9 /* Default-Landscape@2x.png in Resources */,
 				7D2BB6C2151FE506003D98B9 /* Default-Landscape.png in Resources */,
 				7DF10FC91602BA2A001830FE /* Default-568h@2x.png in Resources */,
+				4D2623761635A335001E7E39 /* instapaper-ipad.png in Resources */,
+				4D2623771635A335001E7E39 /* instapaper.png in Resources */,
+				4D2623781635A335001E7E39 /* instapaper-ipad@2x.png in Resources */,
+				4D2623791635A335001E7E39 /* instapaper@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1022,6 +1052,7 @@
 				7D2BB6B9151FD27C003D98B9 /* LoadMoreCell.m in Sources */,
 				7D2BB6C71520E777003D98B9 /* OrangeTableView.m in Sources */,
 				7DBD537F15B3E27600E3D496 /* HNObjectCache.m in Sources */,
+				4D2623631635956A001E7E39 /* ReadLaterActivity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

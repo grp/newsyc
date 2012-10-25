@@ -76,7 +76,21 @@
         [login setDelegate:self];
                 
         NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:login];
-        [controller presentModalViewController:[navigation autorelease] animated:YES];
+        [controller presentViewController:[navigation autorelease] animated:YES completion:nil];
+    }
+}
+
+- (UIViewController *)submitURL:(NSURL *)url {
+    if ([InstapaperSession currentSession] != nil) {
+        [self submitInstapaperRequestForURL:url];
+        return nil;
+    } else {
+        InstapaperLoginController *login = [[InstapaperLoginController alloc] init];
+        [login setPendingURL:url];
+        [login setDelegate:self];
+        
+        NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:login];
+        return [navigation autorelease];
     }
 }
 
