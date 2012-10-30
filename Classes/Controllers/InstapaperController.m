@@ -76,7 +76,7 @@
         [login setDelegate:self];
                 
         NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:login];
-        [controller presentViewController:[navigation autorelease] animated:YES completion:nil];
+        [controller presentModalViewController:[navigation autorelease] animated:YES];
     }
 }
 
