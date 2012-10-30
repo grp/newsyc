@@ -14,5 +14,6 @@
 + (id)sharedInstance;
 
 - (void)submitURL:(NSURL *)url fromController:(UIViewController *)controller;
+- (UIViewController *)submitURL:(NSURL *)url;
 
 @end
