@@ -238,6 +238,8 @@
 
 - (void)actionTapped {
     
+    if (NSClassFromString(@"UIActivityViewController"))
+    
     ReadLaterActivity *readLaterActivity = [[[ReadLaterActivity alloc] init] autorelease];
     NSArray *activityItems = [NSArray arrayWithObjects:[source URL], nil];
     NSArray *applicationActivities = [NSArray arrayWithObjects:readLaterActivity, nil];
@@ -249,6 +251,10 @@
     [self presentViewController:[activityController autorelease]
                        animated:YES completion:nil];
 
+    
+    if () {
+        <#statements#>
+    }
 
 //    UIActionSheet *sheet = [[UIActionSheet alloc]
 //                            initWithTitle:nil

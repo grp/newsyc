@@ -12,7 +12,6 @@
 
 @interface ReadLaterActivity : UIActivity {
     NSURL *URL;
-    UIViewController *controller;
 }
 
 
