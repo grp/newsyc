@@ -20,7 +20,7 @@
 }
 
 - (UIImage *)activityImage {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         return [UIImage imageNamed:@"instapaper-ipad"];
     }
     return [UIImage imageNamed:@"instapaper"];
