@@ -6,10 +6,10 @@
 //
 //
 
-#import "ReadLaterActivity.h"
+#import "InstapaperActivity.h"
 #import "InstapaperController.h"
 
-@implementation ReadLaterActivity
+@implementation InstapaperActivity
 
 - (NSString *)activityType {
     return @"Read Later";

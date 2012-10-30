@@ -17,7 +17,7 @@
 #import "UIActionSheet+Context.h"
 #import "UINavigationItem+MultipleItems.h"
 
-#import "ReadLaterActivity.h"
+#import "InstapaperActivity.h"
 
 @implementation LoadingController
 @synthesize source;
@@ -240,7 +240,7 @@
     
     if (NSClassFromString(@"UIActivityViewController"))
     
-    ReadLaterActivity *readLaterActivity = [[[ReadLaterActivity alloc] init] autorelease];
+    InstapaperActivity *readLaterActivity = [[[InstapaperActivity alloc] init] autorelease];
     NSArray *activityItems = [NSArray arrayWithObjects:[source URL], nil];
     NSArray *applicationActivities = [NSArray arrayWithObjects:readLaterActivity, nil];
     

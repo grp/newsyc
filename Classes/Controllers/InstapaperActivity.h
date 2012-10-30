@@ -10,7 +10,7 @@
 
 @class LoadingController;
 
-@interface ReadLaterActivity : UIActivity {
+@interface InstapaperActivity : UIActivity {
     NSURL *URL;
 }
 
