@@ -17,6 +17,8 @@
 #import "UIActionSheet+Context.h"
 #import "UINavigationItem+MultipleItems.h"
 
+#import "InstapaperActivity.h"
+
 @implementation LoadingController
 @synthesize source;
 
@@ -235,25 +237,40 @@
 }
 
 - (void)actionTapped {
-    UIActionSheet *sheet = [[UIActionSheet alloc]
-                            initWithTitle:nil
-                            delegate:self
-                            cancelButtonTitle:nil
-                            destructiveButtonTitle:nil
-                            otherButtonTitles:nil
-                            ];
     
-    openInSafariIndex = [sheet addButtonWithTitle:@"Open in Safari"];
-    mailLinkIndex = [MFMailComposeViewController canSendMail] ? [sheet addButtonWithTitle:@"Mail Link"] : -1;
-    readLaterIndex = [sheet addButtonWithTitle:@"Read Later"];
-    copyLinkIndex = [sheet addButtonWithTitle:@"Copy Link"];
-    
-    [sheet addButtonWithTitle:@"Cancel"];
-    [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
-    [sheet setSheetContext:@"link"];
-    
-    [sheet showFromBarButtonItemInWindow:actionItem animated:YES];
-    [sheet release];
+    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (version >= 6.0 && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        InstapaperActivity *instapaperActivity = [[InstapaperActivity alloc] init];
+        NSArray *activityItems = [NSArray arrayWithObjects:[source URL], nil];
+        NSArray *applicationActivities = [NSArray arrayWithObjects:[instapaperActivity autorelease], nil];
+        
+        UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
+        
+        activityController.excludedActivityTypes = @[UIActivityTypePostToFacebook, UIActivityTypePostToWeibo, UIActivityTypePrint, UIActivityTypeSaveToCameraRoll];
+        
+        [self presentViewController:[activityController autorelease]
+                           animated:YES completion:nil];
+    } else {
+        UIActionSheet *sheet = [[UIActionSheet alloc]
+                                initWithTitle:nil
+                                delegate:self
+                                cancelButtonTitle:nil
+                                destructiveButtonTitle:nil
+                                otherButtonTitles:nil
+                                ];
+        
+        openInSafariIndex = [sheet addButtonWithTitle:@"Open in Safari"];
+        mailLinkIndex = [MFMailComposeViewController canSendMail] ? [sheet addButtonWithTitle:@"Mail Link"] : -1;
+        readLaterIndex = [sheet addButtonWithTitle:@"Read Later"];
+        copyLinkIndex = [sheet addButtonWithTitle:@"Copy Link"];
+        
+        [sheet addButtonWithTitle:@"Cancel"];
+        [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
+        [sheet setSheetContext:@"link"];
+        
+        [sheet showFromBarButtonItemInWindow:actionItem animated:YES];
+        [sheet release];
+    }
 }
 
 - (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
