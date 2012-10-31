@@ -36,6 +36,8 @@
 
 @implementation CommentListController
 
+@synthesize detailsHeaderView, goesDirectlyToArticle;
+
 #pragma mark - Lifecycle
 
 - (void)finishedLoading {
@@ -322,6 +324,11 @@
     [tableView setTableHeaderView:containerContainer];
     
     suggestedHeaderHeight = [detailsHeaderView bounds].size.height;
+  
+    if(self.goesDirectlyToArticle == YES) {
+      [self.detailsHeaderView touchesEnded:nil withEvent:nil];
+      self.goesDirectlyToArticle = NO;
+    }
 }
 
 #pragma mark - Delegates

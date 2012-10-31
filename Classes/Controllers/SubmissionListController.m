@@ -28,9 +28,10 @@
     [cell_ setSubmission:entry];
 }
 
-- (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
-    CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [[self navigationController] pushController:[controller autorelease] animated:YES];
+- (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry goesDirectlyToArticle:(BOOL)direct {
+  CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
+  controller.goesDirectlyToArticle = direct;
+  [[self navigationController] pushController:[controller autorelease] animated:YES];
 }
 
 - (void)deselectWithAnimation:(BOOL)animated {

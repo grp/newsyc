@@ -16,6 +16,12 @@
 
 #import "CommentListController.h"
 
+@interface EntryListController (PrivateMethods)
+-(void)doubleTap:(UISwipeGestureRecognizer*)tap;
+-(void)singleTap:(UISwipeGestureRecognizer*)tap;
+@end
+
+
 @implementation EntryListController
 
 #pragma mark - Lifecycle
@@ -43,6 +49,17 @@
     [tableView addSubview:pullToRefreshView];
     [pullToRefreshView setDelegate:self];
     
+    UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
+    doubleTap.numberOfTapsRequired = 2;
+    doubleTap.numberOfTouchesRequired = 1;
+    [tableView addGestureRecognizer:doubleTap];
+
+    UITapGestureRecognizer* singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
+    singleTap.numberOfTapsRequired = 1;
+    singleTap.numberOfTouchesRequired = 1;
+    [singleTap requireGestureRecognizerToFail:doubleTap];
+    [tableView addGestureRecognizer:singleTap];
+  
     [[self view] bringSubviewToFront:statusView];
 }
 
@@ -207,16 +224,42 @@
     }
 }
 
-- (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
+- (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry goesDirectlyToArticle:(BOOL)direct {
     return;
 }
 
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    HNEntry *entry = [self entryAtIndexPath:indexPath];
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
-    [self cellSelected:cell forEntry:entry];
+  return;
 }
+
+-(void)singleTap:(UISwipeGestureRecognizer*)tap
+{
+  if (UIGestureRecognizerStateEnded == tap.state)
+  {
+    CGPoint p = [tap locationInView:tap.view];
+    NSIndexPath* indexPath = [tableView indexPathForRowAtPoint:p];
+    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+
+    HNEntry *entry = [self entryAtIndexPath:indexPath];
+
+    [self cellSelected:cell forEntry:entry goesDirectlyToArticle:NO];
+  }
+}
+
+-(void)doubleTap:(UISwipeGestureRecognizer*)tap
+{
+  if (UIGestureRecognizerStateEnded == tap.state)
+  {
+    CGPoint p = [tap locationInView:tap.view];
+    NSIndexPath* indexPath = [tableView indexPathForRowAtPoint:p];
+    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    HNEntry *entry = [self entryAtIndexPath:indexPath];
+    
+    [self cellSelected:cell forEntry:entry goesDirectlyToArticle:YES];
+  }
+}
+
 
 - (void)loadMorePressed {
     if ([source isLoaded] && ![(HNContainer *) source isLoadingMore]) {
