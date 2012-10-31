@@ -110,21 +110,24 @@
     logoutItem = nil;
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];    	
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 	
     // XXX: because this navigation item is shown for every tab, this is a gigantic hack:
     // we are removing it and adding it manually as this view is shown/hidden :(
-    // maybe this should be a button in the table view instead?
-    [[[self tabBarController] navigationItem] setLeftBarButtonItem:(source != nil ? logoutItem : nil)];
+    UIViewController *parentController = [[self navigationController] topViewController];
+    UINavigationItem *navigationItem = [parentController navigationItem];
+    [navigationItem setLeftBarButtonItem:(source != nil ? logoutItem : nil)];
     
     isVisible = YES;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
     
-    [[[self tabBarController] navigationItem] setLeftBarButtonItem:nil];
+    UIViewController *parentController = [[self navigationController] topViewController];
+    UINavigationItem *navigationItem = [parentController navigationItem];
+    [navigationItem setLeftBarButtonItem:nil];
     
     isVisible = NO;
 }

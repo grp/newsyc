@@ -23,9 +23,8 @@
     [searchBar setFrame:CGRectMake(0, 0, [[self view] bounds].size.width, [searchBar bounds].size.height)];
     [searchBar setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
     [searchBar setDelegate:self];
-    [[self view] addSubview:searchBar];
-    
-    coloredView = [[UIView alloc] initWithFrame:CGRectMake(0, [searchBar bounds].size.height, [[self view] bounds].size.width, [searchBar bounds].size.height)];
+
+    coloredView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, [searchBar bounds].size.height)];
     [coloredView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
     [[self view] addSubview:coloredView];
     
@@ -38,7 +37,7 @@
     [facetControl setFrame:CGRectMake(([coloredView bounds].size.height - [facetControl bounds].size.height) / 2, ([coloredView bounds].size.height - [facetControl bounds].size.height) / 2, [coloredView bounds].size.width - ((([coloredView bounds].size.height - [facetControl bounds].size.height) / 2) * 2), [facetControl bounds].size.height)];
     [coloredView addSubview:facetControl];
     
-    tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, [searchBar bounds].size.height + [coloredView bounds].size.height, [[self view] bounds].size.width, [[self view] bounds].size.height - [searchBar bounds].size.height - [coloredView bounds].size.height)];
+    tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, [coloredView bounds].size.height, [[self view] bounds].size.width, [[self view] bounds].size.height - [coloredView bounds].size.height)];
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
@@ -61,9 +60,10 @@
 }
 
 - (HNAPISearch *)searchAPI {
-	if (!searchAPI) {
+	if (searchAPI == nil) {
 		searchAPI = [[HNAPISearch alloc] init];
 	}
+    
 	return searchAPI;
 }
 
@@ -87,11 +87,12 @@
 - (void)facetSelected:(id)sender {
 	[searchBar resignFirstResponder];
 
-	if (facetControl.selectedSegmentIndex == 0) {
-		searchAPI.searchType = kHNSearchTypeInteresting;
+	if ([facetControl selectedSegmentIndex] == 0) {
+		[searchAPI setSearchType:kHNSearchTypeInteresting];
 	} else {
-		searchAPI.searchType = kHNSearchTypeRecent;
+		[searchAPI setSearchType:kHNSearchTypeRecent];
 	}
+    
 	if (searchPerformed) {
 		[self performSearch];
 	}
@@ -200,8 +201,10 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
     
-	[[self navigationController] setNavigationBarHidden:YES animated:animated];
-    
+    UIViewController *parentController = [[self navigationController] topViewController];
+    UINavigationItem *navigationItem = [parentController navigationItem];
+	[navigationItem setTitleView:searchBar];
+
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
@@ -219,10 +222,12 @@
     [searchBar resignFirstResponder];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
+- (void)viewDidDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-    
-	[[self navigationController] setNavigationBarHidden:NO animated:animated];
+
+    UIViewController *parentController = [[self navigationController] topViewController];
+    UINavigationItem *navigationItem = [parentController navigationItem];
+	[navigationItem setTitleView:nil];
 }
 
 - (void)dealloc {

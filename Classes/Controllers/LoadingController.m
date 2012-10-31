@@ -236,7 +236,7 @@
 }
 
 - (void)actionTapped {
-    SharingController *sharingController = [[SharingController alloc] initWithURL:[source URL] title:nil fromController:self];
+    SharingController *sharingController = [[SharingController alloc] initWithURL:[source URL] title:[self sourceTitle] fromController:self];
     [sharingController showFromBarButtonItem:actionItem];
     [sharingController release];
 }
