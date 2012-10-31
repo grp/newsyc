@@ -8,7 +8,7 @@
 
 #import "BrowserController.h"
 
-#import "InstapaperController.h"
+#import "SharingController.h"
 #import "NavigationController.h"
 
 #import "ProgressHUD.h"
@@ -88,7 +88,7 @@
     forwardItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"forward.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goForward)];
     readabilityItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"readability.png"] style:UIBarButtonItemStylePlain target:self action:@selector(readability)];
     refreshItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh.png"] style:UIBarButtonItemStylePlain target:self action:@selector(reload)];
-    shareItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"action.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showActionMenu)];
+    shareItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"action.png"] style:UIBarButtonItemStylePlain target:self action:@selector(share)];
     spacerItem = [[BarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
     loadingItem = [[ActivityIndicatorItem alloc] initWithSize:[[refreshItem image] size]];
     [self updateToolbarItems];
@@ -178,40 +178,8 @@
     [webview stringByEvaluatingJavaScriptFromString:kReadabilityBookmarkletCode];
 }
 
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    [self dismissModalViewControllerAnimated:YES];
-}
-
-- (void)actionSheet:(UIActionSheet *)action clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == [action cancelButtonIndex]) return;
-    
-    if (buttonIndex == 0) {
-        [[UIApplication sharedApplication] openURL:currentURL];
-    } else if ([MFMailComposeViewController canSendMail] && buttonIndex == 1) {
-        MFMailComposeViewController *composeController = [[MFMailComposeViewController alloc] init];
-        [composeController setMailComposeDelegate:self];
-
-        [composeController setSubject:[webview stringByEvaluatingJavaScriptFromString:@"document.title"]];
-
-        NSString *urlString = [currentURL absoluteString];
-        NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", urlString, urlString];
-        [composeController setMessageBody:body isHTML:YES];
-        
-        [self presentModalViewController:[composeController autorelease] animated:YES];
-    } else if (([MFMailComposeViewController canSendMail] && buttonIndex == 2) || (![MFMailComposeViewController canSendMail] && buttonIndex == 1)) {
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        [pasteboard setURL:currentURL];
-        [pasteboard setString:[currentURL absoluteString]];
-        
-        ProgressHUD *copied = [[ProgressHUD alloc] init];
-        [copied setState:kProgressHUDStateCompleted];
-        [copied setText:@"Copied!"];
-        [copied showInWindow:[[self view] window]];
-        [copied dismissAfterDelay:0.8f animated:YES];
-        [copied release];
-    } else if (([MFMailComposeViewController canSendMail] && buttonIndex == 3) || (![MFMailComposeViewController canSendMail] && buttonIndex == 2)) {
-        [[InstapaperController sharedInstance] submitURL:currentURL fromController:self];
-    } 
+- (NSString *)pageTitle {
+    return [webview stringByEvaluatingJavaScriptFromString:@"document.title"];
 }
 
 - (void)reload {
@@ -230,24 +198,10 @@
     [webview goForward];
 }
 
-- (void)showActionMenu {
-    UIActionSheet *sheet = [[UIActionSheet alloc]
-        initWithTitle:[currentURL absoluteString]
-        delegate:self
-        cancelButtonTitle:nil
-        destructiveButtonTitle:nil
-        otherButtonTitles:nil
-    ];
-    
-    [sheet addButtonWithTitle:@"Open with Safari"];
-    if ([MFMailComposeViewController canSendMail]) [sheet addButtonWithTitle:@"Mail Link"];
-    [sheet addButtonWithTitle:@"Copy Link"];
-    [sheet addButtonWithTitle:@"Read Later"];
-    [sheet addButtonWithTitle:@"Cancel"];
-    [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
-
-    [sheet showFromBarButtonItemInWindow:shareItem animated:YES];    
-    [sheet release];
+- (void)share {
+    SharingController *sharingController = [[SharingController alloc] initWithURL:currentURL title:[self pageTitle] fromController:self];
+    [sharingController showFromBarButtonItem:shareItem];
+    [sharingController release];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
@@ -259,7 +213,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     [self updateToolbarItems];
     [self setCurrentURL:[[webView request] URL]];
-    [[self navigationItem] setTitle:[webview stringByEvaluatingJavaScriptFromString:@"document.title"]];
+    [[self navigationItem] setTitle:[self pageTitle]];
     
     [self releaseNetworkIndicator];
 }

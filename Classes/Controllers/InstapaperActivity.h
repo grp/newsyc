@@ -6,13 +6,10 @@
 //
 //
 
-#import <UIKit/UIKit.h>
-
-@class LoadingController;
+@class InstapaperSubmission;
 
 @interface InstapaperActivity : UIActivity {
-    NSURL *URL;
+    InstapaperSubmission *submission;
 }
-
 
 @end

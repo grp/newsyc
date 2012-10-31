@@ -10,14 +10,13 @@
 
 #import "HNKit.h"
 
-#import "InstapaperController.h"
+#import "SharingController.h"
+
 #import "LoadingIndicatorView.h"
 #import "ProgressHUD.h"
 
 #import "UIActionSheet+Context.h"
 #import "UINavigationItem+MultipleItems.h"
-
-#import "InstapaperActivity.h"
 
 @implementation LoadingController
 @synthesize source;
@@ -237,79 +236,9 @@
 }
 
 - (void)actionTapped {
-    
-    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if (version >= 6.0 && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        InstapaperActivity *instapaperActivity = [[InstapaperActivity alloc] init];
-        NSArray *activityItems = [NSArray arrayWithObjects:[source URL], nil];
-        NSArray *applicationActivities = [NSArray arrayWithObjects:[instapaperActivity autorelease], nil];
-        
-        UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
-        
-        activityController.excludedActivityTypes = @[UIActivityTypePostToFacebook, UIActivityTypePostToWeibo, UIActivityTypePrint, UIActivityTypeSaveToCameraRoll];
-        
-        [self presentViewController:[activityController autorelease]
-                           animated:YES completion:nil];
-    } else {
-        UIActionSheet *sheet = [[UIActionSheet alloc]
-                                initWithTitle:nil
-                                delegate:self
-                                cancelButtonTitle:nil
-                                destructiveButtonTitle:nil
-                                otherButtonTitles:nil
-                                ];
-        
-        openInSafariIndex = [sheet addButtonWithTitle:@"Open in Safari"];
-        mailLinkIndex = [MFMailComposeViewController canSendMail] ? [sheet addButtonWithTitle:@"Mail Link"] : -1;
-        readLaterIndex = [sheet addButtonWithTitle:@"Read Later"];
-        copyLinkIndex = [sheet addButtonWithTitle:@"Copy Link"];
-        
-        [sheet addButtonWithTitle:@"Cancel"];
-        [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
-        [sheet setSheetContext:@"link"];
-        
-        [sheet showFromBarButtonItemInWindow:actionItem animated:YES];
-        [sheet release];
-    }
-}
-
-- (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
-    if ([[sheet sheetContext] isEqual:@"link"]) {
-        if (index == [sheet cancelButtonIndex]) return;
-
-        if (index == openInSafariIndex) {
-            [[UIApplication sharedApplication] openURL:[source URL]];
-        } else if (index == mailLinkIndex) {
-            MFMailComposeViewController *composeController = [[MFMailComposeViewController alloc] init];
-            [composeController setMailComposeDelegate:self];
-
-            [composeController setSubject:[self sourceTitle]];
-
-            NSString *urlString = [[source URL] absoluteString];
-            NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", urlString, urlString];
-            [composeController setMessageBody:body isHTML:YES];
-
-            [self presentModalViewController:[composeController autorelease] animated:YES];
-        } else if (index == copyLinkIndex) {
-            // XXX: find the best way to copy a URL to the clipboard
-            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-            [pasteboard setURL:[source URL]];
-            [pasteboard setString:[[source URL] absoluteString]];
-
-            ProgressHUD *hud = [[ProgressHUD alloc] init];
-            [hud setText:@"Copied!"];
-            [hud setState:kProgressHUDStateCompleted];
-            [hud showInWindow:[self.view window]];
-            [hud dismissAfterDelay:0.8f animated:YES];
-            [hud release];
-        } else if (index == readLaterIndex) {
-            [[InstapaperController sharedInstance] submitURL:[source URL] fromController:self];
-        }
-    }
-}
-
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    [self dismissModalViewControllerAnimated:YES];
+    SharingController *sharingController = [[SharingController alloc] initWithURL:[source URL] title:nil fromController:self];
+    [sharingController showFromBarButtonItem:actionItem];
+    [sharingController release];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

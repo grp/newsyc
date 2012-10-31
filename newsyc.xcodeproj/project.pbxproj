@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4D2623631635956A001E7E39 /* InstapaperActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D2623621635956A001E7E39 /* InstapaperActivity.m */; };
 		4D2623761635A335001E7E39 /* instapaper-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2623721635A335001E7E39 /* instapaper-ipad.png */; };
 		4D2623771635A335001E7E39 /* instapaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2623731635A335001E7E39 /* instapaper.png */; };
 		4D2623781635A335001E7E39 /* instapaper-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D2623741635A335001E7E39 /* instapaper-ipad@2x.png */; };
@@ -115,6 +114,8 @@
 		7D6B9F571347DF2E00CD923C /* XMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EEC1347DF2E00CD923C /* XMLDocument.m */; };
 		7D6B9F581347DF2E00CD923C /* XMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EEE1347DF2E00CD923C /* XMLElement.m */; };
 		7D6BAB841415B07500C24B8B /* LoadMoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6BAB831415B07400C24B8B /* LoadMoreButton.m */; };
+		7D8541221640A09000C68F84 /* InstapaperActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8541211640A09000C68F84 /* InstapaperActivity.m */; };
+		7D8541251640B86600C68F84 /* InstapaperSubmission.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8541241640B86600C68F84 /* InstapaperSubmission.m */; };
 		7D8A660813333A72002012AA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D8A660713333A72002012AA /* QuartzCore.framework */; };
 		7D8E9EF6134D76DF00A724C5 /* HackerNewsLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8E9EF5134D76DF00A724C5 /* HackerNewsLoginController.m */; };
 		7D91AA9F135A27DD00247D34 /* ActivityIndicatorItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D91AA9E135A27DD00247D34 /* ActivityIndicatorItem.m */; };
@@ -126,7 +127,7 @@
 		7D977ABF151D4ED000FD7360 /* UINavigationItem+MultipleItems.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D977ABE151D4ED000FD7360 /* UINavigationItem+MultipleItems.m */; };
 		7D977AC2151E8F6700FD7360 /* BarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D977AC1151E8F6700FD7360 /* BarButtonItem.m */; };
 		7DB809B714F8A12F009668E6 /* SubmissionListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB809B614F8A12F009668E6 /* SubmissionListController.m */; };
-		7DB809BA14F8ACEF009668E6 /* InstapaperController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB809B914F8ACEF009668E6 /* InstapaperController.m */; };
+		7DB809BA14F8ACEF009668E6 /* SharingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB809B914F8ACEF009668E6 /* SharingController.m */; };
 		7DBD537F15B3E27600E3D496 /* HNObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBD537E15B3E27500E3D496 /* HNObjectCache.m */; };
 		7DC4BACD13F51B4700E373C0 /* x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC4BACB13F51B4600E373C0 /* x.png */; };
 		7DC4BACE13F51B4700E373C0 /* x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC4BACC13F51B4700E373C0 /* x@2x.png */; };
@@ -161,8 +162,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4D2623611635956A001E7E39 /* InstapaperActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperActivity.h; sourceTree = "<group>"; };
-		4D2623621635956A001E7E39 /* InstapaperActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperActivity.m; sourceTree = "<group>"; };
 		4D2623721635A335001E7E39 /* instapaper-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "instapaper-ipad.png"; sourceTree = "<group>"; };
 		4D2623731635A335001E7E39 /* instapaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instapaper.png; sourceTree = "<group>"; };
 		4D2623741635A335001E7E39 /* instapaper-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "instapaper-ipad@2x.png"; sourceTree = "<group>"; };
@@ -327,6 +326,10 @@
 		7D6B9EF01347DF2E00CD923C /* icon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.psd; sourceTree = "<group>"; };
 		7D6BAB821415B07400C24B8B /* LoadMoreButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadMoreButton.h; sourceTree = "<group>"; };
 		7D6BAB831415B07400C24B8B /* LoadMoreButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadMoreButton.m; sourceTree = "<group>"; };
+		7D8541201640A08600C68F84 /* InstapaperActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperActivity.h; sourceTree = "<group>"; };
+		7D8541211640A09000C68F84 /* InstapaperActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperActivity.m; sourceTree = "<group>"; };
+		7D8541231640B86600C68F84 /* InstapaperSubmission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperSubmission.h; sourceTree = "<group>"; };
+		7D8541241640B86600C68F84 /* InstapaperSubmission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperSubmission.m; sourceTree = "<group>"; };
 		7D8A660713333A72002012AA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7D8E9EF4134D76DF00A724C5 /* HackerNewsLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HackerNewsLoginController.h; sourceTree = "<group>"; };
 		7D8E9EF5134D76DF00A724C5 /* HackerNewsLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HackerNewsLoginController.m; sourceTree = "<group>"; };
@@ -345,8 +348,8 @@
 		7D977AC1151E8F6700FD7360 /* BarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BarButtonItem.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7DB809B514F8A12F009668E6 /* SubmissionListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubmissionListController.h; sourceTree = "<group>"; };
 		7DB809B614F8A12F009668E6 /* SubmissionListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubmissionListController.m; sourceTree = "<group>"; };
-		7DB809B814F8ACEE009668E6 /* InstapaperController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperController.h; sourceTree = "<group>"; };
-		7DB809B914F8ACEF009668E6 /* InstapaperController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperController.m; sourceTree = "<group>"; };
+		7DB809B814F8ACEE009668E6 /* SharingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharingController.h; sourceTree = "<group>"; };
+		7DB809B914F8ACEF009668E6 /* SharingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharingController.m; sourceTree = "<group>"; };
 		7DBD537D15B3E27500E3D496 /* HNObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNObjectCache.h; sourceTree = "<group>"; };
 		7DBD537E15B3E27500E3D496 /* HNObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNObjectCache.m; sourceTree = "<group>"; };
 		7DC4BACB13F51B4600E373C0 /* x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x.png; sourceTree = "<group>"; };
@@ -419,16 +422,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4D262360163594EF001E7E39 /* Activities */ = {
-			isa = PBXGroup;
-			children = (
-				4D2623611635956A001E7E39 /* InstapaperActivity.h */,
-				4D2623621635956A001E7E39 /* InstapaperActivity.m */,
-			);
-			name = Activities;
-			path = Controllers;
-			sourceTree = "<group>";
-		};
 		7D1F98821320CF720059EBBB = {
 			isa = PBXGroup;
 			children = (
@@ -536,7 +529,6 @@
 				7DCB8105134EC9AF00B521F2 /* Instapaper */,
 				7D6B9ED41347DF2E00CD923C /* Views */,
 				7D6B9E6D1347DF2E00CD923C /* Cells */,
-				4D262360163594EF001E7E39 /* Activities */,
 				7D6B9E741347DF2E00CD923C /* Controllers */,
 				7D6B9ED01347DF2E00CD923C /* Prefix.pch */,
 				7D6B9ED11347DF2E00CD923C /* AppDelegate.h */,
@@ -600,12 +592,11 @@
 				7DB809B214F893AF009668E6 /* Compose */,
 				7DB809AF14F89387009668E6 /* Login */,
 				7DB809B314F893C9009668E6 /* Tabs */,
+				7D85411F1640A03100C68F84 /* Sharing */,
 				7D977AB7151C142700FD7360 /* EmptyController.h */,
 				7D977AB8151C142700FD7360 /* EmptyController.m */,
 				7D6B9E751347DF2E00CD923C /* BrowserController.h */,
 				7D6B9E761347DF2E00CD923C /* BrowserController.m */,
-				7DB809B814F8ACEE009668E6 /* InstapaperController.h */,
-				7DB809B914F8ACEF009668E6 /* InstapaperController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -697,6 +688,19 @@
 				7DDFA3AC1401A8A100B8E69B /* Follow Model */,
 			);
 			name = Experimental;
+			sourceTree = "<group>";
+		};
+		7D85411F1640A03100C68F84 /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				7D8541231640B86600C68F84 /* InstapaperSubmission.h */,
+				7D8541241640B86600C68F84 /* InstapaperSubmission.m */,
+				7D8541201640A08600C68F84 /* InstapaperActivity.h */,
+				7D8541211640A09000C68F84 /* InstapaperActivity.m */,
+				7DB809B814F8ACEE009668E6 /* SharingController.h */,
+				7DB809B914F8ACEF009668E6 /* SharingController.m */,
+			);
+			name = Sharing;
 			sourceTree = "<group>";
 		};
 		7DB809AF14F89387009668E6 /* Login */ = {
@@ -1040,7 +1044,7 @@
 				7DDFA3C31401AAC500B8E69B /* SBJsonWriter.m in Sources */,
 				7D6BAB841415B07500C24B8B /* LoadMoreButton.m in Sources */,
 				7DB809B714F8A12F009668E6 /* SubmissionListController.m in Sources */,
-				7DB809BA14F8ACEF009668E6 /* InstapaperController.m in Sources */,
+				7DB809BA14F8ACEF009668E6 /* SharingController.m in Sources */,
 				7DF2C44814F9BA4800E01067 /* HNContainer.m in Sources */,
 				7DD1EEA81503894B00C3EC31 /* HNEntryBodyRenderer.m in Sources */,
 				7D34176C150AEF7B002E284F /* UIImage+Colorize.m in Sources */,
@@ -1052,7 +1056,8 @@
 				7D2BB6B9151FD27C003D98B9 /* LoadMoreCell.m in Sources */,
 				7D2BB6C71520E777003D98B9 /* OrangeTableView.m in Sources */,
 				7DBD537F15B3E27600E3D496 /* HNObjectCache.m in Sources */,
-				4D2623631635956A001E7E39 /* InstapaperActivity.m in Sources */,
+				7D8541221640A09000C68F84 /* InstapaperActivity.m in Sources */,
+				7D8541251640B86600C68F84 /* InstapaperSubmission.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

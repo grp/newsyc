@@ -17,6 +17,12 @@
 
 @end
 
+@interface UIPopoverController (BarButtonItem)
+
+- (void)presentPopoverFromBarButtonItemInWindow:(BarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated;
+
+@end
+
 @interface UIActionSheet (BarButtonItem)
 
 - (void)showFromBarButtonItemInWindow:(BarButtonItem *)item animated:(BOOL)animated;

@@ -7,9 +7,15 @@
 //
 
 #import "InstapaperActivity.h"
-#import "InstapaperController.h"
+#import "InstapaperSubmission.h"
 
 @implementation InstapaperActivity
+
+- (void)dealloc {
+    [submission release];
+
+    [super dealloc];
+}
 
 - (NSString *)activityType {
     return @"Read Later";
@@ -23,6 +29,7 @@
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         return [UIImage imageNamed:@"instapaper-ipad"];
     }
+
     return [UIImage imageNamed:@"instapaper"];
 }
 
@@ -31,15 +38,20 @@
 }
 
 - (void)prepareWithActivityItems:(NSArray *)activityItems {
-    URL = [activityItems objectAtIndex:0];
+    [submission release];
+    
+    submission = [[InstapaperSubmission alloc] initWithURL:[activityItems objectAtIndex:0]];
+    
+    [submission setLoginCompletion:^(BOOL loggedIn) {
+        [self activityDidFinish:YES];
+    }];
 }
 
 - (UIViewController *)activityViewController {
-    return [[InstapaperController sharedInstance] submitURL:URL];
+    return [submission submitFromController:nil];
 }
 
 - (void)performActivity {
-    [self activityViewController];
     [self activityDidFinish:YES];
 }
 

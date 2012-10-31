@@ -231,13 +231,15 @@
 - (void)succeed {
     [[self navigationItem] setRightBarButtonItem:nil];
     
-    if ([delegate respondsToSelector:@selector(loginControllerDidLogin:)])
+    if ([delegate respondsToSelector:@selector(loginControllerDidLogin:)]) {
         [delegate loginControllerDidLogin:self];
+    }
 }
 
 - (void)cancel {
-    if ([delegate respondsToSelector:@selector(loginControllerDidCancel:)])
+    if ([delegate respondsToSelector:@selector(loginControllerDidCancel:)]) {
         [delegate loginControllerDidCancel:self];
+    }
 }
 
 - (void)authenticate {

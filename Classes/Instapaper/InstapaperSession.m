@@ -42,7 +42,7 @@ static id currentSession = nil;
 }
 
 + (void)initialize {
-    // XXX: is it safe to use NSUserDefaults here?
+    // XXX: use the keychain!
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *username = [defaults objectForKey:@"instapaper-username"];
     NSString *password = [defaults objectForKey:@"instapaper-password"];
@@ -58,7 +58,7 @@ static id currentSession = nil;
 }
 
 - (BOOL)canAddItems {
-    return username != nil && [username length] > 0;
+    return (username != nil && [username length] > 0);
 }
 
 @end

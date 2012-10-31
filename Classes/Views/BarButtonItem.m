@@ -73,6 +73,21 @@
 
 @end
 
+@implementation UIPopoverController (BarButtonItem)
+
+- (void)presentPopoverFromBarButtonItemInWindow:(BarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated {
+    UIView *itemView = [item buttonView];
+    UIWindow *window = [itemView window];
+
+    UIView *superview = [itemView superview];
+    CGRect windowRect = [superview convertRect:[itemView frame] toView:nil];
+
+    [self presentPopoverFromRect:windowRect inView:window permittedArrowDirections:arrowDirections animated:animated];
+}
+
+@end
+
+
 @implementation UIActionSheet (BarButtonItem)
 
 - (void)showFromBarButtonItemInWindow:(BarButtonItem *)item animated:(BOOL)animated {
