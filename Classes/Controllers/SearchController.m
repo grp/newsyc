@@ -204,8 +204,10 @@
     UIViewController *parentController = [[self navigationController] topViewController];
     UINavigationItem *navigationItem = [parentController navigationItem];
 	[navigationItem setTitleView:searchBar];
-
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+        [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+    }
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
         [searchBar setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];

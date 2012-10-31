@@ -132,9 +132,12 @@
     isVisible = NO;
 }
 
-- (int)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    if (section == 1) return [super tableView:table numberOfRowsInSection:section] + 1;
-    else return [super tableView:table numberOfRowsInSection:section];
+- (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
+    if (section == 1) {
+        return [super tableView:table numberOfRowsInSection:section] + 1;
+    } else {
+        return [super tableView:table numberOfRowsInSection:section];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
