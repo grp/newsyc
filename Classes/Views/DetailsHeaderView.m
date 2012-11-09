@@ -10,8 +10,9 @@
 
 #import "DetailsHeaderView.h"
 
-#import "UIActionSheet+Context.h"
 #import "NSString+Entities.h"
+
+#import "SharingController.h"
 
 @implementation DetailsHeaderView
 @synthesize delegate, entry, highlighted;
@@ -217,7 +218,7 @@
     
     NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:NULL];
     
-    if (url != nil) {
+    if (url != nil && !navigationCancelled) {
         if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
             [delegate detailsHeaderView:self selectedURL:url];
         }
@@ -228,29 +229,18 @@
             [delegate detailsHeaderView:self selectedURL:[entry destination]];
         }
     }
-        
+
+    navigationCancelled = NO;
     [self setNeedsDisplay];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     [self setHighlighted:NO];
+    
+    navigationCancelled = NO;
     [self clearHighlightedRects];
     
     [self setNeedsDisplay];
-}
-
-- (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
-	if (index == [sheet cancelButtonIndex]) return;
-    
-    NSURL *url = [NSURL URLWithString:[sheet sheetContext]];
-	
-    if (index == [sheet firstOtherButtonIndex]) {
-        [[UIApplication sharedApplication] openURL:url];
-    } else if (index == [sheet firstOtherButtonIndex] + 1) {
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        [pasteboard setURL:url];
-        [pasteboard setString:[url absoluteString]];
-    }
 }
 
 - (void)longPressFromRecognizer:(UILongPressGestureRecognizer *)gesture {
@@ -262,21 +252,11 @@
         NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:&rects];
         
         if (url != nil && [rects count] > 0) {
-            UIActionSheet *action = [[[UIActionSheet alloc]
-                                      initWithTitle:[url absoluteString]
-                                      delegate:self
-                                      cancelButtonTitle:@"Cancel"
-                                      destructiveButtonTitle:nil
-                                      otherButtonTitles:@"Open in Safari", @"Copy Link", nil
-                                      ] autorelease];
-            
-            [action setSheetContext:[url absoluteString]];
+            SharingController *sharingController = [[SharingController alloc] initWithURL:url title:nil fromController:nil];
+            [sharingController showFromView:self atRect:CGRectInset(CGRectMake(location.x, location.y, 0, 0), -4.0f, -4.0f)];
+            [sharingController release];
 
-            if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-                [action showFromRect:CGRectInset(CGRectMake(location.x, location.y, 0, 0), -4.0f, -4.0f) inView:self animated:YES];
-            } else {
-                [action showInView:self];
-            }
+            navigationCancelled = YES;
         }
     }
 }

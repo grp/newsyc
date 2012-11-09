@@ -17,6 +17,7 @@
 - (id)initWithURL:(NSURL *)url title:(NSString *)title fromController:(UIViewController *)controller;
 
 - (void)showFromView:(UIView *)view;
+- (void)showFromView:(UIView *)view atRect:(CGRect)rect;
 - (void)showFromBarButtonItem:(BarButtonItem *)item;
 
 @end

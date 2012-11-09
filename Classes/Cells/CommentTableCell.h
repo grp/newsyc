@@ -12,7 +12,7 @@
 @protocol CommentTableCellDelegate;
 
 @class HNEntry;
-@interface CommentTableCell : TableViewCell <UIActionSheetDelegate> {
+@interface CommentTableCell : TableViewCell {
     HNEntry *comment;
     int indentationLevel;
     
@@ -27,6 +27,8 @@
     UITapGestureRecognizer *tapRecognizer;
     UITapGestureRecognizer *doubleTapRecognizer;
     UILongPressGestureRecognizer *linkLongPressRecognizer;
+
+    BOOL navigationCancelled;
 }
 
 @property (nonatomic, assign) id<CommentTableCellDelegate> delegate;

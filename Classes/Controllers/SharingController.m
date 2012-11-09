@@ -17,6 +17,8 @@
 #import "InstapaperSubmission.h"
 #import "InstapaperActivity.h"
 
+#import "OpenInSafariActivity.h"
+
 #import "BarButtonItem.h"
 
 @interface SharingController () <UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
@@ -45,14 +47,29 @@
     [super dealloc];
 }
 
-- (void)showFromView:(UIView *)view barButtonItem:(BarButtonItem *)item {
+- (void)showFromView:(UIView *)view barButtonItem:(BarButtonItem *)item atRect:(CGRect)rect {
+    if (isnan(rect.origin.x) || isnan(rect.origin.y) || isnan(rect.size.width) || isnan(rect.size.height)) {
+        rect = [view frame];
+    } else {
+        rect = [[view superview] convertRect:rect fromView:view];
+    }
+
+    if (controller == nil) {
+        controller = [[view window] rootViewController];
+    }
+
     if ([[self class] useNativeSharing]) {
         InstapaperActivity *instapaperActivity = [[InstapaperActivity alloc] init];
-        NSArray *activityItems = [NSArray arrayWithObjects:url, nil];
-        NSArray *applicationActivities = [NSArray arrayWithObjects:[instapaperActivity autorelease], nil];
+        OpenInSafariActivity *openInSafariActivity = [[OpenInSafariActivity alloc] init];
+        
+        NSArray *activityItems = [NSArray arrayWithObject:url];
+        NSArray *applicationActivities = [NSArray arrayWithObjects:instapaperActivity, openInSafariActivity, nil];
+
+        [instapaperActivity release];
+        [openInSafariActivity release];
 
         UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
-        [activityController setExcludedActivityTypes:[NSArray arrayWithObjects:UIActivityTypePrint, UIActivityTypeSaveToCameraRoll, nil]];
+        [activityController setExcludedActivityTypes:[NSArray arrayWithObjects:UIActivityTypePrint, UIActivityTypeSaveToCameraRoll, UIActivityTypeMessage, nil]];
 
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:activityController];
@@ -60,7 +77,7 @@
             if (item != nil) {
                 [popover presentPopoverFromBarButtonItemInWindow:item permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             } else if (view != nil) {
-                [popover presentPopoverFromRect:[view frame] inView:[view superview] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                [popover presentPopoverFromRect:rect inView:[view superview] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             } else {
                 NSAssert(NO, @"You must provide a view or a bar button item to a sharing controller.");
             }
@@ -89,7 +106,7 @@
         [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
 
         if (view != nil) {
-            [sheet showFromRect:[view frame] inView:[view superview] animated:YES];
+            [sheet showFromRect:rect inView:[view superview] animated:YES];
         } else {
             [sheet showFromBarButtonItemInWindow:item animated:YES];
         }
@@ -100,11 +117,15 @@
 }
 
 - (void)showFromView:(UIView *)view {
-    [self showFromView:view barButtonItem:nil];
+    [self showFromView:view barButtonItem:nil atRect:CGRectMake(NAN, NAN, NAN, NAN)];
+}
+
+- (void)showFromView:(UIView *)view atRect:(CGRect)rect {
+    [self showFromView:view barButtonItem:nil atRect:rect];
 }
 
 - (void)showFromBarButtonItem:(BarButtonItem *)item {
-    [self showFromView:nil barButtonItem:item];
+    [self showFromView:nil barButtonItem:item atRect:CGRectMake(NAN, NAN, NAN, NAN)];
 }
 
 #pragma mark - Sharing Implementations

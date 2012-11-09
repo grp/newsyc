@@ -12,7 +12,8 @@
 
 #import "NSString+Tags.h"
 #import "NSString+Entities.h"
-#import "UIActionSheet+Context.h"
+
+#import "SharingController.h"
 
 @implementation CommentTableCell
 @synthesize comment, indentationLevel, delegate, expanded;
@@ -315,7 +316,7 @@
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (highlightedRects != nil) {
+    if (highlightedRects != nil && !navigationCancelled) {
         UITouch *touch = [touches anyObject];
         CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
         
@@ -328,10 +329,12 @@
         }
     }
 
+    navigationCancelled = NO;
     [self clearHighlightedRects];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    navigationCancelled = NO;
     [self clearHighlightedRects];
 }
 
@@ -356,36 +359,12 @@
         NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyrect.size.width rects:&rects];
         
         if (url != nil && [rects count] > 0) {
-            UIActionSheet *action = [[[UIActionSheet alloc]
-                initWithTitle:[url absoluteString]
-                delegate:self
-                cancelButtonTitle:@"Cancel"
-                destructiveButtonTitle:nil
-                otherButtonTitles:@"Open in Safari", @"Copy Link", nil
-            ] autorelease];
-        
-            [action setSheetContext:[url absoluteString]];
-            
-            if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-                [action showFromRect:CGRectInset(CGRectMake(location.x, location.y, 0, 0), -4.0f, -4.0f) inView:self animated:YES];
-            } else {
-                [action showInView:self];
-            }
+            SharingController *sharingController = [[SharingController alloc] initWithURL:url title:nil fromController:nil];
+            [sharingController showFromView:self atRect:CGRectInset(CGRectMake(location.x, location.y, 0, 0), -4.0f, -4.0f)];
+            [sharingController release];
+
+            navigationCancelled = YES;
         }
-    }
-}
-
-- (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
-	if (index == [sheet cancelButtonIndex]) return;
-
-    NSURL *url = [NSURL URLWithString:[sheet sheetContext]];
-
-    if (index == [sheet firstOtherButtonIndex]) {
-        [[UIApplication sharedApplication] openURL:url];
-    } else if (index == [sheet firstOtherButtonIndex] + 1) {
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        [pasteboard setURL:url];
-        [pasteboard setString:[url absoluteString]];
     }
 }
 

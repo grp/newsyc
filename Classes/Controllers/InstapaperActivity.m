@@ -18,7 +18,7 @@
 }
 
 - (NSString *)activityType {
-    return @"Read Later";
+    return @"com.instapaper.instapaper.read-later";
 }
 
 - (NSString *)activityTitle {
@@ -26,11 +26,7 @@
 }
 
 - (UIImage *)activityImage {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return [UIImage imageNamed:@"instapaper-ipad"];
-    }
-
-    return [UIImage imageNamed:@"instapaper"];
+    return [UIImage imageNamed:@"instapaper.png"];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {

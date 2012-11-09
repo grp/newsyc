@@ -9,7 +9,7 @@
 @protocol DetailsHeaderViewDelegate;
 
 @class HNEntry;
-@interface DetailsHeaderView : UIView <UIActionSheetDelegate> {
+@interface DetailsHeaderView : UIView {
     HNEntry *entry;
     __weak id<DetailsHeaderViewDelegate> delegate;
 
@@ -17,6 +17,8 @@
     NSSet *highlightedRects;
     
     BOOL highlighted;
+
+    BOOL navigationCancelled;
 }
 
 @property (nonatomic, assign) id<DetailsHeaderViewDelegate> delegate;
