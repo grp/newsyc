@@ -23,6 +23,7 @@
 
 #import "BarButtonItem.h"
 
+
 @interface SharingController () <UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
 @end
 
@@ -70,7 +71,8 @@
 
         [instapaperActivity release];
         [openInSafariActivity release];
-
+        [pocketActivity release];
+        
         UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
         [activityController setExcludedActivityTypes:[NSArray arrayWithObjects:UIActivityTypePrint, UIActivityTypeSaveToCameraRoll, UIActivityTypeMessage, nil]];
 
@@ -165,6 +167,13 @@
     [submission release];
 }
 
+- (void)submitToPocket {
+    PocketSubmission *submission = [[PocketSubmission alloc] initWithURL:url];
+    [submission submitPocketRequest];
+    [submission release];
+}
+
+
 - (void)mailComposeController:(MFMailComposeViewController *)composeController didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
     [controller dismissModalViewControllerAnimated:YES];
     [self release];
@@ -181,6 +190,8 @@
         [self copyToPasteboard];
     } else if ((canSendMail && buttonIndex == 3) || (!canSendMail && buttonIndex == 2)) {
         [self submitToInstapaper];
+    } else if ((canSendMail && buttonIndex == 4) || (!canSendMail && buttonIndex == 3)) {
+        [self submitToPocket];
     }
 
     [self release];

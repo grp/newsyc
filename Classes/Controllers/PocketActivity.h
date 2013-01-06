@@ -7,12 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PocketAPI.h"
-#import "ProgressHUD.h"
+#import "PocketSubmission.h"
 
-@interface PocketActivity : UIActivity <PocketAPIDelegate> {
-    ProgressHUD *hud;
+
+@interface PocketActivity : UIActivity {
+    PocketSubmission *pocketSubmission;
 }
-
 
 @end

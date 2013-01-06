@@ -168,6 +168,7 @@
 		B73307D41699FB52000BF3DD /* pocket~ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B73307D01699FB52000BF3DD /* pocket~ipad@2x.png */; };
 		B73307D61699FB6F000BF3DD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B73307D51699FB6F000BF3DD /* Security.framework */; };
 		B73307D9169A2395000BF3DD /* PocketActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = B73307D81699FBC7000BF3DD /* PocketActivity.m */; };
+		B73307DC169A28F1000BF3DD /* PocketSubmission.m in Sources */ = {isa = PBXBuildFile; fileRef = B73307DB169A28F1000BF3DD /* PocketSubmission.m */; };
 		CBFCE7AD1398712F007A5DDD /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFCE7AB1398712F007A5DDD /* SearchController.m */; };
 		CBFCE7F613989054007A5DDD /* HNAPISearch.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFCE7F513989054007A5DDD /* HNAPISearch.m */; };
 		FA5F796B134CE04F002EEBCA /* InstapaperLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5F796A134CE04F002EEBCA /* InstapaperLoginController.m */; };
@@ -430,6 +431,8 @@
 		B73307D51699FB6F000BF3DD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		B73307D71699FBC7000BF3DD /* PocketActivity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PocketActivity.h; sourceTree = "<group>"; };
 		B73307D81699FBC7000BF3DD /* PocketActivity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PocketActivity.m; sourceTree = "<group>"; };
+		B73307DA169A28F1000BF3DD /* PocketSubmission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PocketSubmission.h; sourceTree = "<group>"; };
+		B73307DB169A28F1000BF3DD /* PocketSubmission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PocketSubmission.m; sourceTree = "<group>"; };
 		CBFCE7AA1398712F007A5DDD /* SearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchController.h; sourceTree = "<group>"; };
 		CBFCE7AB1398712F007A5DDD /* SearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchController.m; sourceTree = "<group>"; };
 		CBFCE7F413989054007A5DDD /* HNAPISearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNAPISearch.h; sourceTree = "<group>"; };
@@ -756,6 +759,8 @@
 				7DB809B914F8ACEF009668E6 /* SharingController.m */,
 				B73307D71699FBC7000BF3DD /* PocketActivity.h */,
 				B73307D81699FBC7000BF3DD /* PocketActivity.m */,
+				B73307DA169A28F1000BF3DD /* PocketSubmission.h */,
+				B73307DB169A28F1000BF3DD /* PocketSubmission.m */,
 			);
 			name = Sharing;
 			sourceTree = "<group>";
@@ -1142,6 +1147,7 @@
 				B73307CA1699FB31000BF3DD /* PocketAPIOperation.m in Sources */,
 				B73307CB1699FB31000BF3DD /* SFHFKeychainUtils.m in Sources */,
 				B73307D9169A2395000BF3DD /* PocketActivity.m in Sources */,
+				B73307DC169A28F1000BF3DD /* PocketSubmission.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
