@@ -19,7 +19,10 @@
 
 #import "OpenInSafariActivity.h"
 
+#import "PocketActivity.h"
+
 #import "BarButtonItem.h"
+
 
 @interface SharingController () <UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
 @end
@@ -61,13 +64,15 @@
     if ([[self class] useNativeSharing]) {
         InstapaperActivity *instapaperActivity = [[InstapaperActivity alloc] init];
         OpenInSafariActivity *openInSafariActivity = [[OpenInSafariActivity alloc] init];
+        PocketActivity *pocketActivity = [[PocketActivity alloc] init];
         
         NSArray *activityItems = [NSArray arrayWithObject:url];
-        NSArray *applicationActivities = [NSArray arrayWithObjects:instapaperActivity, openInSafariActivity, nil];
+        NSArray *applicationActivities = [NSArray arrayWithObjects:instapaperActivity, openInSafariActivity, pocketActivity, nil];
 
         [instapaperActivity release];
         [openInSafariActivity release];
-
+        [pocketActivity release];
+        
         UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
         [activityController setExcludedActivityTypes:[NSArray arrayWithObjects:UIActivityTypePrint, UIActivityTypeSaveToCameraRoll, UIActivityTypeMessage, nil]];
 
@@ -102,6 +107,7 @@
         if ([MFMailComposeViewController canSendMail]) [sheet addButtonWithTitle:@"Mail Link"];
         [sheet addButtonWithTitle:@"Copy Link"];
         [sheet addButtonWithTitle:@"Read Later"];
+        [sheet addButtonWithTitle:@"Pocket It"];
         [sheet addButtonWithTitle:@"Cancel"];
         [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
 
@@ -161,6 +167,13 @@
     [submission release];
 }
 
+- (void)submitToPocket {
+    PocketSubmission *submission = [[PocketSubmission alloc] initWithURL:url];
+    [submission submitPocketRequest];
+    [submission release];
+}
+
+
 - (void)mailComposeController:(MFMailComposeViewController *)composeController didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
     [controller dismissModalViewControllerAnimated:YES];
     [self release];
@@ -177,6 +190,8 @@
         [self copyToPasteboard];
     } else if ((canSendMail && buttonIndex == 3) || (!canSendMail && buttonIndex == 2)) {
         [self submitToInstapaper];
+    } else if ((canSendMail && buttonIndex == 4) || (!canSendMail && buttonIndex == 3)) {
+        [self submitToPocket];
     }
 
     [self release];
