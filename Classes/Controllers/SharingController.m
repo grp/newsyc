@@ -19,6 +19,8 @@
 
 #import "OpenInSafariActivity.h"
 
+#import "PocketActivity.h"
+
 #import "BarButtonItem.h"
 
 @interface SharingController () <UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
@@ -61,9 +63,10 @@
     if ([[self class] useNativeSharing]) {
         InstapaperActivity *instapaperActivity = [[InstapaperActivity alloc] init];
         OpenInSafariActivity *openInSafariActivity = [[OpenInSafariActivity alloc] init];
+        PocketActivity *pocketActivity = [[PocketActivity alloc] init];
         
         NSArray *activityItems = [NSArray arrayWithObject:url];
-        NSArray *applicationActivities = [NSArray arrayWithObjects:instapaperActivity, openInSafariActivity, nil];
+        NSArray *applicationActivities = [NSArray arrayWithObjects:instapaperActivity, openInSafariActivity, pocketActivity, nil];
 
         [instapaperActivity release];
         [openInSafariActivity release];
@@ -102,6 +105,7 @@
         if ([MFMailComposeViewController canSendMail]) [sheet addButtonWithTitle:@"Mail Link"];
         [sheet addButtonWithTitle:@"Copy Link"];
         [sheet addButtonWithTitle:@"Read Later"];
+        [sheet addButtonWithTitle:@"Pocket It"];
         [sheet addButtonWithTitle:@"Cancel"];
         [sheet setCancelButtonIndex:([sheet numberOfButtons] - 1)];
 
