@@ -29,7 +29,7 @@
 			<string>com.getpocket.sdk</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>pocketapp11364</string>
+				<string>YOUR_URL_SCHEME_HERE</string>
 			</array>
 		</dict>
 	</array>
