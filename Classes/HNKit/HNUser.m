@@ -34,13 +34,13 @@
     return [self objectWithIdentifier:identifier_];
 }
 
-- (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error {
-    if (error == nil) {
-        [self setAbout:[response objectForKey:@"about"]];
-        [self setKarma:[[response objectForKey:@"karma"] intValue]];
-        [self setAverage:[[response objectForKey:@"average"] floatValue]];
-        [self setCreated:[[response objectForKey:@"created"] stringByRemovingSuffix:@" ago"]];
-    }
+- (void)loadFromDictionary:(NSDictionary *)dictionary complete:(BOOL)complete {
+    [self setAbout:[dictionary objectForKey:@"about"]];
+    [self setKarma:[[dictionary objectForKey:@"karma"] intValue]];
+    [self setAverage:[[dictionary objectForKey:@"average"] floatValue]];
+    [self setCreated:[[dictionary objectForKey:@"created"] stringByRemovingSuffix:@" ago"]];
+
+    [super loadFromDictionary:dictionary complete:complete];
 }
 
 @end

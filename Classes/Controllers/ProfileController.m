@@ -105,7 +105,7 @@
 	if ([indexPath section] == 0 && [indexPath row] == 0 && [self hasAbout]) {
 		NSString *text = [self aboutText];
 		CGSize constraint = CGSizeMake([[self view] bounds].size.width - 40.0f, 4000.0f);
-		CGSize size = [text sizeWithFont:[UIFont systemFontOfSize:16.0] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+		CGSize size = [text sizeWithFont:[UIFont systemFontOfSize:16.0] constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
         size.height += 20.0f;
 		if (size.height >= 64.0f) return size.height;
 		else return 64.0;
@@ -123,7 +123,7 @@
             [[cell textLabel] setFont:[UIFont systemFontOfSize:16.0]];
             [[cell textLabel] setNumberOfLines:0];
         } else {
-            int row = [indexPath row] - ([self hasAbout] ? 1 : 0);
+            NSInteger row = [indexPath row] - ([self hasAbout] ? 1 : 0);
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:nil];
             
             if (row == 0) {

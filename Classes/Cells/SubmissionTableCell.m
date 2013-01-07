@@ -56,7 +56,7 @@
 }
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {
-    CGSize titlesize = [[entry title] sizeWithFont:[self titleFont] constrainedToSize:CGSizeMake(width - 16.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
+    CGSize titlesize = [[entry title] sizeWithFont:[self titleFont] constrainedToSize:CGSizeMake(width - 16.0f, 200.0f) lineBreakMode:NSLineBreakByWordWrapping];
     return titlesize.height + 45.0f;
 }
 
@@ -83,7 +83,7 @@
     [date drawAtPoint:CGPointMake(bounds.width - datewidth - offsets.width, offsets.height) withFont:[[self class] dateFont]];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor blackColor] set];
-    [title drawInRect:CGRectMake(offsets.width, offsets.height + 19.0f, bounds.width - (2 * offsets.width), bounds.height - 45.0f) withFont:[[self class] titleFont] lineBreakMode:UILineBreakModeWordWrap];
+    [title drawInRect:CGRectMake(offsets.width, offsets.height + 19.0f, bounds.width - (2 * offsets.width), bounds.height - 45.0f) withFont:[[self class] titleFont] lineBreakMode:NSLineBreakByWordWrapping];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor grayColor] set];
     CGRect pointsrect;
@@ -91,7 +91,7 @@
     pointsrect.size.width = (bounds.width / 2) * 1.1 - offsets.width * 2;
     pointsrect.size.width = floorf(pointsrect.size.width);
     pointsrect.origin = CGPointMake(offsets.width, bounds.height - offsets.height - pointsrect.size.height);
-    [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+    [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
     
     if (!([self isHighlighted] || [self isSelected])) [[UIColor lightGrayColor] set];
     CGRect siterect;
@@ -99,7 +99,7 @@
     siterect.size.width = (bounds.width / 2) * 0.9 - offsets.width * 2;
     siterect.size.width = floorf(siterect.size.width);
     siterect.origin = CGPointMake(bounds.width - offsets.width - siterect.size.width, bounds.height - offsets.height - siterect.size.height);
-    [site drawInRect:siterect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
+    [site drawInRect:siterect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingHead alignment:NSTextAlignmentRight];
 }
 
 - (void)dealloc {

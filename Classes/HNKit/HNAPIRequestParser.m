@@ -171,9 +171,9 @@ typedef enum {
             NSString *content = [element content];
             
             // XXX: is there any better way of doing this?
-            int start = [content rangeOfString:@"</a> "].location;
+            NSInteger start = [content rangeOfString:@"</a> "].location;
             if (start != NSNotFound) content = [content substringFromIndex:start + [@"</a> " length]];
-            int end = [content rangeOfString:@" ago"].location;
+            NSInteger end = [content rangeOfString:@" ago"].location;
             if (end != NSNotFound) date = [content substringToIndex:end];
             
             for (XMLElement *element2 in [element children]) {
@@ -185,13 +185,13 @@ typedef enum {
                         user = [content stringByRemovingHTMLTags];
                         user = [user stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                     } else if ([[element2 attributeWithName:@"href"] hasPrefix:@"item?id="]) {
-                        int end = [content rangeOfString:@" "].location;
+                        NSInteger end = [content rangeOfString:@" "].location;
                         if (end != NSNotFound) comments = [NSNumber numberWithInt:[[content substringToIndex:end] intValue]];
                         
                         identifier = [NSNumber numberWithInt:[[[element2 attributeWithName:@"href"] substringFromIndex:[@"item?id=" length]] intValue]];
                     }
                 } else if ([tag isEqual:@"span"]) {
-                    int end = [content rangeOfString:@" "].location;
+                    NSInteger end = [content rangeOfString:@" "].location;
                     if (end != NSNotFound) points = [NSNumber numberWithInt:[[content substringToIndex:end] intValue]];
                 }
             }
@@ -300,9 +300,9 @@ typedef enum {
                             NSString *content = [element3 content];
                             
                             // XXX: is there any better way of doing this?
-                            int start = [content rangeOfString:@"</a> "].location;
+                            NSInteger start = [content rangeOfString:@"</a> "].location;
                             if (start != NSNotFound) content = [content substringFromIndex:start + [@"</a> " length]];
-                            int end = [content rangeOfString:@" ago"].location;
+                            NSInteger end = [content rangeOfString:@" ago"].location;
                             if (end != NSNotFound) date = [content substringToIndex:end];
                             
                             for (XMLElement *element4 in [element3 children]) {
@@ -323,7 +323,7 @@ typedef enum {
                                         submission = [NSNumber numberWithInt:[[href substringFromIndex:[@"item?id=" length]] intValue]];
                                     }
                                 } else if ([tag isEqual:@"span"]) {
-                                    int end = [content rangeOfString:@" "].location;
+                                    NSInteger end = [content rangeOfString:@" "].location;
                                     if (end != NSNotFound) points = [NSNumber numberWithInt:[[content substringToIndex:end] intValue]];
                                 }
                             }
@@ -348,7 +348,7 @@ typedef enum {
             for (XMLElement *element2 in [element children]) {
                 if ([[element2 tagName] isEqual:@"img"] && [[element2 attributeWithName:@"src"] hasSuffix:@"://ycombinator.com/images/s.gif"]) {
                     // Yes, really: HN uses a 1x1 gif to indent comments. It's like 1999 all over again. :(
-                    int width = [[element2 attributeWithName:@"width"] intValue];
+                    NSInteger width = [[element2 attributeWithName:@"width"] intValue];
                     // Each comment is "indented" by setting the width to "depth * 40", so divide to get the depth.
                     depth = [NSNumber numberWithInt:(width / 40)];
                 }
@@ -407,7 +407,7 @@ typedef enum {
     
     NSString *moreToken = nil;
     
-    for (int i = 0; i < [comments count]; i++) {
+    for (NSInteger i = 0; i < [comments count]; i++) {
         XMLElement *element = [comments objectAtIndex:i];
         if ([[element content] length] == 0) continue;
         NSDictionary *comment = [self parseCommentWithElement:element];
@@ -448,7 +448,7 @@ typedef enum {
     NSString *moreToken = nil;
 
     // Three rows are used per submission.
-    for (int i = 0; i < [submissions count]; i += 3) {
+    for (NSInteger i = 0; i < [submissions count]; i += 3) {
         XMLElement *first = [submissions objectAtIndex:i];
         XMLElement *second = i + 1 < [submissions count] ? [submissions objectAtIndex:i + 1] : nil;
         XMLElement *third = i + 2 < [submissions count] ? [submissions objectAtIndex:i + 2] : nil;

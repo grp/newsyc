@@ -13,6 +13,19 @@
 @implementation HNContainer
 @synthesize entries, moreToken;
 
+- (void)loadFromDictionary:(NSDictionary *)dictionary complete:(BOOL)complete {
+    [self setMoreToken:[dictionary objectForKey:@"more"]];
+
+    [super loadFromDictionary:dictionary complete:complete];
+}
+
+- (void)loadMoreFromDictionary:(NSDictionary *)dictionary complete:(BOOL)complete {
+    NSArray *previousEntries = [[[self entries] retain] autorelease];
+    [self loadFromDictionary:dictionary complete:complete];
+    NSArray *combinedEntries = [previousEntries arrayByAddingObjectsFromArray:[self entries]];
+    [self setEntries:combinedEntries];
+}
+
 - (BOOL)isLoadingMore {
     return [self hasLoadingState:kHNContainerLoadingStateLoadingMore];
 }
@@ -26,27 +39,6 @@
     
     moreRequest = [[HNAPIRequest alloc] initWithTarget:self action:@selector(moreRequest:completedWithResponse:error:)];
     [moreRequest performRequestWithPath:@"x" parameters:parameters];
-}
-
-- (void)loadFromDictionary:(NSDictionary *)response entries:(NSArray **)outEntries {
-    return;
-}
-
-- (void)loadFromDictionary:(NSDictionary *)response {
-    [self loadFromDictionary:response entries:NULL];
-}
-
-- (void)loadFromDictionary:(NSDictionary *)response append:(BOOL)append {
-    NSArray *children = nil;
-    [self loadFromDictionary:response entries:&children];
-    
-    if (append) {
-        [self setEntries:[entries arrayByAddingObjectsFromArray:children]];
-    } else {
-        [self setEntries:children];
-    }
-    
-    [self setMoreToken:[response objectForKey:@"more"]];
 }
 
 - (void)cancelLoadingMore {
@@ -67,17 +59,11 @@
     moreRequest = nil;
     
     if (error == nil) {
-        [self loadFromDictionary:response append:YES];
-        
+        [self loadMoreFromDictionary:response complete:YES];
+
         [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectFinishedLoadingNotification object:self];
     } else {
         [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectFailedLoadingNotification object:self];
-    }
-}
-
-- (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error {
-    if (error == nil) {
-        [self loadFromDictionary:response append:NO];
     }
 }
 

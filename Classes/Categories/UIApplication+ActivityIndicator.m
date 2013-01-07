@@ -11,7 +11,7 @@
 @implementation UIApplication (ActivityIndicator)
 
 - (void)_updateNetworkActivityIndicator:(BOOL)visible {
-    static int count = 0;
+    static NSInteger count = 0;
     
     if (visible) count += 1;
     else count -= 1;

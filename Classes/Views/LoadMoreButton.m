@@ -21,7 +21,7 @@
         moreLabel = [[UILabel alloc] initWithFrame:[self bounds]];
         [moreLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         [moreLabel setText:@"Load More..."];
-        [moreLabel setTextAlignment:UITextAlignmentCenter];
+        [moreLabel setTextAlignment:NSTextAlignmentCenter];
         [moreLabel setTextColor:[UIColor grayColor]];
         [moreLabel setFont:[UIFont systemFontOfSize:17.0f]];
         [self addSubview:moreLabel];

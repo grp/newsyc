@@ -148,16 +148,8 @@
 - (void)dealloc {
     [loginCompletionBlock release];
     [composeItem release];
-    [lastSeen release];
     
     [super dealloc];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [lastSeen release];
-    lastSeen = [[NSDate date] retain];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -166,15 +158,6 @@
     // XXX: Fix iOS 6 bug with a tab bar controller in a navigation controller.
     [self setViewControllers:[self viewControllers]];
     [[self selectedViewController] setWantsFullScreenLayout:YES];
-
-    // XXX: Is 15 inutes the optimal time here?
-    if ([lastSeen timeIntervalSinceNow] < -(15 * 60)) {
-        [[home source] beginLoading];
-        [[latest source] beginLoading];
-    }
-
-    [lastSeen release];
-    lastSeen = [[NSDate date] retain];
 
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
       [[self tabBar] setSelectedImageTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];

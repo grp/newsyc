@@ -15,8 +15,8 @@
 
 @class HNUser;
 @interface HNEntry : HNContainer {
-    int points;
-    int children;
+    NSInteger points;
+    NSInteger children;
     HNUser *submitter;
     NSString *body;
     NSString *posted;
@@ -29,8 +29,8 @@
 #endif
 }
 
-@property (nonatomic, assign) int points;
-@property (nonatomic, assign) int children;
+@property (nonatomic, assign) NSInteger points;
+@property (nonatomic, assign) NSInteger children;
 @property (nonatomic, retain) HNUser *submitter;
 @property (nonatomic, copy) NSString *body;
 @property (nonatomic, retain) NSString *posted;
@@ -41,8 +41,6 @@
 #ifdef HNKIT_RENDERING_ENABLED
 @property (nonatomic, readonly) HNEntryBodyRenderer *renderer;
 #endif
-
-- (void)loadFromDictionary:(NSDictionary *)response entries:(NSArray **)outEntries withSubmission:(HNEntry *)submission_;
 
 - (BOOL)isComment;
 - (BOOL)isSubmission;

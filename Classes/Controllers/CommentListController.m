@@ -207,8 +207,8 @@
 }
 
 // XXX: this is really really slow :(
-- (int)depthOfEntry:(HNEntry *)entry {
-    int depth = 0;
+- (NSInteger)depthOfEntry:(HNEntry *)entry {
+    NSInteger depth = 0;
     
     HNEntry *parent = [entry parent];
     
@@ -507,7 +507,7 @@
     
     __block __typeof__(self) this = self;
     
-    savedCompletion = [^(int index) {
+    savedCompletion = [^(NSInteger index) {
         if (item == kEntryActionsViewItemReply) {
             EntryReplyComposeController *compose = [[EntryReplyComposeController alloc] initWithEntry:entry];
             [compose setDelegate:this];

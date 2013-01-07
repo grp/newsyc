@@ -19,7 +19,6 @@
     SessionProfileController *profile;
     MoreController *more;
     
-    NSDate *lastSeen;
     BarButtonItem *composeItem;
     
     void (^loginCompletionBlock)(void);

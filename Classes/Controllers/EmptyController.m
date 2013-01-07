@@ -37,7 +37,7 @@
     [emptyLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [emptyLabel setText:@"No Submission Selected"];
     [emptyLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
-    [emptyLabel setTextAlignment:UITextAlignmentCenter];
+    [emptyLabel setTextAlignment:NSTextAlignmentCenter];
     [emptyLabel setShadowColor:[UIColor whiteColor]];
     [emptyLabel setShadowOffset:CGSizeMake(0, 1)];
     [emptyLabel setBackgroundColor:[UIColor clearColor]];

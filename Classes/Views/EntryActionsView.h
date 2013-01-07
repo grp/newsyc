@@ -31,15 +31,15 @@ typedef enum {
     HNEntry *entry;
     __weak id<EntryActionsViewDelegate> delegate;
     
-    int upvoteLoading;
+    NSInteger upvoteLoading;
     BOOL upvoteDisabled;
-    int replyLoading;
+    NSInteger replyLoading;
     BOOL replyDisabled;
-    int flagLoading;
+    NSInteger flagLoading;
     BOOL flagDisabled;
-    int downvoteLoading;
+    NSInteger downvoteLoading;
     BOOL downvoteDisabled;
-    int actionsLoading;
+    NSInteger actionsLoading;
     BOOL actionsDisabled;
     
     EntryActionsViewStyle style;

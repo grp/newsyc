@@ -34,7 +34,7 @@
     [emptyLabel setTextColor:[UIColor grayColor]];
     [emptyLabel setBackgroundColor:[UIColor clearColor]];
     [emptyLabel setText:@"No Items"];
-    [emptyLabel setTextAlignment:UITextAlignmentCenter];
+    [emptyLabel setTextAlignment:NSTextAlignmentCenter];
     
     moreCell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [[moreCell button] addTarget:self action:@selector(loadMorePressed) forControlEvents:UIControlEventTouchUpInside];

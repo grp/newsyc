@@ -62,7 +62,7 @@
     [field setBackgroundColor:[UIColor clearColor]];
     [field setAutocorrectionType:UITextAutocorrectionTypeNo];
     [field setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [field setTextAlignment:UITextAlignmentLeft];
+    [field setTextAlignment:NSTextAlignmentLeft];
     [field setEnabled:YES];
     [field setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     return [field autorelease];
@@ -138,13 +138,13 @@
 		
     bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 15.0f)];
     [bottomLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
-    [bottomLabel setTextAlignment:UITextAlignmentCenter];
+    [bottomLabel setTextAlignment:NSTextAlignmentCenter];
     [bottomLabel setBackgroundColor:[UIColor clearColor]];
     [bottomLabel setFont:[UIFont systemFontOfSize:14.0f]];
     
     topLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 40.0f)];
     [topLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
-    [topLabel setTextAlignment:UITextAlignmentCenter];
+    [topLabel setTextAlignment:NSTextAlignmentCenter];
     [topLabel setBackgroundColor:[UIColor clearColor]];
     [topLabel setShadowColor:[UIColor clearColor]];
     [topLabel setShadowOffset:CGSizeMake(0, 1.0f)];

@@ -129,7 +129,7 @@
     [field setBackgroundColor:[UIColor whiteColor]];
     [field setAutocorrectionType:UITextAutocorrectionTypeNo];
     [field setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [field setTextAlignment:UITextAlignmentLeft];
+    [field setTextAlignment:NSTextAlignmentLeft];
     [field setEnabled:YES];
     
     CGSize label = [[[cell textLabel] text] sizeWithFont:[[cell textLabel] font]];

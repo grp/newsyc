@@ -56,7 +56,7 @@ typedef enum {
 
 - (NSDictionary *)infoDictionary;
 
-- (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error;
+- (void)loadFromDictionary:(NSDictionary *)dictionary complete:(BOOL)complete;
 
 - (void)setIsLoaded:(BOOL)loaded;
 - (BOOL)isLoaded;
