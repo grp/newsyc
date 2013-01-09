@@ -14,11 +14,15 @@
 @implementation ComposeController
 @synthesize delegate;
 
-- (id)init {
+- (id)initWithSession:(HNSession *)session_ {
     if ((self = [super init])) {
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+        session = [session_ retain];
+
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             [self setModalPresentationStyle:UIModalPresentationPageSheet];
+        }
     }
+    
     return self;
 }
 
@@ -287,6 +291,8 @@
     [textView release];
     [loadingItem release];
     [entryCells release];
+
+    [session release];
     
     [super dealloc];
 }

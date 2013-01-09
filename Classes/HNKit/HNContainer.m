@@ -37,7 +37,7 @@
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:moreToken forKey:@"fnid"];
     
-    moreRequest = [[HNAPIRequest alloc] initWithTarget:self action:@selector(moreRequest:completedWithResponse:error:)];
+    moreRequest = [[HNAPIRequest alloc] initWithSession:session target:self action:@selector(moreRequest:completedWithResponse:error:)];
     [moreRequest performRequestWithPath:@"x" parameters:parameters];
 }
 

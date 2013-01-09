@@ -20,12 +20,23 @@
 
 @implementation HNAnonymousSession
 
+- (id)init {
+    if ((self = [super initWithUsername:nil password:nil token:nil])) {
+    }
+
+    return self;
+}
+
 - (void)performSubmission:(HNSubmission *)submission target:(id)target action:(SEL)action {
     [target performSelector:action withObject:nil withObject:[NSNumber numberWithBool:NO]];
 }
 
 - (BOOL)isAnonymous {
     return YES;
+}
+
+- (NSString *)identifier {
+    return @"HNKit-HNAnonymousSession";
 }
 
 - (void)reloadToken {

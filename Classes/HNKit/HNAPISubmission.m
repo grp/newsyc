@@ -23,8 +23,9 @@
     [super dealloc];
 }
 
-- (id)initWithSubmission:(HNSubmission *)submission_ {
+- (id)initWithSession:(HNSession *)session_ submission:(HNSubmission *)submission_ {
     if ((self = [super init])) {
+        session = session_;
         submission = [submission_ retain];
         loadingState = kHNAPISubmissionLoadingStateReady;
     }
@@ -55,7 +56,7 @@
         [document autorelease];
         
         NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-        [[HNSession currentSession] addCookiesToRequest:request];
+        [session addCookiesToRequest:request];
         
         if ([submission type] == kHNSubmissionTypeSubmission) {
             XMLElement *element = [document firstElementMatchingPath:@"//input[@name='fnid']"];
@@ -152,7 +153,7 @@
     }
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [[HNSession currentSession] addCookiesToRequest:request];
+    [session addCookiesToRequest:request];
     
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];

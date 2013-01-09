@@ -11,20 +11,27 @@
 
 @class HNEntry;
 
+@interface HNAPISearch () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@end
+
 @implementation HNAPISearch
 
 @synthesize entries;
 @synthesize responseData;
 @synthesize searchType;
+@synthesize session;
 
-- (id)init {
+- (id)initWithSession:(HNSession *)session_ {
 	if (self = [super init]) {
-		self.searchType = kHNSearchTypeInteresting;
+        session = session_;
+		[self setSearchType:kHNSearchTypeInteresting];
 	}
+    
 	return self;
 }
 
-#pragma mark NSURLConnection delegate methods
+#pragma mark NSURLConnectionDelegate
+
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 	[responseData setLength:0];
 }
@@ -62,7 +69,7 @@
     
 	for (NSDictionary *result in rawResults) {
 		NSDictionary *item = [self itemFromRaw:[result objectForKey:@"item"]];
-		HNEntry *entry = [HNEntry entryWithIdentifier:[item objectForKey:@"identifier"]];
+		HNEntry *entry = [HNEntry session:session entryWithIdentifier:[item objectForKey:@"identifier"]];
 
         [entry loadFromDictionary:item complete:NO];
 		[entries addObject:entry];

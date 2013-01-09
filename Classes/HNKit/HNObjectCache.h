@@ -8,13 +8,19 @@
 
 #import "HNObject.h"
 
-@interface HNObjectCache : NSObject
+@interface HNObjectCache : NSObject {
+    HNSession *session;
+    NSMutableDictionary *cacheDictionary;
+}
 
-+ (BOOL)cacheHasObject:(HNObject *)object;
-+ (void)addObjectToCache:(HNObject *)object_;
-+ (HNObject *)objectFromCacheWithClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
+- (id)initWithSession:(HNSession *)session_;
 
-+ (void)updateObjectFromPersistentCache:(HNObject *)object;
-+ (void)savePersistentCacheDictionary:(NSDictionary *)dict forObject:(HNObject *)object;
+- (BOOL)cacheHasObject:(HNObject *)object;
+- (void)addObjectToCache:(HNObject *)object_;
+- (HNObject *)objectFromCacheWithClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
+
+- (void)createPersistentCache;
+- (void)updateObjectFromPersistentCache:(HNObject *)object;
+- (void)savePersistentCacheDictionary:(NSDictionary *)dict forObject:(HNObject *)object;
 
 @end

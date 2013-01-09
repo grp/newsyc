@@ -8,68 +8,55 @@
 
 #import "HNKit.h"
 #import "HNSession.h"
+#import "HNObjectCache.h"
 #import "HNAPISubmission.h"
 #import "HNSubmission.h"
 #import "HNAnonymousSession.h"
 
-static HNSession *current = nil;
-
 @implementation HNSession
-@synthesize user, token, loaded, password;
-
-+ (HNSession *)currentSession {
-    return current;
-}
-
-+ (void)setCurrentSession:(HNSession *)session {
-    [current autorelease];
-    current = [session retain];
-    
-    if (session != nil) {
-        [[NSUserDefaults standardUserDefaults] setObject:[session token] forKey:@"HNKit:SessionToken"];
-        [[NSUserDefaults standardUserDefaults] setObject:[[session user] identifier] forKey:@"HNKit:SessionName"];
-        [[NSUserDefaults standardUserDefaults] setObject:[session password] forKey:@"HNKit:SessionPassword"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        [[session user] beginLoading];
-    } else {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HNKit:SessionToken"];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HNKit:SessionName"];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HNKit:SessionPassword"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        HNSession *session = [[HNAnonymousSession alloc] init];
-        [self setCurrentSession:[session autorelease]];
-    }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kHNSessionChangedNotification object:[self currentSession]];
-}
-
-+ (void)initialize {
-    // XXX: is it safe to use NSUserDefaults here?
-    HNSessionToken token = (HNSessionToken) [[NSUserDefaults standardUserDefaults] objectForKey:@"HNKit:SessionToken"];
-    NSString *password = [[NSUserDefaults standardUserDefaults] objectForKey:@"HNKit:SessionPassword"];
-    NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"HNKit:SessionName"];
-    
-    if (name != nil && token != nil) {
-        HNSession *session = [[HNSession alloc] initWithUsername:name password:password token:token];
-        [self setCurrentSession:[session autorelease]];
-    } else {
-        [self setCurrentSession:nil];
-    }
-}
+@synthesize user, token, loaded, password, cache;
 
 - (id)initWithUsername:(NSString *)username password:(NSString *)password_ token:(NSString *)token_ {
     if ((self = [super init])) {
-        HNUser *user_ = [HNUser userWithIdentifier:username];
+        cache = [[HNObjectCache alloc] initWithSession:self];
+
+        HNUser *user_ = [HNUser session:self userWithIdentifier:username];
         
         [self setUser:user_];
         [self setToken:token_];
         [self setPassword:password_];
         [self setLoaded:YES];
+
+        [cache createPersistentCache];
     }
-    
+
     return self;
+}
+
+- (id)initWithSessionDictionary:(NSDictionary *)sessionDictionary {
+    HNSessionToken token_ = (HNSessionToken) [sessionDictionary objectForKey:@"HNKit:HNSession:Token"];
+    NSString *password_ = [sessionDictionary objectForKey:@"HNKit:HNSession:Password"];
+    NSString *name_ = [sessionDictionary objectForKey:@"HNKit:HNSession:Identifier"];
+
+    return [self initWithUsername:name_ password:password_ token:token_];
+}
+
+- (NSDictionary *)sessionDictionary {
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+        token, @"HNKit:HNSession:Token",
+        password, @"HNKit:HNSession:Password",
+        [self identifier], @"HNKit:HNSession:Identifier",
+    nil];
+}
+
+- (NSString *)identifier {
+    return [[self user] identifier];
+}
+
+- (void)dealloc {
+    [cache release];
+
+    [super dealloc];
 }
 
 - (void)sessionAuthenticatorDidRecieveFailure:(HNSessionAuthenticator *)authenticator_ {
@@ -94,7 +81,7 @@ static HNSession *current = nil;
 }
 
 - (void)performSubmission:(HNSubmission *)submission {
-    HNAPISubmission *api = [[HNAPISubmission alloc] initWithSubmission:submission];
+    HNAPISubmission *api = [[HNAPISubmission alloc] initWithSession:self submission:submission];
     [api performSubmission];
     [api autorelease];
 }

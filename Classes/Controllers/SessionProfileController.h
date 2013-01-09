@@ -13,12 +13,6 @@
 
 #import "BarButtonItem.h"
 
-@interface SessionProfileController : ProfileController <LoginControllerDelegate, UIActionSheetDelegate> {
-    UIView *loginContainer;
-    UIButton *loginButton;
-    UIImageView *loginImage;
-    BarButtonItem *logoutItem;
-    BOOL isVisible;
-}
+@interface SessionProfileController : ProfileController
 
 @end

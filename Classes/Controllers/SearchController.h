@@ -10,15 +10,20 @@
 @class LoadingIndicatorView;
 
 @interface SearchController : UIViewController <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
+    HNSession *session;
+    HNAPISearch *searchAPI;
+    NSMutableArray *entries;
+
     UISearchBar *searchBar;
+    UIView *coloredView;
     UISegmentedControl *facetControl;
+    
 	UITableView *tableView;
 	UILabel *emptyResultsView;
-    UIView *coloredView;
     LoadingIndicatorView *indicator;
 	BOOL searchPerformed;
-	HNAPISearch *searchAPI;
-	NSMutableArray *entries;
 }
+
+- (id)initWithSession:(HNSession *)session_;
 
 @end

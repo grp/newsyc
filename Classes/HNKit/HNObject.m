@@ -11,10 +11,17 @@
 
 #import "HNKit.h"
 #import "HNObject.h"
+#import "HNSession.h"
 #import "HNObjectCache.h"
 
+@interface HNObject ()
+
+@property (nonatomic, assign, readwrite) HNSession *session;
+
+@end
+
 @implementation HNObject
-@synthesize identifier, URL=url;
+@synthesize identifier=identifier, URL=url, session=session;
 @synthesize loadingState;
 
 + (BOOL)isValidURL:(NSURL *)url_ {
@@ -47,39 +54,40 @@
     return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", [kHNWebsiteURL absoluteString], path, [parameters queryString]]];
 }
 
-+ (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info URL:(NSURL *)url_ {
-    HNObject *object = [HNObjectCache objectFromCacheWithClass:self identifier:identifier_ infoDictionary:info];
++ (id)session:(HNSession *)session objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info URL:(NSURL *)url_ {
+    HNObjectCache *cache = [session cache];
+    HNObject *object = [cache objectFromCacheWithClass:self identifier:identifier_ infoDictionary:info];
 
     if (object == nil) {
         object = [[[self alloc] init] autorelease];
+        [object setSession:session];
     }
 
     if (url_ != nil) {
         [object setURL:url_];
         [object setIdentifier:identifier_];
-
         [object loadInfoDictionary:info];
 
-        if (![HNObjectCache cacheHasObject:object]) {
-            [HNObjectCache addObjectToCache:object];
+        if (![cache cacheHasObject:object]) {
+            [cache addObjectToCache:object];
         }
     }
 
     return object;
 }
 
-+ (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
-    return [self objectWithIdentifier:identifier_ infoDictionary:info URL:[[self class] generateURLWithIdentifier:identifier_ infoDictionary:info]];
++ (id)session:(HNSession *)session objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+    return [self session:session objectWithIdentifier:identifier_ infoDictionary:info URL:[[self class] generateURLWithIdentifier:identifier_ infoDictionary:info]];
 }
 
-+ (id)objectWithIdentifier:(id)identifier_ {
-    return [self objectWithIdentifier:identifier_ infoDictionary:nil];
++ (id)session:(HNSession *)session objectWithIdentifier:(id)identifier_ {
+    return [self session:session objectWithIdentifier:identifier_ infoDictionary:nil];
 }
 
-+ (id)objectWithURL:(NSURL *)url_ {
++ (id)session:(HNSession *)session objectWithURL:(NSURL *)url_ {
     id identifier_ = [self identifierForURL:url_];
     NSDictionary *info = [self infoDictionaryForURL:url_];
-    return [self objectWithIdentifier:identifier_ infoDictionary:info URL:url_];
+    return [self session:session objectWithIdentifier:identifier_ infoDictionary:info URL:url_];
 }
 
 + (NSString *)pathWithIdentifier:(id)identifier {
@@ -155,7 +163,8 @@
             
 - (void)loadFromDictionary:(NSDictionary *)dictionary complete:(BOOL)complete {
     if (complete) {
-        [HNObjectCache savePersistentCacheDictionary:dictionary forObject:self];
+        HNObjectCache *cache = [session cache];
+        [cache savePersistentCacheDictionary:dictionary forObject:self];
         [self setIsLoaded:YES];
     }
 }
@@ -185,7 +194,8 @@
 }
 
 - (void)beginLoadingWithState:(HNObjectLoadingState)state_ {
-    [HNObjectCache updateObjectFromPersistentCache:self];
+    HNObjectCache *cache = [session cache];
+    [cache updateObjectFromPersistentCache:self];
 
     [self addLoadingState:state_];
     
@@ -193,7 +203,7 @@
     NSDictionary *parameters = [[self class] parametersForURLWithIdentifier:identifier infoDictionary:info];
     NSString *path = [[self class] pathForURLWithIdentifier:identifier infoDictionary:info];
     
-    apiRequest = [[HNAPIRequest alloc] initWithTarget:self action:@selector(request:completedWithResponse:error:)];
+    apiRequest = [[HNAPIRequest alloc] initWithSession:session target:self action:@selector(request:completedWithResponse:error:)];
     [apiRequest performRequestWithPath:path parameters:parameters];
 }
 

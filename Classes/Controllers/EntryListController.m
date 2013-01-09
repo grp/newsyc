@@ -51,6 +51,8 @@
 }
 
 - (void)viewDidUnload {
+    [super viewDidUnload];
+
     [emptyLabel release];
     emptyLabel = nil;
     [pullToRefreshView release];
@@ -59,8 +61,6 @@
     tableView = nil;
     [moreCell release];
     moreCell = nil;
-    
-    [super viewDidUnload];
 }
 
 - (void)dealloc {

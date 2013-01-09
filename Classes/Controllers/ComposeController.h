@@ -15,6 +15,8 @@
 @class PlaceholderTextView;
 
 @interface ComposeController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate> {
+    HNSession *session;
+
     UITableView *tableView;
     NSArray *entryCells;
     PlaceholderTextView *textView;
@@ -26,6 +28,8 @@
 }
 
 @property (nonatomic, assign) id<ComposeControllerDelegate> delegate;
+
+- (id)initWithSession:(HNSession *)session_;
 
 - (UITableViewCell *)generateTextFieldCell;
 - (UITextField *)generateTextFieldForCell:(UITableViewCell *)cell;

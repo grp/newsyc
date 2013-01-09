@@ -22,6 +22,6 @@
 @property (nonatomic, copy) NSString *created;
 @property (nonatomic, copy) NSString *about;
 
-+ (id)userWithIdentifier:(id)identifier_;
++ (id)session:(HNSession *)session userWithIdentifier:(id)identifier_;
 
 @end

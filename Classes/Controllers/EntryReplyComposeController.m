@@ -62,7 +62,7 @@
         HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeReply];
         [submission setBody:[textView text]];
         [submission setTarget:entry];
-        [[HNSession currentSession] performSubmission:submission];
+        [session performSubmission:submission];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replySucceededWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyFailedWithNotification:) name:kHNSubmissionFailureNotification object:submission];
         [submission release];

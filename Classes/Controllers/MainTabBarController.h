@@ -10,9 +10,11 @@
 
 #import "LoginController.h"
 
-@class EntryListController, SessionProfileController, MoreController, SearchController;
+@class EntryListController, SessionProfileController, MoreController, SearchController, HNSession;
 
-@interface MainTabBarController : UITabBarController <UIActionSheetDelegate, LoginControllerDelegate, UITabBarControllerDelegate> {
+@interface MainTabBarController : UITabBarController <UIActionSheetDelegate, UITabBarControllerDelegate> {
+    HNSession *session;
+
     EntryListController *home;
     EntryListController *latest;
 	SearchController *search;
@@ -20,8 +22,8 @@
     MoreController *more;
     
     BarButtonItem *composeItem;
-    
-    void (^loginCompletionBlock)(void);
 }
+
+- (id)initWithSession:(HNSession *)session_;
 
 @end

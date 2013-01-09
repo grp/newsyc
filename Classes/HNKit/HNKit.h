@@ -10,7 +10,7 @@
 // which has the singular purpose of scraping Hacker News.
 //
 // HNKit depends on the files in the "XML" directory, as
-// well as few files in the "Categories" folder as well.
+// well as few files in the "Categories" folder.
 
 #import "HNShared.h"
 
@@ -24,6 +24,7 @@
 // sessions
 #import "HNSession.h"
 #import "HNAnonymousSession.h"
+#import "HNSessionController.h"
 #import "HNSessionAuthenticator.h"
 #import "HNSubmission.h"
 

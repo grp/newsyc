@@ -27,6 +27,7 @@ typedef enum {
 
 @class HNAPIRequest, HNSession;
 @interface HNObject : NSObject {
+    HNSession *session;
     id identifier;
     NSURL *url;
 
@@ -35,6 +36,7 @@ typedef enum {
     HNAPIRequest *apiRequest;
 }
 
+@property (nonatomic, assign, readonly) HNSession *session;
 @property (nonatomic, copy) id identifier;
 @property (nonatomic, copy) NSURL *URL;
 @property (nonatomic, readonly) HNObjectLoadingState loadingState;
@@ -49,10 +51,10 @@ typedef enum {
 
 // These methods don't necessarily create a new instance if it's already in the
 // cache. The cache's keyed on (class, identifier, info) tuples inside HNObject.
-+ (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info URL:(NSURL *)url_;
-+ (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
-+ (id)objectWithIdentifier:(id)identifier_;
-+ (id)objectWithURL:(NSURL *)url_;
++ (id)session:(HNSession *)session objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info URL:(NSURL *)url_;
++ (id)session:(HNSession *)session objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
++ (id)session:(HNSession *)session objectWithIdentifier:(id)identifier_;
++ (id)session:(HNSession *)session objectWithURL:(NSURL *)url_;
 
 - (NSDictionary *)infoDictionary;
 

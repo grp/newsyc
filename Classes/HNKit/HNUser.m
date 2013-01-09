@@ -30,8 +30,8 @@
     else return [NSDictionary dictionary];
 }
 
-+ (id)userWithIdentifier:(id)identifier_ {
-    return [self objectWithIdentifier:identifier_];
++ (id)session:(HNSession *)session userWithIdentifier:(id)identifier_ {
+    return [self session:session objectWithIdentifier:identifier_];
 }
 
 - (void)loadFromDictionary:(NSDictionary *)dictionary complete:(BOOL)complete {

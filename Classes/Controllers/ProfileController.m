@@ -165,7 +165,7 @@
             controllerClass = [CommentListController class];
         }
         
-        HNEntryList *list = [HNEntryList entryListWithIdentifier:type user:(HNUser *) source];
+        HNEntryList *list = [HNEntryList session:[source session] entryListWithIdentifier:type user:(HNUser *) source];
         
         UIViewController *controller = [[controllerClass alloc] initWithSource:list];
         [controller setTitle:title];

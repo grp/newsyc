@@ -26,34 +26,42 @@
 
 @implementation MainTabBarController
 
-- (id)init {
+- (id)initWithSession:(HNSession *)session_ {
     if ((self = [super init])) {
-        HNEntryList *homeList = [HNEntryList entryListWithIdentifier:kHNEntryListIdentifierSubmissions];
+        session = [session_ retain];
+
+        if (![session isAnonymous]) {
+            [self setTitle:[[session user] identifier]];
+        } else {
+            [self setTitle:@"Hacker News"];
+        }
+
+        HNEntryList *homeList = [HNEntryList session:session entryListWithIdentifier:kHNEntryListIdentifierSubmissions];
         home = [[[SubmissionListController alloc] initWithSource:homeList] autorelease];
         [home setTitle:@"Hacker News"];
         [home setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Home" image:[UIImage imageNamed:@"home.png"] tag:0] autorelease]];
         
-        HNEntryList *newList = [HNEntryList entryListWithIdentifier:kHNEntryListIdentifierNewSubmissions];
+        HNEntryList *newList = [HNEntryList session:session entryListWithIdentifier:kHNEntryListIdentifierNewSubmissions];
         latest = [[[SubmissionListController alloc] initWithSource:newList] autorelease];
         [latest setTitle:@"New Submissions"];
         [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"New" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
     
 #ifdef ENABLE_TIMELINE
-        HNEntryList *newList = [HNTimeline timelineForSession:[HNSession currentSession]];
+        HNEntryList *newList = [HNTimeline timelineForSession:session];
         latest = [[[CommentListController alloc] initWithSource:newList] autorelease];
         [latest setTitle:@"Timeline"];
         [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Timeline" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
 #endif
 
-        profile = [[[SessionProfileController alloc] initWithSource:nil] autorelease];
+        profile = [[[SessionProfileController alloc] initWithSource:[session user]] autorelease];
         [profile setTitle:@"Profile"];
         [profile setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"person.png"] tag:0] autorelease]];
 
-        search = [[[SearchController alloc] init] autorelease];
+        search = [[[SearchController alloc] initWithSession:session] autorelease];
         [search setTitle:@"Search"];
         [search setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:0] autorelease]];
 
-        more = [[[MoreController alloc] init] autorelease];
+        more = [[[MoreController alloc] initWithSession:session] autorelease];
         [more setTitle:@"More"];
         [more setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:0] autorelease]];
 
@@ -72,13 +80,18 @@
         
         NavigationController *navigation = [[NavigationController alloc] init];
         ComposeController *compose = nil;
+        
         if (index == 0) {
             compose = [[SubmissionURLComposeController alloc] init];
         } else {
             compose = [[SubmissionTextComposeController alloc] init];
         }
-        [navigation setViewControllers:[NSArray arrayWithObject:[compose autorelease]]];
-        [self presentModalViewController:[navigation autorelease] animated:YES];
+        
+        [navigation setViewControllers:[NSArray arrayWithObject:compose]];
+        [self presentModalViewController:navigation animated:YES];
+
+        [navigation release];
+        [compose release];
     }
 }
 
@@ -96,37 +109,10 @@
     [sheet release];
 }
 
-- (void)loginControllerDidLogin:(LoginController *)controller {
-    [self dismissModalViewControllerAnimated:YES];
-    
-    loginCompletionBlock();
-    
-    [loginCompletionBlock release];
-    loginCompletionBlock = nil;
-}
-
-- (void)loginControllerDidCancel:(LoginController *)controller {
-    [self dismissModalViewControllerAnimated:YES];
-    
-    [loginCompletionBlock release];
-    loginCompletionBlock = nil;
-}
-
-- (void)showLoginController {
-    LoginController *login = [[HackerNewsLoginController alloc] init];
-    [login setDelegate:self];
-    NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:[login autorelease]];
-    [self presentModalViewController:[navigation autorelease] animated:YES];
-}
-
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
-    if (viewController == profile && [[HNSession currentSession] isAnonymous]) {
-        loginCompletionBlock = [^{
-            [self setSelectedViewController:profile];
-        } copy];
-        
-		[self showLoginController];
-        
+    if (viewController == profile && [session isAnonymous]) {
+        [[self navigationController] requestLogin];
+
         return NO;
 	}
     
@@ -134,20 +120,16 @@
 }
 
 - (void)composePressed {
-    if (![[HNSession currentSession] isAnonymous]) {
+    if (![session isAnonymous]) {
         [self requestSubmissionType];
     } else {
-        loginCompletionBlock = [^{
-            [self requestSubmissionType];
-        } copy];
-        
-        [self showLoginController];
+        [[self navigationController] requestLogin];
     }
 }
 
 - (void)dealloc {
-    [loginCompletionBlock release];
     [composeItem release];
+    [session release];
     
     [super dealloc];
 }

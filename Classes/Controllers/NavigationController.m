@@ -8,7 +8,11 @@
 
 #import "NavigationController.h"
 
+#import "LoginController.h"
+#import "HackerNewsLoginController.h"
+
 @implementation NavigationController
+@synthesize loginDelegate;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,6 +47,16 @@
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+    if (loginDelegatePendingSession != nil) {
+        [loginDelegate navigationController:self didLoginWithSession:loginDelegatePendingSession];
+        [loginDelegatePendingSession release];
+        loginDelegatePendingSession = nil;
+    }
+}
+
 // Why this isn't delegated by UIKit to the top view controller, I have no clue.
 // This, however, should unobstrusively add that delegation.
 - (UIModalPresentationStyle)modalPresentationStyle {
@@ -56,6 +70,28 @@
         return style;
     }
 }
+
+- (void)loginControllerDidLogin:(HackerNewsLoginController *)controller {
+    [self dismissModalViewControllerAnimated:YES];
+
+    loginDelegatePendingSession = [[controller session] retain];
+}
+
+- (void)loginControllerDidCancel:(HackerNewsLoginController *)controller {
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)requestLogin {
+    LoginController *login = [[HackerNewsLoginController alloc] init];
+    [login setDelegate:self];
+
+    NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:login];
+    [self presentModalViewController:navigation animated:YES];
+
+    [navigation release];
+    [login release];
+}
+
 
 AUTOROTATION_FOR_PAD_ONLY
 

@@ -8,6 +8,30 @@
 
 // An orange navigation controller. Sometimes.
 
-@interface NavigationController : UINavigationController
+#import "LoginController.h"
+#import "HackerNewsLoginController.h"
+
+@protocol NavigationControllerLoginDelegate;
+
+@interface NavigationController : UINavigationController <LoginControllerDelegate> {
+    id<NavigationControllerLoginDelegate> loginDelegate;
+    HNSession *loginDelegatePendingSession;
+}
+
+@property (nonatomic, assign) id<NavigationControllerLoginDelegate> loginDelegate;
+- (void)requestLogin;
+
+@end
+
+@interface UINavigationController (DefinedPropertyAdditionsSupport)
+
+@property (nonatomic, assign) id<NavigationControllerLoginDelegate> loginDelegate;
+- (void)requestLogin;
+
+@end
+
+@protocol NavigationControllerLoginDelegate <NSObject>
+
+- (void)navigationController:(NavigationController *)navigationController didLoginWithSession:(HNSession *)session;
 
 @end

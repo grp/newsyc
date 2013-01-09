@@ -110,7 +110,7 @@
     UIImage *disclosure = [[self class] disclosureImage];
     
     // Re-enable this for everyone if comment score viewing is re-enabled.
-    if ([entry submitter] == [[HNSession currentSession] user] || [entry isSubmission]) {
+    if ([entry submitter] == [[entry session] user] || [entry isSubmission]) {
         pointdate = [NSString stringWithFormat:@"%@ • %@", points, date];
     } else {
         pointdate = [NSString stringWithFormat:@"%@", date];

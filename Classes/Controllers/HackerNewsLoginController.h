@@ -9,6 +9,10 @@
 #import "HNKit.h"
 #import "LoginController.h"
 
-@interface HackerNewsLoginController : LoginController <HNSessionAuthenticatorDelegate>
+@interface HackerNewsLoginController : LoginController <HNSessionAuthenticatorDelegate> {
+    HNSession *session;
+}
+
+@property (nonatomic, retain, readonly) HNSession *session;
 
 @end

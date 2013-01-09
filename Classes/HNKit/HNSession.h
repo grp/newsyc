@@ -9,15 +9,14 @@
 #import "HNKit.h"
 #import "HNSessionAuthenticator.h"
 
-#define kHNSessionChangedNotification @"HNSessionChanged"
-
-@class HNUser, HNEntry, HNSubmission;
+@class HNUser, HNEntry, HNSubmission, HNObjectCache;
 @interface HNSession : NSObject <HNSessionAuthenticatorDelegate> {
     BOOL loaded;
     HNSessionToken token;
     HNUser *user;
     NSString *password;
     HNSessionAuthenticator *authenticator;
+    HNObjectCache *cache;
     
     NSDictionary *pool;
 }
@@ -26,11 +25,13 @@
 @property (nonatomic, retain) HNUser *user;
 @property (nonatomic, copy) NSString *token;
 @property (nonatomic, assign, getter=isLoaded) BOOL loaded;
-
-+ (HNSession *)currentSession;
-+ (void)setCurrentSession:(HNSession *)session;
+@property (nonatomic, retain, readonly) NSString *identifier;
+@property (nonatomic, retain, readonly) HNObjectCache *cache;
 
 - (id)initWithUsername:(NSString *)username password:(NSString *)password token:(HNSessionToken)token;
+- (id)initWithSessionDictionary:(NSDictionary *)sessionDictionary;
+
+- (NSDictionary *)sessionDictionary;
 
 - (void)performSubmission:(HNSubmission *)submission;
 - (void)reloadToken;

@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 #import "SplitViewController.h"
 #import "NavigationController.h"
+#import "SessionListController.h"
 #import "MainTabBarController.h"
 
 #import "SubmissionListController.h"
@@ -34,6 +35,7 @@
 
 - (BOOL)controllerBelongsOnLeft:(UIViewController *)controller {
     return [controller isKindOfClass:[MainTabBarController class]]
+        || [controller isKindOfClass:[SessionListController class]]
         || [controller isKindOfClass:[SearchController class]]
         || [controller isKindOfClass:[ProfileController class]]
         || [controller isKindOfClass:[MoreController class]]
@@ -99,12 +101,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
+    HNSessionController *sessionController = [HNSessionController sessionController];
+    HNSession *recentSession = [sessionController recentSession];
+
+    SessionListController *sessionListController = [[SessionListController alloc] init];
+    [sessionListController setAutomaticDisplaySession:recentSession];
+    [sessionListController autorelease];
     
-    MainTabBarController *mainTabBarController = [[MainTabBarController alloc] init];
-    [mainTabBarController setTitle:@"Hacker News"];
-    [mainTabBarController autorelease];
-    
-    navigationController = [[NavigationController alloc] initWithRootViewController:mainTabBarController];
+    navigationController = [[NavigationController alloc] initWithRootViewController:sessionListController];
     [navigationController autorelease];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -129,13 +134,11 @@
         
         [HNEntryBodyRenderer setDefaultFontSize:14.0f];
     } else {
-        NSLog(@"Error: what kind of device is this?");
+        NSAssert(NO, @"Invalid Device Type");
     }
-    
-    if (![[HNSession currentSession] isAnonymous]) {
-        [[HNSession currentSession] reloadToken];
-    }
-    
+
+    [sessionController refresh];
+
     [InstapaperSession logoutIfNecessary];
                   
     [window makeKeyAndVisible];
@@ -306,10 +309,8 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    if (![[HNSession currentSession] isAnonymous]) {
-        [[HNSession currentSession] reloadToken];
-    }
-    
+    [[HNSessionController sessionController] refresh];
+
     [InstapaperSession logoutIfNecessary];
 }
 

@@ -7,6 +7,8 @@
 //
 
 @interface HNAPIRequest : NSObject {
+    HNSession *session;
+
     id target;
     SEL action;
     NSMutableData *received;
@@ -14,7 +16,7 @@
     NSString *path;
 }
 
-- (HNAPIRequest *)initWithTarget:(id)target_ action:(SEL)action_;
+- (HNAPIRequest *)initWithSession:(HNSession *)session_ target:(id)target_ action:(SEL)action_;
 - (void)performRequestWithPath:(NSString *)path parameters:(NSDictionary *)parameters;
 - (void)cancelRequest;
 - (BOOL)isLoading;

@@ -76,7 +76,7 @@
     
     actionItem = [[BarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTapped)];
     
-    statusView = [[UIView alloc] initWithFrame:[self.view bounds]];
+    statusView = [[UIView alloc] initWithFrame:[[self view] bounds]];
     [statusView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [statusView setBackgroundColor:[UIColor whiteColor]];
     [statusView setHidden:YES];
@@ -218,7 +218,7 @@
         ProgressHUD *hud = [[ProgressHUD alloc] init];
         [hud setText:@"Error Loading"];
         [hud setState:kProgressHUDStateError];
-        [hud showInWindow:[self.view window]];
+        [hud showInWindow:[[self view] window]];
         [hud dismissAfterDelay:0.8f animated:YES];
         [hud release];
     }

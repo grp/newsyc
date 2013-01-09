@@ -9,8 +9,9 @@
 #import "HackerNewsLoginController.h"
 
 @implementation HackerNewsLoginController
+@synthesize session;
 
-- (void)viewDidLoad{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [topLabel setText:@"Hacker News"];
@@ -31,12 +32,18 @@
 }
 
 - (void)sessionAuthenticator:(HNSessionAuthenticator *)authenticator didRecieveToken:(HNSessionToken)token {
-    HNSession *session = [[HNSession alloc] initWithUsername:[usernameField text] password:[passwordField text] token:token];
-    [HNSession setCurrentSession:[session autorelease]];
+    session = [[HNSession alloc] initWithUsername:[usernameField text] password:[passwordField text] token:token];
+    [[HNSessionController sessionController] addSession:session];
     [authenticator autorelease];
     
     [self finish];
     [self succeed];
+}
+
+- (void)dealloc {
+    [session release];
+    
+    [super dealloc];
 }
 
 - (NSArray *)gradientColors {
@@ -48,7 +55,18 @@
 
 - (void)authenticate {
 	[super authenticate];
-    HNSessionAuthenticator *authenticator = [[HNSessionAuthenticator alloc] initWithUsername:[usernameField text] password:[passwordField text]];
+
+    NSString *username = [usernameField text];
+
+    for (HNSession *session_ in [[HNSessionController sessionController] sessions]) {
+        if ([[session_ identifier] isEqual:username]) {
+            [self finish];
+            [self fail];
+            return;
+        }
+    }
+    
+    HNSessionAuthenticator *authenticator = [[HNSessionAuthenticator alloc] initWithUsername:username password:[passwordField text]];
     [authenticator setDelegate:self];
     [authenticator beginAuthenticationRequest];
 }

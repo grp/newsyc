@@ -14,8 +14,9 @@
 
 @implementation HNAPIRequest
 
-- (HNAPIRequest *)initWithTarget:(id)target_ action:(SEL)action_ {
+- (HNAPIRequest *)initWithSession:(HNSession *)session_ target:(id)target_ action:(SEL)action_ {
     if ((self = [super init])) {
+        session = session_;
         target = target_;
         action = action_;
     }
@@ -93,7 +94,7 @@
     NSURL *url = [NSURL URLWithString:base];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [[HNSession currentSession] addCookiesToRequest:request];
+    [session addCookiesToRequest:request];
     
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];

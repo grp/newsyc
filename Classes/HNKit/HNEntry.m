@@ -44,8 +44,8 @@
     return [NSDictionary dictionaryWithObject:identifier_ forKey:@"id"];
 }
 
-+ (id)entryWithIdentifier:(id)identifier_ {
-    return [self objectWithIdentifier:identifier_];
++ (id)session:(HNSession *)session entryWithIdentifier:(id)identifier_ {
+    return [self session:session objectWithIdentifier:identifier_];
 }
 
 - (BOOL)isComment {
@@ -60,11 +60,11 @@
 
 - (void)loadFromDictionary:(NSDictionary *)response complete:(BOOL)complete {
     if ([response objectForKey:@"submission"]) {
-        [self setSubmission:[HNEntry entryWithIdentifier:[response objectForKey:@"submission"]]];
+        [self setSubmission:[HNEntry session:session entryWithIdentifier:[response objectForKey:@"submission"]]];
     }
 
     if ([response objectForKey:@"parent"]) {
-        [self setParent:[HNEntry entryWithIdentifier:[response objectForKey:@"parent"]]];
+        [self setParent:[HNEntry session:session entryWithIdentifier:[response objectForKey:@"parent"]]];
 
         // Set the submission property on the parent, as long as that's not the submission itself
         // (we want all submission objects to have a submission property value of nil)
@@ -74,7 +74,7 @@
     }
 
     if ([response objectForKey:@"url"] != nil) [self setDestination:[NSURL URLWithString:[response objectForKey:@"url"]]];
-    if ([response objectForKey:@"user"] != nil) [self setSubmitter:[HNUser userWithIdentifier:[response objectForKey:@"user"]]];
+    if ([response objectForKey:@"user"] != nil) [self setSubmitter:[HNUser session:session userWithIdentifier:[response objectForKey:@"user"]]];
     if ([response objectForKey:@"body"] != nil) [self setBody:[response objectForKey:@"body"]];
     if ([response objectForKey:@"date"] != nil) [self setPosted:[response objectForKey:@"date"]];
     if ([response objectForKey:@"title"] != nil) [self setTitle:[response objectForKey:@"title"]];
@@ -84,7 +84,7 @@
         NSMutableArray *comments = [NSMutableArray array];
 
         for (NSDictionary *child in [response objectForKey:@"children"]) {
-            HNEntry *childEntry = [HNEntry entryWithIdentifier:[child objectForKey:@"identifier"]];
+            HNEntry *childEntry = [HNEntry session:session entryWithIdentifier:[child objectForKey:@"identifier"]];
             
             [childEntry setParent:self];
             [childEntry setSubmission:[self submission] ?: self];

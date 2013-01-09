@@ -156,7 +156,7 @@
 
 + (BOOL)entryShowsPoints:(HNEntry *)entry {
     // Re-enable this for everyone if comment score viewing is re-enabled.
-    return [entry submitter] == [[HNSession currentSession] user];
+    return [entry submitter] == [[entry session] user];
 }
 
 #pragma mark - Height Calculations

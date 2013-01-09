@@ -16,6 +16,7 @@ typedef enum {
 
 @class HNSubmission;
 @interface HNAPISubmission : NSObject {
+    HNSession *session;
     HNSubmission *submission;
     
     HNAPISubmissionLoadingState loadingState;
@@ -25,7 +26,7 @@ typedef enum {
 
 @property (nonatomic, readonly, retain) HNSubmission *submission;
 
-- (id)initWithSubmission:(HNSubmission *)submission_;
+- (id)initWithSession:(HNSession *)session_ submission:(HNSubmission *)submission_;
 - (void)performSubmission;
 - (BOOL)isLoading;
 

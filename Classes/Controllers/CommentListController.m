@@ -391,9 +391,9 @@
         [[NSNotificationCenter defaultCenter] removeObserver:failureToken];
     }];
     
-    [[HNSession currentSession] performSubmission:submission];
+    [session performSubmission:submission];
     [submission release];
-    
+
     [eav beginLoadingItem:kEntryActionsViewItemUpvote];
 }
 
@@ -418,7 +418,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:failureToken];
     }];
     
-    [[HNSession currentSession] performSubmission:submission];
+    [session performSubmission:submission];
     [submission release];
     
     [eav beginLoadingItem:kEntryActionsViewItemDownvote];
@@ -444,7 +444,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:failureToken];
     }];
     
-    [[HNSession currentSession] performSubmission:submission];
+    [session performSubmission:submission];
 
     [submission release];
     
@@ -591,13 +591,10 @@
         [this clearSavedAction];
     } copy];
     
-    if (![[HNSession currentSession] isAnonymous] || item == kEntryActionsViewItemActions) {
+    if (![session isAnonymous] || item == kEntryActionsViewItemActions) {
         savedAction();
     } else {
-        LoginController *login = [[HackerNewsLoginController alloc] init];
-        [login setDelegate:this];
-        NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:[login autorelease]];
-        [[this navigationController] presentModalViewController:[navigation autorelease] animated:YES];
+        [[self navigationController] requestLogin];
     }
 }
 

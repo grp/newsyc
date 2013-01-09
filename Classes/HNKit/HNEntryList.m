@@ -47,21 +47,21 @@
     }
 }
 
-+ (id)entryListWithIdentifier:(HNEntryListIdentifier)identifier_ user:(HNUser *)user_ {
++ (id)session:(HNSession *)session entryListWithIdentifier:(HNEntryListIdentifier)identifier_ user:(HNUser *)user_ {
     NSDictionary *info = nil;
     if (user_ != nil) info = [NSDictionary dictionaryWithObject:[user_ identifier] forKey:@"user"];
     
-    return [self objectWithIdentifier:identifier_ infoDictionary:info];
+    return [self session:session objectWithIdentifier:identifier_ infoDictionary:info];
 }
 
-+ (id)entryListWithIdentifier:(HNEntryListIdentifier)identifier_ {
-    return [self entryListWithIdentifier:identifier_ user:nil];
++ (id)session:(HNSession *)session entryListWithIdentifier:(HNEntryListIdentifier)identifier_ {
+    return [self session:session entryListWithIdentifier:identifier_ user:nil];
 }
 
 - (void)loadInfoDictionary:(NSDictionary *)info {
     if (info != nil) {
         NSString *identifier_ = [info objectForKey:@"user"];
-        [self setUser:[HNUser userWithIdentifier:identifier_]];
+        [self setUser:[HNUser session:session userWithIdentifier:identifier_]];
     }
 }
 
@@ -77,12 +77,9 @@
     NSMutableArray *children = [NSMutableArray array];
     
     for (NSDictionary *entryDictionary in [response objectForKey:@"children"]) {
-        HNEntry *entry = [HNEntry entryWithIdentifier:[entryDictionary objectForKey:@"identifier"]];
+        HNEntry *entry = [HNEntry session:session entryWithIdentifier:[entryDictionary objectForKey:@"identifier"]];
         [entry loadFromDictionary:entryDictionary complete:NO];
         [children addObject:entry];
-        
-        // XXX: should the entry be set to loaded here? probably not, since
-        //      it isn't fully loaded (as the loaded state represents).
     }
 
     [self setEntries:children];

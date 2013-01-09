@@ -9,7 +9,11 @@
 #import "OrangeTableView.h"
 
 @interface MoreController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+    HNSession *session;
+    
     OrangeTableView *tableView;
 }
+
+- (id)initWithSession:(HNSession *)session_;
 
 @end

@@ -30,7 +30,8 @@
 
 - (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [[self navigationController] pushController:[controller autorelease] animated:YES];
+    [[self navigationController] pushController:controller animated:YES];
+    [controller release];
 }
 
 - (void)deselectWithAnimation:(BOOL)animated {

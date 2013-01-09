@@ -45,6 +45,6 @@
 - (BOOL)isComment;
 - (BOOL)isSubmission;
 
-+ (id)entryWithIdentifier:(id)identifier_;
++ (id)session:(HNSession *)session entryWithIdentifier:(id)identifier_;
 
 @end

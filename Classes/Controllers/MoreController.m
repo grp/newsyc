@@ -19,8 +19,17 @@
 
 @implementation MoreController
 
+- (id)initWithSession:(HNSession *)session_ {
+    if ((self = [super init])) {
+        session = [session_ retain];
+    }
+
+    return self;
+}
+
 - (void)dealloc {
     [tableView release];
+    [session release];
     
     [super dealloc];
 }
@@ -175,7 +184,7 @@
         }
     }
     
-    HNEntryList *list = [HNEntryList entryListWithIdentifier:type];
+    HNEntryList *list = [HNEntryList session:session entryListWithIdentifier:type];
     UIViewController *controller = [[controllerClass alloc] initWithSource:list];
     [controller setTitle:title];
     

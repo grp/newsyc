@@ -6,7 +6,9 @@
 //
 //
 
+#import "HNKit.h"
 #import "HNObjectCache.h"
+#import "HNSession.h"
 
 @interface HNObjectCacheKey : NSObject <NSCopying> {
     Class cls;
@@ -95,31 +97,30 @@
 
 @implementation HNObjectCache
 
-+ (NSMutableDictionary *)cacheDictionary {
-    static NSMutableDictionary *objectCache = nil;
-    if (objectCache == nil) objectCache = [[NSMutableDictionary alloc] init];
-    return objectCache;
+- (NSMutableDictionary *)cacheDictionary {
+    return cacheDictionary;
 }
 
-+ (NSString *)persistentCachePath {
+- (NSString *)persistentCachePath {
     NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
 
     if ([cachePaths count] > 0) {
         NSString *cachePath = [cachePaths objectAtIndex:0];
         NSString *objectPath = [cachePath stringByAppendingPathComponent:@"HNObjectCache"];
+        objectPath = [objectPath stringByAppendingPathComponent:[session identifier]];
         return objectPath;
     } else {
         return nil;
     }
 }
 
-+ (void)clearPersistentCache {
+- (void)clearPersistentCache {
     NSString *cachePath = [self persistentCachePath];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:cachePath error:NULL];
 }
 
-+ (NSString *)persistentCachePathForKey:(HNObjectCacheKey *)key {
+- (NSString *)persistentCachePathForKey:(HNObjectCacheKey *)key {
     NSString *cachePath = [self persistentCachePath];
     NSString *keyPath = [key persistentCacheIdentifier];
     NSString *objectPath = [cachePath stringByAppendingPathComponent:keyPath];
@@ -127,18 +128,18 @@
     return objectPath;
 }
 
-+ (BOOL)persistentCacheHasObjectForKey:(HNObjectCacheKey *)key {
+- (BOOL)persistentCacheHasObjectForKey:(HNObjectCacheKey *)key {
     NSString *path = [self persistentCachePathForKey:key];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     return [fileManager fileExistsAtPath:path];
 }
 
-+ (NSDictionary *)persistentCacheDictionaryForKey:(HNObjectCacheKey *)key {
+- (NSDictionary *)persistentCacheDictionaryForKey:(HNObjectCacheKey *)key {
     NSString *path = [self persistentCachePathForKey:key];
     return [NSDictionary dictionaryWithContentsOfFile:path];
 }
 
-+ (void)updateObjectFromPersistentCache:(HNObject *)object {
+- (void)updateObjectFromPersistentCache:(HNObject *)object {
     HNObjectCacheKey *key = [HNObjectCacheKey objectCacheForObject:object];
     
     if ([self persistentCacheHasObjectForKey:key]) {
@@ -148,7 +149,7 @@
     }
 }
 
-+ (void)savePersistentCacheDictionary:(NSDictionary *)dict forObject:(HNObject *)object {
+- (void)savePersistentCacheDictionary:(NSDictionary *)dict forObject:(HNObject *)object {
     HNObjectCacheKey *key = [HNObjectCacheKey objectCacheForObject:object];
     NSString *path = [self persistentCachePathForKey:key];
 
@@ -157,37 +158,44 @@
     });
 }
 
-+ (void)initialize {
-    static BOOL initialized = NO;
-
-    if (!initialized) {
-        // inititalize the cache
-        [self cacheDictionary];
-
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        [fileManager createDirectoryAtPath:[self persistentCachePath] withIntermediateDirectories:YES attributes:nil error:NULL];
-
-        initialized = YES;
-    }
+- (void)createPersistentCache {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager createDirectoryAtPath:[self persistentCachePath] withIntermediateDirectories:YES attributes:nil error:NULL];
 }
 
-+ (HNObject *)objectFromCacheWithKey:(HNObjectCacheKey *)key {
+- (id)initWithSession:(HNSession *)session_ {
+    if ((self = [super init])) {
+        session = session_;
+
+        cacheDictionary = [[NSMutableDictionary alloc] init];
+    }
+
+    return self;
+}
+
+- (void)dealloc {
+    [cacheDictionary release];
+
+    [super dealloc];
+}
+
+- (HNObject *)objectFromCacheWithKey:(HNObjectCacheKey *)key {
     NSMutableDictionary *cache = [self cacheDictionary];
     HNObject *object = [cache objectForKey:key];
     return object;
 }
 
-+ (HNObject *)objectFromCacheWithClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
+- (HNObject *)objectFromCacheWithClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
     HNObjectCacheKey *key = [HNObjectCacheKey objectCacheWithClass:cls_ identifier:identifier_ infoDictionary:info];
     return [self objectFromCacheWithKey:key];
 }
 
-+ (BOOL)cacheHasObject:(HNObject *)object {
+- (BOOL)cacheHasObject:(HNObject *)object {
     HNObjectCacheKey *key = [HNObjectCacheKey objectCacheForObject:object];
     return ([self objectFromCacheWithKey:key] != nil);
 }
 
-+ (void)addObjectToCache:(HNObject *)object {
+- (void)addObjectToCache:(HNObject *)object {
     HNObjectCacheKey *key = [HNObjectCacheKey objectCacheForObject:object];
 
     NSMutableDictionary *cache = [self cacheDictionary];

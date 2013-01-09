@@ -14,6 +14,14 @@
 
 @implementation SearchController
 
+- (id)initWithSession:(HNSession *)session_ {
+    if ((self = [super init])) {
+        session = [session_ retain];
+    }
+
+    return self;
+}
+
 - (void)loadView {
     [super loadView];
     
@@ -61,7 +69,7 @@
 
 - (HNAPISearch *)searchAPI {
 	if (searchAPI == nil) {
-		searchAPI = [[HNAPISearch alloc] init];
+		searchAPI = [[HNAPISearch alloc] initWithSession:session];
 	}
     
 	return searchAPI;
@@ -241,6 +249,7 @@
     [coloredView release];
     [searchAPI release];
     [indicator release];
+    [session release];
 
     [super dealloc];
 }
