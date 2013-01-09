@@ -23,6 +23,7 @@
 #import "HNKit.h"
 #import "InstapaperSession.h"
 #import "JSON.h"
+#import "PocketAPI.h"
 
 #import "UINavigationItem+MultipleItems.h"
 
@@ -328,6 +329,17 @@
     [splitController release];
 
     [super dealloc];
+}
+
+#pragma mark - URL Handlers
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    if ([[PocketAPI sharedAPI] handleOpenURL:url]) {
+        return YES;
+    } else {
+        // Other url-schemes can be added here
+        return NO;
+    }
 }
 
 @end
