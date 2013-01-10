@@ -352,7 +352,7 @@
     CGRect endingIntersectionRect = CGRectIntersection(viewFrame, viewEndingFrame);
     viewFrame.size.height -= endingIntersectionRect.size.height;
 
-    [UIView animateWithDuration:duration delay:0 options:(curve << 16) animations:^{
+    [UIView animateWithDuration:duration delay:0 options:(curve << 16) | UIViewAnimationOptionBeginFromCurrentState animations:^{
         [tableContainerView setFrame:viewFrame];
     } completion:NULL];
 }
