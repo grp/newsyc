@@ -42,7 +42,7 @@
 }
 
 - (void)dismiss {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

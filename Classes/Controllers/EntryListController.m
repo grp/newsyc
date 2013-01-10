@@ -80,6 +80,7 @@
 
 - (void)dealloc {
     [pullToRefreshView release];
+    [refreshControl endRefreshing];
     [refreshControl release];
     [emptyLabel release];
     [moreCell release];

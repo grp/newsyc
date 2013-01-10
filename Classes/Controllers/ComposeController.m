@@ -27,7 +27,7 @@
 }
 
 - (void)close {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (BOOL)hasText {

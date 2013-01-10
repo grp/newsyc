@@ -47,16 +47,6 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-
-    if (loginDelegatePendingSession != nil) {
-        [loginDelegate navigationController:self didLoginWithSession:loginDelegatePendingSession];
-        [loginDelegatePendingSession release];
-        loginDelegatePendingSession = nil;
-    }
-}
-
 // Why this isn't delegated by UIKit to the top view controller, I have no clue.
 // This, however, should unobstrusively add that delegation.
 - (UIModalPresentationStyle)modalPresentationStyle {
@@ -72,13 +62,13 @@
 }
 
 - (void)loginControllerDidLogin:(HackerNewsLoginController *)controller {
-    [self dismissModalViewControllerAnimated:YES];
-
-    loginDelegatePendingSession = [[controller session] retain];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [loginDelegate navigationController:self didLoginWithSession:[controller session]];
+    }];
 }
 
 - (void)loginControllerDidCancel:(HackerNewsLoginController *)controller {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (void)requestLogin {
@@ -86,7 +76,7 @@
     [login setDelegate:self];
 
     NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:login];
-    [self presentModalViewController:navigation animated:YES];
+    [self presentViewController:navigation animated:YES completion:NULL];
 
     [navigation release];
     [login release];

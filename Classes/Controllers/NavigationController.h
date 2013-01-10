@@ -15,7 +15,6 @@
 
 @interface NavigationController : UINavigationController <LoginControllerDelegate> {
     id<NavigationControllerLoginDelegate> loginDelegate;
-    HNSession *loginDelegatePendingSession;
 }
 
 @property (nonatomic, assign) id<NavigationControllerLoginDelegate> loginDelegate;

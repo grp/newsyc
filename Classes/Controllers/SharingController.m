@@ -87,7 +87,7 @@
                 [popover release];
             }];
         } else {
-            [controller presentModalViewController:activityController animated:YES];
+            [controller presentViewController:activityController animated:YES completion:NULL];
         }
     } else {
         UIActionSheet *sheet = [[UIActionSheet alloc]
@@ -143,7 +143,7 @@
     [composeController setMessageBody:body isHTML:YES];
     [composeController setSubject:title];
 
-    [controller presentModalViewController:composeController animated:YES];
+    [controller presentViewController:composeController animated:YES completion:NULL];
 
     [self retain];
     [composeController release];
@@ -162,7 +162,7 @@
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)composeController didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    [controller dismissModalViewControllerAnimated:YES];
+    [controller dismissViewControllerAnimated:YES completion:NULL];
     [self release];
 }
 

@@ -154,16 +154,6 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    if (shouldCompleteOnAppear) {
-        shouldCompleteOnAppear = NO;
-        
-        savedAction();
-    }
-}
-
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self setupHeader];
     
@@ -391,7 +381,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:failureToken];
     }];
     
-    [session performSubmission:submission];
+    [[source session] performSubmission:submission];
     [submission release];
 
     [eav beginLoadingItem:kEntryActionsViewItemUpvote];
@@ -418,7 +408,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:failureToken];
     }];
     
-    [session performSubmission:submission];
+    [[source session] performSubmission:submission];
     [submission release];
     
     [eav beginLoadingItem:kEntryActionsViewItemDownvote];
@@ -444,7 +434,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:failureToken];
     }];
     
-    [session performSubmission:submission];
+    [[source session] performSubmission:submission];
 
     [submission release];
     
@@ -486,17 +476,13 @@
 }
 
 - (void)loginControllerDidLogin:(LoginController *)controller {
-    [self dismissModalViewControllerAnimated:YES];
-    
-    // When a modal view controller is dismissed, you can't present another one
-    // until the -viewDidAppear: message is called. Because this might cause a
-    // modal view to be presented, we need to use this ivar to have it delayed 
-    // until when -viewDidAppear: is called.
-    shouldCompleteOnAppear = YES;
+    [self dismissViewControllerAnimated:YES completion:^{
+        savedAction();
+    }];
 }
 
 - (void)loginControllerDidCancel:(LoginController *)controller {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:NULL];
     
     [self clearSavedAction];
     [self clearSavedCompletion];
@@ -513,7 +499,8 @@
             [compose setDelegate:this];
             
             NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:compose];
-            [[this navigationController] presentModalViewController:[navigation autorelease] animated:YES];
+            [[this navigationController] presentViewController:navigation animated:YES completion:NULL];
+            [navigation release];
         } else if (item == kEntryActionsViewItemUpvote) {
             [this performUpvoteForEntry:entry fromEntryActionsView:eav];
         } else if (item == kEntryActionsViewItemFlag) {
@@ -530,7 +517,8 @@
                     [[this navigationController] pushController:controller animated:YES];
                 } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
                     ModalNavigationController *navigation = [[ModalNavigationController alloc] initWithRootViewController:controller];
-                    [self presentModalViewController:[navigation autorelease] animated:YES];
+                    [self presentViewController:navigation animated:YES completion:NULL];
+                    [navigation release];
                 }
             } else if (index == 1) {
                 CommentListController *controller = [[CommentListController alloc] initWithSource:[entry parent]];
@@ -591,7 +579,7 @@
         [this clearSavedAction];
     } copy];
     
-    if (![session isAnonymous] || item == kEntryActionsViewItemActions) {
+    if (![[source session] isAnonymous] || item == kEntryActionsViewItemActions) {
         savedAction();
     } else {
         [[self navigationController] requestLogin];

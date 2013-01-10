@@ -18,7 +18,6 @@
 
 @class LoadingIndicatorView;
 @interface LoadingController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate> {
-    HNSession *session;
     HNObject *source;
     
     UIView *statusView;

@@ -88,7 +88,7 @@
         }
         
         [navigation setViewControllers:[NSArray arrayWithObject:compose]];
-        [self presentModalViewController:navigation animated:YES];
+        [self presentViewController:navigation animated:YES completion:NULL];
 
         [navigation release];
         [compose release];

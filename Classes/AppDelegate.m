@@ -64,13 +64,15 @@
                     [delegate pushLeafViewController:controller animated:animated];
                 }
                 
-                [self dismissModalViewControllerAnimated:animated];
+                [self dismissViewControllerAnimated:animated completion:NULL];
             } else {
                 [self pushViewController:controller animated:animated];
             }
         }
     } else {
-        [delegate pushBranchViewController:controller animated:animated];
+        if (![controller isKindOfClass:[EmptyController class]]) {
+            [delegate pushBranchViewController:controller animated:animated];
+        }
     }
 }
 
@@ -110,6 +112,7 @@
     [sessionListController autorelease];
     
     navigationController = [[NavigationController alloc] initWithRootViewController:sessionListController];
+    [navigationController setLoginDelegate:sessionListController];
     [navigationController autorelease];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -121,6 +124,7 @@
         [emptyController autorelease];
         
         rightNavigationController = [[NavigationController alloc] initWithRootViewController:emptyController];
+        [rightNavigationController setLoginDelegate:sessionListController];
         [rightNavigationController setDelegate:self];
         [rightNavigationController autorelease];
         
@@ -143,6 +147,10 @@
                   
     [window makeKeyAndVisible];
     [self startConnection];
+
+    // To ensure all setup has completed including such delayed for a run loop
+    // iteration, spin the run loop once inside this method before the UI draws.
+    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
         
     return YES;
 }

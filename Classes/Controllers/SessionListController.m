@@ -9,6 +9,7 @@
 #import "SessionListController.h"
 #import "MainTabBarController.h"
 #import "BarButtonItem.h"
+#import "AppDelegate.h"
 #import "HackerNewsLoginController.h"
 #import "ModalNavigationController.h"
 
@@ -45,12 +46,12 @@
 
     [[self navigationItem] setRightBarButtonItem:addBarButtonItem];
     [[self navigationItem] setLeftBarButtonItem:editBarButtonItem];
-
-    [[self navigationController] setLoginDelegate:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    [self clearRightControllerIfNecessary];
 
     NSIndexPath *selectedIndexPath = [tableView indexPathForSelectedRow];
     HNSession *session = nil;
@@ -125,6 +126,12 @@
     sessions = [[[HNSessionController sessionController] sessions] retain];
 }
 
+- (void)clearRightControllerIfNecessary {
+    EmptyController *emptyController = [[EmptyController alloc] init];
+    [[self navigationController] pushController:emptyController animated:NO];
+    [EmptyController release];
+}
+
 - (void)pushMainControllerForSession:(HNSession *)session animated:(BOOL)animated {
     [[HNSessionController sessionController] setRecentSession:session];
 
@@ -135,7 +142,7 @@
 
     MainTabBarController *tabBarController = [[MainTabBarController alloc] initWithSession:session];
     [[tabBarController navigationItem] setHidesBackButton:[session isAnonymous]];
-    [[self navigationController] pushViewController:tabBarController animated:animated];
+    [[self navigationController] pushController:tabBarController animated:animated];
     [tabBarController release];
 }
 
@@ -162,7 +169,7 @@
 - (void)navigationController:(NavigationController *)navigationController didLoginWithSession:(HNSession *)session {
     if ([navigationController topViewController] != self) {
         [self setAutomaticDisplaySession:session];
-        [navigationController popToViewController:self animated:YES];
+        [[self navigationController] popToViewController:self animated:YES];
     } else {
         [self pushMainControllerForSession:session animated:YES];
     }

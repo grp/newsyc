@@ -72,22 +72,33 @@
     return nil;
 }
 
-- (void)loadView {
-    [super loadView];
-    
-    // XXX: this is one particuarly ugly way of making a gradient :(
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+
     UIGraphicsBeginImageContext([[self view] bounds].size);
+    
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColors(rgb, (CFArrayRef) [self gradientColors], NULL);
-    CGContextDrawRadialGradient(context, gradient, CGPointMake(160.0f, 110.0f), 5.0f, CGPointMake(160.0f, 110.0f), 1500.0f, kCGGradientDrawsBeforeStartLocation);
+    
+    CGFloat centerX = CGRectGetMidX([[self view] bounds]);
+    CGFloat centerY = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad ? 200.0f : 110.0f);
+    CGPoint center =  CGPointMake(centerX, centerY);
+    CGContextDrawRadialGradient(context, gradient, center, 5.0f, center, 1500.0f, kCGGradientDrawsBeforeStartLocation);
+    
     CGGradientRelease(gradient);
     CGColorSpaceRelease(rgb);
+    
 	UIImage *background = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-
-    backgroundImageView = [[UIImageView alloc] initWithFrame:[[self view] bounds]];
     [backgroundImageView setImage:background];
+    
+	UIGraphicsEndImageContext();
+}
+
+- (void)loadView {
+    [super loadView];
+    
+    backgroundImageView = [[UIImageView alloc] initWithFrame:[[self view] bounds]];
     [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [[self view] addSubview:backgroundImageView];
 

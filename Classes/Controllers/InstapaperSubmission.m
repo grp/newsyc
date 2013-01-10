@@ -86,7 +86,7 @@
             presented = YES;
             [self retain];
 
-            [controller presentModalViewController:navigation animated:YES];
+            [controller presentViewController:navigation animated:YES completion:NULL];
         }
         [navigation autorelease];
 
@@ -99,7 +99,7 @@
         [self release];
         presented = NO;
 
-        [controller dismissModalViewControllerAnimated:YES];
+        [controller dismissViewControllerAnimated:YES completion:NULL];
     }
 
     if (loginCompletion != NULL) {
