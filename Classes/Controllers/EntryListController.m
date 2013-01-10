@@ -22,8 +22,12 @@
 
 - (void)loadView {
     [super loadView];
-    
-    tableView = [[UITableView alloc] initWithFrame:[[self view] bounds] style:UITableViewStylePlain];
+
+    tableViewController = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
+    [self addChildViewController:tableViewController];
+
+    tableView = [[tableViewController tableView] retain];
+    [tableView setFrame:[[self view] bounds]];
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
@@ -38,10 +42,16 @@
     
     moreCell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [[moreCell button] addTarget:self action:@selector(loadMorePressed) forControlEvents:UIControlEventTouchUpInside];
-    
-    pullToRefreshView = [[PullToRefreshView alloc] initWithScrollView:tableView];
-    [tableView addSubview:pullToRefreshView];
-    [pullToRefreshView setDelegate:self];
+
+    if (NSClassFromString(@"UIRefreshControl") != nil) {
+        refreshControl = [[UIRefreshControl alloc] init];
+        [refreshControl addTarget:self action:@selector(refreshFromRefreshControl:) forControlEvents:UIControlEventValueChanged];
+        [tableViewController setRefreshControl:refreshControl];
+    } else {
+        pullToRefreshView = [[PullToRefreshView alloc] initWithScrollView:tableView];
+        [tableView addSubview:pullToRefreshView];
+        [pullToRefreshView setDelegate:self];
+    }
     
     [[self view] bringSubviewToFront:statusView];
 }
@@ -57,19 +67,27 @@
     emptyLabel = nil;
     [pullToRefreshView release];
     pullToRefreshView = nil;
-    [tableView release];
-    tableView = nil;
+    [refreshControl release];
+    refreshControl = nil;
     [moreCell release];
     moreCell = nil;
+    [tableView release];
+    tableView = nil;
+    [tableViewController removeFromParentViewController];
+    [tableViewController release];
+    tableViewController = nil;
 }
 
 - (void)dealloc {
     [pullToRefreshView release];
-    [tableView release];
+    [refreshControl release];
     [emptyLabel release];
-    [entries release];
     [moreCell release];
-    
+    [tableView release];
+    [tableViewController removeFromParentViewController];
+    [tableViewController release];
+    [entries release];
+
     [super dealloc];
 }
 
@@ -88,11 +106,18 @@
 
 - (void)sourceStartedLoading {
     [super sourceStartedLoading];
+
+    if (!refreshControlIgnoreNextBegan) {
+        [refreshControl beginRefreshing];
+    } else {
+        refreshControlIgnoreNextBegan = NO;
+    }
     
     [pullToRefreshView setState:PullToRefreshViewStateLoading];
 }
 
 - (void)sourceFinishedLoading {
+    [refreshControl endRefreshing];
     [pullToRefreshView finishedLoading];
     [[moreCell button] stopLoading];
     
@@ -101,12 +126,18 @@
 
 - (void)sourceFailedLoading {
     [super sourceFailedLoading];
-    
+
+    [refreshControl endRefreshing];
     [pullToRefreshView finishedLoading];
     [[moreCell button] stopLoading];
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
+    [source beginLoading];
+}
+
+- (void)refreshFromRefreshControl:(UIRefreshControl *)control {
+    refreshControlIgnoreNextBegan = YES;
     [source beginLoading];
 }
 

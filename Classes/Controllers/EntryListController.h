@@ -11,11 +11,14 @@
 #import "LoadMoreCell.h"
 
 @interface EntryListController : LoadingController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate> {
+    UITableViewController *tableViewController;
     UITableView *tableView;
     UILabel *emptyLabel;
     
     LoadMoreCell *moreCell;
     PullToRefreshView *pullToRefreshView;
+    UIRefreshControl *refreshControl;
+    BOOL refreshControlIgnoreNextBegan;
     
     NSArray *entries;
 }

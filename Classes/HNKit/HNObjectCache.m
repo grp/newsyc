@@ -142,10 +142,9 @@
 - (void)updateObjectFromPersistentCache:(HNObject *)object {
     HNObjectCacheKey *key = [HNObjectCacheKey objectCacheForObject:object];
     
-    if ([self persistentCacheHasObjectForKey:key]) {
+    if ([self persistentCacheHasObjectForKey:key] && ![object isLoaded]) {
         NSDictionary *cachedDictionary = [self persistentCacheDictionaryForKey:key];
         [object loadFromDictionary:cachedDictionary complete:YES];
-        [object setIsLoaded:YES];
     }
 }
 
