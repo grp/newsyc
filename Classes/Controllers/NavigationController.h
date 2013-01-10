@@ -19,6 +19,7 @@
 
 @property (nonatomic, assign) id<NavigationControllerLoginDelegate> loginDelegate;
 - (void)requestLogin;
+- (void)requestSessions;
 
 @end
 
@@ -26,11 +27,13 @@
 
 @property (nonatomic, assign) id<NavigationControllerLoginDelegate> loginDelegate;
 - (void)requestLogin;
+- (void)requestSessions;
 
 @end
 
 @protocol NavigationControllerLoginDelegate <NSObject>
 
 - (void)navigationController:(NavigationController *)navigationController didLoginWithSession:(HNSession *)session;
+- (void)navigationControllerRequestedSessions:(NavigationController *)navigationController;
 
 @end

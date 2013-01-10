@@ -82,6 +82,9 @@
     [login release];
 }
 
+- (void)requestSessions {
+    [loginDelegate navigationControllerRequestedSessions:self];
+}
 
 AUTOROTATION_FOR_PAD_ONLY
 

@@ -141,7 +141,10 @@
     }
 
     MainTabBarController *tabBarController = [[MainTabBarController alloc] initWithSession:session];
-    [[tabBarController navigationItem] setHidesBackButton:[session isAnonymous]];
+    
+    BOOL hideBackButton = [session isAnonymous] || ([sessions count] == 1);
+    [[tabBarController navigationItem] setHidesBackButton:hideBackButton];
+    
     [[self navigationController] pushController:tabBarController animated:animated];
     [tabBarController release];
 }
@@ -173,6 +176,10 @@
     } else {
         [self pushMainControllerForSession:session animated:YES];
     }
+}
+
+- (void)navigationControllerRequestedSessions:(NavigationController *)navigationController {
+    [[self navigationController] popToViewController:self animated:YES];
 }
 
 - (void)addSessionFromBarButtonItem:(BarButtonItem *)barButtonItem {

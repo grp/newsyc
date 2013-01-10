@@ -105,7 +105,12 @@
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
     HNSessionController *sessionController = [HNSessionController sessionController];
+    NSArray *sessions = [sessionController sessions];
     HNSession *recentSession = [sessionController recentSession];
+
+    if (recentSession == nil && [sessions count] == 1) {
+        recentSession = [sessions lastObject];
+    }
 
     SessionListController *sessionListController = [[SessionListController alloc] init];
     [sessionListController setAutomaticDisplaySession:recentSession];

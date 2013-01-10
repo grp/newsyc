@@ -19,9 +19,19 @@
 
 @implementation SessionProfileController
 
+- (BOOL)showSessionListButton {
+    return [[[HNSessionController sessionController] sessions] count] == 1;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
+    return [super numberOfSectionsInTableView:tableView] + ([self showSessionListButton] ? 1 : 0);
+}
+
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     if (section == 1) {
         return [super tableView:table numberOfRowsInSection:section] + 1;
+    } else if (section == 2) {
+        return 1;
     } else {
         return [super tableView:table numberOfRowsInSection:section];
     }
@@ -33,6 +43,14 @@
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         
         [[cell textLabel] setText:@"Saved"];
+        
+        return [cell autorelease];
+    } else if ([indexPath section] == 2) {
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+        
+        [cell setAccessoryType:UITableViewCellAccessoryNone];
+        [[cell textLabel] setTextAlignment:NSTextAlignmentCenter];
+        [[cell textLabel] setText:@"Accounts"];
         
         return [cell autorelease];
     } else {
@@ -47,6 +65,8 @@
         SubmissionListController *controller = [[SubmissionListController alloc] initWithSource:list];
         [controller setTitle:@"Saved"];
         [[self navigationController] pushController:[controller autorelease] animated:YES];
+    } else if ([indexPath section] == 2) {
+        [[self navigationController] requestSessions];
     } else {
         [super tableView:table didSelectRowAtIndexPath:indexPath];
     }
