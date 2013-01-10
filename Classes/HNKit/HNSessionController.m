@@ -9,6 +9,7 @@
 #import "HNSessionController.h"
 #import "HNSession.h"
 #import "HNAnonymousSession.h"
+#import "HNObjectCache.h"
 
 NSString *kHNSessionControllerSessionsChangedNotification = @"HNSessionControllerSessionsChangedNotification";
 
@@ -76,6 +77,10 @@ NSString *kHNSessionControllerSessionsChangedNotification = @"HNSessionControlle
     }
 }
 
+- (NSInteger)numberOfSessions {
+    return [sessions count];
+}
+
 - (void)setRecentSession:(HNSession *)recentSession_ {
     // This wouldn't even make sense.
     if ([recentSession_ isAnonymous]) return;
@@ -111,6 +116,8 @@ NSString *kHNSessionControllerSessionsChangedNotification = @"HNSessionControlle
 }
 
 - (void)removeSession:(HNSession *)session {
+    [[session cache] clearPersistentCache];
+
     [sessions removeObject:session];
     [self saveSessions];
 

@@ -30,7 +30,7 @@
     if ((self = [super init])) {
         session = [session_ retain];
 
-        if (![session isAnonymous]) {
+        if (![session isAnonymous] && [[HNSessionController sessionController] numberOfSessions] != 1) {
             [self setTitle:[[session user] identifier]];
         } else {
             [self setTitle:@"Hacker News"];

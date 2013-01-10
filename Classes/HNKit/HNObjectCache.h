@@ -20,6 +20,7 @@
 - (HNObject *)objectFromCacheWithClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info;
 
 - (void)createPersistentCache;
+- (void)clearPersistentCache;
 - (void)updateObjectFromPersistentCache:(HNObject *)object;
 - (void)savePersistentCacheDictionary:(NSDictionary *)dict forObject:(HNObject *)object;
 

@@ -90,7 +90,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%@:%p identifier=%@ info=%p>", [self class], self, identifier, info];
+    return [NSString stringWithFormat:@"<%@:%p class=%@ identifier=%@ info=%p>", [self class], cls, self, identifier, info];
 }
 
 @end
@@ -116,8 +116,11 @@
 
 - (void)clearPersistentCache {
     NSString *cachePath = [self persistentCachePath];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    [fileManager removeItemAtPath:cachePath error:NULL];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        [fileManager removeItemAtPath:cachePath error:NULL];
+    });
 }
 
 - (NSString *)persistentCachePathForKey:(HNObjectCacheKey *)key {

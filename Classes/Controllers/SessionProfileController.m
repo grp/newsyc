@@ -20,7 +20,7 @@
 @implementation SessionProfileController
 
 - (BOOL)showSessionListButton {
-    return [[[HNSessionController sessionController] sessions] count] == 1;
+    return [[HNSessionController sessionController] numberOfSessions] == 1;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {

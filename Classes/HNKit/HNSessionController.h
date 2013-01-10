@@ -21,6 +21,8 @@ extern NSString *kHNSessionControllerSessionsChangedNotification;
 @property (nonatomic, copy, readonly) NSArray *sessions;
 @property (nonatomic, retain) HNSession *recentSession;
 
+- (NSInteger)numberOfSessions;
+
 - (void)addSession:(HNSession *)session;
 - (void)removeSession:(HNSession *)session;
 - (void)moveSession:(HNSession *)session toIndex:(NSInteger)index;
