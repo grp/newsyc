@@ -130,6 +130,7 @@
 		7DB809B714F8A12F009668E6 /* SubmissionListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB809B614F8A12F009668E6 /* SubmissionListController.m */; };
 		7DB809BA14F8ACEF009668E6 /* SharingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB809B914F8ACEF009668E6 /* SharingController.m */; };
 		7DB9FC1F169D156A008674F4 /* SessionListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB9FC1E169D156A008674F4 /* SessionListController.m */; };
+		7DBD4CB2169FC52E00938C54 /* UIColor+Orange.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBD4CB1169FC52E00938C54 /* UIColor+Orange.m */; };
 		7DBD537F15B3E27600E3D496 /* HNObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBD537E15B3E27500E3D496 /* HNObjectCache.m */; };
 		7DC4BACD13F51B4700E373C0 /* x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC4BACB13F51B4600E373C0 /* x.png */; };
 		7DC4BACE13F51B4700E373C0 /* x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC4BACC13F51B4700E373C0 /* x@2x.png */; };
@@ -357,6 +358,8 @@
 		7DB809B914F8ACEF009668E6 /* SharingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharingController.m; sourceTree = "<group>"; };
 		7DB9FC1D169D156A008674F4 /* SessionListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionListController.h; sourceTree = "<group>"; };
 		7DB9FC1E169D156A008674F4 /* SessionListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionListController.m; sourceTree = "<group>"; };
+		7DBD4CAF169FC4DA00938C54 /* UIColor+Orange.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Orange.h"; sourceTree = "<group>"; };
+		7DBD4CB1169FC52E00938C54 /* UIColor+Orange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Orange.m"; sourceTree = "<group>"; };
 		7DBD537D15B3E27500E3D496 /* HNObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNObjectCache.h; sourceTree = "<group>"; };
 		7DBD537E15B3E27500E3D496 /* HNObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNObjectCache.m; sourceTree = "<group>"; };
 		7DC4BACB13F51B4600E373C0 /* x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x.png; sourceTree = "<group>"; };
@@ -576,6 +579,8 @@
 				7D34176B150AEF7B002E284F /* UIImage+Colorize.m */,
 				7D977ABD151D4ED000FD7360 /* UINavigationItem+MultipleItems.h */,
 				7D977ABE151D4ED000FD7360 /* UINavigationItem+MultipleItems.m */,
+				7DBD4CAF169FC4DA00938C54 /* UIColor+Orange.h */,
+				7DBD4CB1169FC52E00938C54 /* UIColor+Orange.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1073,6 +1078,7 @@
 				7D56C3BE164CBD1500A18E7E /* OpenInSafariActivity.m in Sources */,
 				7D4E846E169D05FA006408AC /* HNSessionController.m in Sources */,
 				7DB9FC1F169D156A008674F4 /* SessionListController.m in Sources */,
+				7DBD4CB2169FC52E00938C54 /* UIColor+Orange.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

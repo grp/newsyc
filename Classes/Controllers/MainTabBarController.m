@@ -9,6 +9,7 @@
 #import "HNKit.h"
 
 #import "UIActionSheet+Context.h"
+#import "UIColor+Orange.h"
 
 #import "MainTabBarController.h"
 #import "SubmissionListController.h"
@@ -142,7 +143,7 @@
     [[self selectedViewController] setWantsFullScreenLayout:YES];
 
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-      [[self tabBar] setSelectedImageTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+      [[self tabBar] setSelectedImageTintColor:[UIColor mainOrangeColor]];
     } else {
       [[self tabBar] setSelectedImageTintColor:nil];
     }

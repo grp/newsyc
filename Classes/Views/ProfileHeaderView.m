@@ -20,7 +20,7 @@
         [titleLabel setShadowColor:[UIColor whiteColor]];
         [titleLabel setTextAlignment:NSTextAlignmentLeft];
         [titleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
-        [titleLabel setTextColor:[UIColor blackColor]];//[UIColor colorWithRed:(76.0f/255.0f) green:(86.0f/255.0f) blue:(108.0f/255.0f) alpha:1.0f]];
+        [titleLabel setTextColor:[UIColor blackColor]];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
         [titleLabel setFont:[UIFont boldSystemFontOfSize:19.0f]];
         [self addSubview:titleLabel];
@@ -30,7 +30,7 @@
         [subtitleLabel setShadowColor:[UIColor whiteColor]];
         [subtitleLabel setTextAlignment:NSTextAlignmentLeft];
         [subtitleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
-        [subtitleLabel setTextColor:[UIColor darkGrayColor]];//[UIColor colorWithRed:(76.0f/255.0f) green:(86.0f/255.0f) blue:(108.0f/255.0f) alpha:1.0f]];
+        [subtitleLabel setTextColor:[UIColor darkGrayColor]];
         [subtitleLabel setBackgroundColor:[UIColor clearColor]];
         [subtitleLabel setFont:[UIFont systemFontOfSize:14.0f]];
         [self addSubview:subtitleLabel];

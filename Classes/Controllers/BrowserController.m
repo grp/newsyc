@@ -13,6 +13,7 @@
 
 #import "ProgressHUD.h"
 #import "NSArray+Strings.h"
+#import "UIColor+Orange.h"
 #import "UIApplication+ActivityIndicator.h"
 #import "UINavigationItem+MultipleItems.h"
 
@@ -113,7 +114,7 @@
     }
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-        [toolbar setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+        [toolbar setTintColor:[UIColor mainOrangeColor]];
     } else {
         [toolbar setTintColor:nil];
     }

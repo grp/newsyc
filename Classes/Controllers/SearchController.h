@@ -15,7 +15,7 @@
     NSMutableArray *entries;
 
     UISearchBar *searchBar;
-    UIView *coloredView;
+    UINavigationBar *coloredView;
     UISegmentedControl *facetControl;
     
 	UITableView *tableView;

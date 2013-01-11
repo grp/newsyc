@@ -105,7 +105,7 @@
         
         overlay = [[UIView alloc] init];
         [overlay setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
-        [overlay setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.8f]];
+        [overlay setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8f]];
         [[overlay layer] setCornerRadius:10.0f];
         
         [overlay addSubview:spinner];

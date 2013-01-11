@@ -8,6 +8,8 @@
 
 #import "HackerNewsLoginController.h"
 
+#import "UIColor+Orange.h"
+
 @implementation HackerNewsLoginController
 @synthesize session;
 
@@ -48,8 +50,8 @@
 
 - (NSArray *)gradientColors {
     NSMutableArray *array = [NSMutableArray array];
-    [array addObject:(id) [[UIColor colorWithRed:1.0f green:0.6f blue:0.2f alpha:1.0f] CGColor]];
-    [array addObject:(id) [[UIColor colorWithRed:0.4f green:0.1f blue:0.0f alpha:1.0f] CGColor]];
+    [array addObject:(id) [[UIColor lightOrangeColor] CGColor]];
+    [array addObject:(id) [[UIColor mainOrangeColor] CGColor]];
     return array;
 }
 

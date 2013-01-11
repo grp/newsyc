@@ -9,7 +9,7 @@
 #import "SubmissionTableCell.h"
 #import "CommentListController.h"
 #import "LoadingIndicatorView.h"
-
+#import "UIColor+Orange.h"
 #import "AppDelegate.h"
 
 @implementation SearchController
@@ -32,7 +32,7 @@
     [searchBar setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
     [searchBar setDelegate:self];
 
-    coloredView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, [searchBar bounds].size.height)];
+    coloredView = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, [searchBar bounds].size.height)];
     [coloredView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
     [[self view] addSubview:coloredView];
     
@@ -218,13 +218,13 @@
     }
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-        [searchBar setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
-        [facetControl setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
-        [coloredView setBackgroundColor:[UIColor colorWithRed:(236.0f / 255.0f) green:(141.0f / 255.0f) blue:(91.0f / 255.0f) alpha:1.0f]];
+        [searchBar setTintColor:[UIColor mainOrangeColor]];
+        [facetControl setTintColor:[UIColor mainOrangeColor]];
+        [coloredView setTintColor:[UIColor orangeColor]];
     } else {
         [searchBar setTintColor:nil];
         [facetControl setTintColor:nil];
-        [coloredView setBackgroundColor:[UIColor colorWithRed:(170.0f / 255.0f) green:(180.0f / 255.0f) blue:(190.0f / 255.0f) alpha:1.0f]];
+        [coloredView setTintColor:nil];
     }
 }
 

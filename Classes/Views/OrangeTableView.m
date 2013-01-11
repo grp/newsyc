@@ -7,6 +7,7 @@
 //
 
 #import "OrangeTableView.h"
+#import "UIColor+Orange.h"
 
 @implementation OrangeTableView
 @synthesize orange;
@@ -17,7 +18,7 @@
         
         orangeBackgroundView = [[UIView alloc] initWithFrame:[self bounds]];
         [orangeBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        [orangeBackgroundView setBackgroundColor:[UIColor colorWithRed:(234.0f / 255.0f) green:(232.0f / 255.0f) blue:(224.0f / 255.0f) alpha:1.0f]];
+        [orangeBackgroundView setBackgroundColor:[UIColor paleOrangeColor]];
         
         tableBackgroundView = [[UITableView alloc] initWithFrame:[self bounds] style:UITableViewStyleGrouped];
         [tableBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];

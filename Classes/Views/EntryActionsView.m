@@ -12,6 +12,7 @@
 
 #import "EntryActionsView.h"
 #import "UIImage+Colorize.h"
+#import "UIColor+Orange.h"
 
 @interface EntryActionsView ()
 
@@ -79,7 +80,7 @@
         [self setTintColor:nil];
     } else if (style == kEntryActionsViewStyleOrange) {
         [self setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-        [self setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+        [self setTintColor:[UIColor mainOrangeColor]];
     } else if (style == kEntryActionsViewStyleLight) {
         UIImage *backgroundImage = [[UIImage imageNamed:@"toolbar-expanded.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
         [self setBackgroundImage:backgroundImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
