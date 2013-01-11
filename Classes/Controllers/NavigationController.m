@@ -9,6 +9,7 @@
 #import "NavigationController.h"
 
 #import "LoginController.h"
+#import "UIColor+Orange.h"
 #import "HackerNewsLoginController.h"
 
 @implementation NavigationController
@@ -41,7 +42,7 @@
     [super viewWillAppear:animated];
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-        [[self navigationBar] setTintColor:[UIColor colorWithRed:1.0f green:0.4f blue:0.0f alpha:1.0f]];
+        [[self navigationBar] setTintColor:[UIColor mainOrangeColor]];
     } else {
         [[self navigationBar] setTintColor:nil];
     }
