@@ -350,15 +350,15 @@
 
 - (void)clearHighlights {
     if (highlightedRects != nil) {
-        [tapRecognizer setEnabled:YES];
-        [doubleTapRecognizer setEnabled:YES];
-
         [highlightedRects release];
         highlightedRects = nil;
     } else if (userHighlighted) {
         userHighlighted = NO;
     }
 
+    [tapRecognizer setEnabled:YES];
+    [doubleTapRecognizer setEnabled:YES];
+    
     [self setNeedsDisplay];
 }
 
