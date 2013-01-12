@@ -26,6 +26,8 @@
 #import "AppDelegate.h"
 #import "ModalNavigationController.h"
 
+#import "NSString+Tags.h"
+
 @interface CommentListController ()
 
 - (void)setupHeader;
@@ -540,7 +542,7 @@
                 [[this navigationController] pushController:[controller autorelease] animated:YES];
             } else if (index == 3) {
                 NSString *commentStringWithHTML = [[expandedCell comment] body];
-                NSString *commentStringWithoutHTML = [this stripTagsFromComment:commentStringWithHTML];
+                NSString *commentStringWithoutHTML = [commentStringWithHTML stringByRemovingHTMLTags];
                 UIPasteboard *pb = [UIPasteboard generalPasteboard];
                 [pb setString:commentStringWithoutHTML];
             }
@@ -605,32 +607,6 @@
         NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:[login autorelease]];
         [[this navigationController] presentModalViewController:[navigation autorelease] animated:YES];
     }
-}
-
-- (NSString *)stripTagsFromComment:(NSString *)str
-{
-    NSMutableString *html = [NSMutableString stringWithCapacity:[str length]];
-    
-    NSScanner *scanner = [NSScanner scannerWithString:str];
-    scanner.charactersToBeSkipped = NULL;
-    NSString *tempText = nil;
-    
-    while (![scanner isAtEnd])
-    {
-        [scanner scanUpToString:@"<" intoString:&tempText];
-        
-        if (tempText != nil)
-            [html appendString:tempText];
-        
-        [scanner scanUpToString:@">" intoString:NULL];
-        
-        if (![scanner isAtEnd])
-            [scanner setScanLocation:[scanner scanLocation] + 1];
-        
-        tempText = nil;
-    }
-    
-    return html;
 }
 
 - (NSString *)sourceTitle {
