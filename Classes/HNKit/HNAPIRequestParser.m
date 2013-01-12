@@ -198,12 +198,7 @@ typedef enum {
         } else if ([[element attributeWithName:@"class"] isEqual:@"title"] && [[[[element content] stringByRemovingHTMLTags] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@"More"]) {
             for (XMLElement *element2 in [element children]) {
                 if ([[element2 tagName] isEqualToString:@"a"]) {
-                    NSString *morehref = [element2 attributeWithName:@"href"];
-                    
-                    // XXX: this breaks the second news page when not logged in, since that now uses /news2 rather than /x?fnid= for performance reasons.
-                    if ([morehref hasPrefix:@"/x?fnid="]) {
-                        more = [morehref substringFromIndex:[@"/x?fnid=" length]];
-                    }
+                    more = [element2 attributeWithName:@"href"];
                 }
             }
         }
@@ -270,11 +265,7 @@ typedef enum {
         if ([[element attributeWithName:@"class"] isEqual:@"title"] && [[[[element content] stringByRemovingHTMLTags] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@"More"]) {
             for (XMLElement *element2 in [element children]) {
                 if ([[element2 tagName] isEqualToString:@"a"]) {
-                    NSString *morehref = [element2 attributeWithName:@"href"];
-                    
-                    if ([morehref hasPrefix:@"/x?fnid="]) {
-                        more = [morehref substringFromIndex:[@"/x?fnid=" length]];
-                    }
+                    more = [element2 attributeWithName:@"href"];
                 }
             }
         } else if ([[element tagName] isEqual:@"td"]) {
@@ -337,11 +328,7 @@ typedef enum {
         } else if ([[element attributeWithName:@"class"] isEqual:@"title"] && [[[[element content] stringByRemovingHTMLTags] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@"More"]) {
             for (XMLElement *element2 in [element children]) {
                 if ([[element2 tagName] isEqualToString:@"a"]) {
-                    NSString *morehref = [element2 attributeWithName:@"href"];
-                        
-                    if ([morehref hasPrefix:@"/x?fnid="]) {
-                        more = [morehref substringFromIndex:[@"/x?fnid=" length]];
-                    }
+                    more = [element2 attributeWithName:@"href"];
                 }
             }
         } else {

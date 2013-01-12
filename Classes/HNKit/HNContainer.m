@@ -10,6 +10,8 @@
 #import "HNAPIRequest.h"
 #import "HNEntry.h"
 
+#import "NSURL+Parameters.h"
+
 @implementation HNContainer
 @synthesize entries, moreToken;
 
@@ -34,11 +36,16 @@
     if ([self isLoadingMore] || moreToken == nil || ![self isLoaded]) return;
     
     [self addLoadingState:kHNContainerLoadingStateLoadingMore];
+
+    NSURL *moreURL = [NSURL URLWithString:moreToken];
     
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:moreToken forKey:@"fnid"];
+    NSString *path = [moreURL path];
+    if ([path hasPrefix:@"/"]) path = [path substringFromIndex:[@"/" length]];
+    NSDictionary *parameters = [moreURL parameterDictionary];
+    if (parameters == nil) parameters = [NSDictionary dictionary];
     
     moreRequest = [[HNAPIRequest alloc] initWithSession:session target:self action:@selector(moreRequest:completedWithResponse:error:)];
-    [moreRequest performRequestWithPath:@"x" parameters:parameters];
+    [moreRequest performRequestWithPath:path parameters:parameters];
 }
 
 - (void)cancelLoadingMore {
