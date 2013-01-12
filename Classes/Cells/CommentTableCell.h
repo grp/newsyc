@@ -18,6 +18,7 @@
     
     CGRect bodyrect;
     NSSet *highlightedRects;
+    BOOL userHighlighted;
     
     __weak id<CommentTableCellDelegate> delegate;
     
@@ -46,6 +47,7 @@
 @optional
 
 - (void)commentTableCellTapped:(CommentTableCell *)cell;
+- (void)commentTableCellTappedUser:(CommentTableCell *)cell;
 - (void)commentTableCellDoubleTapped:(CommentTableCell *)cell;
 - (void)commentTableCell:(CommentTableCell *)cell selectedURL:(NSURL *)url;
 

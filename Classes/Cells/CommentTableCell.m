@@ -174,7 +174,6 @@
 }
 
 + (BOOL)entryShowsPoints:(HNEntry *)entry {
-    return YES;
     // Re-enable this for everyone if comment score viewing is re-enabled.
     return [entry submitter] == [[entry session] user];
 }
@@ -207,11 +206,43 @@
 
 #pragma mark - Drawing
 
-- (void)drawContentView:(CGRect)rect {
+- (CGRect)drawingBounds {
     CGRect bounds = [self bounds];
     bounds.origin.x += (indentationLevel * [[self class] indentationDepth]);
     if (expanded) bounds.size.height -= [toolbarView bounds].size.height + 2.0f;
-    
+
+    return bounds;
+}
+
+- (CGRect)userFrame {
+    CGRect bounds = [self drawingBounds];
+    UIEdgeInsets margins = [[self class] margins];
+
+    NSString *user = [[comment submitter] identifier];
+
+    CGRect userrect;
+    userrect.origin.x = bounds.origin.x + margins.left;
+    userrect.origin.y = margins.top;
+    userrect.size = [user sizeWithFont:[[self class] userFont]];
+
+    return userrect;
+}
+
+- (CGRect)dateFrame {
+    CGRect bounds = [self drawingBounds];
+    UIEdgeInsets margins = [[self class] margins];
+
+    NSString *date = [comment posted];
+
+    CGRect daterect;
+    daterect.size = [date sizeWithFont:[[self class] dateFont]];
+    daterect.origin = CGPointMake(bounds.size.width - daterect.size.width - margins.right, margins.top);
+
+    return daterect;
+}
+
+- (void)drawContentView:(CGRect)rect {
+    CGRect bounds = [self drawingBounds];
     CGSize offsets = [[self class] offsets];
     UIEdgeInsets margins = [[self class] margins];
 
@@ -222,17 +253,19 @@
 
     // draw username
     [[UIColor blackColor] set];
-    CGRect userrrect;
-    userrrect.origin.x = bounds.origin.x + margins.left;
-    userrrect.origin.y = margins.top;
-    userrrect.size = [user sizeWithFont:[[self class] userFont]];
-    [user drawInRect:userrrect withFont:[[self class] userFont]];
+    CGRect userrect = [self userFrame];
+    [user drawInRect:userrect withFont:[[self class] userFont]];
+
+    if (userHighlighted) {
+        CGRect rect = CGRectInset(userrect, -4.0f, -4.0f);
+        UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:3.0f];
+        [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
+        [bezierPath fill];
+    }
 
     // draw date
     [[UIColor lightGrayColor] set];
-    CGRect daterect;
-    daterect.size = [date sizeWithFont:[[self class] dateFont]];
-    daterect.origin = CGPointMake(bounds.size.width - daterect.size.width - margins.right, margins.top);
+    CGRect daterect = [self dateFrame];
     [date drawInRect:daterect withFont:[[self class] dateFont]];
     
     // draw comment body
@@ -253,8 +286,9 @@
     pointsrect.size.width = (bounds.size.width + bounds.origin.x) / 2 - margins.left - offsets.width;
     pointsrect.origin.x = bounds.origin.x + margins.left;
     pointsrect.origin.y = bounds.size.height - margins.bottom - pointsrect.size.height;
-    if ([[self class] entryShowsPoints:comment])
+    if ([[self class] entryShowsPoints:comment]) {
           [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
+    }
     
     // draw replies count
     [[UIColor grayColor] set];
@@ -288,24 +322,12 @@
     linerect.size.height = 1.0f / [[UIScreen mainScreen] scale];
     linerect.origin.y = bounds.size.height - linerect.size.height;
     [[UIColor colorWithWhite:0.85f alpha:1.0f] set];
-    
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         UIRectFill(linerect);
     }
 }
 
 #pragma mark - Tap Handlers
-
-- (void)clearHighlightedRects {
-    if (highlightedRects != nil) {
-        [tapRecognizer setEnabled:YES];
-        [doubleTapRecognizer setEnabled:YES];
-
-        [highlightedRects release];
-        highlightedRects = nil;
-        [self setNeedsDisplay];
-    }
-}
 
 - (void)singleTapped {
     if ([delegate respondsToSelector:@selector(commentTableCellTapped:)]) {
@@ -326,16 +348,40 @@
     return bodyPoint;
 }
 
+- (void)clearHighlights {
+    if (highlightedRects != nil) {
+        [tapRecognizer setEnabled:YES];
+        [doubleTapRecognizer setEnabled:YES];
+
+        [highlightedRects release];
+        highlightedRects = nil;
+    } else if (userHighlighted) {
+        userHighlighted = NO;
+    }
+
+    [self setNeedsDisplay];
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self clearHighlightedRects];
+    [self clearHighlights];
 
     UITouch *touch = [touches anyObject];
-    CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
-    
-    [[comment renderer] linkURLAtPoint:point forWidth:bodyrect.size.width rects:&highlightedRects];
+    CGPoint location = [touch locationInView:self];
+
+    CGPoint bodyPoint = [self bodyPointForPoint:location];
+    [[comment renderer] linkURLAtPoint:bodyPoint forWidth:bodyrect.size.width rects:&highlightedRects];
+
+    BOOL tapRecognized = NO;
 
     if (highlightedRects != nil) {
         [highlightedRects retain];
+        tapRecognized = YES;
+    } else if (CGRectContainsPoint([self userFrame], location)) {
+        userHighlighted = YES;
+        tapRecognized = YES;
+    }
+
+    if (tapRecognized) {
         [self setNeedsDisplay];
 
         [tapRecognizer setEnabled:NO];
@@ -355,26 +401,38 @@
                 [delegate commentTableCell:self selectedURL:url];
             }
         }
+    } else if (userHighlighted) {
+        if ([delegate respondsToSelector:@selector(commentTableCellTappedUser:)]) {
+            [delegate commentTableCellTappedUser:self];
+        }
     }
 
     navigationCancelled = NO;
-    [self clearHighlightedRects];
+    [self clearHighlights];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     navigationCancelled = NO;
-    [self clearHighlightedRects];
+    [self clearHighlights];
 }
 
 - (void)tapFromRecognizer:(UITapGestureRecognizer *)gesture {
-    if (highlightedRects == nil) {
-        [self singleTapped];
+    if (highlightedRects == nil && !userHighlighted) {
+        CGPoint location = [gesture locationInView:self];
+
+        if (!expanded || location.y < [toolbarView frame].origin.y) {
+            [self singleTapped];
+        }
     }
 }
 
 - (void)doubleTapFromRecognizer:(UITapGestureRecognizer *)gesture {
-    if (highlightedRects == nil) {
-        [self doubleTapped];
+    if (highlightedRects == nil && !userHighlighted) {
+        CGPoint location = [gesture locationInView:self];
+
+        if (!expanded || location.y < [toolbarView frame].origin.y) {
+            [self doubleTapped];
+        }
     }
 }
 

@@ -342,6 +342,10 @@
     }
 }
 
+- (void)commentTableCellTappedUser:(CommentTableCell *)cell {
+    [self showProfileForEntry:[cell comment]];
+}
+
 - (void)commentTableCellDoubleTapped:(CommentTableCell *)cell {
     HNEntry *entry = [self entryAtIndexPath:[tableView indexPathForCell:cell]];
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
@@ -449,6 +453,20 @@
     [eav beginLoadingItem:kEntryActionsViewItemFlag];
 }
 
+- (void)showProfileForEntry:(HNEntry *)entry {
+    ProfileController *controller = [[ProfileController alloc] initWithSource:[entry submitter]];
+    [controller setTitle:@"Profile"];
+    [controller autorelease];
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        [[self navigationController] pushController:controller animated:YES];
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        ModalNavigationController *navigation = [[ModalNavigationController alloc] initWithRootViewController:controller];
+        [self presentViewController:navigation animated:YES completion:NULL];
+        [navigation release];
+    }
+}
+
 - (void)composeControllerDidCancel:(EntryReplyComposeController *)controller {
     return;
 }
@@ -517,17 +535,7 @@
             [this performDownvoteForEntry:entry fromEntryActionsView:eav];            
         } else if (item == kEntryActionsViewItemActions) {
             if (index == 0) {
-                ProfileController *controller = [[ProfileController alloc] initWithSource:[entry submitter]];
-                [controller setTitle:@"Profile"];
-                [controller autorelease];
-                
-                if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-                    [[this navigationController] pushController:controller animated:YES];
-                } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-                    ModalNavigationController *navigation = [[ModalNavigationController alloc] initWithRootViewController:controller];
-                    [self presentViewController:navigation animated:YES completion:NULL];
-                    [navigation release];
-                }
+                [self showProfileForEntry:entry];
             } else if (index == 1) {
                 CommentListController *controller = [[CommentListController alloc] initWithSource:[entry parent]];
                 [[this navigationController] pushController:[controller autorelease] animated:YES];

@@ -97,9 +97,9 @@
 
 + (UIFont *)subtleFont {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return [UIFont systemFontOfSize:14.0f];
+        return [UIFont systemFontOfSize:16.0f];
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return [UIFont systemFontOfSize:11.0f];
+        return [UIFont systemFontOfSize:12.0f];
     }
 
     return nil;
@@ -124,10 +124,15 @@
     CGFloat disclosure = [self hasDestination] ? [[[self class] disclosureImage] size].width + offsets.width : 0.0f;
     CGFloat title = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(width - margins.left - margins.right - disclosure, 400.0f) lineBreakMode:NSLineBreakByWordWrapping].height;
     CGFloat date = [[entry posted] sizeWithFont:[[self class] subtleFont]].height;
+
+    // Don't make space for something we don't have.
+    title = ([[entry title] length] > 0 ? title : 0);
+    body = ([[entry body] length] > 0 ? body : 0);
+
+    // Add padding between the title and the body if we have both. 
+    CGFloat titleBodyPadding = ([[entry body] length] > 0 && [[entry title] length] > 0 ? offsets.height : 0);
     
-    body = [[entry body] length] > 0 ? body + offsets.height : 0;
-    
-    return margins.top + title + body + offsets.height + date + margins.bottom;
+    return margins.top + title + titleBodyPadding + body + offsets.height + date + margins.bottom;
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -157,6 +162,7 @@
     }
     
     CGRect titlerect;
+    CGFloat titleafter = 0;
     if ([[entry title] length] > 0) {
         [[UIColor blackColor] set];
 
@@ -164,10 +170,13 @@
         titlerect.origin.y = margins.top;
         titlerect.size.width = bounds.width - margins.left - margins.right - [disclosure size].width - ([self hasDestination] ? offsets.width : 0);
         titlerect.size.height = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(titlerect.size.width, 400.0f) lineBreakMode:NSLineBreakByWordWrapping].height;
+        [title drawInRect:titlerect withFont:[[self class] titleFont]];
+
+        titleafter = offsets.height;
     } else {
         titlerect = CGRectZero;
+        titleafter = 0;
     }
-    [title drawInRect:titlerect withFont:[[self class] titleFont]];
     
     if ([self hasDestination]) {
         CGRect disclosurerect;
@@ -181,7 +190,7 @@
         HNEntryBodyRenderer *renderer = [entry renderer];
 
         bodyRect.origin.x = margins.left;
-        bodyRect.origin.y = titlerect.origin.y + titlerect.size.height + offsets.height;
+        bodyRect.origin.y = margins.top + titlerect.size.height + titleafter;
         bodyRect.size.width = bounds.width - margins.left - margins.right;
         bodyRect.size.height = [renderer sizeForWidth:bodyRect.size.width].height;
             
