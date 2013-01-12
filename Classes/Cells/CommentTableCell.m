@@ -37,7 +37,7 @@
         [toolbarView setFrame:toolbarFrame];
         [toolbarView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
         
-        [contentView addSubview:toolbarView];
+        [self addSubview:toolbarView];
         [self setExpanded:NO];
         
         linkLongPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFromRecognizer:)];
@@ -349,17 +349,25 @@
 }
 
 - (void)clearHighlights {
+    BOOL wasHighlighted = NO;
+
     if (highlightedRects != nil) {
         [highlightedRects release];
         highlightedRects = nil;
+        wasHighlighted = YES;
     } else if (userHighlighted) {
         userHighlighted = NO;
+        wasHighlighted = YES;
     }
 
-    [tapRecognizer setEnabled:YES];
-    [doubleTapRecognizer setEnabled:YES];
+    navigationCancelled = NO;
+
+    if (wasHighlighted) {
+        [tapRecognizer setEnabled:YES];
+        [doubleTapRecognizer setEnabled:YES];
     
-    [self setNeedsDisplay];
+        [self setNeedsDisplay];
+    }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -407,12 +415,10 @@
         }
     }
 
-    navigationCancelled = NO;
     [self clearHighlights];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    navigationCancelled = NO;
     [self clearHighlights];
 }
 
