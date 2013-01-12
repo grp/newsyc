@@ -20,11 +20,14 @@
     if ((self = [super init])) {
         cache = [[HNObjectCache alloc] initWithSession:self];
 
-        HNUser *user_ = [HNUser session:self userWithIdentifier:username];
+        if (username != nil) {
+            HNUser *user_ = [HNUser session:self userWithIdentifier:username];
+            [self setUser:user_];
+        }
         
-        [self setUser:user_];
         [self setToken:token_];
         [self setPassword:password_];
+
         [self setLoaded:YES];
 
         [cache createPersistentCache];
