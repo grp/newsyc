@@ -21,22 +21,23 @@
 - (id)initWithReuseIdentifier:(NSString *)identifier {
     if ((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier])) {
         [contentView setBackgroundColor:[UIColor whiteColor]];
+        [self setShowsDivider:NO];
         
         CALayer *layer = [contentView layer];
         [layer setContentsGravity:kCAGravityBottomLeft];
         [layer setNeedsDisplayOnBoundsChange:YES];
         
         toolbarView = [[EntryActionsView alloc] initWithFrame:CGRectZero];
-        [toolbarView setStyle:kEntryActionsViewStyleLight];
         [toolbarView sizeToFit];
-        
+        [toolbarView setStyle:kEntryActionsViewStyleLight];
+
         CGRect toolbarFrame = [toolbarView frame];
         toolbarFrame.origin.y = [self bounds].size.height;
         toolbarFrame.size.width = [self bounds].size.width;
         [toolbarView setFrame:toolbarFrame];
         [toolbarView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
         
-        [self addSubview:toolbarView];
+        [contentView addSubview:toolbarView];
         [self setExpanded:NO];
         
         linkLongPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFromRecognizer:)];
@@ -83,7 +84,7 @@
         [toolbarView setFrame:toolbarFrame];
     } else {
         CGRect toolbarFrame = [toolbarView frame];
-        toolbarFrame.origin.y = [self bounds].size.height;
+        toolbarFrame.origin.y = [self bounds].size.height + 2.0f;
         toolbarFrame.size.width = [self bounds].size.width;
         [toolbarView setFrame:toolbarFrame];
     }
@@ -114,9 +115,9 @@
 
 + (UIEdgeInsets)margins {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return UIEdgeInsetsMake(18.0f, 21.0f, 25.0f, 20.0f);
+        return UIEdgeInsetsMake(30.0f, 32.0f, 32.0f, 32.0f);
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return UIEdgeInsetsMake(8.0f, 10.0f, 13.0f, 10.0);
+        return UIEdgeInsetsMake(12.0f, 12.0f, 15.0f, 12.0);
     }
     
     return UIEdgeInsetsZero;
@@ -124,7 +125,7 @@
 
 + (CGSize)offsets {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return CGSizeMake(8.0f, 4.0f);
+        return CGSizeMake(8.0f, 8.0f);
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         return CGSizeMake(8.0f, 4.0f);
     }
@@ -134,34 +135,53 @@
 
 + (CGFloat)indentationDepth {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return 40.0f;
+        return 30.0f;
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return 15.0f;
+        return 10.0f;
     }
     
     return 0.0f;
 }
 
 + (UIFont *)userFont {
-    return [UIFont boldSystemFontOfSize:14.0f];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return [UIFont boldSystemFontOfSize:17.0f];
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return [UIFont boldSystemFontOfSize:14.0f];
+    }
+
+    return nil;
 }
 
 + (UIFont *)dateFont {
-    return [UIFont systemFontOfSize:13.0f];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return [UIFont systemFontOfSize:16.0f];
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return [UIFont systemFontOfSize:13.0f];
+    }
+
+    return nil;
 }
 
 + (UIFont *)subtleFont {
-    return [UIFont systemFontOfSize:13.0f];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return [UIFont systemFontOfSize:16.0f];
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return [UIFont systemFontOfSize:13.0f];
+    }
+
+    return nil;
 }
 
 + (BOOL)entryShowsPoints:(HNEntry *)entry {
+    return YES;
     // Re-enable this for everyone if comment score viewing is re-enabled.
     return [entry submitter] == [[entry session] user];
 }
 
 #pragma mark - Height Calculations
 
-+ (CGFloat)bodyHeightForComment:(HNEntry *)comment withWidth:(CGFloat)width indentationLevel:(int)indentationLevel {
++ (CGFloat)bodyHeightForComment:(HNEntry *)comment withWidth:(CGFloat)width indentationLevel:(NSInteger)indentationLevel {
     width -= ([self margins].left + [self margins].right);
     width -= (indentationLevel * [self indentationDepth]);
     
@@ -171,13 +191,16 @@
     return size.height;
 }
 
-+ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width expanded:(BOOL)expanded indentationLevel:(int)indentationLevel {
-    CGFloat height = [self margins].top;
++ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width expanded:(BOOL)expanded indentationLevel:(NSInteger)indentationLevel {
+    UIEdgeInsets margins = [self margins];
+    CGSize offsets = [self offsets];
+
+    CGFloat height = margins.top;
     height += [[self userFont] lineHeight];
     height += [self bodyHeightForComment:entry withWidth:width indentationLevel:indentationLevel];
-    if ([self entryShowsPoints:entry]) height += [self offsets].height + [[self subtleFont] lineHeight];
-    height += [self margins].bottom;
-    if (expanded) height += 44.0f;
+    if ([self entryShowsPoints:entry]) height += offsets.height + [[self subtleFont] lineHeight];
+    height += margins.bottom;
+    if (expanded) height += 46.0f;
     
     return height;
 }
@@ -187,20 +210,24 @@
 - (void)drawContentView:(CGRect)rect {
     CGRect bounds = [self bounds];
     bounds.origin.x += (indentationLevel * [[self class] indentationDepth]);
-    if (expanded) bounds.size.height -= 44.0f;
+    if (expanded) bounds.size.height -= [toolbarView bounds].size.height + 2.0f;
     
     CGSize offsets = [[self class] offsets];
     UIEdgeInsets margins = [[self class] margins];
-    
+
     NSString *user = [[comment submitter] identifier];
     NSString *date = [comment posted];
     NSString *points = [comment points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [comment points]];
     NSString *comments = [comment children] == 0 ? @"" : [comment children] == 1 ? @"1 reply" : [NSString stringWithFormat:@"%d replies", [comment children]];
-    
+
     // draw username
     [[UIColor blackColor] set];
-    [user drawAtPoint:CGPointMake(bounds.origin.x + margins.left, margins.top) withFont:[[self class] userFont]];
-    
+    CGRect userrrect;
+    userrrect.origin.x = bounds.origin.x + margins.left;
+    userrrect.origin.y = margins.top;
+    userrrect.size = [user sizeWithFont:[[self class] userFont]];
+    [user drawInRect:userrrect withFont:[[self class] userFont]];
+
     // draw date
     [[UIColor lightGrayColor] set];
     CGRect daterect;
@@ -240,7 +267,7 @@
     // draw link highlight
     UIBezierPath *highlightBezierPath = [UIBezierPath bezierPath];
     for (NSValue *rect in highlightedRects) {
-        CGRect highlightedRect = [rect CGRectValue];
+        CGRect highlightedRect = CGRectIntegral([rect CGRectValue]);
         
         if (highlightedRect.size.width != 0 && highlightedRect.size.height != 0) {            
             CGRect rect = CGRectInset(highlightedRect, -4.0f, -4.0f);
@@ -256,12 +283,13 @@
 
     // draw divider line
     CGRect linerect;
-    linerect.origin.x = bodyrect.origin.x;
-    linerect.size.width = bodyrect.size.width;
-    linerect.origin.y = bounds.size.height - 1.0f;
-    linerect.size.height = 1.0f;
-    if (!expanded) {
-        [[UIColor lightGrayColor] set];
+    linerect.origin.x = 0;
+    linerect.size.width = bounds.size.width;
+    linerect.size.height = 1.0f / [[UIScreen mainScreen] scale];
+    linerect.origin.y = bounds.size.height - linerect.size.height;
+    [[UIColor colorWithWhite:0.85f alpha:1.0f] set];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         UIRectFill(linerect);
     }
 }

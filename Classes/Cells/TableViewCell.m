@@ -45,6 +45,8 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    
 	[cell drawContentView:rect];
 }
 

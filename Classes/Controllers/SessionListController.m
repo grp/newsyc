@@ -71,17 +71,17 @@
             [tableView deselectRowAtIndexPath:newIndexPath animated:YES];
         }
     }
+
+    if (!animated) {
+        [self pushAutomaticDisplaySesssionAnimated:animated];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    if (automaticDisplaySession != nil) {
-        [self pushMainControllerForSession:automaticDisplaySession animated:animated];
-        [automaticDisplaySession release];
-        automaticDisplaySession = nil;
-    } else {
-        [self pushAnonymousSessionIfNecessaryAnimated:animated];
+    if (animated) {
+        [self pushAutomaticDisplaySesssionAnimated:animated];
     }
 
     [[HNSessionController sessionController] setRecentSession:nil];
@@ -147,6 +147,10 @@
     
     [[self navigationController] pushController:tabBarController animated:animated];
     [tabBarController release];
+
+    if (!animated) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
+    }
 }
 
 - (void)pushAnonymousSessionIfNecessaryAnimated:(BOOL)animated {
@@ -154,6 +158,16 @@
         HNAnonymousSession *anonymousSession = [[HNAnonymousSession alloc] init];
         [self pushMainControllerForSession:anonymousSession animated:animated];
         [anonymousSession release];
+    }
+}
+
+- (void)pushAutomaticDisplaySesssionAnimated:(BOOL)animated {
+    if (automaticDisplaySession != nil) {
+        [self pushMainControllerForSession:automaticDisplaySession animated:animated];
+        [automaticDisplaySession release];
+        automaticDisplaySession = nil;
+    } else {
+        [self pushAnonymousSessionIfNecessaryAnimated:animated];
     }
 }
 

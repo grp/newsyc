@@ -24,6 +24,7 @@
     [super loadView];
 
     tableViewController = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
+    [tableViewController setClearsSelectionOnViewWillAppear:NO];
     [self addChildViewController:tableViewController];
 
     tableView = [[tableViewController tableView] retain];
@@ -99,7 +100,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     [self deselectWithAnimation:YES];
 }
 

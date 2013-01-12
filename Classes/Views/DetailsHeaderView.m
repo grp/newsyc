@@ -55,16 +55,54 @@
     [super dealloc];
 }
 
++ (UIEdgeInsets)margins {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return UIEdgeInsetsMake(20.0f, 30.0f, 20.0f, 30.0f);
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return UIEdgeInsetsMake(10.0f, 8.0f, 4.0f, 8.0f);
+    }
+
+    return UIEdgeInsetsZero;
+}
+
 + (CGSize)offsets {
-    return CGSizeMake(8.0f, 4.0f);
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return CGSizeMake(12.0f, 12.0f);
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return CGSizeMake(8.0f, 8.0f);
+    }
+
+    return CGSizeZero;
 }
 
 + (UIFont *)titleFont {
-    return [UIFont boldSystemFontOfSize:16.0f];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return [UIFont boldSystemFontOfSize:19.0f];
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return [UIFont boldSystemFontOfSize:16.0f];
+    }
+
+    return nil;
+}
+
++ (UIFont *)bodyFont {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return [UIFont boldSystemFontOfSize:19.0f];
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return [UIFont boldSystemFontOfSize:16.0f];
+    }
+
+    return nil;
 }
 
 + (UIFont *)subtleFont {
-    return [UIFont systemFontOfSize:11.0f];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return [UIFont systemFontOfSize:14.0f];
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return [UIFont systemFontOfSize:11.0f];
+    }
+
+    return nil;
 }
 
 - (void)setEntry:(HNEntry *)entry_ {
@@ -79,22 +117,24 @@
 }
 
 - (CGFloat)suggestedHeightWithWidth:(CGFloat)width {
+    UIEdgeInsets margins = [[self class] margins];
     CGSize offsets = [[self class] offsets];
     
-    CGFloat body = [[entry renderer] sizeForWidth:(width - offsets.width - offsets.width)].height;
+    CGFloat body = [[entry renderer] sizeForWidth:(width - margins.left - margins.right)].height;
     CGFloat disclosure = [self hasDestination] ? [[[self class] disclosureImage] size].width + offsets.width : 0.0f;
-    CGFloat title = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(width - (offsets.width * 2) - disclosure, 400.0f) lineBreakMode:NSLineBreakByWordWrapping].height;
+    CGFloat title = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(width - margins.left - margins.right - disclosure, 400.0f) lineBreakMode:NSLineBreakByWordWrapping].height;
+    CGFloat date = [[entry posted] sizeWithFont:[[self class] subtleFont]].height;
     
-    CGFloat bodyArea = [[entry body] length] > 0 ? offsets.height + body : 0;
-    CGFloat titleArea = [[entry title] length] > 0 ? offsets.height + title : 0;
+    body = [[entry body] length] > 0 ? body + offsets.height : 0;
     
-    return titleArea + bodyArea + 30.0f + offsets.height + (titleArea > 0 && bodyArea > 0 ? 8.0f : 0);
+    return margins.top + title + body + offsets.height + date + margins.bottom;
 }
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     
     CGSize bounds = [self bounds].size;
+    UIEdgeInsets margins = [[self class] margins];
     CGSize offsets = [[self class] offsets];
     
     if ([self isHighlighted] && [self hasDestination]) {
@@ -119,11 +159,11 @@
     CGRect titlerect;
     if ([[entry title] length] > 0) {
         [[UIColor blackColor] set];
-        
-        titlerect.size.width = bounds.width - (offsets.width * 2) - [disclosure size].width - ([self hasDestination] ? offsets.width : 0);
+
+        titlerect.origin.x = margins.left;
+        titlerect.origin.y = margins.top;
+        titlerect.size.width = bounds.width - margins.left - margins.right - [disclosure size].width - ([self hasDestination] ? offsets.width : 0);
         titlerect.size.height = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(titlerect.size.width, 400.0f) lineBreakMode:NSLineBreakByWordWrapping].height;
-        titlerect.origin.x = offsets.width;
-        titlerect.origin.y = offsets.height + 8.0f;
     } else {
         titlerect = CGRectZero;
     }
@@ -132,17 +172,17 @@
     if ([self hasDestination]) {
         CGRect disclosurerect;
         disclosurerect.size = [disclosure size];
-        disclosurerect.origin.x = bounds.width - offsets.width - disclosurerect.size.width;
-        disclosurerect.origin.y = titlerect.origin.y + (titlerect.size.height / 2) - (disclosurerect.size.height / 2);
+        disclosurerect.origin.x = bounds.width - margins.right - disclosurerect.size.width;
+        disclosurerect.origin.y = CGRectGetMidY(titlerect) - (disclosurerect.size.height / 2);
         [disclosure drawInRect:disclosurerect];
     }
 
     if ([[entry body] length] > 0) {
         HNEntryBodyRenderer *renderer = [entry renderer];
-        
-        bodyRect.origin.y = titlerect.origin.y + titlerect.size.height + offsets.height + offsets.height;
-        bodyRect.origin.x = offsets.width;
-        bodyRect.size.width = bounds.width - offsets.width - offsets.width;
+
+        bodyRect.origin.x = margins.left;
+        bodyRect.origin.y = titlerect.origin.y + titlerect.size.height + offsets.height;
+        bodyRect.size.width = bounds.width - margins.left - margins.right;
         bodyRect.size.height = [renderer sizeForWidth:bodyRect.size.width].height;
             
         [renderer renderInContext:UIGraphicsGetCurrentContext() rect:bodyRect];
@@ -150,24 +190,24 @@
     
     [[UIColor grayColor] set];
     CGRect pointsrect;
-    pointsrect.size.width = bounds.width / 2 - (offsets.width * 2);
+    pointsrect.size.width = (bounds.width - margins.left - margins.right) / 2;
     pointsrect.size.height = [pointdate sizeWithFont:[[self class] subtleFont]].height;
-    pointsrect.origin.x = offsets.width;
-    pointsrect.origin.y = bounds.height - offsets.height - 2.0f - pointsrect.size.height;
+    pointsrect.origin.x = margins.left;
+    pointsrect.origin.y = bounds.height - margins.bottom - 2.0f - pointsrect.size.height;
     [pointdate drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
     
     [[UIColor darkGrayColor] set];
     CGRect userrect;
-    userrect.size.width = bounds.width / 2 - (offsets.width * 2);
+    userrect.size.width = (bounds.width - margins.left - margins.right) / 2;
     userrect.size.height = [user sizeWithFont:[[self class] subtleFont]].height;
-    userrect.origin.x = bounds.width / 2 + offsets.width;
-    userrect.origin.y = bounds.height - offsets.height - 2.0f - userrect.size.height;
+    userrect.origin.x = bounds.width - margins.right - userrect.size.width;
+    userrect.origin.y = bounds.height - margins.bottom - 2.0f - userrect.size.height;
     [user drawInRect:userrect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingHead alignment:NSTextAlignmentRight];
     
     // draw link highlight
     UIBezierPath *highlightBezierPath = [UIBezierPath bezierPath];
     for (NSValue *rect in highlightedRects) {
-        CGRect highlightedRect = [rect CGRectValue];
+        CGRect highlightedRect = CGRectIntegral([rect CGRectValue]);
 
         if (highlightedRect.size.width != 0 && highlightedRect.size.height != 0) {
             CGRect rect = CGRectInset(highlightedRect, -4.0f, -4.0f);

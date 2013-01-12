@@ -141,7 +141,7 @@
         
         [window setRootViewController:splitController];
         
-        [HNEntryBodyRenderer setDefaultFontSize:14.0f];
+        [HNEntryBodyRenderer setDefaultFontSize:16.0f];
     } else {
         NSAssert(NO, @"Invalid Device Type");
     }
@@ -152,10 +152,6 @@
                   
     [window makeKeyAndVisible];
     [self startConnection];
-
-    // To ensure all setup has completed including such delayed for a run loop
-    // iteration, spin the run loop once inside this method before the UI draws.
-    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
         
     return YES;
 }

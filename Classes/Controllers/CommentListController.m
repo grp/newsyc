@@ -78,6 +78,9 @@
             [entryActionsView setFrame:actionsFrame];
         }
     }
+
+    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [tableView setSeparatorColor:[UIColor whiteColor]];
 }
 
 - (void)viewDidUnload {
@@ -134,6 +137,9 @@
             expandedCell = nil;
         }
     }
+
+    [tableView setSeparatorColor:[UIColor whiteColor]];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -145,13 +151,15 @@
         } else {
             [entryActionsView setStyle:kEntryActionsViewStyleDefault];
         }
-    } else {
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
             [entryActionsView setStyle:kEntryActionsViewStyleTransparentLight];
         } else {
             [entryActionsView setStyle:kEntryActionsViewStyleTransparentDark];
         }
     }
+
+    [tableView setSeparatorColor:[UIColor whiteColor]];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
