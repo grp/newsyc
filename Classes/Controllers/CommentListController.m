@@ -538,6 +538,11 @@
             } else if (index == 2) {
                 CommentListController *controller = [[CommentListController alloc] initWithSource:[entry submission]];
                 [[this navigationController] pushController:[controller autorelease] animated:YES];
+            } else if (index == 3) {
+                NSString *commentStringWithHTML = [[expandedCell comment] body];
+                NSString *commentStringWithoutHTML = [this stripTagsFromComment:commentStringWithHTML];
+                UIPasteboard *pb = [UIPasteboard generalPasteboard];
+                [pb setString:commentStringWithoutHTML];
             }
         }
         
@@ -574,6 +579,7 @@
             [sheet release];
         } else if (item == kEntryActionsViewItemActions) {
             UIActionSheet *sheet = [[UIActionSheet alloc] init];
+            if ([entry submission]) [sheet addButtonWithTitle:@"Copy Comment"];
             if ([entry submission]) [sheet addButtonWithTitle:@"Submission"];
             if ([entry parent]) [sheet addButtonWithTitle:@"Parent"];
             [sheet addButtonWithTitle:@"Submitter"];
@@ -599,6 +605,32 @@
         NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:[login autorelease]];
         [[this navigationController] presentModalViewController:[navigation autorelease] animated:YES];
     }
+}
+
+- (NSString *)stripTagsFromComment:(NSString *)str
+{
+    NSMutableString *html = [NSMutableString stringWithCapacity:[str length]];
+    
+    NSScanner *scanner = [NSScanner scannerWithString:str];
+    scanner.charactersToBeSkipped = NULL;
+    NSString *tempText = nil;
+    
+    while (![scanner isAtEnd])
+    {
+        [scanner scanUpToString:@"<" intoString:&tempText];
+        
+        if (tempText != nil)
+            [html appendString:tempText];
+        
+        [scanner scanUpToString:@">" intoString:NULL];
+        
+        if (![scanner isAtEnd])
+            [scanner setScanLocation:[scanner scanLocation] + 1];
+        
+        tempText = nil;
+    }
+    
+    return html;
 }
 
 - (NSString *)sourceTitle {
