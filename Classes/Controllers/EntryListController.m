@@ -109,12 +109,7 @@
 - (void)sourceStartedLoading {
     [super sourceStartedLoading];
 
-    if (!refreshControlIgnoreNextBegan) {
-        [refreshControl beginRefreshing];
-    } else {
-        refreshControlIgnoreNextBegan = NO;
-    }
-    
+    [refreshControl beginRefreshing];
     [pullToRefreshView setState:PullToRefreshViewStateLoading];
 }
 
@@ -139,7 +134,6 @@
 }
 
 - (void)refreshFromRefreshControl:(UIRefreshControl *)control {
-    refreshControlIgnoreNextBegan = YES;
     [source beginLoading];
 }
 

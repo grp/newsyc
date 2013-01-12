@@ -18,7 +18,6 @@
     LoadMoreCell *moreCell;
     PullToRefreshView *pullToRefreshView;
     UIRefreshControl *refreshControl;
-    BOOL refreshControlIgnoreNextBegan;
     
     NSArray *entries;
 }
