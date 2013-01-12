@@ -149,6 +149,9 @@
     [tabBarController release];
 
     if (!animated) {
+        // If we aren't animated, we are expecting the controller to be pushed
+        // instantly. However, UINavigationController takes a run loop iteration
+        // to actually perform the push, so let that happen before we return.
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
     }
 }
