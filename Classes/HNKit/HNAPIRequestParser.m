@@ -19,6 +19,9 @@ typedef enum {
     kHNPageLayoutTypeExposed // <tr>[3:]
 } HNPageLayoutType;
 
+NSString *topBand; // band across the top of the site, for deaths, christmas etc
+int main_tr; // store whether the main content tr is 3 is usual or 4 with the top band
+
 @implementation HNAPIRequestParser
 
 - (NSDictionary *)parseUserProfileWithString:(NSString *)string {
@@ -70,11 +73,27 @@ typedef enum {
 
 - (HNPageLayoutType)pageLayoutTypeForDocument:(XMLDocument *)document {
     NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
+	int use_index;
     
     if ([elements count] >= 4) {
-        XMLElement *tr = [elements objectAtIndex:2];
+		// check for top band
+		XMLElement *tr_band = [elements objectAtIndex:0];
+        XMLElement *td_band = [[tr_band children] lastObject];
+		
+		if (![[td_band attributeWithName:@"bgcolor"] isEqualToString: @"#ff6600"])
+		{
+			topBand = [td_band attributeWithName:@"bgcolor"];
+			main_tr = 4;
+			
+		}
+		else
+		{
+			main_tr = 3;
+		}
+		
+        XMLElement *tr = [elements objectAtIndex: (main_tr-1)];
         XMLElement *td = [[tr children] lastObject];
-        
+		
         if (td != nil) {
             if ([[td children] count] == 0) {
                 return kHNPageLayoutTypeExposed;
@@ -104,12 +123,12 @@ typedef enum {
 }
 
 - (BOOL)rootElementIsSubmission:(XMLDocument *)document {
-    return [document firstElementMatchingPath:@"//body/center/table/tr[3]/td/table//td[@class='title']"] != nil;
+    return [document firstElementMatchingPath: [NSString stringWithFormat:@"//body/center/table/tr[%i]/td/table//td[@class='title']", main_tr]] != nil;
 }
 
 - (XMLElement *)rootElementForDocument:(XMLDocument *)document pageLayoutType:(HNPageLayoutType)type {
     if (type == kHNPageLayoutTypeHeaderFooter) {
-        return [document firstElementMatchingPath:@"//body/center/table/tr[3]/td/table[1]"];
+        return [document firstElementMatchingPath: [NSString stringWithFormat:@"//body/center/table/tr[%i]/td/table[1]", main_tr]];
     } else {
         return nil;
     }
@@ -117,13 +136,13 @@ typedef enum {
 
 - (NSArray *)contentRowsForDocument:(XMLDocument *)document pageLayoutType:(HNPageLayoutType)type {
     if (type == kHNPageLayoutTypeEnclosed) {
-        NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr[3]/td/table/tr"];
+        NSArray *elements = [document elementsMatchingPath:[NSString stringWithFormat:@"//body/center/table/tr[%i]/td/table/tr", main_tr]];
         return elements;
-    } else if (type == kHNPageLayoutTypeExposed) {
+	} else if (type == kHNPageLayoutTypeExposed) {
         NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
-        return [elements subarrayWithRange:NSMakeRange(3, [elements count] - 3)];
+        return [elements subarrayWithRange:NSMakeRange(main_tr, [elements count] - 3)];
     } else if (type == kHNPageLayoutTypeHeaderFooter) {
-        NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr[3]/td/table[2]/tr"];
+        NSArray *elements = [document elementsMatchingPath: [NSString stringWithFormat:@"//body/center/table/tr[%i]/td/table[2]/tr", main_tr]];
         return elements;
     } else {
         return nil;
@@ -461,7 +480,7 @@ typedef enum {
     XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
     
     // XXX: these are quite random and not perfect
-    XMLElement *userLabel = [document firstElementMatchingPath:@"//body/center/table/tr[3]/td/form/table/tr/td"];
+    XMLElement *userLabel = [document firstElementMatchingPath:[NSString stringWithFormat:@"//body/center/table/tr[%i]/td/form/table/tr/td", main_tr]];
     XMLElement *commentSpan = [document firstElementMatchingPath:@"//span[@class='comment']"];
         
     if (userLabel != nil && [[userLabel content] hasPrefix:@"user:"]) {
