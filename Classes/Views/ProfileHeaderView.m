@@ -18,7 +18,7 @@
         titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 20.0f, width - 40.0f, 20.0f)];
         [titleLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
         [titleLabel setShadowColor:[UIColor whiteColor]];
-        [titleLabel setTextAlignment:UITextAlignmentLeft];
+        [titleLabel setTextAlignment:NSTextAlignmentLeft];
         [titleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
         [titleLabel setTextColor:[UIColor blackColor]];//[UIColor colorWithRed:(76.0f/255.0f) green:(86.0f/255.0f) blue:(108.0f/255.0f) alpha:1.0f]];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
@@ -28,7 +28,7 @@
         subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 42.0f, width - 40.0f, 20.0f)];
         [subtitleLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
         [subtitleLabel setShadowColor:[UIColor whiteColor]];
-        [subtitleLabel setTextAlignment:UITextAlignmentLeft];
+        [subtitleLabel setTextAlignment:NSTextAlignmentLeft];
         [subtitleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
         [subtitleLabel setTextColor:[UIColor darkGrayColor]];//[UIColor colorWithRed:(76.0f/255.0f) green:(86.0f/255.0f) blue:(108.0f/255.0f) alpha:1.0f]];
         [subtitleLabel setBackgroundColor:[UIColor clearColor]];

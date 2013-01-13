@@ -28,7 +28,7 @@
     CGSize maximumTextSize = maximumSize;
     maximumTextSize.width -= horizontalPadding + horizontalPadding;
     maximumTextSize.height -= topPadding + spinnerFrame.size.height + innerPadding + bottomPadding;
-    labelFrame.size = [text sizeWithFont:[label font] constrainedToSize:maximumTextSize lineBreakMode:UILineBreakModeWordWrap];
+    labelFrame.size = [text sizeWithFont:[label font] constrainedToSize:maximumTextSize lineBreakMode:NSLineBreakByWordWrapping];
     labelFrame.origin.y = topPadding + spinnerFrame.size.height + innerPadding;
     labelFrame.origin.x = horizontalPadding;
     
@@ -98,8 +98,8 @@
         label = [[UILabel alloc] init];
         [label setFont:[UIFont boldSystemFontOfSize:22.0f]];
         [label setTextColor:[UIColor whiteColor]];
-        [label setTextAlignment:UITextAlignmentCenter];
-        [label setLineBreakMode:UILineBreakModeWordWrap];
+        [label setTextAlignment:NSTextAlignmentCenter];
+        [label setLineBreakMode:NSLineBreakByWordWrapping];
         [label setBackgroundColor:[UIColor clearColor]];
         [label setNumberOfLines:0];
         

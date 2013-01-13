@@ -227,7 +227,7 @@
     pointsrect.origin.x = bounds.origin.x + margins.left;
     pointsrect.origin.y = bounds.size.height - margins.bottom - pointsrect.size.height;
     if ([[self class] entryShowsPoints:comment])
-          [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+          [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
     
     // draw replies count
     [[UIColor grayColor] set];

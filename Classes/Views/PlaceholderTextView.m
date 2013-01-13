@@ -62,7 +62,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChanged:) name:UITextViewTextDidChangeNotification object:nil];
         
         placeholderLabel = [[UILabel alloc] init];
-        [placeholderLabel setLineBreakMode:UILineBreakModeWordWrap];
+        [placeholderLabel setLineBreakMode:NSLineBreakByWordWrapping];
         [placeholderLabel setNumberOfLines:0];
         [placeholderLabel setClipsToBounds:NO];
         [placeholderLabel setFont:[self font]];

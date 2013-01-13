@@ -49,20 +49,22 @@
 
 + (id)objectWithIdentifier:(id)identifier_ infoDictionary:(NSDictionary *)info URL:(NSURL *)url_ {
     HNObject *object = [HNObjectCache objectFromCacheWithClass:self identifier:identifier_ infoDictionary:info];
-    
+
     if (object == nil) {
         object = [[[self alloc] init] autorelease];
     }
-    
+
     if (url_ != nil) {
         [object setURL:url_];
         [object setIdentifier:identifier_];
-        
+
         [object loadInfoDictionary:info];
-        
-        [HNObjectCache addObjectToCache:object];
+
+        if (![HNObjectCache cacheHasObject:object]) {
+            [HNObjectCache addObjectToCache:object];
+        }
     }
-    
+
     return object;
 }
 
@@ -151,12 +153,18 @@
     return [self hasLoadingState:kHNObjectLoadingStateLoadingAny];
 }
             
-- (void)finishLoadingWithResponse:(NSDictionary *)response error:(NSError *)error {
-    // overridden in subclasses
+- (void)loadFromDictionary:(NSDictionary *)dictionary complete:(BOOL)complete {
+    if (complete) {
+        [HNObjectCache savePersistentCacheDictionary:dictionary forObject:self];
+        [self setIsLoaded:YES];
+    }
 }
 
 - (void)_clearRequest {
-    if ([apiRequest isLoading]) [apiRequest cancelRequest];
+    if ([apiRequest isLoading]) {
+        [apiRequest cancelRequest];
+    }
+    
     [apiRequest release];
     apiRequest = nil;
     
@@ -164,19 +172,21 @@
 }
 
 - (void)request:(HNAPIRequest *)request completedWithResponse:(NSDictionary *)response error:(NSError *)error {
-    [self finishLoadingWithResponse:response error:error];
+    if (error == nil) {
+        [self loadFromDictionary:response complete:YES];
+    }
     
     // note: don't move this downwards, bad things will happen
     [self _clearRequest];
-    
-    if (error == nil) {
-        [self setIsLoaded:YES];
-    } else {
+
+    if (error != nil) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kHNObjectFailedLoadingNotification object:self];
     }
 }
 
 - (void)beginLoadingWithState:(HNObjectLoadingState)state_ {
+    [HNObjectCache updateObjectFromPersistentCache:self];
+
     [self addLoadingState:state_];
     
     NSDictionary *info = [self infoDictionary];

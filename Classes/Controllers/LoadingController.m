@@ -125,23 +125,30 @@
     [retryButton release];
     [statusView release];
     [statusViews release];
+    [lastUpdatedOnAppearDate release];
     
     [super dealloc];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
+    NSTimeInterval interval = [lastUpdatedOnAppearDate timeIntervalSinceNow];
+    BOOL first = (lastUpdatedOnAppearDate == nil);
+    BOOL later = (interval > (15 * 60));
+
+    if (![source isLoading] && (first || later)) {
+        [source beginLoading];
+    }
+
+    [lastUpdatedOnAppearDate release];
+    lastUpdatedOnAppearDate = [[NSDate date] retain];
+
     if ([source isLoaded]) {
         // Fake a finished loading event even if it's loaded (to show content).
         [self finishedLoading];
-    } else if ([source isLoading]) {
-        // We're currently loading, so update the status display (below).
-    } else {
-        // Start loading if we're not either loading or loaded already.
-        [source beginLoading];
     }
-    
+
     [self updateStatusDisplay];
 }
 

@@ -52,7 +52,7 @@
     emptyResultsView = [[UILabel alloc] initWithFrame:[tableView frame]];
     [emptyResultsView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [emptyResultsView setText:@"No Results"];
-    [emptyResultsView setTextAlignment:UITextAlignmentCenter];
+    [emptyResultsView setTextAlignment:NSTextAlignmentCenter];
     [emptyResultsView setFont:[UIFont systemFontOfSize:17.0f]];
     [emptyResultsView setTextColor:[UIColor grayColor]];
     [emptyResultsView setFrame:[tableView frame]];

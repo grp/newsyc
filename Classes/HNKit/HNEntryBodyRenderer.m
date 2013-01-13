@@ -220,7 +220,7 @@ static CGFloat defaultFontSize = 13.0f;
     CGPoint *origins = (CGPoint *) calloc(sizeof(CGPoint), [lines count]);
     CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), origins);
     
-    CGRect (^computeLineRect)(CTLineRef, int) = ^CGRect (CTLineRef line, int index) {                    
+    CGRect (^computeLineRect)(CTLineRef, int) = ^CGRect (CTLineRef line, NSInteger index) {
         CGRect lineRect;
         lineRect.origin.x = 0;
         lineRect.origin.y = origins[index].y;
@@ -243,7 +243,7 @@ static CGFloat defaultFontSize = 13.0f;
         return runRect;
     };
     
-    for (int i = 0; i < [lines count]; i++) {
+    for (NSInteger i = 0; i < [lines count]; i++) {
         CTLineRef line = (CTLineRef) [lines objectAtIndex:i];
         CGRect lineBounds = computeLineRect(line, i);
         
@@ -254,7 +254,7 @@ static CGFloat defaultFontSize = 13.0f;
         if (lineBounds.origin.y - descent < point.y) {
             NSArray *runs = (NSArray *) CTLineGetGlyphRuns(line);
                         
-            for (int j = 0; j < [runs count]; j++) {
+            for (NSInteger j = 0; j < [runs count]; j++) {
                 CTRunRef run = (CTRunRef) [runs objectAtIndex:j];
                 CGRect runBounds = computeRunRect(run, line, lineBounds);
                 
@@ -266,11 +266,11 @@ static CGFloat defaultFontSize = 13.0f;
                     if (linkIdentifier != nil && rects != NULL) {
                         NSMutableSet *runRects = [NSMutableSet set];
                         
-                        for (int k = 0; k < [lines count]; k++) {
+                        for (NSInteger k = 0; k < [lines count]; k++) {
                             CTLineRef line = (CTLineRef) [lines objectAtIndex:k];
                             NSArray *runs = (NSArray *) CTLineGetGlyphRuns(line);
 
-                            for (int l = 0; l < [runs count]; l++) {
+                            for (NSInteger l = 0; l < [runs count]; l++) {
                                 CTRunRef run = (CTRunRef) [runs objectAtIndex:l];
                                 NSDictionary *attributes = (NSDictionary *) CTRunGetAttributes(run);
 

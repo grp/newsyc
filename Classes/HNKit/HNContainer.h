@@ -25,7 +25,6 @@
 - (BOOL)isLoadingMore;
 - (void)cancelLoadingMore;
 
-- (void)loadFromDictionary:(NSDictionary *)response;
-- (void)loadFromDictionary:(NSDictionary *)response entries:(NSArray **)outEntries;
+- (void)loadMoreFromDictionary:(NSDictionary *)dictionary complete:(BOOL)complete;
 
 @end

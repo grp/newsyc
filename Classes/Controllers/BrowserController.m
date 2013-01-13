@@ -43,7 +43,7 @@
     // there may be multiple connections open on the webview, so we have
     // to keep track of how many are open ourselves and release the indicator
     // that many times to make sure it is properly hidden when we are popped
-    for (int i = 0; i < networkRetainCount; i++) {
+    for (NSInteger i = 0; i < networkRetainCount; i++) {
         [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
     }
 }

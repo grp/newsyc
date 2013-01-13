@@ -14,7 +14,7 @@
 @class HNEntry;
 @interface CommentTableCell : TableViewCell {
     HNEntry *comment;
-    int indentationLevel;
+    NSInteger indentationLevel;
     
     CGRect bodyrect;
     NSSet *highlightedRects;
@@ -33,7 +33,7 @@
 
 @property (nonatomic, assign) id<CommentTableCellDelegate> delegate;
 @property (nonatomic, retain) HNEntry *comment;
-@property (nonatomic, assign) int indentationLevel;
+@property (nonatomic, assign) NSInteger indentationLevel;
 @property (nonatomic, assign) BOOL expanded;
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width expanded:(BOOL)expanded indentationLevel:(int)indentationLevel;

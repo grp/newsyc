@@ -53,7 +53,7 @@
     
     if ([realTarget respondsToSelector:realAction]) {
         NSMethodSignature *signature = [realTarget methodSignatureForSelector:realAction];
-        int args = [signature numberOfArguments] - 2; // remove self, _cmd
+        NSInteger args = [signature numberOfArguments] - 2; // remove self, _cmd
         
         if (args == 0) {
             [realTarget performSelector:realAction];

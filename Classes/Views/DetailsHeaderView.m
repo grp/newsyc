@@ -83,7 +83,7 @@
     
     CGFloat body = [[entry renderer] sizeForWidth:(width - offsets.width - offsets.width)].height;
     CGFloat disclosure = [self hasDestination] ? [[[self class] disclosureImage] size].width + offsets.width : 0.0f;
-    CGFloat title = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(width - (offsets.width * 2) - disclosure, 400.0f) lineBreakMode:UILineBreakModeWordWrap].height;
+    CGFloat title = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(width - (offsets.width * 2) - disclosure, 400.0f) lineBreakMode:NSLineBreakByWordWrapping].height;
     
     CGFloat bodyArea = [[entry body] length] > 0 ? offsets.height + body : 0;
     CGFloat titleArea = [[entry title] length] > 0 ? offsets.height + title : 0;
@@ -121,7 +121,7 @@
         [[UIColor blackColor] set];
         
         titlerect.size.width = bounds.width - (offsets.width * 2) - [disclosure size].width - ([self hasDestination] ? offsets.width : 0);
-        titlerect.size.height = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(titlerect.size.width, 400.0f) lineBreakMode:UILineBreakModeWordWrap].height;
+        titlerect.size.height = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(titlerect.size.width, 400.0f) lineBreakMode:NSLineBreakByWordWrapping].height;
         titlerect.origin.x = offsets.width;
         titlerect.origin.y = offsets.height + 8.0f;
     } else {
@@ -154,7 +154,7 @@
     pointsrect.size.height = [pointdate sizeWithFont:[[self class] subtleFont]].height;
     pointsrect.origin.x = offsets.width;
     pointsrect.origin.y = bounds.height - offsets.height - 2.0f - pointsrect.size.height;
-    [pointdate drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+    [pointdate drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
     
     [[UIColor darkGrayColor] set];
     CGRect userrect;
@@ -162,7 +162,7 @@
     userrect.size.height = [user sizeWithFont:[[self class] subtleFont]].height;
     userrect.origin.x = bounds.width / 2 + offsets.width;
     userrect.origin.y = bounds.height - offsets.height - 2.0f - userrect.size.height;
-    [user drawInRect:userrect withFont:[[self class] subtleFont] lineBreakMode:UILineBreakModeHeadTruncation alignment:UITextAlignmentRight];
+    [user drawInRect:userrect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingHead alignment:NSTextAlignmentRight];
     
     // draw link highlight
     UIBezierPath *highlightBezierPath = [UIBezierPath bezierPath];

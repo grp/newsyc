@@ -25,12 +25,14 @@
     
     PlacardButton *retryButton;
     LoadingIndicatorView *indicator;
+
+    NSDate *lastUpdatedOnAppearDate;
     
     BarButtonItem *actionItem;
-    int openInSafariIndex;
-    int mailLinkIndex;
-    int copyLinkIndex;
-    int readLaterIndex;
+    NSInteger openInSafariIndex;
+    NSInteger mailLinkIndex;
+    NSInteger copyLinkIndex;
+    NSInteger readLaterIndex;
 }
 
 @property (nonatomic, retain) HNObject *source;

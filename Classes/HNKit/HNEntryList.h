@@ -30,7 +30,7 @@ typedef NSString *HNEntryListIdentifier;
 
 @property (nonatomic, retain, readonly) HNUser *user;
 
-+ (id)entryListWithIdentifier:(HNEntryListIdentifier)identifier_;
 + (id)entryListWithIdentifier:(HNEntryListIdentifier)identifier_ user:(HNUser *)user_;
++ (id)entryListWithIdentifier:(HNEntryListIdentifier)identifier_;
 
 @end

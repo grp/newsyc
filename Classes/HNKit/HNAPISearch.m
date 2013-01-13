@@ -59,13 +59,15 @@
 	responseData = nil;
 
 	NSArray *rawResults = [[NSArray alloc] initWithArray:[[responseString JSONValue] objectForKey:@"results"]];
+    
 	for (NSDictionary *result in rawResults) {
 		NSDictionary *item = [self itemFromRaw:[result objectForKey:@"item"]];
 		HNEntry *entry = [HNEntry entryWithIdentifier:[item objectForKey:@"identifier"]];
 
-		[entry loadFromDictionary:item];
+        [entry loadFromDictionary:item complete:NO];
 		[entries addObject:entry];
 	}
+    
 	[responseString release];
 	responseString = nil;
 	[rawResults release];

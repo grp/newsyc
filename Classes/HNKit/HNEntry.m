@@ -58,31 +58,21 @@
     return [self submission] == nil;
 }
 
-- (void)loadFromDictionary:(NSDictionary *)response entries:(NSArray **)outEntries {
+- (void)loadFromDictionary:(NSDictionary *)response complete:(BOOL)complete {
     if ([response objectForKey:@"submission"]) {
         [self setSubmission:[HNEntry entryWithIdentifier:[response objectForKey:@"submission"]]];
     }
 
-    id parentId = [response objectForKey:@"parent"];
-    if (parentId) {
-        HNEntry *parent_ = [HNEntry entryWithIdentifier:parentId];
-        
+    if ([response objectForKey:@"parent"]) {
+        [self setParent:[HNEntry entryWithIdentifier:[response objectForKey:@"parent"]]];
+
         // Set the submission property on the parent, as long as that's not the submission itself
         // (we want all submission objects to have a submission property value of nil)
-        if (![parentId isEqual:[[self submission] identifier]]) {
-            [parent_ setSubmission:[self submission]];
+        if (![[[self parent] identifier] isEqual:[[self submission] identifier]]) {
+            [[self parent] setSubmission:[self submission]];
         }
-        
-        [self setParent:parent_];
     }
 
-    [self loadFromDictionary:response entries:outEntries withSubmission:[self submission] ?: self];
-}
-
-- (void)loadChildrenFromDictionary:(NSDictionary *)response {
-}
-
-- (void)loadFromDictionary:(NSDictionary *)response entries:(NSArray **)outEntries withSubmission:(HNEntry *)submission_ {
     if ([response objectForKey:@"url"] != nil) [self setDestination:[NSURL URLWithString:[response objectForKey:@"url"]]];
     if ([response objectForKey:@"user"] != nil) [self setSubmitter:[HNUser userWithIdentifier:[response objectForKey:@"user"]]];
     if ([response objectForKey:@"body"] != nil) [self setBody:[response objectForKey:@"body"]];
@@ -90,40 +80,38 @@
     if ([response objectForKey:@"title"] != nil) [self setTitle:[response objectForKey:@"title"]];
     if ([response objectForKey:@"points"] != nil) [self setPoints:[[response objectForKey:@"points"] intValue]];
     
-    NSMutableArray *comments = [NSMutableArray array];    
     if ([response objectForKey:@"children"] != nil) {
+        NSMutableArray *comments = [NSMutableArray array];
+
         for (NSDictionary *child in [response objectForKey:@"children"]) {
             HNEntry *childEntry = [HNEntry entryWithIdentifier:[child objectForKey:@"identifier"]];
-            NSArray *childEntries = nil;
             
-            [childEntry loadFromDictionary:child entries:&childEntries withSubmission:submission_];
-            [childEntry setEntries:childEntries];
             [childEntry setParent:self];
-            [childEntry setSubmission:submission_];
-            
-            if ([child objectForKey:@"children"] != nil) {
-                [childEntry setIsLoaded:YES];
-            } else {
-                [childEntry setIsLoaded:NO];
-            }
-            
+            [childEntry setSubmission:[self submission] ?: self];
+
+            BOOL complete = ([child objectForKey:@"children"] != nil);
+            [childEntry loadFromDictionary:child complete:complete];
+
             [comments addObject:childEntry];
         }
-        
-        if (outEntries != NULL) {
-            *outEntries = comments;
-        }
+
+        [self setEntries:comments];
     }
     
     if ([response objectForKey:@"numchildren"] != nil) {
-        int count = [[response objectForKey:@"numchildren"] intValue];
+        NSInteger count = [[response objectForKey:@"numchildren"] intValue];
         [self setChildren:count];
     } else {
-        int count = [comments count];
-        for (HNEntry *child in comments)
+        NSInteger count = [[self entries] count];
+        
+        for (HNEntry *child in [self entries]) {
             count += [child children];
+        }
+        
         [self setChildren:count];
     }
+
+    [super loadFromDictionary:response complete:complete];
 }
 
 @end

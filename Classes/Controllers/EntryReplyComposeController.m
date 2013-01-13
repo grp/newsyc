@@ -74,8 +74,8 @@
     
     replyLabel = [[UILabel alloc] init];
     [replyLabel setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
-    [replyLabel setTextAlignment:UITextAlignmentLeft];
-    [replyLabel setLineBreakMode:UILineBreakModeWordWrap];
+    [replyLabel setTextAlignment:NSTextAlignmentLeft];
+    [replyLabel setLineBreakMode:NSLineBreakByWordWrapping];
     [replyLabel setFont:[UIFont systemFontOfSize:12.0f]];
     [replyLabel setTextColor:[UIColor darkGrayColor]];
     [replyLabel setNumberOfLines:0];
