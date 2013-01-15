@@ -22,10 +22,10 @@
 }
 
 - (void)loadMoreFromDictionary:(NSDictionary *)dictionary complete:(BOOL)complete {
-    NSArray *previousEntries = [[[self entries] retain] autorelease];
+    pendingMoreEntries = [[self entries] retain];
     [self loadFromDictionary:dictionary complete:complete];
-    NSArray *combinedEntries = [previousEntries arrayByAddingObjectsFromArray:[self entries]];
-    [self setEntries:combinedEntries];
+    [pendingMoreEntries release];
+    pendingMoreEntries = nil;
 }
 
 - (BOOL)isLoadingMore {

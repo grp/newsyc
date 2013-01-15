@@ -16,6 +16,7 @@
     
     HNMoreToken moreToken;
     HNAPIRequest *moreRequest;
+    NSArray *pendingMoreEntries;
 }
 
 @property (nonatomic, retain) NSArray *entries;

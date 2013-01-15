@@ -82,7 +82,8 @@
         [children addObject:entry];
     }
 
-    [self setEntries:children];
+    NSArray *allEntries = [(pendingMoreEntries ? : [NSArray array]) arrayByAddingObjectsFromArray:children];
+    [self setEntries:allEntries];
 
     [super loadFromDictionary:response complete:complete];
 }

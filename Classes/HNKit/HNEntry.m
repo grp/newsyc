@@ -95,7 +95,8 @@
             [comments addObject:childEntry];
         }
 
-        [self setEntries:comments];
+        NSArray *allEntries = [(pendingMoreEntries ? : [NSArray array]) arrayByAddingObjectsFromArray:comments];
+        [self setEntries:allEntries];
     }
     
     if ([response objectForKey:@"numchildren"] != nil) {
