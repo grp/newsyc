@@ -45,12 +45,14 @@
   return [self initWithData:data_ isXML:NO];
 }
 
-- (NSArray *)elementsMatchingPath:(NSString *)query {
+- (NSArray *)elementsMatchingPath:(NSString *)query relativeToElement:(XMLElement *)element {
     xmlXPathContextPtr xpathCtx;
     xmlXPathObjectPtr xpathObj;
     
     xpathCtx = xmlXPathNewContext(document);
     if (xpathCtx == NULL) return nil;
+
+    xpathCtx->node = [element node];
     
     xpathObj = xmlXPathEvalExpression((xmlChar *) [query cStringUsingEncoding:NSUTF8StringEncoding], xpathCtx);
     if (xpathObj == NULL) return nil;
@@ -68,6 +70,10 @@
     xmlXPathFreeContext(xpathCtx);
     
     return result;
+}
+
+- (NSArray *)elementsMatchingPath:(NSString *)xpath {
+    return [self elementsMatchingPath:xpath relativeToElement:nil];
 }
 
 - (XMLElement *)firstElementMatchingPath:(NSString *)xpath {

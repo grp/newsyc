@@ -20,6 +20,7 @@
 
 - (id)initWithHTMLData:(NSData *)data_;
 - (id)initWithXMLData:(NSData *)data_;
+- (NSArray *)elementsMatchingPath:(NSString *)query relativeToElement:(XMLElement *)element;
 - (NSArray *)elementsMatchingPath:(NSString *)xpath;
 - (XMLElement *)firstElementMatchingPath:(NSString *)xpath;
 - (xmlDocPtr)document;

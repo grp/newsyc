@@ -29,5 +29,9 @@
 - (NSDictionary *)attributes;
 - (NSString *)attributeWithName:(NSString *)name;
 - (BOOL)isTextNode;
+- (xmlNodePtr)node;
+
+- (NSArray *)elementsMatchingPath:(NSString *)xpath;
+- (XMLElement *)firstElementMatchingPath:(NSString *)xpath;
 
 @end

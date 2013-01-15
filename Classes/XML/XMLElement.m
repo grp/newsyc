@@ -41,6 +41,19 @@ static int XMLElementOutputCloseCallback(void *context) {
     return self;
 }
 
+- (NSUInteger)hash {
+    return (NSUInteger) node;
+}
+
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[XMLElement class]]) {
+        XMLElement *other = (XMLElement *)object;
+        return [other node] == node;
+    } else {
+        return NO;
+    }
+}
+
 - (NSString *)content {
     if (cachedContent != nil) return cachedContent;
     
@@ -128,6 +141,24 @@ static int XMLElementOutputCloseCallback(void *context) {
 
 - (BOOL)isTextNode {
     return node->type == XML_TEXT_NODE;
+}
+
+- (xmlNodePtr)node {
+    return node;
+}
+
+- (NSArray *)elementsMatchingPath:(NSString *)xpath {
+    return [document elementsMatchingPath:xpath relativeToElement:self];
+}
+
+- (XMLElement *)firstElementMatchingPath:(NSString *)xpath {
+    NSArray *elements = [self elementsMatchingPath:xpath];
+
+    if ([elements count] >= 1) {
+        return [elements objectAtIndex:0];
+    } else {
+        return nil;
+    }
 }
 
 @end

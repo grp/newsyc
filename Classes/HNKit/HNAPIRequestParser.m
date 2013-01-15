@@ -19,9 +19,6 @@ typedef enum {
     kHNPageLayoutTypeExposed // <tr>[3:]
 } HNPageLayoutType;
 
-NSString *topBand; // band across the top of the site, for deaths, christmas etc
-int main_tr; // store whether the main content tr is 3 is usual or 4 with the top band
-
 @implementation HNAPIRequestParser
 
 - (BOOL)stringIsProcrastinationError:(NSString *)string {
@@ -82,28 +79,46 @@ int main_tr; // store whether the main content tr is 3 is usual or 4 with the to
     return result;
 }
 
-- (HNPageLayoutType)pageLayoutTypeForDocument:(XMLDocument *)document {
+- (XMLElement *)headerRowForDocument:(XMLDocument *)document {
+    return [document firstElementMatchingPath:@"//body/center/table/tr[//span[@class='pagetop']]"];
+}
+
+- (XMLElement *)headerCellForDocument:(XMLDocument *)document {
+    XMLElement *header = [self headerCellForDocument:document];
+    XMLElement *headerCell = [[header children] lastObject];
+    return headerCell;
+}
+
+- (NSArray *)mainRowsForDocument:(XMLDocument *)document {
     NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
-	int use_index;
+    return elements;
+}
+
+- (NSInteger)bodyIndexForDocument:(XMLDocument *)document {
+    NSArray *elements = [self mainRowsForDocument:document];
+    XMLElement *header = [self headerRowForDocument:document];
+    NSInteger index = [elements indexOfObject:header] + 3;
+    return index;
+}
+
+- (XMLElement *)bodyRowElementForDocument:(XMLDocument *)document {
+    NSArray *elements = [self mainRowsForDocument:document];
+    NSInteger index = [self bodyIndexForDocument:document];
+    XMLElement *body = [elements objectAtIndex:(index - 1)];
+    return body;
+}
+
+- (XMLElement *)bodyCellElementForDocument:(XMLDocument *)document {
+    XMLElement *body = [self bodyRowElementForDocument:document];
+    XMLElement *cell = [[body children] lastObject];
+    return cell;
+}
+
+- (HNPageLayoutType)pageLayoutTypeForDocument:(XMLDocument *)document {
+    NSArray *elements = [self mainRowsForDocument:document];
     
     if ([elements count] >= 4) {
-		// check for top band
-		XMLElement *tr_band = [elements objectAtIndex:0];
-        XMLElement *td_band = [[tr_band children] lastObject];
-		
-		if (![[td_band attributeWithName:@"bgcolor"] isEqualToString: @"#ff6600"])
-		{
-			topBand = [td_band attributeWithName:@"bgcolor"];
-			main_tr = 4;
-			
-		}
-		else
-		{
-			main_tr = 3;
-		}
-		
-        XMLElement *tr = [elements objectAtIndex: (main_tr-1)];
-        XMLElement *td = [[tr children] lastObject];
+        XMLElement *td = [self bodyCellElementForDocument:document];
 		
         if (td != nil) {
             if ([[td children] count] == 0) {
@@ -134,12 +149,14 @@ int main_tr; // store whether the main content tr is 3 is usual or 4 with the to
 }
 
 - (BOOL)rootElementIsSubmission:(XMLDocument *)document {
-    return [document firstElementMatchingPath: [NSString stringWithFormat:@"//body/center/table/tr[%i]/td/table//td[@class='title']", main_tr]] != nil;
+    XMLElement *bodyCell = [self bodyCellElementForDocument:document];
+    return [bodyCell firstElementMatchingPath:@"table//td[@class='title']"] != nil;
 }
 
 - (XMLElement *)rootElementForDocument:(XMLDocument *)document pageLayoutType:(HNPageLayoutType)type {
     if (type == kHNPageLayoutTypeHeaderFooter) {
-        return [document firstElementMatchingPath: [NSString stringWithFormat:@"//body/center/table/tr[%i]/td/table[1]", main_tr]];
+        XMLElement *bodyCell = [self bodyCellElementForDocument:document];
+        return [bodyCell firstElementMatchingPath:@"table[1]"];
     } else {
         return nil;
     }
@@ -147,13 +164,16 @@ int main_tr; // store whether the main content tr is 3 is usual or 4 with the to
 
 - (NSArray *)contentRowsForDocument:(XMLDocument *)document pageLayoutType:(HNPageLayoutType)type {
     if (type == kHNPageLayoutTypeEnclosed) {
-        NSArray *elements = [document elementsMatchingPath:[NSString stringWithFormat:@"//body/center/table/tr[%i]/td/table/tr", main_tr]];
+        XMLElement *bodyCell = [self bodyCellElementForDocument:document];
+        NSArray *elements = [bodyCell elementsMatchingPath:@"table/tr"];
         return elements;
 	} else if (type == kHNPageLayoutTypeExposed) {
-        NSArray *elements = [document elementsMatchingPath:@"//body/center/table/tr"];
-        return [elements subarrayWithRange:NSMakeRange(main_tr, [elements count] - 3)];
+        NSArray *elements = [self mainRowsForDocument:document];
+        NSInteger index = [self bodyIndexForDocument:document];
+        return [elements subarrayWithRange:NSMakeRange(index, [elements count] - index)];
     } else if (type == kHNPageLayoutTypeHeaderFooter) {
-        NSArray *elements = [document elementsMatchingPath: [NSString stringWithFormat:@"//body/center/table/tr[%i]/td/table[2]/tr", main_tr]];
+        XMLElement *bodyCell = [self bodyCellElementForDocument:document];
+        NSArray *elements = [bodyCell elementsMatchingPath:@"table[2]/tr"];
         return elements;
     } else {
         return nil;
@@ -491,7 +511,8 @@ int main_tr; // store whether the main content tr is 3 is usual or 4 with the to
     XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
     
     // XXX: these are quite random and not perfect
-    XMLElement *userLabel = [document firstElementMatchingPath:[NSString stringWithFormat:@"//body/center/table/tr[%i]/td/form/table/tr/td", main_tr]];
+    XMLElement *bodyCell = [self bodyCellElementForDocument:document];
+    XMLElement *userLabel = [bodyCell firstElementMatchingPath:@"form/table/tr/td"];
     XMLElement *commentSpan = [document firstElementMatchingPath:@"//span[@class='comment']"];
         
     if (userLabel != nil && [[userLabel content] hasPrefix:@"user:"]) {
