@@ -117,7 +117,7 @@
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         return UIEdgeInsetsMake(30.0f, 32.0f, 32.0f, 32.0f);
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return UIEdgeInsetsMake(12.0f, 12.0f, 15.0f, 12.0);
+        return UIEdgeInsetsMake(11.0f, 12.0f, 16.0f, 12.0);
     }
     
     return UIEdgeInsetsZero;
