@@ -48,31 +48,32 @@
 - (void)parseInBackground {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    NSString *resp = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
-        
-    BOOL success = YES;
-    HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] init];
+    NSString *resp = [[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding];
+
     NSDictionary *result = nil;
-    
-    @try {
-        result = [parser parseWithString:resp];
-    } @catch (NSException *e) {
-        NSLog(@"HNAPIRequest: Exception parsing page at /%@ with reason \"%@\".", path, [e reason]);
-        success = NO;
+
+    if ([resp length] > 0) {
+        HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] init];
+        
+        @try {
+            result = [parser parseWithString:resp];
+        } @catch (NSException *e) {
+            NSLog(@"HNAPIRequest: Exception parsing page at /%@ with reason \"%@\".", path, [e reason]);
+        }
+        
+        [parser release];
     }
-    
-    [parser release];
-    
-    [received release];
-    received = nil;
-    
-    if (success) {
+
+    if (result != nil) {
         [self performSelectorOnMainThread:@selector(completeSuccessfullyWithResult:) withObject:result waitUntilDone:YES];
     } else {
         NSError *error = [NSError errorWithDomain:@"error" code:100 userInfo:[NSDictionary dictionaryWithObject:@"Error scraping." forKey:NSLocalizedDescriptionKey]];
-        
         [self performSelectorOnMainThread:@selector(completeUnsuccessfullyWithError:) withObject:error waitUntilDone:YES];
     }
+    
+    [resp release];
+    [received release];
+    received = nil;
     
     [pool release];
 }
