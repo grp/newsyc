@@ -11,5 +11,6 @@
 @interface HNAPIRequestParser : NSObject
 
 - (NSDictionary *)parseWithString:(NSString *)string;
+- (BOOL)stringIsProcrastinationError:(NSString *)string;
 
 @end

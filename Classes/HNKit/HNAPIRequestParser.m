@@ -21,6 +21,17 @@ typedef enum {
 
 @implementation HNAPIRequestParser
 
+- (BOOL)stringIsProcrastinationError:(NSString *)string {
+    XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+    XMLElement *procrastElement = [document firstElementMatchingPath:@"//body/center/table/tr/td/b"];
+    NSString *procrastMessage = [procrastElement content];
+
+    BOOL procrast = [procrastMessage isEqualToString:@"Get back to work!"];
+
+    [document release];
+    return procrast;
+}
+
 - (NSDictionary *)parseUserProfileWithString:(NSString *)string {
     NSScanner *scanner = [NSScanner scannerWithString:string];
     NSString *key = nil, *value = nil;

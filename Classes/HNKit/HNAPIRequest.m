@@ -56,7 +56,9 @@
         HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] init];
         
         @try {
-            result = [parser parseWithString:resp];
+            if (![parser stringIsProcrastinationError:resp]) {
+                result = [parser parseWithString:resp];
+            }
         } @catch (NSException *e) {
             NSLog(@"HNAPIRequest: Exception parsing page at /%@ with reason \"%@\".", path, [e reason]);
         }
