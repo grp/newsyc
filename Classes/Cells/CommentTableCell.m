@@ -29,6 +29,7 @@
         
         toolbarView = [[EntryActionsView alloc] initWithFrame:CGRectZero];
         [toolbarView sizeToFit];
+        [toolbarView setClipsToBounds:YES]; // hide shadow
         [toolbarView setStyle:kEntryActionsViewStyleLight];
 
         CGRect toolbarFrame = [toolbarView frame];
@@ -84,7 +85,7 @@
         [toolbarView setFrame:toolbarFrame];
     } else {
         CGRect toolbarFrame = [toolbarView frame];
-        toolbarFrame.origin.y = [self bounds].size.height + 2.0f;
+        toolbarFrame.origin.y = [self bounds].size.height;
         toolbarFrame.size.width = [self bounds].size.width;
         [toolbarView setFrame:toolbarFrame];
     }
@@ -115,7 +116,7 @@
 
 + (UIEdgeInsets)margins {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return UIEdgeInsetsMake(30.0f, 32.0f, 32.0f, 32.0f);
+        return UIEdgeInsetsMake(26.0f, 32.0f, 36.0f, 32.0f);
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         return UIEdgeInsetsMake(11.0f, 12.0f, 16.0f, 12.0);
     }
@@ -199,7 +200,7 @@
     height += [self bodyHeightForComment:entry withWidth:width indentationLevel:indentationLevel];
     if ([self entryShowsPoints:entry]) height += offsets.height + [[self subtleFont] lineHeight];
     height += margins.bottom;
-    if (expanded) height += 46.0f;
+    if (expanded) height += 44.0f;
     
     return height;
 }
@@ -209,7 +210,7 @@
 - (CGRect)drawingBounds {
     CGRect bounds = [self bounds];
     bounds.origin.x += (indentationLevel * [[self class] indentationDepth]);
-    if (expanded) bounds.size.height -= [toolbarView bounds].size.height + 2.0f;
+    if (expanded) bounds.size.height -= [toolbarView bounds].size.height;
 
     return bounds;
 }
@@ -322,9 +323,7 @@
     linerect.size.height = 1.0f / [[UIScreen mainScreen] scale];
     linerect.origin.y = bounds.size.height - linerect.size.height;
     [[UIColor colorWithWhite:0.85f alpha:1.0f] set];
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        UIRectFill(linerect);
-    }
+    UIRectFill(linerect);
 }
 
 #pragma mark - Tap Handlers
