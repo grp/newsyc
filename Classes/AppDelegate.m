@@ -42,6 +42,30 @@
         || [controller isKindOfClass:[SubmissionListController class]];
 }
 
+- (BOOL)controllerRequiresClearing:(UIViewController *)controller {
+    return [controller isKindOfClass:[SessionListController class]];
+}
+
+- (void)popToController:(UIViewController *)controller animated:(BOOL)animated {
+    AppDelegate *delegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        if ([[self viewControllers] containsObject:controller]) {
+            [delegate popBranchToViewController:controller animated:animated];
+
+            if ([self controllerRequiresClearing:controller]) {
+                [delegate clearLeafViewControllerAnimated:animated];
+            }
+        } else if ([delegate leafContainsViewController:controller]) {
+            [delegate popLeafToViewController:controller animated:animated];
+        } else {
+            [NSException raise:@"UINavigationControllerPopException" format:@"can't find where to pop"];
+        }
+    } else {
+        [delegate popBranchToViewController:controller animated:animated];
+    }
+}
+
 - (void)pushController:(UIViewController *)controller animated:(BOOL)animated {
     AppDelegate *delegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     
@@ -50,7 +74,7 @@
             if ([self controllerBelongsOnLeft:controller]) {
                 [delegate pushBranchViewController:controller animated:animated];
             } else if ([self controllerBelongsOnLeft:[self topViewController]]) {
-                [delegate setLeafViewController:controller];
+                [delegate setLeafViewController:controller animated:animated];
             } else {
                 [delegate pushLeafViewController:controller animated:animated];
             }
@@ -70,9 +94,7 @@
             }
         }
     } else {
-        if (![controller isKindOfClass:[EmptyController class]]) {
-            [delegate pushBranchViewController:controller animated:animated];
-        }
+        [delegate pushBranchViewController:controller animated:animated];
     }
 }
 
@@ -125,14 +147,13 @@
         
         [HNEntryBodyRenderer setDefaultFontSize:13.0f];
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        emptyController = [[EmptyController alloc] init];
-        [emptyController autorelease];
-        
-        rightNavigationController = [[NavigationController alloc] initWithRootViewController:emptyController];
+        rightNavigationController = [[NavigationController alloc] init];
         [rightNavigationController setLoginDelegate:sessionListController];
         [rightNavigationController setDelegate:self];
         [rightNavigationController autorelease];
-        
+
+        [self clearLeafViewControllerAnimated:NO];
+
         splitController = [[SplitViewController alloc] init];
         [splitController setViewControllers:[NSArray arrayWithObjects:navigationController, rightNavigationController, nil]];
         if ([splitController respondsToSelector:@selector(setPresentsWithGesture:)]) [splitController setPresentsWithGesture:YES];
@@ -140,7 +161,7 @@
         [splitController autorelease];
         
         [window setRootViewController:splitController];
-        
+
         [HNEntryBodyRenderer setDefaultFontSize:16.0f];
     } else {
         NSAssert(NO, @"Invalid Device Type");
@@ -209,11 +230,32 @@
     [rightNavigationController pushViewController:leafController animated:animated];
 }
 
-- (void)setLeafViewController:(UIViewController *)leafController {
+- (BOOL)leafContainsViewController:(UIViewController *)leafController {
+    return [[rightNavigationController viewControllers] containsObject:leafController];
+}
+
+- (void)setLeafViewController:(UIViewController *)leafController animated:(BOOL)animated {
     [rightNavigationController setViewControllers:[NSArray arrayWithObject:leafController]];
     
     if (popoverItem != nil) [[leafController navigationItem] addLeftBarButtonItem:popoverItem atPosition:UINavigationItemPositionLeft];
-    if (popover != nil) [popover dismissPopoverAnimated:YES];
+    if (popover != nil) [popover dismissPopoverAnimated:animated];
+}
+
+- (void)clearLeafViewControllerAnimated:(BOOL)animated {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        EmptyController *emptyController = [[EmptyController alloc] init];
+        if (popoverItem != nil) [[emptyController navigationItem] addLeftBarButtonItem:popoverItem atPosition:UINavigationItemPositionLeft];
+        [rightNavigationController setViewControllers:[NSArray arrayWithObject:emptyController]];
+        [emptyController release];
+    }
+}
+
+- (void)popBranchToViewController:(UIViewController *)branchController animated:(BOOL)animated {
+    [navigationController popToViewController:branchController animated:animated];
+}
+
+- (void)popLeafToViewController:(UIViewController *)leafController animated:(BOOL)animated {
+    [rightNavigationController popToViewController:leafController animated:animated];
 }
 
 #pragma mark - Startup Connection

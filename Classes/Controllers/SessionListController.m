@@ -51,8 +51,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [self clearRightControllerIfNecessary];
-
     NSIndexPath *selectedIndexPath = [tableView indexPathForSelectedRow];
     HNSession *session = nil;
 
@@ -126,12 +124,6 @@
     sessions = [[[HNSessionController sessionController] sessions] retain];
 }
 
-- (void)clearRightControllerIfNecessary {
-    EmptyController *emptyController = [[EmptyController alloc] init];
-    [[self navigationController] pushController:emptyController animated:NO];
-    [EmptyController release];
-}
-
 - (void)pushMainControllerForSession:(HNSession *)session animated:(BOOL)animated {
     [[HNSessionController sessionController] setRecentSession:session];
 
@@ -147,13 +139,6 @@
     
     [[self navigationController] pushController:tabBarController animated:animated];
     [tabBarController release];
-
-    if (!animated) {
-        // If we aren't animated, we are expecting the controller to be pushed
-        // instantly. However, UINavigationController takes a run loop iteration
-        // to actually perform the push, so let that happen before we return.
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
-    }
 }
 
 - (void)pushAnonymousSessionIfNecessaryAnimated:(BOOL)animated {
@@ -189,14 +174,14 @@
 - (void)navigationController:(NavigationController *)navigationController didLoginWithSession:(HNSession *)session {
     if ([navigationController topViewController] != self) {
         [self setAutomaticDisplaySession:session];
-        [[self navigationController] popToViewController:self animated:YES];
+        [[self navigationController] popToController:self animated:YES];
     } else {
         [self pushMainControllerForSession:session animated:YES];
     }
 }
 
 - (void)navigationControllerRequestedSessions:(NavigationController *)navigationController {
-    [[self navigationController] popToViewController:self animated:YES];
+    [[self navigationController] popToController:self animated:YES];
 }
 
 - (void)addSessionFromBarButtonItem:(BarButtonItem *)barButtonItem {

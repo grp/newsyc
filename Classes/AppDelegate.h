@@ -15,7 +15,6 @@
     UIWindow *window;
     
     SplitViewController *splitController;
-    EmptyController *emptyController;
     
     NavigationController *navigationController;
     NavigationController *rightNavigationController;
@@ -29,12 +28,19 @@
 
 - (void)pushBranchViewController:(UIViewController *)branchController animated:(BOOL)animated;
 - (void)pushLeafViewController:(UIViewController *)leafController animated:(BOOL)animated;
-- (void)setLeafViewController:(UIViewController *)leafController;
+
+- (BOOL)leafContainsViewController:(UIViewController *)leafController;
+- (void)setLeafViewController:(UIViewController *)leafController animated:(BOOL)animated;
+- (void)clearLeafViewControllerAnimated:(BOOL)animated;
+
+- (void)popBranchToViewController:(UIViewController *)branchController animated:(BOOL)animated;
+- (void)popLeafToViewController:(UIViewController *)leafController animated:(BOOL)animated;
 
 @end
 
 @interface UINavigationController (AppDelegate)
 
 - (void)pushController:(UIViewController *)controller animated:(BOOL)animated;
+- (void)popToController:(UIViewController *)controller animated:(BOOL)animated;
 
 @end
