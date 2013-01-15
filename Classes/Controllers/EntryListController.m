@@ -11,9 +11,8 @@
 #import "EntryListController.h"
 #import "LoadingIndicatorView.h"
 #import "PullToRefreshView.h"
-
 #import "SubmissionTableCell.h"
-
+#import "UIColor+Orange.h"
 #import "CommentListController.h"
 
 @implementation EntryListController
@@ -100,6 +99,12 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
+        [refreshControl setTintColor:[UIColor lightOrangeColor]];
+    } else {
+        [refreshControl setTintColor:nil];
+    }
 
     [self deselectWithAnimation:YES];
 }
