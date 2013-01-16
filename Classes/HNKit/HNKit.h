@@ -35,5 +35,5 @@
 
 #ifdef HNKIT_RENDERING_ENABLED
 // rendering
-#import "HNEntryBodyRenderer.h"
+#import "HNObjectBodyRenderer.h"
 #endif

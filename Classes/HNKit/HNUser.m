@@ -14,6 +14,17 @@
 @implementation HNUser
 @synthesize karma, average, created, about;
 
+#ifdef HNKIT_RENDERING_ENABLED
+@synthesize renderer;
+
+- (HNObjectBodyRenderer *)renderer {
+    if (renderer != nil) return renderer;
+
+    renderer = [[HNObjectBodyRenderer alloc] initWithObject:self];
+    return renderer;
+}
+#endif
+
 + (id)identifierForURL:(NSURL *)url_ {
     if (![self isValidURL:url_]) return NO;
     

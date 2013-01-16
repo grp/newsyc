@@ -11,10 +11,14 @@
     HNUser *user;
     UILabel *titleLabel;
     UILabel *subtitleLabel;
+
+    CGFloat padding;
 }
 
 @property (nonatomic, retain) HNUser *user;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;
+
+@property (nonatomic, assign) CGFloat padding;
 
 @end

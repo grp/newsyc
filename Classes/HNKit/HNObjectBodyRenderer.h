@@ -1,5 +1,5 @@
 //
-//  EntryBodyRenderer.h
+//  HNObjectBodyRenderer.h
 //  newsyc
 //
 //  Created by Grant Paul on 2/26/12.
@@ -12,21 +12,21 @@
 
 #import <CoreText/CoreText.h>
 
-@class HNEntry;
+@class HNObject;
 
-@interface HNEntryBodyRenderer : NSObject {
-    HNEntry *entry;
+@interface HNObjectBodyRenderer : NSObject {
+    HNObject *object;
     
     NSAttributedString *attributed;
     CTFramesetterRef framesetter;
 }
 
-@property (nonatomic, readonly, assign) HNEntry *entry;
+@property (nonatomic, readonly, assign) HNObject *object;
 
 + (CGFloat)defaultFontSize;
 + (void)setDefaultFontSize:(CGFloat)size;
 
-- (id)initWithEntry:(HNEntry *)entry;
+- (id)initWithObject:(HNObject *)object;
 
 - (CGSize)sizeForWidth:(CGFloat)width;
 - (void)renderInContext:(CGContextRef)context rect:(CGRect)rect;

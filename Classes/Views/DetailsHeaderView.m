@@ -24,16 +24,17 @@
                 
         [self setEntry:entry_];
         [self setBackgroundColor:[UIColor whiteColor]];
+
+        bodyTextView = [[BodyTextView alloc] init];
+        [bodyTextView setRenderer:[entry renderer]];
+        [bodyTextView setDelegate:self];
+        [self addSubview:bodyTextView];
         
         CGRect frame;
         frame.origin = CGPointZero;
         frame.size.width = width;
         frame.size.height = [self suggestedHeightWithWidth:width];
         [self setFrame:frame];
-        
-        UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFromRecognizer:)];
-        [longPressRecognizer setMinimumPressDuration:0.65f];
-        [self addGestureRecognizer:[longPressRecognizer autorelease]];
     }
     
     return self;
@@ -51,6 +52,7 @@
 
 - (void)dealloc {
     [entry release];
+    [bodyTextView release];
     
     [super dealloc];
 }
@@ -135,126 +137,154 @@
     return margins.top + title + titleBodyPadding + body + offsets.height + date + margins.bottom;
 }
 
-- (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    
+- (NSString *)titleText {
+    NSString *title = [[entry title] stringByDecodingHTMLEntities];
+    return title;
+}
+
+- (CGRect)titleRect {
     CGSize bounds = [self bounds].size;
     UIEdgeInsets margins = [[self class] margins];
     CGSize offsets = [[self class] offsets];
+
+    if ([[entry title] length] > 0) {
+        CGRect titlerect;
+
+        titlerect.origin.x = margins.left;
+        titlerect.origin.y = margins.top;
+        titlerect.size.width = bounds.width - margins.left - margins.right - [[[self class] disclosureImage] size].width - ([self hasDestination] ? offsets.width : 0);
+        titlerect.size.height = [[self titleText] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(titlerect.size.width, 400.0f) lineBreakMode:NSLineBreakByWordWrapping].height;
+
+        return titlerect;
+    } else {
+        return CGRectZero;
+    }
+}
+
+- (CGRect)disclosureRect {
+    CGSize bounds = [self bounds].size;
+    UIEdgeInsets margins = [[self class] margins];
+    CGRect titlerect = [self titleRect];
     
+    if ([self hasDestination]) {
+        CGRect disclosurerect;
+        
+        disclosurerect.size = [[[self class] disclosureImage] size];
+        disclosurerect.origin.x = bounds.width - margins.right - disclosurerect.size.width;
+        disclosurerect.origin.y = CGRectGetMidY(titlerect) - (disclosurerect.size.height / 2);
+    
+        return disclosurerect;
+    } else {
+        return CGRectZero;
+    }
+}
+
+- (NSString *)pointsText {
+    NSString *date = [entry posted];
+    NSString *points = [entry points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [entry points]];
+
+    // Re-enable this for everyone if comment score viewing is re-enabled.
+    if ([entry submitter] == [[entry session] user] || [entry isSubmission]) {
+        return [NSString stringWithFormat:@"%@ • %@", points, date];
+    } else {
+        return [NSString stringWithFormat:@"%@", date];
+    }
+}
+
+- (CGRect)pointsRect {
+    CGSize bounds = [self bounds].size;
+    UIEdgeInsets margins = [[self class] margins];
+
+    CGRect pointsrect;
+    
+    pointsrect.size.width = (bounds.width - margins.left - margins.right) / 2;
+    pointsrect.size.height = [[self pointsText] sizeWithFont:[[self class] subtleFont]].height;
+    pointsrect.origin.x = margins.left;
+    pointsrect.origin.y = bounds.height - margins.bottom - 2.0f - pointsrect.size.height;
+
+    return pointsrect;
+}
+
+- (NSString *)userText {
+    return [[entry submitter] identifier];
+}
+
+- (CGRect)userRect {
+    CGSize bounds = [self bounds].size;
+    UIEdgeInsets margins = [[self class] margins];
+
+    CGRect userrect;
+    
+    userrect.size.width = (bounds.width - margins.left - margins.right) / 2;
+    userrect.size.height = [[self userText] sizeWithFont:[[self class] subtleFont]].height;
+    userrect.origin.x = bounds.width - margins.right - userrect.size.width;
+    userrect.origin.y = bounds.height - margins.bottom - 2.0f - userrect.size.height;
+
+    return userrect;
+}
+
+- (BOOL)bodyVisible {
+    return [[entry body] length] > 0;
+}
+
+- (CGRect)bodyRect {
+    if ([self bodyVisible]) {
+        CGSize bounds = [self bounds].size;
+        UIEdgeInsets margins = [[self class] margins];
+        CGSize offsets = [[self class] offsets];
+        CGRect titlerect = [self titleRect];
+
+        CGRect bodyRect;
+        bodyRect.origin.x = margins.left;
+        bodyRect.origin.y = margins.top + titlerect.size.height + (titlerect.size.height != 0 ? offsets.height : 0);
+        bodyRect.size.width = bounds.width - margins.left - margins.right;
+        bodyRect.size.height = [[entry renderer] sizeForWidth:bodyRect.size.width].height;
+
+        return bodyRect;
+    } else {
+        return CGRectZero;
+    }
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+
+    [bodyTextView setFrame:[self bodyRect]];
+    [bodyTextView setHidden:![self bodyVisible]];
+}
+
+- (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+        
     if ([self isHighlighted] && [self hasDestination]) {
         [[UIColor colorWithWhite:0.85f alpha:1.0f] set];
         UIRectFill([self bounds]);
     }
     
-    NSString *title = [[entry title] stringByDecodingHTMLEntities];
-    NSString *date = [entry posted];
-    NSString *points = [entry points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [entry points]];
-    NSString *pointdate = nil;
-    NSString *user = [[entry submitter] identifier];
-    UIImage *disclosure = [[self class] disclosureImage];
-    
-    // Re-enable this for everyone if comment score viewing is re-enabled.
-    if ([entry submitter] == [[entry session] user] || [entry isSubmission]) {
-        pointdate = [NSString stringWithFormat:@"%@ • %@", points, date];
-    } else {
-        pointdate = [NSString stringWithFormat:@"%@", date];
-    }
-    
-    CGRect titlerect;
-    CGFloat titleafter = 0;
-    if ([[entry title] length] > 0) {
-        [[UIColor blackColor] set];
-
-        titlerect.origin.x = margins.left;
-        titlerect.origin.y = margins.top;
-        titlerect.size.width = bounds.width - margins.left - margins.right - [disclosure size].width - ([self hasDestination] ? offsets.width : 0);
-        titlerect.size.height = [[entry title] sizeWithFont:[[self class] titleFont] constrainedToSize:CGSizeMake(titlerect.size.width, 400.0f) lineBreakMode:NSLineBreakByWordWrapping].height;
-        [title drawInRect:titlerect withFont:[[self class] titleFont]];
-
-        titleafter = offsets.height;
-    } else {
-        titlerect = CGRectZero;
-        titleafter = 0;
-    }
+    [[UIColor blackColor] set];
+    [[self titleText] drawInRect:[self titleRect] withFont:[[self class] titleFont]];
     
     if ([self hasDestination]) {
-        CGRect disclosurerect;
-        disclosurerect.size = [disclosure size];
-        disclosurerect.origin.x = bounds.width - margins.right - disclosurerect.size.width;
-        disclosurerect.origin.y = CGRectGetMidY(titlerect) - (disclosurerect.size.height / 2);
-        [disclosure drawInRect:disclosurerect];
+        [[[self class] disclosureImage] drawInRect:[self disclosureRect]];
     }
 
-    if ([[entry body] length] > 0) {
-        HNEntryBodyRenderer *renderer = [entry renderer];
-
-        bodyRect.origin.x = margins.left;
-        bodyRect.origin.y = margins.top + titlerect.size.height + titleafter;
-        bodyRect.size.width = bounds.width - margins.left - margins.right;
-        bodyRect.size.height = [renderer sizeForWidth:bodyRect.size.width].height;
-            
-        [renderer renderInContext:UIGraphicsGetCurrentContext() rect:bodyRect];
-    }
-    
     [[UIColor grayColor] set];
-    CGRect pointsrect;
-    pointsrect.size.width = (bounds.width - margins.left - margins.right) / 2;
-    pointsrect.size.height = [pointdate sizeWithFont:[[self class] subtleFont]].height;
-    pointsrect.origin.x = margins.left;
-    pointsrect.origin.y = bounds.height - margins.bottom - 2.0f - pointsrect.size.height;
-    [pointdate drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
+    [[self pointsText] drawInRect:[self pointsRect] withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
     
     [[UIColor darkGrayColor] set];
-    CGRect userrect;
-    userrect.size.width = (bounds.width - margins.left - margins.right) / 2;
-    userrect.size.height = [user sizeWithFont:[[self class] subtleFont]].height;
-    userrect.origin.x = bounds.width - margins.right - userrect.size.width;
-    userrect.origin.y = bounds.height - margins.bottom - 2.0f - userrect.size.height;
-    [user drawInRect:userrect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingHead alignment:NSTextAlignmentRight];
-    
-    // draw link highlight
-    UIBezierPath *highlightBezierPath = [UIBezierPath bezierPath];
-    for (NSValue *rect in highlightedRects) {
-        CGRect highlightedRect = CGRectIntegral([rect CGRectValue]);
-
-        if (highlightedRect.size.width != 0 && highlightedRect.size.height != 0) {
-            CGRect rect = CGRectInset(highlightedRect, -4.0f, -4.0f);
-            rect.origin.x += bodyRect.origin.x;
-            rect.origin.y += bodyRect.origin.y;
-
-            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:3.0f];
-            [highlightBezierPath appendPath:bezierPath];
-        }
-    }
-    [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
-    [highlightBezierPath fill];
+    [[self userText] drawInRect:[self userRect] withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingHead alignment:NSTextAlignmentRight];
 }
 
 #pragma mark - Links
 
-- (void)clearHighlightedRects {
-    [highlightedRects release];
-    highlightedRects = nil;
-}
-
-- (CGPoint)bodyPointForPoint:(CGPoint)point {
-    CGPoint bodyPoint;
-    bodyPoint.x = point.x - bodyRect.origin.x;
-    bodyPoint.y = point.y - bodyRect.origin.y;
-    return bodyPoint;
+- (void)bodyTextView:(BodyTextView *)header selectedURL:(NSURL *)url {
+    if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
+        [delegate detailsHeaderView:self selectedURL:url];
+    }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [touches anyObject];
-    CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
-    
-    [self clearHighlightedRects];
-    NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:&highlightedRects];
-    [highlightedRects retain];
-    
-    // if there's not a URL, click the header
-    if (url == nil && [self hasDestination]) {
+    if ([self hasDestination]) {
         [self setHighlighted:YES];
     }
     
@@ -262,52 +292,19 @@
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [touches anyObject];
-    CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
-    
-    NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:NULL];
-    
-    if (url != nil && !navigationCancelled) {
-        if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
-            [delegate detailsHeaderView:self selectedURL:url];
-        }
-        
-        [self clearHighlightedRects];
-    } else if ([self hasDestination]) {
+    if ([self hasDestination]) {
         if ([delegate respondsToSelector:@selector(detailsHeaderView:selectedURL:)]) {
             [delegate detailsHeaderView:self selectedURL:[entry destination]];
         }
     }
 
-    navigationCancelled = NO;
     [self setNeedsDisplay];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     [self setHighlighted:NO];
-    
-    navigationCancelled = NO;
-    [self clearHighlightedRects];
-    
+        
     [self setNeedsDisplay];
-}
-
-- (void)longPressFromRecognizer:(UILongPressGestureRecognizer *)gesture {
-	if ([gesture state] == UIGestureRecognizerStateBegan) {
-        CGPoint location = [gesture locationInView:self];
-        CGPoint point = [self bodyPointForPoint:location];
-        
-        NSSet *rects;
-        NSURL *url = [[entry renderer] linkURLAtPoint:point forWidth:bodyRect.size.width rects:&rects];
-        
-        if (url != nil && [rects count] > 0) {
-            SharingController *sharingController = [[SharingController alloc] initWithURL:url title:nil fromController:nil];
-            [sharingController showFromView:self atRect:CGRectInset(CGRectMake(location.x, location.y, 0, 0), -4.0f, -4.0f)];
-            [sharingController release];
-
-            navigationCancelled = YES;
-        }
-    }
 }
 
 @end

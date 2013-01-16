@@ -12,7 +12,7 @@
 #import "HNEntry.h"
 
 #ifdef HNKIT_RENDERING_ENABLED
-#import "HNEntryBodyRenderer.h"
+#import "HNObjectBodyRenderer.h"
 #endif
 
 @implementation HNEntry
@@ -21,10 +21,10 @@
 #ifdef HNKIT_RENDERING_ENABLED
 @synthesize renderer;
 
-- (HNEntryBodyRenderer *)renderer {
+- (HNObjectBodyRenderer *)renderer {
     if (renderer != nil) return renderer;
     
-    renderer = [[HNEntryBodyRenderer alloc] initWithEntry:self];
+    renderer = [[HNObjectBodyRenderer alloc] initWithObject:self];
     return renderer;
 }
 #endif

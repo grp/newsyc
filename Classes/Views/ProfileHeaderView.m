@@ -9,14 +9,11 @@
 #import "ProfileHeaderView.h"
 
 @implementation ProfileHeaderView
-@synthesize user;
+@synthesize user, padding;
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-        CGFloat width = frame.size.width;
-        
-        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 20.0f, width - 40.0f, 20.0f)];
-        [titleLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
+        titleLabel = [[UILabel alloc] init];
         [titleLabel setShadowColor:[UIColor whiteColor]];
         [titleLabel setTextAlignment:NSTextAlignmentLeft];
         [titleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
@@ -25,8 +22,7 @@
         [titleLabel setFont:[UIFont boldSystemFontOfSize:19.0f]];
         [self addSubview:titleLabel];
         
-        subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 42.0f, width - 40.0f, 20.0f)];
-        [subtitleLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
+        subtitleLabel = [[UILabel alloc] init];
         [subtitleLabel setShadowColor:[UIColor whiteColor]];
         [subtitleLabel setTextAlignment:NSTextAlignmentLeft];
         [subtitleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
@@ -37,6 +33,20 @@
     }
     
     return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+
+    CGFloat width = [self bounds].size.width;
+    [titleLabel setFrame:CGRectMake(padding, 20.0f, width - (padding * 2), 20.0f)];
+    [subtitleLabel setFrame:CGRectMake(padding, 42.0f, width - (padding * 2), 20.0f)];
+}
+
+- (void)setPadding:(CGFloat)padding_ {
+    padding = padding_;
+
+    [self setNeedsLayout];
 }
 
 - (NSString *)title {

@@ -6,18 +6,18 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
+#import "BodyTextView.h"
+
 @protocol DetailsHeaderViewDelegate;
 
 @class HNEntry;
-@interface DetailsHeaderView : UIView {
+@interface DetailsHeaderView : UIView <BodyTextViewDelegate> {
     HNEntry *entry;
     __weak id<DetailsHeaderViewDelegate> delegate;
 
-    CGRect bodyRect;
-    NSSet *highlightedRects;
+    BodyTextView *bodyTextView;
     
     BOOL highlighted;
-
     BOOL navigationCancelled;
 }
 

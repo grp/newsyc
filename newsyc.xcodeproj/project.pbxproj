@@ -115,6 +115,7 @@
 		7D6B9F571347DF2E00CD923C /* XMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EEC1347DF2E00CD923C /* XMLDocument.m */; };
 		7D6B9F581347DF2E00CD923C /* XMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EEE1347DF2E00CD923C /* XMLElement.m */; };
 		7D6BAB841415B07500C24B8B /* LoadMoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6BAB831415B07400C24B8B /* LoadMoreButton.m */; };
+		7D75447616A636DB000AAB40 /* BodyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D75447516A636DA000AAB40 /* BodyTextView.m */; };
 		7D8541221640A09000C68F84 /* InstapaperActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8541211640A09000C68F84 /* InstapaperActivity.m */; };
 		7D8541251640B86600C68F84 /* InstapaperSubmission.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8541241640B86600C68F84 /* InstapaperSubmission.m */; };
 		7D8A660813333A72002012AA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D8A660713333A72002012AA /* QuartzCore.framework */; };
@@ -147,7 +148,7 @@
 		7DD03DEB14529E880007A069 /* Icon-Small-50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD03DE614529E880007A069 /* Icon-Small-50@2x.png */; };
 		7DD03DEC14529E880007A069 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD03DE714529E880007A069 /* Icon-72.png */; };
 		7DD03DED14529E880007A069 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD03DE814529E880007A069 /* Icon-72@2x.png */; };
-		7DD1EEA81503894B00C3EC31 /* HNEntryBodyRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD1EEA71503894B00C3EC31 /* HNEntryBodyRenderer.m */; };
+		7DD1EEA81503894B00C3EC31 /* HNObjectBodyRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD1EEA71503894B00C3EC31 /* HNObjectBodyRenderer.m */; };
 		7DDFA3B01401A8F300B8E69B /* HNTimeline.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3AF1401A8F300B8E69B /* HNTimeline.m */; };
 		7DDFA3B31401A92400B8E69B /* HNSession+Following.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3B21401A92400B8E69B /* HNSession+Following.m */; };
 		7DDFA3BF1401AAC500B8E69B /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3B61401AAC500B8E69B /* NSObject+SBJSON.m */; };
@@ -336,6 +337,8 @@
 		7D6B9EF01347DF2E00CD923C /* icon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.psd; sourceTree = "<group>"; };
 		7D6BAB821415B07400C24B8B /* LoadMoreButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadMoreButton.h; sourceTree = "<group>"; };
 		7D6BAB831415B07400C24B8B /* LoadMoreButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadMoreButton.m; sourceTree = "<group>"; };
+		7D75447416A636DA000AAB40 /* BodyTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BodyTextView.h; sourceTree = "<group>"; };
+		7D75447516A636DA000AAB40 /* BodyTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BodyTextView.m; sourceTree = "<group>"; };
 		7D8541201640A08600C68F84 /* InstapaperActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperActivity.h; sourceTree = "<group>"; };
 		7D8541211640A09000C68F84 /* InstapaperActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperActivity.m; sourceTree = "<group>"; };
 		7D8541231640B86600C68F84 /* InstapaperSubmission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperSubmission.h; sourceTree = "<group>"; };
@@ -386,8 +389,8 @@
 		7DD03DE614529E880007A069 /* Icon-Small-50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50@2x.png"; sourceTree = "<group>"; };
 		7DD03DE714529E880007A069 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		7DD03DE814529E880007A069 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72@2x.png"; sourceTree = "<group>"; };
-		7DD1EEA61503894B00C3EC31 /* HNEntryBodyRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNEntryBodyRenderer.h; sourceTree = "<group>"; };
-		7DD1EEA71503894B00C3EC31 /* HNEntryBodyRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNEntryBodyRenderer.m; sourceTree = "<group>"; };
+		7DD1EEA61503894B00C3EC31 /* HNObjectBodyRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNObjectBodyRenderer.h; sourceTree = "<group>"; };
+		7DD1EEA71503894B00C3EC31 /* HNObjectBodyRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNObjectBodyRenderer.m; sourceTree = "<group>"; };
 		7DDFA3AE1401A8F300B8E69B /* HNTimeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HNTimeline.h; path = "Classes/Follow Model/HNTimeline.h"; sourceTree = "<group>"; };
 		7DDFA3AF1401A8F300B8E69B /* HNTimeline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HNTimeline.m; path = "Classes/Follow Model/HNTimeline.m"; sourceTree = "<group>"; };
 		7DDFA3B11401A92400B8E69B /* HNSession+Following.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "HNSession+Following.h"; path = "Classes/Follow Model/HNSession+Following.h"; sourceTree = "<group>"; };
@@ -663,8 +666,8 @@
 				7D6B9EC01347DF2E00CD923C /* HNAPISubmission.m */,
 				CBFCE7F413989054007A5DDD /* HNAPISearch.h */,
 				CBFCE7F513989054007A5DDD /* HNAPISearch.m */,
-				7DD1EEA61503894B00C3EC31 /* HNEntryBodyRenderer.h */,
-				7DD1EEA71503894B00C3EC31 /* HNEntryBodyRenderer.m */,
+				7DD1EEA61503894B00C3EC31 /* HNObjectBodyRenderer.h */,
+				7DD1EEA71503894B00C3EC31 /* HNObjectBodyRenderer.m */,
 			);
 			path = HNKit;
 			sourceTree = "<group>";
@@ -672,6 +675,8 @@
 		7D6B9ED41347DF2E00CD923C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7D75447416A636DA000AAB40 /* BodyTextView.h */,
+				7D75447516A636DA000AAB40 /* BodyTextView.m */,
 				7D91AA9D135A27DD00247D34 /* ActivityIndicatorItem.h */,
 				7D91AA9E135A27DD00247D34 /* ActivityIndicatorItem.m */,
 				7D6B9ED91347DF2E00CD923C /* PullToRefreshView.h */,
@@ -1079,7 +1084,7 @@
 				7DB809B714F8A12F009668E6 /* SubmissionListController.m in Sources */,
 				7DB809BA14F8ACEF009668E6 /* SharingController.m in Sources */,
 				7DF2C44814F9BA4800E01067 /* HNContainer.m in Sources */,
-				7DD1EEA81503894B00C3EC31 /* HNEntryBodyRenderer.m in Sources */,
+				7DD1EEA81503894B00C3EC31 /* HNObjectBodyRenderer.m in Sources */,
 				7D34176C150AEF7B002E284F /* UIImage+Colorize.m in Sources */,
 				7D28FFE3151ADF4000BEBE1B /* SplitViewController.m in Sources */,
 				7D977AB9151C142700FD7360 /* EmptyController.m in Sources */,
@@ -1095,6 +1100,7 @@
 				7D4E846E169D05FA006408AC /* HNSessionController.m in Sources */,
 				7DB9FC1F169D156A008674F4 /* SessionListController.m in Sources */,
 				7DBD4CB2169FC52E00938C54 /* UIColor+Orange.m in Sources */,
+				7D75447616A636DB000AAB40 /* BodyTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

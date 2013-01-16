@@ -145,7 +145,7 @@
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [window setRootViewController:navigationController];
         
-        [HNEntryBodyRenderer setDefaultFontSize:13.0f];
+        [HNObjectBodyRenderer setDefaultFontSize:13.0f];
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         rightNavigationController = [[NavigationController alloc] init];
         [rightNavigationController setLoginDelegate:sessionListController];
@@ -162,7 +162,7 @@
         
         [window setRootViewController:splitController];
 
-        [HNEntryBodyRenderer setDefaultFontSize:16.0f];
+        [HNObjectBodyRenderer setDefaultFontSize:16.0f];
     } else {
         NSAssert(NO, @"Invalid Device Type");
     }

@@ -8,9 +8,10 @@
 
 #import "LoadingController.h"
 #import "OrangeTableView.h"
+#import "BodyTextView.h"
 
 @class ProfileHeaderView;
-@interface ProfileController : LoadingController <UITableViewDelegate, UITableViewDataSource> {
+@interface ProfileController : LoadingController <UITableViewDelegate, UITableViewDataSource, BodyTextViewDelegate> {
     OrangeTableView *tableView;
     ProfileHeaderView *header;
 }

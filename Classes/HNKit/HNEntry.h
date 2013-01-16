@@ -10,7 +10,7 @@
 #import "HNContainer.h"
 
 #ifdef HNKIT_RENDERING_ENABLED
-@class HNEntryBodyRenderer;
+@class HNObjectBodyRenderer;
 #endif
 
 @class HNUser;
@@ -25,7 +25,7 @@
     NSURL *destination;
     NSString *title;
 #ifdef HNKIT_RENDERING_ENABLED
-    HNEntryBodyRenderer *renderer;
+    HNObjectBodyRenderer *renderer;
 #endif
 }
 
@@ -39,7 +39,7 @@
 @property (nonatomic, copy) NSURL *destination;
 @property (nonatomic, copy) NSString *title;
 #ifdef HNKIT_RENDERING_ENABLED
-@property (nonatomic, readonly) HNEntryBodyRenderer *renderer;
+@property (nonatomic, readonly) HNObjectBodyRenderer *renderer;
 #endif
 
 - (BOOL)isComment;

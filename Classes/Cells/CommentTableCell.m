@@ -40,18 +40,22 @@
         
         [self addSubview:toolbarView];
         [self setExpanded:NO];
-        
-        linkLongPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFromRecognizer:)];
-        [linkLongPressRecognizer setMinimumPressDuration:0.65f];
-        [linkLongPressRecognizer setCancelsTouchesInView:NO];
-        [contentView addGestureRecognizer:linkLongPressRecognizer];
+
+        bodyTextView = [[BodyTextView alloc] init];
+        [bodyTextView setDelegate:self];
+        [contentView addSubview:bodyTextView];
 
         doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapFromRecognizer:)];
         [doubleTapRecognizer setNumberOfTapsRequired:2];
+        [doubleTapRecognizer setDelaysTouchesBegan:NO];
+        [doubleTapRecognizer setDelaysTouchesEnded:NO];
         [contentView addGestureRecognizer:doubleTapRecognizer];
 
         tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFromRecognizer:)];
         [tapRecognizer setNumberOfTapsRequired:1];
+        [tapRecognizer setDelegate:self];
+        [tapRecognizer setDelaysTouchesBegan:NO];
+        [tapRecognizer setDelaysTouchesEnded:NO];
         [tapRecognizer setCancelsTouchesInView:NO];
         [tapRecognizer requireGestureRecognizerToFail:doubleTapRecognizer];
         [contentView addGestureRecognizer:tapRecognizer];
@@ -67,7 +71,7 @@
     [comment release];
     [toolbarView release];
     [doubleTapRecognizer release];
-    [linkLongPressRecognizer release];
+    [bodyTextView release];
     [tapRecognizer release];
 
     [super dealloc];
@@ -101,12 +105,13 @@
     [comment autorelease];
     comment = [comment_ retain];
     
-    [toolbarView setEntry:comment_];
+    [toolbarView setEntry:comment];
+    [bodyTextView setRenderer:[comment renderer]];
     
     [self setNeedsDisplay];
 }
 
-- (void)setIndentationLevel:(int)level {
+- (void)setIndentationLevel:(NSInteger)level {
     indentationLevel = level;
     
     [self setNeedsDisplay];
@@ -185,7 +190,7 @@
     width -= ([self margins].left + [self margins].right);
     width -= (indentationLevel * [self indentationDepth]);
     
-    HNEntryBodyRenderer *renderer = [comment renderer];
+    HNObjectBodyRenderer *renderer = [comment renderer];
     CGSize size = [renderer sizeForWidth:width];
     
     return size.height;
@@ -215,118 +220,169 @@
     return bounds;
 }
 
-- (CGRect)userFrame {
+- (NSString *)userText {
+    return [[comment submitter] identifier];
+}
+
+- (CGRect)userRect {
     CGRect bounds = [self drawingBounds];
     UIEdgeInsets margins = [[self class] margins];
-
-    NSString *user = [[comment submitter] identifier];
 
     CGRect userrect;
     userrect.origin.x = bounds.origin.x + margins.left;
     userrect.origin.y = margins.top;
-    userrect.size = [user sizeWithFont:[[self class] userFont]];
+    userrect.size = [[self userText] sizeWithFont:[[self class] userFont]];
 
     return userrect;
 }
 
-- (CGRect)dateFrame {
+- (NSString *)dateText {
+    return [comment posted];
+}
+
+- (CGRect)dateRect {
     CGRect bounds = [self drawingBounds];
     UIEdgeInsets margins = [[self class] margins];
 
-    NSString *date = [comment posted];
-
     CGRect daterect;
-    daterect.size = [date sizeWithFont:[[self class] dateFont]];
+    daterect.size = [[self dateText] sizeWithFont:[[self class] dateFont]];
     daterect.origin = CGPointMake(bounds.size.width - daterect.size.width - margins.right, margins.top);
 
     return daterect;
 }
 
-- (void)drawContentView:(CGRect)rect {
-    CGRect bounds = [self drawingBounds];
-    CGSize offsets = [[self class] offsets];
-    UIEdgeInsets margins = [[self class] margins];
+- (BOOL)bodyVisible {
+    return [[comment body] length] > 0;
+}
 
-    NSString *user = [[comment submitter] identifier];
-    NSString *date = [comment posted];
-    NSString *points = [comment points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [comment points]];
-    NSString *comments = [comment children] == 0 ? @"" : [comment children] == 1 ? @"1 reply" : [NSString stringWithFormat:@"%d replies", [comment children]];
+- (CGRect)bodyRect {
+    if ([self bodyVisible]) {
+        CGRect bounds = [self drawingBounds];
+        UIEdgeInsets margins = [[self class] margins];
+        CGSize offsets = [[self class] offsets];
+        CGRect daterect = [self dateRect];
 
-    // draw username
-    [[UIColor blackColor] set];
-    CGRect userrect = [self userFrame];
-    [user drawInRect:userrect withFont:[[self class] userFont]];
+        CGRect bodyrect;
 
-    if (userHighlighted) {
-        CGRect rect = CGRectInset(userrect, -4.0f, -4.0f);
-        UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:3.0f];
-        [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
-        [bezierPath fill];
-    }
-
-    // draw date
-    [[UIColor lightGrayColor] set];
-    CGRect daterect = [self dateFrame];
-    [date drawInRect:daterect withFont:[[self class] dateFont]];
-    
-    // draw comment body
-    if ([[comment body] length] > 0) {
         bodyrect.size.height = [[self class] bodyHeightForComment:comment withWidth:bounds.size.width indentationLevel:indentationLevel];
         bodyrect.size.width = bounds.size.width - bounds.origin.x - margins.left - margins.left;
         bodyrect.origin.x = bounds.origin.x + margins.left;
         bodyrect.origin.y = margins.top + daterect.size.height + offsets.height;
 
-        HNEntryBodyRenderer *renderer = [comment renderer];
-        [renderer renderInContext:UIGraphicsGetCurrentContext() rect:bodyrect];
+        return bodyrect;
+    } else {
+        return CGRectZero;
     }
-    
-    // draw points
-    [[UIColor grayColor] set];
-    CGRect pointsrect;
-    pointsrect.size.height = [points sizeWithFont:[[self class] subtleFont]].height;
-    pointsrect.size.width = (bounds.size.width + bounds.origin.x) / 2 - margins.left - offsets.width;
-    pointsrect.origin.x = bounds.origin.x + margins.left;
-    pointsrect.origin.y = bounds.size.height - margins.bottom - pointsrect.size.height;
-    if ([[self class] entryShowsPoints:comment]) {
-          [points drawInRect:pointsrect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
-    }
-    
-    // draw replies count
-    [[UIColor grayColor] set];
-    CGRect commentsrect;
-    commentsrect.size.height = [comments sizeWithFont:[[self class] subtleFont]].height;
-    commentsrect.size.width = (bounds.size.width - bounds.origin.x) / 2 - margins.right - offsets.width;
-    commentsrect.origin.x = bounds.size.width - (bounds.size.width - bounds.origin.x) / 2 + offsets.width;
-    commentsrect.origin.y = bounds.size.height - margins.bottom - commentsrect.size.height;
-    
-    // draw link highlight
-    UIBezierPath *highlightBezierPath = [UIBezierPath bezierPath];
-    for (NSValue *rect in highlightedRects) {
-        CGRect highlightedRect = CGRectIntegral([rect CGRectValue]);
-        
-        if (highlightedRect.size.width != 0 && highlightedRect.size.height != 0) {            
-            CGRect rect = CGRectInset(highlightedRect, -4.0f, -4.0f);
-            rect.origin.x += bodyrect.origin.x;
-            rect.origin.y += bodyrect.origin.y;
-            
-            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:3.0f];
-            [highlightBezierPath appendPath:bezierPath];
-        }
-    }
-    [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
-    [highlightBezierPath fill];
+}
 
-    // draw divider line
+- (BOOL)pointsVisible {
+    return [[self class] entryShowsPoints:comment];
+}
+
+- (NSString *)pointsText {
+    NSString *points = [comment points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [comment points]];
+    return points;
+}
+
+- (CGRect)pointsRect {
+    if ([self pointsVisible]) {
+        CGRect bounds = [self drawingBounds];
+        UIEdgeInsets margins = [[self class] margins];
+        CGSize offsets = [[self class] offsets];
+
+        CGRect pointsrect;
+        
+        pointsrect.size.height = [[self pointsText] sizeWithFont:[[self class] subtleFont]].height;
+        pointsrect.size.width = (bounds.size.width + bounds.origin.x) / 2 - margins.left - offsets.width;
+        pointsrect.origin.x = bounds.origin.x + margins.left;
+        pointsrect.origin.y = bounds.size.height - margins.bottom - pointsrect.size.height;
+
+        return pointsrect;
+    } else {
+        return CGRectZero;
+    }
+}
+
+- (NSString *)commentsText {
+    NSString *comments = [comment children] == 0 ? @"" : [comment children] == 1 ? @"1 reply" : [NSString stringWithFormat:@"%d replies", [comment children]];
+    return comments;
+}
+
+- (CGRect)commentsRect {
+    if ([self pointsVisible]) {
+        CGRect bounds = [self drawingBounds];
+        UIEdgeInsets margins = [[self class] margins];
+        CGSize offsets = [[self class] offsets];
+
+        CGRect commentsrect;
+        
+        commentsrect.size.height = [[self commentsText] sizeWithFont:[[self class] subtleFont]].height;
+        commentsrect.size.width = (bounds.size.width - bounds.origin.x) / 2 - margins.right - offsets.width;
+        commentsrect.origin.x = bounds.size.width - (bounds.size.width - bounds.origin.x) / 2 + offsets.width;
+        commentsrect.origin.y = bounds.size.height - margins.bottom - commentsrect.size.height;
+
+        return commentsrect;
+    } else {
+        return CGRectZero;
+    }
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+
+    [bodyTextView setFrame:[self bodyRect]];
+    [bodyTextView setHidden:![self bodyVisible]];
+}
+
+- (void)drawContentView:(CGRect)rect {
+    CGRect bounds = [self drawingBounds];
+
+    [[UIColor blackColor] set];
+    [[self userText] drawInRect:[self userRect] withFont:[[self class] userFont]];
+
+    if (userHighlighted) {
+        CGRect rect = CGRectInset([self userRect], -4.0f, -4.0f);
+        UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:3.0f];
+        [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
+        [bezierPath fill];
+    }
+
+    [[UIColor lightGrayColor] set];
+    [[self dateText] drawInRect:[self dateRect] withFont:[[self class] dateFont]];
+
+    if ([self pointsVisible]) {
+        [[UIColor grayColor] set];
+        [[self pointsText] drawInRect:[self pointsRect] withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
+    
+        [[UIColor grayColor] set];
+        [[self commentsText] drawInRect:[self commentsRect] withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingHead alignment:NSTextAlignmentRight];
+    }
+    
     CGRect linerect;
-    linerect.origin.x = 0;
     linerect.size.width = bounds.size.width;
-    linerect.size.height = 1.0f / [[UIScreen mainScreen] scale];
+    linerect.size.height = (1.0f / [[UIScreen mainScreen] scale]);
+    linerect.origin.x = 0;
     linerect.origin.y = bounds.size.height - linerect.size.height;
+    
     [[UIColor colorWithWhite:0.85f alpha:1.0f] set];
     UIRectFill(linerect);
 }
 
 #pragma mark - Tap Handlers
+
+- (void)bodyTextView:(BodyTextView *)header selectedURL:(NSURL *)url {
+    if ([delegate respondsToSelector:@selector(commentTableCell:selectedURL:)]) {
+        [delegate commentTableCell:self selectedURL:url];
+    }
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer == tapRecognizer || gestureRecognizer == doubleTapRecognizer) {
+        return ![bodyTextView linkHighlighted] && !userHighlighted;
+    } else {
+        return YES;
+    }
+}
 
 - (void)singleTapped {
     if ([delegate respondsToSelector:@selector(commentTableCellTapped:)]) {
@@ -340,28 +396,10 @@
     }
 }
 
-- (CGPoint)bodyPointForPoint:(CGPoint)point {
-    CGPoint bodyPoint;
-    bodyPoint.x = point.x - bodyrect.origin.x;
-    bodyPoint.y = point.y - bodyrect.origin.y;
-    return bodyPoint;
-}
-
 - (void)clearHighlights {
-    BOOL wasHighlighted = NO;
-
-    if (highlightedRects != nil) {
-        [highlightedRects release];
-        highlightedRects = nil;
-        wasHighlighted = YES;
-    } else if (userHighlighted) {
+    if (userHighlighted) {
         userHighlighted = NO;
-        wasHighlighted = YES;
-    }
-
-    navigationCancelled = NO;
-
-    if (wasHighlighted) {
+        
         [tapRecognizer setEnabled:YES];
         [doubleTapRecognizer setEnabled:YES];
     
@@ -375,20 +413,9 @@
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInView:self];
 
-    CGPoint bodyPoint = [self bodyPointForPoint:location];
-    [[comment renderer] linkURLAtPoint:bodyPoint forWidth:bodyrect.size.width rects:&highlightedRects];
-
-    BOOL tapRecognized = NO;
-
-    if (highlightedRects != nil) {
-        [highlightedRects retain];
-        tapRecognized = YES;
-    } else if (CGRectContainsPoint([self userFrame], location)) {
+    if (CGRectContainsPoint([self userRect], location)) {
         userHighlighted = YES;
-        tapRecognized = YES;
-    }
 
-    if (tapRecognized) {
         [self setNeedsDisplay];
 
         [tapRecognizer setEnabled:NO];
@@ -397,18 +424,7 @@
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (highlightedRects != nil && !navigationCancelled) {
-        UITouch *touch = [touches anyObject];
-        CGPoint point = [self bodyPointForPoint:[touch locationInView:self]];
-        
-        NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyrect.size.width rects:NULL];
-        
-        if (url != nil) {
-            if ([delegate respondsToSelector:@selector(commentTableCell:selectedURL:)]) {
-                [delegate commentTableCell:self selectedURL:url];
-            }
-        }
-    } else if (userHighlighted) {
+    if (userHighlighted) {
         if ([delegate respondsToSelector:@selector(commentTableCellTappedUser:)]) {
             [delegate commentTableCellTappedUser:self];
         }
@@ -422,7 +438,7 @@
 }
 
 - (void)tapFromRecognizer:(UITapGestureRecognizer *)gesture {
-    if (highlightedRects == nil && !userHighlighted) {
+    if (![bodyTextView linkHighlighted] && !userHighlighted) {
         CGPoint location = [gesture locationInView:self];
 
         if (!expanded || location.y < [toolbarView frame].origin.y) {
@@ -432,29 +448,11 @@
 }
 
 - (void)doubleTapFromRecognizer:(UITapGestureRecognizer *)gesture {
-    if (highlightedRects == nil && !userHighlighted) {
+    if (![bodyTextView linkHighlighted] &&  !userHighlighted) {
         CGPoint location = [gesture locationInView:self];
 
         if (!expanded || location.y < [toolbarView frame].origin.y) {
             [self doubleTapped];
-        }
-    }
-}
-
-- (void)longPressFromRecognizer:(UILongPressGestureRecognizer *)gesture {
-	if ([gesture state] == UIGestureRecognizerStateBegan) {
-        CGPoint location = [gesture locationInView:self];
-        CGPoint point = [self bodyPointForPoint:location];
-        
-        NSSet *rects;
-        NSURL *url = [[comment renderer] linkURLAtPoint:point forWidth:bodyrect.size.width rects:&rects];
-        
-        if (url != nil && [rects count] > 0) {
-            SharingController *sharingController = [[SharingController alloc] initWithURL:url title:nil fromController:nil];
-            [sharingController showFromView:self atRect:CGRectInset(CGRectMake(location.x, location.y, 0, 0), -4.0f, -4.0f)];
-            [sharingController release];
-
-            navigationCancelled = YES;
         }
     }
 }

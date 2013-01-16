@@ -1,5 +1,5 @@
 //
-//  EntryBodyRenderer.m
+//  HNObjectBodyRenderer.m
 //  newsyc
 //
 //  Created by Grant Paul on 2/26/12.
@@ -10,16 +10,19 @@
 
 #ifdef HNKIT_RENDERING_ENABLED
 
-#import "HNEntryBodyRenderer.h"
+#import "HNObjectBodyRenderer.h"
+
+#import "HNObject.h"
 #import "HNEntry.h"
+#import "HNUser.h"
 
 #import "XMLDocument.h"
 #import "XMLElement.h"
 
 static CGFloat defaultFontSize = 13.0f;
 
-@implementation HNEntryBodyRenderer
-@synthesize entry;
+@implementation HNObjectBodyRenderer
+@synthesize object;
 
 + (CGFloat)defaultFontSize {
     return defaultFontSize;
@@ -61,8 +64,52 @@ static CGFloat defaultFontSize = 13.0f;
     return [UIColor colorWithRed:red green:green blue:blue alpha:1.0f];
 }
 
+- (NSString *)text {
+    if ([object isKindOfClass:[HNEntry class]]) {
+        HNEntry *entry = (HNEntry *) object;
+        return [entry body];
+    } else if ([object isKindOfClass:[HNUser class]]) {
+        HNUser *user = (HNUser *) object;
+        NSString *body = [user about];
+
+        __block NSInteger lastIndex = 0;
+        NSMutableString *markupBody = [NSMutableString string];
+
+        NSDataDetector *dataDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:NULL];
+        [dataDetector enumerateMatchesInString:body options:0 range:NSMakeRange(0, [body length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+            NSRange range = [result range];
+            NSURL *url = [result URL];
+
+            if ([[url scheme] isEqualToString:@"mailto"]) {
+                // XXX: support mailto: URLs
+                url = nil;
+            }
+
+            [markupBody appendString:[body substringWithRange:NSMakeRange(lastIndex, range.location - lastIndex)]];
+            
+            if (url != nil) {
+                [markupBody appendString:[NSString stringWithFormat:@"<a href=\"%@\">", [url absoluteString]]];
+            }
+            
+            [markupBody appendString:[body substringWithRange:range]];
+            
+            if (url != nil) {
+                [markupBody appendString:@"</a>"];
+            }
+
+            lastIndex = range.location + range.length;
+        }];
+
+        [markupBody replaceOccurrencesOfString:@"\n" withString:@"<br />" options:0 range:NSMakeRange(0, [markupBody length])];
+        
+        return markupBody;
+    }
+
+    return nil;
+}
+
 - (NSAttributedString *)createAttributedString {
-    NSString *body = [entry body];
+    NSString *body = [self text];
     if ([body length] == 0) return [[[NSAttributedString alloc] init] autorelease];
     
     CGFloat fontSize = [[self class] defaultFontSize];
@@ -339,12 +386,12 @@ static CGFloat defaultFontSize = 13.0f;
     framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef) attributed);
 }
 
-- (id)initWithEntry:(HNEntry *)entry_ {
+- (id)initWithObject:(HNObject *)object_ {
     if ((self = [super init])) {
-        entry = entry_;
+        object = object_;
         [self prepare];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepare) name:kHNObjectLoadingStateChangedNotification object:entry];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepare) name:kHNObjectLoadingStateChangedNotification object:object];
     }
     
     return self;

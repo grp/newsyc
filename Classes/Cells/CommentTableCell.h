@@ -8,17 +8,17 @@
 
 #import "TableViewCell.h"
 #import "EntryActionsView.h"
+#import "BodyTextView.h"
 
 @protocol CommentTableCellDelegate;
 
 @class HNEntry;
-@interface CommentTableCell : TableViewCell {
+@interface CommentTableCell : TableViewCell <BodyTextViewDelegate> {
     HNEntry *comment;
     NSInteger indentationLevel;
-    
-    CGRect bodyrect;
-    NSSet *highlightedRects;
+
     BOOL userHighlighted;
+    BodyTextView *bodyTextView;
     
     __weak id<CommentTableCellDelegate> delegate;
     
@@ -27,9 +27,6 @@
 
     UITapGestureRecognizer *tapRecognizer;
     UITapGestureRecognizer *doubleTapRecognizer;
-    UILongPressGestureRecognizer *linkLongPressRecognizer;
-
-    BOOL navigationCancelled;
 }
 
 @property (nonatomic, assign) id<CommentTableCellDelegate> delegate;
@@ -37,7 +34,7 @@
 @property (nonatomic, assign) NSInteger indentationLevel;
 @property (nonatomic, assign) BOOL expanded;
 
-+ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width expanded:(BOOL)expanded indentationLevel:(int)indentationLevel;
++ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width expanded:(BOOL)expanded indentationLevel:(NSInteger)indentationLevel;
 
 - (id)initWithReuseIdentifier:(NSString *)identifier;
 
