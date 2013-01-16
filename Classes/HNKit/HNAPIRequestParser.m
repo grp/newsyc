@@ -124,13 +124,8 @@ typedef enum {
             if ([[td children] count] == 0) {
                 return kHNPageLayoutTypeExposed;
             } else {
-                NSArray *tables = [[td children] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(XMLElement *object, NSDictionary *bindings) {
-                    return [[object tagName] isEqualToString:@"table"];
-                }]];
-                
-                NSArray *linebreaks = [[td children] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(XMLElement *object, NSDictionary *bindings) {
-                    return [[object tagName] isEqualToString:@"br"];
-                }]];
+                NSArray *tables = [td elementsMatchingPath:@"table"];
+                NSArray *linebreaks = [td elementsMatchingPath:@"br"];
                 
                 // XXX: This is horrible hack.
                 // This is because when there is only a header, make sure
