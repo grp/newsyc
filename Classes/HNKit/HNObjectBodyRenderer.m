@@ -72,6 +72,8 @@ static CGFloat defaultFontSize = 13.0f;
         HNUser *user = (HNUser *) object;
         NSString *body = [user about];
 
+        body = [body stringByReplacingOccurrencesOfString:@"<p>" withString:@"\n\n"];
+
         __block NSInteger lastIndex = 0;
         NSMutableString *markupBody = [NSMutableString string];
 
@@ -88,7 +90,8 @@ static CGFloat defaultFontSize = 13.0f;
             [markupBody appendString:[body substringWithRange:NSMakeRange(lastIndex, range.location - lastIndex)]];
             
             if (url != nil) {
-                [markupBody appendString:[NSString stringWithFormat:@"<a href=\"%@\">", [url absoluteString]]];
+                NSString *addressString = [url absoluteString];
+                [markupBody appendString:[NSString stringWithFormat:@"<a href=\"%@\">", addressString]];
             }
             
             [markupBody appendString:[body substringWithRange:range]];
@@ -99,6 +102,8 @@ static CGFloat defaultFontSize = 13.0f;
 
             lastIndex = range.location + range.length;
         }];
+
+        [markupBody appendString:[body substringFromIndex:lastIndex]];
 
         [markupBody replaceOccurrencesOfString:@"\n" withString:@"<br />" options:0 range:NSMakeRange(0, [markupBody length])];
         
@@ -267,7 +272,7 @@ static CGFloat defaultFontSize = 13.0f;
     CGPoint *origins = (CGPoint *) calloc(sizeof(CGPoint), [lines count]);
     CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), origins);
     
-    CGRect (^computeLineRect)(CTLineRef, int) = ^CGRect (CTLineRef line, NSInteger index) {
+    CGRect (^computeLineRect)(CTLineRef, NSInteger) = ^CGRect (CTLineRef line, NSInteger index) {
         CGRect lineRect;
         lineRect.origin.x = 0;
         lineRect.origin.y = origins[index].y;

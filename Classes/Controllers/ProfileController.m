@@ -84,7 +84,7 @@
 }
 
 - (BOOL)hasAbout {
-    return [(HNUser *) source about] != nil && [[(HNUser *) source about] length] > 0;
+    return [[(HNUser *) source about] length] != 0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
@@ -138,6 +138,7 @@
     if ([indexPath section] == 0) {
         if ([indexPath row] == 0 && [self hasAbout]) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             
             BodyTextView *textView = [[BodyTextView alloc] init];
             [textView setRenderer:[(HNUser *)source renderer]];
