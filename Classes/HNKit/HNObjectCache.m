@@ -10,6 +10,11 @@
 #import "HNObjectCache.h"
 #import "HNSession.h"
 
+#import "NSDictionary+Parameters.h"
+#import "NSString+URLEncoding.h"
+#import "NSString+Entities.h"
+#import "NSString+Tags.h"
+
 @interface HNObjectCacheKey : NSObject <NSCopying> {
     Class cls;
     id identifier;
@@ -48,7 +53,13 @@
 }
 
 + (NSString *)persistentCacheIdentiferForClass:(Class)cls_ identifier:(id)identifier_ infoDictionary:(NSDictionary *)info {
-    return [NSString stringWithFormat:@"%@-%@-%x", cls_, identifier_, [info hash]];
+    NSString *infoString = @"";
+    
+    if (info != nil) {
+        infoString = [@"-" stringByAppendingString:[[info queryString] stringByURLEncodingString]];
+    }
+    
+    return [NSString stringWithFormat:@"%@-%@%@", cls_, identifier_, infoString];
 }
 
 - (NSString *)persistentCacheIdentifier {
@@ -90,7 +101,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%@:%p class=%@ identifier=%@ info=%p>", [self class], cls, self, identifier, info];
+    return [NSString stringWithFormat:@"<%@:%p class=%@ identifier=%@ info=%p>", [self class], self, cls, identifier, info];
 }
 
 @end
