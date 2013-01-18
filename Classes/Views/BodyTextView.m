@@ -6,6 +6,8 @@
 //
 //
 
+#import <MobileCoreServices/UTCoreTypes.h>
+
 #import "BodyTextView.h"
 
 #import "HNObjectBodyRenderer.h"
@@ -163,10 +165,49 @@
             SharingController *sharingController = [[SharingController alloc] initWithURL:url title:nil fromController:nil];
             [sharingController showFromView:self atRect:CGRectInset(CGRectMake(point.x, point.y, 0, 0), -4.0f, -4.0f)];
             [sharingController release];
+        } else if ([self becomeFirstResponder]) {
+            UIMenuController *menuController = [UIMenuController sharedMenuController];
+            [menuController setTargetRect:[self bounds] inView:self];
+            [menuController setMenuVisible:YES animated:YES];
         }
 
         [self clearHighlights];
     }
+}
+
+- (void)copy:(id)sender {
+    NSAttributedString *attributedString = [renderer attributedString];
+    NSString *htmlString = [renderer HTMLString];
+    NSString *string = [renderer string];
+
+    NSDictionary *htmlItem = [NSDictionary dictionaryWithObjectsAndKeys:
+        [attributedString string], (NSString *) kUTTypeText,
+        [NSDictionary dictionaryWithObjectsAndKeys:
+            [NSDictionary dictionaryWithObjectsAndKeys:
+                [htmlString dataUsingEncoding:NSUTF8StringEncoding], @"WebResourceData",
+                @"", @"WebResourceFrameName",
+                @"text/html", @"WebResourceMIMEType",
+                @"UTF-8", @"WebResourceTextEncodingName",
+                @"about:blank", @"WebResourceURL",
+            nil], @"WebMainResource",
+        nil], @"Apple Web Archive pasteboard type",
+    nil];
+
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    [pasteboard setString:string];
+    [pasteboard setItems:[NSArray arrayWithObject:htmlItem]];
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    if (action == @selector(copy:)) {
+        return YES;
+    } else {
+        return [super canPerformAction:action withSender:sender];
+    }
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
 }
 
 @end

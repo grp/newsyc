@@ -23,6 +23,10 @@
 
 @property (nonatomic, readonly, assign) HNObject *object;
 
+@property (nonatomic, readonly, copy) NSString *HTMLString;
+@property (nonatomic, readonly, copy) NSAttributedString *attributedString;
+@property (nonatomic, readonly, copy) NSString *string;
+
 + (CGFloat)defaultFontSize;
 + (void)setDefaultFontSize:(CGFloat)size;
 

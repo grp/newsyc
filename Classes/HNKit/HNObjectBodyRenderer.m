@@ -391,6 +391,18 @@ static CGFloat defaultFontSize = 13.0f;
     framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef) attributed);
 }
 
+- (NSString *)string {
+    return [attributed string];
+}
+
+- (NSString *)HTMLString {
+    return [[[self text] copy] autorelease];
+}
+
+- (NSAttributedString *)attributedString {
+    return [[attributed copy] autorelease];
+}
+
 - (id)initWithObject:(HNObject *)object_ {
     if ((self = [super init])) {
         object = object_;

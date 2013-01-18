@@ -116,6 +116,7 @@
 		7D6B9F581347DF2E00CD923C /* XMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B9EEE1347DF2E00CD923C /* XMLElement.m */; };
 		7D6BAB841415B07500C24B8B /* LoadMoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6BAB831415B07400C24B8B /* LoadMoreButton.m */; };
 		7D75447616A636DB000AAB40 /* BodyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D75447516A636DA000AAB40 /* BodyTextView.m */; };
+		7D75447C16A8C83B000AAB40 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D75447B16A8C83B000AAB40 /* MobileCoreServices.framework */; };
 		7D8541221640A09000C68F84 /* InstapaperActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8541211640A09000C68F84 /* InstapaperActivity.m */; };
 		7D8541251640B86600C68F84 /* InstapaperSubmission.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8541241640B86600C68F84 /* InstapaperSubmission.m */; };
 		7D8A660813333A72002012AA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D8A660713333A72002012AA /* QuartzCore.framework */; };
@@ -339,6 +340,7 @@
 		7D6BAB831415B07400C24B8B /* LoadMoreButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadMoreButton.m; sourceTree = "<group>"; };
 		7D75447416A636DA000AAB40 /* BodyTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BodyTextView.h; sourceTree = "<group>"; };
 		7D75447516A636DA000AAB40 /* BodyTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BodyTextView.m; sourceTree = "<group>"; };
+		7D75447B16A8C83B000AAB40 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7D8541201640A08600C68F84 /* InstapaperActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperActivity.h; sourceTree = "<group>"; };
 		7D8541211640A09000C68F84 /* InstapaperActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperActivity.m; sourceTree = "<group>"; };
 		7D8541231640B86600C68F84 /* InstapaperSubmission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperSubmission.h; sourceTree = "<group>"; };
@@ -430,6 +432,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D75447C16A8C83B000AAB40 /* MobileCoreServices.framework in Frameworks */,
 				7D148E65132D68B5008FBF32 /* libxml2.dylib in Frameworks */,
 				7D96C60D1426CC1B00A76F04 /* MessageUI.framework in Frameworks */,
 				7D1F98921320CF720059EBBB /* UIKit.framework in Frameworks */,
@@ -467,6 +470,7 @@
 		7D1F98901320CF720059EBBB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7D75447B16A8C83B000AAB40 /* MobileCoreServices.framework */,
 				7D148E64132D68B5008FBF32 /* libxml2.dylib */,
 				7D96C60C1426CC1B00A76F04 /* MessageUI.framework */,
 				7D8A660713333A72002012AA /* QuartzCore.framework */,

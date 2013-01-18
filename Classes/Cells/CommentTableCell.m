@@ -62,6 +62,9 @@
 
         [tapRecognizer setEnabled:YES];
         [doubleTapRecognizer setEnabled:YES];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willShowMenu:) name:UIMenuControllerWillShowMenuNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didHideMenu:) name:UIMenuControllerDidHideMenuNotification object:nil];
     }
     
     return self;
@@ -73,6 +76,9 @@
     [doubleTapRecognizer release];
     [bodyTextView release];
     [tapRecognizer release];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIMenuControllerWillShowMenuNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIMenuControllerDidHideMenuNotification object:nil];
 
     [super dealloc];
 }
@@ -399,9 +405,6 @@
 - (void)clearHighlights {
     if (userHighlighted) {
         userHighlighted = NO;
-        
-        [tapRecognizer setEnabled:YES];
-        [doubleTapRecognizer setEnabled:YES];
     
         [self setNeedsDisplay];
     }
@@ -417,9 +420,6 @@
         userHighlighted = YES;
 
         [self setNeedsDisplay];
-
-        [tapRecognizer setEnabled:NO];
-        [doubleTapRecognizer setEnabled:NO];
     }
 }
 
@@ -438,7 +438,9 @@
 }
 
 - (void)tapFromRecognizer:(UITapGestureRecognizer *)gesture {
-    if (![bodyTextView linkHighlighted] && !userHighlighted) {
+    BOOL menuControllerVisible = [[UIMenuController sharedMenuController] isMenuVisible];
+
+    if (![bodyTextView linkHighlighted] && !userHighlighted && !menuControllerVisible) {
         CGPoint location = [gesture locationInView:self];
 
         if (!expanded || location.y < [toolbarView frame].origin.y) {
@@ -448,13 +450,21 @@
 }
 
 - (void)doubleTapFromRecognizer:(UITapGestureRecognizer *)gesture {
-    if (![bodyTextView linkHighlighted] &&  !userHighlighted) {
+    if (![bodyTextView linkHighlighted] && !userHighlighted) {
         CGPoint location = [gesture locationInView:self];
 
         if (!expanded || location.y < [toolbarView frame].origin.y) {
             [self doubleTapped];
         }
     }
+}
+
+- (void)willShowMenu:(NSNotification *)notification {
+    [tapRecognizer setEnabled:NO];
+}
+
+- (void)didHideMenu:(NSNotification *)notification {
+    [tapRecognizer setEnabled:YES];
 }
 
 @end
