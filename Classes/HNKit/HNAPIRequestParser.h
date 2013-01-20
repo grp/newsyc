@@ -12,5 +12,6 @@
 
 - (NSDictionary *)parseWithString:(NSString *)string;
 - (BOOL)stringIsProcrastinationError:(NSString *)string;
+- (BOOL)stringIsExpiredError:(NSString *)string;
 
 @end

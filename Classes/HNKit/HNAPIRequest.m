@@ -56,7 +56,7 @@
         HNAPIRequestParser *parser = [[HNAPIRequestParser alloc] init];
         
         @try {
-            if (![parser stringIsProcrastinationError:resp]) {
+            if (![parser stringIsProcrastinationError:resp] && ![parser stringIsExpiredError:resp]) {
                 result = [parser parseWithString:resp];
             }
         } @catch (NSException *e) {

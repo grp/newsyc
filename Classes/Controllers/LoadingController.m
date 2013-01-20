@@ -23,6 +23,11 @@
 
 #pragma mark - Source Management
 
+- (void)applicationDidBecomeActiveWithNotification:(NSNotification *)notification {
+    [lastUpdatedOnAppearDate release];
+    lastUpdatedOnAppearDate = nil;
+}
+
 - (void)setSource:(HNObject *)source_ {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNObjectStartedLoadingNotification object:source];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNObjectFinishedLoadingNotification object:source];
@@ -56,6 +61,8 @@
         [self setSource:source_];
         
         statusViews = [[NSMutableSet alloc] init];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActiveWithNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
     }
     
     return self;

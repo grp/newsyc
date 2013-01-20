@@ -32,6 +32,17 @@ typedef enum {
     return procrast;
 }
 
+- (BOOL)stringIsExpiredError:(NSString *)string {
+    XMLDocument *document = [[XMLDocument alloc] initWithHTMLData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+    XMLElement *procrastElement = [document firstElementMatchingPath:@"//body/p"];
+    NSString *procrastMessage = [procrastElement content];
+
+    BOOL expired = [procrastMessage isEqualToString:@"Unknown or expired link."];
+
+    [document release];
+    return expired;
+}
+
 - (NSDictionary *)parseUserProfileWithString:(NSString *)string {
     NSScanner *scanner = [NSScanner scannerWithString:string];
     NSString *key = nil, *value = nil;
