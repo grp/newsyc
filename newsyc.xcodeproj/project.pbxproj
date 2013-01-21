@@ -152,11 +152,6 @@
 		7DD1EEA81503894B00C3EC31 /* HNObjectBodyRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD1EEA71503894B00C3EC31 /* HNObjectBodyRenderer.m */; };
 		7DDFA3B01401A8F300B8E69B /* HNTimeline.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3AF1401A8F300B8E69B /* HNTimeline.m */; };
 		7DDFA3B31401A92400B8E69B /* HNSession+Following.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3B21401A92400B8E69B /* HNSession+Following.m */; };
-		7DDFA3BF1401AAC500B8E69B /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3B61401AAC500B8E69B /* NSObject+SBJSON.m */; };
-		7DDFA3C01401AAC500B8E69B /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3B81401AAC500B8E69B /* NSString+SBJSON.m */; };
-		7DDFA3C11401AAC500B8E69B /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3BA1401AAC500B8E69B /* SBJsonBase.m */; };
-		7DDFA3C21401AAC500B8E69B /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3BC1401AAC500B8E69B /* SBJsonParser.m */; };
-		7DDFA3C31401AAC500B8E69B /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDFA3BE1401AAC500B8E69B /* SBJsonWriter.m */; };
 		7DF10FC91602BA2A001830FE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF10FC81602BA2A001830FE /* Default-568h@2x.png */; };
 		7DF2C44314F8CBE600E01067 /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF2C44114F8CBE600E01067 /* action.png */; };
 		7DF2C44414F8CBE600E01067 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF2C44214F8CBE600E01067 /* action@2x.png */; };
@@ -397,17 +392,6 @@
 		7DDFA3AF1401A8F300B8E69B /* HNTimeline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HNTimeline.m; path = "Classes/Follow Model/HNTimeline.m"; sourceTree = "<group>"; };
 		7DDFA3B11401A92400B8E69B /* HNSession+Following.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "HNSession+Following.h"; path = "Classes/Follow Model/HNSession+Following.h"; sourceTree = "<group>"; };
 		7DDFA3B21401A92400B8E69B /* HNSession+Following.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "HNSession+Following.m"; path = "Classes/Follow Model/HNSession+Following.m"; sourceTree = "<group>"; };
-		7DDFA3B41401AAC500B8E69B /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSON.h; path = JSON/JSON.h; sourceTree = "<group>"; };
-		7DDFA3B51401AAC500B8E69B /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+SBJSON.h"; path = "JSON/NSObject+SBJSON.h"; sourceTree = "<group>"; };
-		7DDFA3B61401AAC500B8E69B /* NSObject+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+SBJSON.m"; path = "JSON/NSObject+SBJSON.m"; sourceTree = "<group>"; };
-		7DDFA3B71401AAC500B8E69B /* NSString+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+SBJSON.h"; path = "JSON/NSString+SBJSON.h"; sourceTree = "<group>"; };
-		7DDFA3B81401AAC500B8E69B /* NSString+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+SBJSON.m"; path = "JSON/NSString+SBJSON.m"; sourceTree = "<group>"; };
-		7DDFA3B91401AAC500B8E69B /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SBJsonBase.h; path = JSON/SBJsonBase.h; sourceTree = "<group>"; };
-		7DDFA3BA1401AAC500B8E69B /* SBJsonBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SBJsonBase.m; path = JSON/SBJsonBase.m; sourceTree = "<group>"; };
-		7DDFA3BB1401AAC500B8E69B /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SBJsonParser.h; path = JSON/SBJsonParser.h; sourceTree = "<group>"; };
-		7DDFA3BC1401AAC500B8E69B /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SBJsonParser.m; path = JSON/SBJsonParser.m; sourceTree = "<group>"; };
-		7DDFA3BD1401AAC500B8E69B /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SBJsonWriter.h; path = JSON/SBJsonWriter.h; sourceTree = "<group>"; };
-		7DDFA3BE1401AAC500B8E69B /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SBJsonWriter.m; path = JSON/SBJsonWriter.m; sourceTree = "<group>"; };
 		7DF10FC81602BA2A001830FE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		7DF2C44114F8CBE600E01067 /* action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action.png; sourceTree = "<group>"; };
 		7DF2C44214F8CBE600E01067 /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action@2x.png"; sourceTree = "<group>"; };
@@ -554,7 +538,6 @@
 			isa = PBXGroup;
 			children = (
 				7D6BAB7C14128A5700C24B8B /* Experimental */,
-				CBFCE802139891F2007A5DDD /* JSON */,
 				7D6B9E5C1347DF2E00CD923C /* Categories */,
 				7D6B9EEA1347DF2E00CD923C /* XML */,
 				7D6B9EB41347DF2E00CD923C /* HNKit */,
@@ -874,24 +857,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		CBFCE802139891F2007A5DDD /* JSON */ = {
-			isa = PBXGroup;
-			children = (
-				7DDFA3B41401AAC500B8E69B /* JSON.h */,
-				7DDFA3B51401AAC500B8E69B /* NSObject+SBJSON.h */,
-				7DDFA3B61401AAC500B8E69B /* NSObject+SBJSON.m */,
-				7DDFA3B71401AAC500B8E69B /* NSString+SBJSON.h */,
-				7DDFA3B81401AAC500B8E69B /* NSString+SBJSON.m */,
-				7DDFA3B91401AAC500B8E69B /* SBJsonBase.h */,
-				7DDFA3BA1401AAC500B8E69B /* SBJsonBase.m */,
-				7DDFA3BB1401AAC500B8E69B /* SBJsonParser.h */,
-				7DDFA3BC1401AAC500B8E69B /* SBJsonParser.m */,
-				7DDFA3BD1401AAC500B8E69B /* SBJsonWriter.h */,
-				7DDFA3BE1401AAC500B8E69B /* SBJsonWriter.m */,
-			);
-			name = JSON;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1079,11 +1044,6 @@
 				7DC4BAD113F5F70C00E373C0 /* HNEntryList.m in Sources */,
 				7DDFA3B01401A8F300B8E69B /* HNTimeline.m in Sources */,
 				7DDFA3B31401A92400B8E69B /* HNSession+Following.m in Sources */,
-				7DDFA3BF1401AAC500B8E69B /* NSObject+SBJSON.m in Sources */,
-				7DDFA3C01401AAC500B8E69B /* NSString+SBJSON.m in Sources */,
-				7DDFA3C11401AAC500B8E69B /* SBJsonBase.m in Sources */,
-				7DDFA3C21401AAC500B8E69B /* SBJsonParser.m in Sources */,
-				7DDFA3C31401AAC500B8E69B /* SBJsonWriter.m in Sources */,
 				7D6BAB841415B07500C24B8B /* LoadMoreButton.m in Sources */,
 				7DB809B714F8A12F009668E6 /* SubmissionListController.m in Sources */,
 				7DB809BA14F8ACEF009668E6 /* SharingController.m in Sources */,

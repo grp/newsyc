@@ -23,7 +23,6 @@
 
 #import "HNKit.h"
 #import "InstapaperSession.h"
-#import "JSON.h"
 
 #import "UINavigationItem+MultipleItems.h"
 
@@ -288,8 +287,7 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSString *json = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
-    id representation = [[[[SBJsonParser alloc] init] autorelease] objectWithString:json];
+    id representation = [NSJSONSerialization JSONObjectWithData:received options:0 error:NULL];
     
     if ([representation isKindOfClass:[NSDictionary class]]) {
         NSString *message = [representation objectForKey:@"message"];
