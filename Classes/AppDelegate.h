@@ -41,5 +41,6 @@
 
 - (void)pushController:(UIViewController *)controller animated:(BOOL)animated;
 - (void)popToController:(UIViewController *)controller animated:(BOOL)animated;
+- (void)willShowController:(UIViewController *)controller animated:(BOOL)animated;
 
 @end

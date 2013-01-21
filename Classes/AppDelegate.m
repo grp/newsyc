@@ -48,10 +48,6 @@
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         if ([[self viewControllers] containsObject:controller]) {
             [delegate popBranchToViewController:controller animated:animated];
-
-            if ([self controllerRequiresClearing:controller]) {
-                [delegate clearLeafViewControllerAnimated:animated];
-            }
         } else if ([delegate leafContainsViewController:controller]) {
             [delegate popLeafToViewController:controller animated:animated];
         } else {
@@ -59,6 +55,16 @@
         }
     } else {
         [delegate popBranchToViewController:controller animated:animated];
+    }
+}
+
+- (void)willShowController:(UIViewController *)controller animated:(BOOL)animated {
+    AppDelegate *delegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        if ([self controllerRequiresClearing:controller]) {
+            [delegate clearLeafViewControllerAnimated:animated];
+        }
     }
 }
 
@@ -98,27 +104,6 @@
 
 @implementation AppDelegate
 
-- (NSString *)version {
-    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-}
-
-- (NSString *)bundleIdentifier {
-    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
-}
-
-- (NSString *) platform {
-    size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    
-    char *machine = malloc(size);
-    sysctlbyname("hw.machine", machine, &size, NULL, 0);
-    
-    NSString *platform = [NSString stringWithUTF8String:machine];
-    free(machine);
-    
-    return platform;
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
@@ -136,6 +121,7 @@
     
     navigationController = [[NavigationController alloc] initWithRootViewController:sessionListController];
     [navigationController setLoginDelegate:sessionListController];
+    [navigationController setDelegate:self];
     [navigationController autorelease];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -176,7 +162,11 @@
 }
          
 #pragma mark - View Controllers
-         
+
+- (void)navigationController:(UINavigationController *)navigation willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [navigation willShowController:viewController animated:animated];
+}
+
 - (BOOL)splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation {
     return UIInterfaceOrientationIsPortrait(orientation);
 }
