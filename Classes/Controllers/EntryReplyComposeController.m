@@ -16,7 +16,7 @@
 @synthesize entry;
 
 - (id)initWithEntry:(HNEntry *)entry_ {
-    if ((self = [super init])) {
+    if ((self = [super initWithSession:[entry_ session]])) {
         entry = [entry_ retain];
     }
     
