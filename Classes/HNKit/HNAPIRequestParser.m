@@ -520,10 +520,11 @@ typedef enum {
     XMLElement *bodyCell = [self bodyCellElementForDocument:document];
     XMLElement *userLabel = [bodyCell firstElementMatchingPath:@"form/table/tr/td"];
     XMLElement *commentSpan = [document firstElementMatchingPath:@"//span[@class='comment']"];
-        
+    HNPageLayoutType pageLayoutType = [self pageLayoutTypeForDocument:document];
+
     if (userLabel != nil && [[userLabel content] hasPrefix:@"user:"]) {
         result = [self parseUserProfileWithString:string];
-    } else if (commentSpan != nil) {
+    } else if (commentSpan != nil || pageLayoutType == kHNPageLayoutTypeHeaderFooter) {
         result = [self parseCommentTreeInDocument:document];
     } else {
         result = [self parseSubmissionsInDocument:document];
