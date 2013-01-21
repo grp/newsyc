@@ -20,15 +20,12 @@
 #import "SessionProfileController.h"
 #import "BrowserController.h"
 #import "MoreController.h"
+#import "EmptyController.h"
 
 #import "HNKit.h"
 #import "InstapaperSession.h"
 
 #import "UINavigationItem+MultipleItems.h"
-
-@interface AppDelegate ()
-- (void)startConnection;
-@end
 
 @implementation UINavigationController (AppDelegate)
 
@@ -166,13 +163,15 @@
         NSAssert(NO, @"Invalid Device Type");
     }
 
-    [sessionController refresh];
+    [window makeKeyAndVisible];
 
     [InstapaperSession logoutIfNecessary];
-                  
-    [window makeKeyAndVisible];
-    [self startConnection];
-        
+    [sessionController refresh];
+
+    pingController = [[PingController alloc] init];
+    [pingController setDelegate:self];
+    [pingController ping];
+    
     return YES;
 }
          
@@ -257,92 +256,25 @@
     [rightNavigationController popToViewController:leafController animated:animated];
 }
 
-#pragma mark - Startup Connection
+#pragma mark - Ping Controller
 
-- (void)startConnection {
-    NSString *appv = [self version];
-    NSString *sysv = [[UIDevice currentDevice] systemVersion];
-    NSString *dev = [[UIDevice currentDevice] model];
-    NSString *bundle = [self bundleIdentifier];
-    NSString *platform = [self platform];
-    NSString *from = [[NSUserDefaults standardUserDefaults] objectForKey:@"current-version"] ?: @"";
-    BOOL seen = [[NSUserDefaults standardUserDefaults] boolForKey:@"initial-install-seen"];
-    
-    received = [[NSMutableData alloc] init];
-    
-    NSString *url = [NSString stringWithFormat:@"http://newsyc.me/ping?appv=%@&sysv=%@&dev=%@&seen=%d&oldv=%@&bundle=%@&platform=%@", [appv stringByURLEncodingString], [sysv stringByURLEncodingString], [dev stringByURLEncodingString], seen, [from stringByURLEncodingString], [bundle stringByURLEncodingString], [platform stringByURLEncodingString]];
-    NSURL *requestURL = [NSURL URLWithString:url];
-    NSURLRequest *request = [NSURLRequest requestWithURL:requestURL];
-    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
-    [connection start];
+- (void)pingController:(PingController *)ping completedAcceptingURL:(NSURL *)url {
+    BrowserController *browserController = [[BrowserController alloc] initWithURL:url];
+    [navigationController pushController:browserController animated:YES];
+    [browserController release];
+
+    [pingController release];
+    pingController = nil;
 }
 
-- (void)connection:(NSURLConnection *)connection_ didReceiveData:(NSData *)data {
-    [received appendData:data];
+- (void)pingController:(PingController *)ping failedWithError:(NSError *)error {
+    [pingController release];
+    pingController = nil;
 }
 
-- (void)connection:(NSURLConnection *)connection_ didFailWithError:(NSError *)error {
-    [received release];
-    received = nil;
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    id representation = [NSJSONSerialization JSONObjectWithData:received options:0 error:NULL];
-    
-    if ([representation isKindOfClass:[NSDictionary class]]) {
-        NSString *message = [representation objectForKey:@"message"];
-        NSString *title = [representation objectForKey:@"title"];
-        NSString *button = [representation objectForKey:@"button"];
-        NSString *moreButton = [representation objectForKey:@"more-button"];
-        NSString *moreURL = [representation objectForKey:@"more-url"];
-        
-        BOOL locked = [[representation objectForKey:@"locked"] boolValue];
-        
-        if (locked) {
-            UIWindow *lockedWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-            [lockedWindow setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-            [lockedWindow setBackgroundColor:[UIColor darkGrayColor]];
-            [window setHidden:YES];
-            [lockedWindow makeKeyAndVisible];
-        }
-        
-        if (title != nil) {
-            if (button == nil) button = @"Continue";
-            
-            UIAlertView *alert = [[UIAlertView alloc] init];
-            [alert setDelegate:self];
-            [alert setTitle:title];
-            [alert setMessage:message];
-            if (!locked) {
-                [alert addButtonWithTitle:button];
-                
-                if (moreButton != nil && moreURL != nil) {
-                    [alert addButtonWithTitle:moreButton];
-                    
-                    moreInfoURL = [[NSURL URLWithString:moreURL] retain];
-                }
-            }
-            [alert show];
-            [alert release];
-        }
-    }
-    
-    [[NSUserDefaults standardUserDefaults] setObject:[self version] forKey:@"current-version"];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"initial-install-seen"];
-    
-    [received release];
-    received = nil;
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {    
-        BrowserController *browser = [[BrowserController alloc] initWithURL:moreInfoURL];
-        [navigationController pushController:browser animated:YES];
-        [browser release];
-    }
-    
-    [moreInfoURL release];
-    moreInfoURL = nil;
+- (void)pingControllerCompletedWithoutAction:(PingController *)ping {
+    [pingController release];
+    pingController = nil;
 }
 
 #pragma mark - Application Lifecycle

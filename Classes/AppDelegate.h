@@ -9,9 +9,9 @@
 #import "LoginController.h"
 #import "SplitViewController.h"
 #import "NavigationController.h"
-#import "EmptyController.h"
+#import "PingController.h"
 
-@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate, UISplitViewControllerDelegate, UIAlertViewDelegate> {
+@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate, UISplitViewControllerDelegate, PingControllerDelegate> {
     UIWindow *window;
     
     SplitViewController *splitController;
@@ -22,8 +22,7 @@
     UIPopoverController *popover;
     UIBarButtonItem *popoverItem;
     
-    NSMutableData *received;
-    NSURL *moreInfoURL;
+    PingController *pingController;
 }
 
 - (void)pushBranchViewController:(UIViewController *)branchController animated:(BOOL)animated;

@@ -15,6 +15,7 @@
 		7D1F98961320CF720059EBBB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98951320CF720059EBBB /* CoreGraphics.framework */; };
 		7D28FFE3151ADF4000BEBE1B /* SplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D28FFE2151ADF4000BEBE1B /* SplitViewController.m */; };
 		7D28FFE5151B022D00BEBE1B /* clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D28FFE4151B022D00BEBE1B /* clear.png */; };
+		7D2B8B8816ADCEF50072D730 /* PingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B8B8716ADCEF50072D730 /* PingController.m */; };
 		7D2BB6B9151FD27C003D98B9 /* LoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2BB6B8151FD27C003D98B9 /* LoadMoreCell.m */; };
 		7D2BB6BF151FE506003D98B9 /* Default-Portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D2BB6BB151FE506003D98B9 /* Default-Portrait@2x.png */; };
 		7D2BB6C0151FE506003D98B9 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D2BB6BC151FE506003D98B9 /* Default-Portrait.png */; };
@@ -176,6 +177,8 @@
 		7D28FFE1151ADF4000BEBE1B /* SplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplitViewController.h; sourceTree = "<group>"; };
 		7D28FFE2151ADF4000BEBE1B /* SplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplitViewController.m; sourceTree = "<group>"; };
 		7D28FFE4151B022D00BEBE1B /* clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear.png; sourceTree = "<group>"; };
+		7D2B8B8616ADCEF50072D730 /* PingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PingController.h; sourceTree = "<group>"; };
+		7D2B8B8716ADCEF50072D730 /* PingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PingController.m; sourceTree = "<group>"; };
 		7D2BB6B7151FD27C003D98B9 /* LoadMoreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadMoreCell.h; sourceTree = "<group>"; };
 		7D2BB6B8151FD27C003D98B9 /* LoadMoreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadMoreCell.m; sourceTree = "<group>"; };
 		7D2BB6BB151FE506003D98B9 /* Default-Portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait@2x.png"; sourceTree = "<group>"; };
@@ -547,6 +550,8 @@
 				7D85411F1640A03100C68F84 /* Sharing */,
 				7D6B9E741347DF2E00CD923C /* Controllers */,
 				7D6B9ED01347DF2E00CD923C /* Prefix.pch */,
+				7D2B8B8616ADCEF50072D730 /* PingController.h */,
+				7D2B8B8716ADCEF50072D730 /* PingController.m */,
 				7D6B9ED11347DF2E00CD923C /* AppDelegate.h */,
 				7D6B9ED21347DF2E00CD923C /* AppDelegate.m */,
 				7D6B9ECF1347DF2E00CD923C /* main.m */,
@@ -1065,6 +1070,7 @@
 				7DB9FC1F169D156A008674F4 /* SessionListController.m in Sources */,
 				7DBD4CB2169FC52E00938C54 /* UIColor+Orange.m in Sources */,
 				7D75447616A636DB000AAB40 /* BodyTextView.m in Sources */,
+				7D2B8B8816ADCEF50072D730 /* PingController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
