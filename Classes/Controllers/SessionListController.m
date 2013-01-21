@@ -11,7 +11,6 @@
 #import "BarButtonItem.h"
 #import "AppDelegate.h"
 #import "HackerNewsLoginController.h"
-#import "ModalNavigationController.h"
 
 @implementation SessionListController
 @synthesize automaticDisplaySession;
@@ -50,6 +49,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    [[self navigationController] setLoginDelegate:self];
 
     NSIndexPath *selectedIndexPath = [tableView indexPathForSelectedRow];
     HNSession *session = nil;
@@ -176,6 +177,7 @@
         [self setAutomaticDisplaySession:session];
         [[self navigationController] popToController:self animated:YES];
     } else {
+        [self reloadSessions];
         [self pushMainControllerForSession:session animated:YES];
     }
 }

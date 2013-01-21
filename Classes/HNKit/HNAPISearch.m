@@ -6,7 +6,6 @@
 //
 
 #import "HNAPISearch.h"
-#import "JSON.h"
 #import "HNKit.h"
 
 @class HNEntry;
@@ -61,11 +60,8 @@
 
 - (void)handleResponse {
 	self.entries = [NSMutableArray array];
-	NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-	[responseData release];
-	responseData = nil;
 
-	NSArray *rawResults = [[NSArray alloc] initWithArray:[[responseString JSONValue] objectForKey:@"results"]];
+    NSArray *rawResults = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:NULL];
     
 	for (NSDictionary *result in rawResults) {
 		NSDictionary *item = [self itemFromRaw:[result objectForKey:@"item"]];
@@ -75,10 +71,8 @@
 		[entries addObject:entry];
 	}
     
-	[responseString release];
-	responseString = nil;
-	[rawResults release];
-	rawResults = nil;
+    [responseData release];
+	responseData = nil;
 
 	NSDictionary *dictToBePassed = [NSDictionary dictionaryWithObject:entries forKey:@"array"];
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];

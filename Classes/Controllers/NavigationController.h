@@ -13,7 +13,7 @@
 
 @protocol NavigationControllerLoginDelegate;
 
-@interface NavigationController : UINavigationController <LoginControllerDelegate> {
+@interface NavigationController : UINavigationController <UINavigationControllerDelegate, LoginControllerDelegate> {
     id<NavigationControllerLoginDelegate> loginDelegate;
 }
 
@@ -21,13 +21,19 @@
 - (void)requestLogin;
 - (void)requestSessions;
 
+- (void)pushController:(UIViewController *)controller animated:(BOOL)animated;
+- (void)popToController:(UIViewController *)controller animated:(BOOL)animated;
+
 @end
 
-@interface UINavigationController (DefinedPropertyAdditionsSupport)
+@interface UINavigationController (Convenience)
 
 @property (nonatomic, assign) id<NavigationControllerLoginDelegate> loginDelegate;
 - (void)requestLogin;
 - (void)requestSessions;
+
+- (void)pushController:(UIViewController *)controller animated:(BOOL)animated;
+- (void)popToController:(UIViewController *)controller animated:(BOOL)animated;
 
 @end
 

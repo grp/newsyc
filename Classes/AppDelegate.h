@@ -6,41 +6,17 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "LoginController.h"
 #import "SplitViewController.h"
 #import "NavigationController.h"
-#import "EmptyController.h"
+#import "PingController.h"
 
-@interface AppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate, UISplitViewControllerDelegate, UIAlertViewDelegate> {
+@interface AppDelegate : NSObject <UIApplicationDelegate, PingControllerDelegate> {
     UIWindow *window;
+
+    PingController *pingController;
     
     SplitViewController *splitController;
-    
     NavigationController *navigationController;
-    NavigationController *rightNavigationController;
-    
-    UIPopoverController *popover;
-    UIBarButtonItem *popoverItem;
-    
-    NSMutableData *received;
-    NSURL *moreInfoURL;
 }
-
-- (void)pushBranchViewController:(UIViewController *)branchController animated:(BOOL)animated;
-- (void)pushLeafViewController:(UIViewController *)leafController animated:(BOOL)animated;
-
-- (BOOL)leafContainsViewController:(UIViewController *)leafController;
-- (void)setLeafViewController:(UIViewController *)leafController animated:(BOOL)animated;
-- (void)clearLeafViewControllerAnimated:(BOOL)animated;
-
-- (void)popBranchToViewController:(UIViewController *)branchController animated:(BOOL)animated;
-- (void)popLeafToViewController:(UIViewController *)leafController animated:(BOOL)animated;
-
-@end
-
-@interface UINavigationController (AppDelegate)
-
-- (void)pushController:(UIViewController *)controller animated:(BOOL)animated;
-- (void)popToController:(UIViewController *)controller animated:(BOOL)animated;
 
 @end

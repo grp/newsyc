@@ -206,7 +206,8 @@
 
 - (void)bodyTextView:(BodyTextView *)header selectedURL:(NSURL *)url {
     BrowserController *controller = [[BrowserController alloc] initWithURL:url];
-    [[self navigationController] pushController:[controller autorelease] animated:YES];
+    [[self navigationController] pushController:controller animated:YES];
+    [controller release];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

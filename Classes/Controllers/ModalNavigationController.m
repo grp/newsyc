@@ -25,7 +25,7 @@
     [super viewDidUnload];
     
     // Don't release doneItem here, because we depend on it staying the same
-    // object for the lifetime of this navigation controller (for removal).
+    // object for the lifetime of the top view controller (for removal).
 }
 
 - (void)dealloc {

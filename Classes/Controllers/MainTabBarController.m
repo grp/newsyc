@@ -79,7 +79,6 @@
     if ([[sheet sheetContext] isEqual:@"compose"]) {
         if (index == [sheet cancelButtonIndex]) return;
         
-        NavigationController *navigation = [[NavigationController alloc] init];
         ComposeController *compose = nil;
         
         if (index == 0) {
@@ -87,11 +86,9 @@
         } else {
             compose = [[SubmissionTextComposeController alloc] init];
         }
-        
-        [navigation setViewControllers:[NSArray arrayWithObject:compose]];
-        [self presentViewController:navigation animated:YES completion:NULL];
 
-        [navigation release];
+        [[self navigationController] pushController:compose animated:YES];
+        
         [compose release];
     }
 }

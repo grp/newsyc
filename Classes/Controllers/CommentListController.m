@@ -458,13 +458,7 @@
     [controller setTitle:@"Profile"];
     [controller autorelease];
 
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [[self navigationController] pushController:controller animated:YES];
-    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        ModalNavigationController *navigation = [[ModalNavigationController alloc] initWithRootViewController:controller];
-        [self presentViewController:navigation animated:YES completion:NULL];
-        [navigation release];
-    }
+    [[self navigationController] pushController:controller animated:YES];
 }
 
 - (void)composeControllerDidCancel:(EntryReplyComposeController *)controller {
@@ -523,10 +517,8 @@
         if (item == kEntryActionsViewItemReply) {
             EntryReplyComposeController *compose = [[EntryReplyComposeController alloc] initWithEntry:entry];
             [compose setDelegate:this];
-            
-            NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:compose];
-            [[this navigationController] presentViewController:navigation animated:YES completion:NULL];
-            [navigation release];
+            [[this navigationController] pushController:compose animated:YES];
+            [compose release];
         } else if (item == kEntryActionsViewItemUpvote) {
             [this performUpvoteForEntry:entry fromEntryActionsView:eav];
         } else if (item == kEntryActionsViewItemFlag) {

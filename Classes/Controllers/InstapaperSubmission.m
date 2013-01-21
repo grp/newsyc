@@ -81,16 +81,22 @@
         [login setPendingURL:url];
         [login setDelegate:self];
 
-        NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:login];
-        if (controller != nil) {
+        UIViewController *newController = nil;
+
+        if ([controller navigationController] != nil) {
             presented = YES;
             [self retain];
 
-            [controller presentViewController:navigation animated:YES completion:NULL];
+            [[controller navigationController] pushController:login animated:YES];
+            newController = [[controller navigationController] presentedViewController];
+        } else {
+            newController = [[NavigationController alloc] initWithRootViewController:login];
+            [newController autorelease];
         }
-        [navigation autorelease];
 
-        return navigation;
+        [login release];
+
+        return newController;
     }
 }
 
