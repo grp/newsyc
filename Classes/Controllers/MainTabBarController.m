@@ -83,9 +83,9 @@
         ComposeController *compose = nil;
         
         if (index == 0) {
-            compose = [[SubmissionURLComposeController alloc] init];
+            compose = [[SubmissionURLComposeController alloc] initWithSession:session];
         } else {
-            compose = [[SubmissionTextComposeController alloc] init];
+            compose = [[SubmissionTextComposeController alloc] initWithSession:session];
         }
         
         [navigation setViewControllers:[NSArray arrayWithObject:compose]];

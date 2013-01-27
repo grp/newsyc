@@ -16,12 +16,14 @@
 
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     if (nil != pasteboard.string) {
-        NSDataDetector* detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
-        NSArray* matches = [detector matchesInString:pasteboard.string options:0 range:NSMakeRange(0, [pasteboard.string length])];
+        NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+        NSArray *matches = [detector matchesInString:pasteboard.string options:0 range:NSMakeRange(0, [pasteboard.string length])];
         if ([matches count] > 0) {            
             textView.text = [[[matches objectAtIndex:0] URL] absoluteString];
         }
     }
+
+    textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
 }
 
 - (BOOL)includeMultilineEditor {
