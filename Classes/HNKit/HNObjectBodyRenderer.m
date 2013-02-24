@@ -32,7 +32,11 @@ static CGFloat defaultFontSize = 13.0f;
     defaultFontSize = size;
 }
 
+#ifndef IS_MAC_OS_X
 - (CTFontRef)fontForFont:(UIFont *)font {
+#else
+- (CTFontRef)fontForFont:(NSFont *)font {
+#endif
     static NSCache *fontCache = nil;
     if (fontCache == nil) fontCache = [[NSCache alloc] init];
     
@@ -48,7 +52,11 @@ static CGFloat defaultFontSize = 13.0f;
     }
 }
 
+#ifndef IS_MAC_OS_X
 - (UIColor *)colorFromHexString:(NSString *)hex {
+#else
+- (NSColor *)colorFromHexString:(NSString *)hex {
+#endif
     if ([hex hasPrefix:@"#"]) hex = [hex substringFromIndex:1];
     
     NSScanner *scanner = [NSScanner scannerWithString:hex];
@@ -61,7 +69,11 @@ static CGFloat defaultFontSize = 13.0f;
     CGFloat green = ((color & 0x00FF00) >>  8) / 255.0f;
     CGFloat blue  = ((color & 0x0000FF) >>  0) / 255.0f;
 
+#ifndef IS_MAC_OS_X
     return [UIColor colorWithRed:red green:green blue:blue alpha:1.0f];
+#else
+    return [NSColor colorWithCalibratedRed:red green:green blue:blue alpha:1.0f];
+#endif
 }
 
 - (NSString *)text {
@@ -119,6 +131,7 @@ static CGFloat defaultFontSize = 13.0f;
     
     CGFloat fontSize = [[self class] defaultFontSize];
     
+#ifndef IS_MAC_OS_X
     CTFontRef fontBody = [self fontForFont:[UIFont systemFontOfSize:fontSize]];
     CTFontRef fontCode = [self fontForFont:[UIFont fontWithName:@"Courier New" size:fontSize]];
     CTFontRef fontItalic = [self fontForFont:[UIFont italicSystemFontOfSize:fontSize]];
@@ -126,6 +139,15 @@ static CGFloat defaultFontSize = 13.0f;
     
     CGColorRef colorBody = [[UIColor blackColor] CGColor];
     CGColorRef colorLink = [[UIColor blueColor] CGColor];
+#else
+    CTFontRef fontBody = [self fontForFont:[NSFont systemFontOfSize:fontSize]];
+    CTFontRef fontCode = [self fontForFont:[NSFont fontWithName:@"Courier New" size:fontSize]];
+    CTFontRef fontItalic = [self fontForFont:[NSFont italicSystemFontOfSize:fontSize]];
+    CTFontRef fontSmallParagraphBreak = [self fontForFont:[NSFont systemFontOfSize:floorf(fontSize * 2.0f / 3.0f)]];
+    
+    CGColorRef colorBody = [[NSColor blackColor] CGColor];
+    CGColorRef colorLink = [[NSColor blueColor] CGColor];
+#endif
     
     __block NSMutableAttributedString *bodyAttributed = [[NSMutableAttributedString alloc] init];
     __block NSMutableDictionary *currentAttributes = [NSMutableDictionary dictionary];

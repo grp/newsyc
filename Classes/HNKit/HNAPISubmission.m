@@ -12,7 +12,10 @@
 #import "XMLDocument.h"
 
 #import "NSDictionary+Parameters.h"
+
+#ifndef IS_MAC_OS_X
 #import "UIApplication+ActivityIndicator.h"
+#endif
 
 @implementation HNAPISubmission
 @synthesize submission;
@@ -41,7 +44,9 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection_ {
+#ifndef IS_MAC_OS_X
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+#endif
     
     NSString *result = [[[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding] autorelease];
     [received release];
@@ -119,14 +124,18 @@
         connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
         [connection start];
         
+#ifndef IS_MAC_OS_X
         [[UIApplication sharedApplication] retainNetworkActivityIndicator];
+#endif
     } else if (loadingState == kHNAPISubmissionLoadingStateFormSubmit) {
         [self _completedSuccessfully:YES withError:nil];
     }
 }
 
 - (void)connection:(NSURLConnection *)connection_ didFailWithError:(NSError *)error {
+#ifndef IS_MAC_OS_X
     [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+#endif
     
     [received release];
     received = nil;
@@ -158,7 +167,9 @@
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];
     
+#ifndef IS_MAC_OS_X
     [[UIApplication sharedApplication] retainNetworkActivityIndicator];
+#endif
 }
 
 - (BOOL)isLoading {
