@@ -7,7 +7,7 @@
 //
 
 #import "HNSession+Following.h"
-#import "HNUser.h"
+#import <HNKit/HNUser.h>
 
 #import <objc/runtime.h>
 

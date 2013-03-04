@@ -1,0 +1,3 @@
+[submodule "HNKit"]
+	path = HNKit
+	url = git://github.com/Xuzz/HNKit.git

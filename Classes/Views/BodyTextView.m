@@ -10,7 +10,7 @@
 
 #import "BodyTextView.h"
 
-#import "HNObjectBodyRenderer.h"
+#import <HNKit/HNObjectBodyRenderer.h>
 #import "SharingController.h"
 
 @interface BodyTextRenderView : UIView {

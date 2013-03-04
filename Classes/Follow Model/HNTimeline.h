@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "HNEntryList.h"
+#import <HNKit/HNEntryList.h>
 
 #ifdef ENABLE_TIMELINE
 

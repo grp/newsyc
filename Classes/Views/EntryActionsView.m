@@ -8,7 +8,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#import "HNKit.h"
+#import <HNKit/HNKit.h>
 
 #import "EntryActionsView.h"
 #import "UIImage+Colorize.h"

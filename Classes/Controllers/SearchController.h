@@ -5,7 +5,7 @@
 //  Created by Quin Hoxie on 6/2/11.
 //
 
-#import "HNAPISearch.h"
+#import <HNKit/HNAPISearch.h>
 
 @class LoadingIndicatorView;
 

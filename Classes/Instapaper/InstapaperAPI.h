@@ -6,7 +6,7 @@
 //  Copyright 2011 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "NSString+URLEncoding.h"
+#import <HNKit/NSString+URLEncoding.h>
 
 #define kInstapaperAPIRootURL [NSURL URLWithString:@"https://instapaper.com/api/"]
 #define kInstapaperAPIAuthenticationURL [NSURL URLWithString:[[kInstapaperAPIRootURL absoluteString] stringByAppendingString:@"authenticate"]]

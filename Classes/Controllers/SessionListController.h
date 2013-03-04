@@ -6,7 +6,7 @@
 //
 //
 
-#import "HNKit.h"
+#import <HNKit/HNKit.h>
 
 #import "NavigationController.h"
 

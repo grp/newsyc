@@ -7,7 +7,7 @@
 //
 
 #import "NSDictionary+Parameters.h"
-#import "NSString+URLEncoding.h"
+#import <HNKit/NSString+URLEncoding.h>
 
 @implementation NSDictionary (Parameters)
 

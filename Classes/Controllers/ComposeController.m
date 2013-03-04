@@ -8,7 +8,7 @@
 
 #import "ComposeController.h"
 #import "UIActionSheet+Context.h"
-#import "HNKit.h"
+#import <HNKit/HNKit.h>
 #import "PlaceholderTextView.h"
 
 @implementation ComposeController

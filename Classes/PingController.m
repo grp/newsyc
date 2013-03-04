@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-#import "NSString+URLEncoding.h"
+#import <HNKit/NSString+URLEncoding.h>
 
 #import "PingController.h"
 

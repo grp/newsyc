@@ -6,7 +6,7 @@
 //
 //
 
-#import "HNKit.h"
+#import <HNKit/HNKit.h>
 
 @protocol BodyTextViewDelegate;
 

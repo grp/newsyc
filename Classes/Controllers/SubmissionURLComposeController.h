@@ -7,7 +7,7 @@
 //
 
 #import "ComposeController.h"
-#import "HNKit.h"
+#import <HNKit/HNKit.h>
 
 @interface SubmissionURLComposeController : ComposeController {
     __weak UITextField *titleField;

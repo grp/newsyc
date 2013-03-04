@@ -8,7 +8,7 @@
 
 #import <MessageUI/MFMailComposeViewController.h>
 
-#import "HNKit.h"
+#import <HNKit/HNKit.h>
 
 #import "LoginController.h"
 

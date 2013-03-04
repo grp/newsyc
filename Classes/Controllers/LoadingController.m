@@ -8,7 +8,7 @@
 
 #import "LoadingController.h"
 
-#import "HNKit.h"
+#import <HNKit/HNKit.h>
 
 #import "SharingController.h"
 

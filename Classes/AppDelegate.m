@@ -22,9 +22,11 @@
 #import "MoreController.h"
 #import "EmptyController.h"
 
-#import "HNKit.h"
+#import <HNKit/HNKit.h>
+#import <HNKit/HNNetworkActivityController.h>
 #import "InstapaperSession.h"
 
+#import "UIApplication+ActivityIndicator.h"
 #import "UINavigationItem+MultipleItems.h"
 
 @implementation UINavigationController (AppDelegate)
@@ -106,6 +108,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
+    [HNNetworkActivityController setNetworkActivityBeganBlock:^{
+        [[UIApplication sharedApplication] retainNetworkActivityIndicator];
+    }];
+
+    [HNNetworkActivityController setNetworkActivityEndedBlock:^{
+        [[UIApplication sharedApplication] releaseNetworkActivityIndicator];
+    }];
 
     HNSessionController *sessionController = [HNSessionController sessionController];
     NSArray *sessions = [sessionController sessions];
