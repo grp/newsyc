@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		598ED48D16E6AAA4003A6BC2 /* libHNKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D563FF516E45AE000BDD2DB /* libHNKit.a */; };
 		7D17CA2F134AE22700763741 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D17CA2D134AE22700763741 /* Default.png */; };
 		7D17CA30134AE22700763741 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D17CA2E134AE22700763741 /* Default@2x.png */; };
 		7D1F98921320CF720059EBBB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98911320CF720059EBBB /* UIKit.framework */; };
@@ -28,7 +29,6 @@
 		7D36ADCF13560D87000613B2 /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D36ADCD13560D87000613B2 /* check@2x.png */; };
 		7D49183E1391E5DA00F05203 /* UIApplication+ActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D49183D1391E5DA00F05203 /* UIApplication+ActivityIndicator.m */; };
 		7D563FE416E456C000BDD2DB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D148E64132D68B5008FBF32 /* libxml2.dylib */; };
-		7D563FF616E45AF100BDD2DB /* libHNKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D563FF516E45AE000BDD2DB /* libHNKit.a */; };
 		7D56C3BE164CBD1500A18E7E /* OpenInSafariActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D56C3BD164CBD1500A18E7E /* OpenInSafariActivity.m */; };
 		7D56C3CA164CC54400A18E7E /* openinsafari@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D56C3C2164CC54400A18E7E /* openinsafari@2x~ipad.png */; };
 		7D56C3CB164CC54400A18E7E /* openinsafari.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D56C3C3164CC54400A18E7E /* openinsafari.png */; };
@@ -146,6 +146,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		598ED48A16E6A9EA003A6BC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7D563FF016E45ADF00BDD2DB /* HNKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7D563E4F16E4501E00BDD2DB;
+			remoteInfo = HNKit;
+		};
 		7D563FF416E45AE000BDD2DB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7D563FF016E45ADF00BDD2DB /* HNKit.xcodeproj */;
@@ -363,7 +370,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D563FF616E45AF100BDD2DB /* libHNKit.a in Frameworks */,
+				598ED48D16E6AAA4003A6BC2 /* libHNKit.a in Frameworks */,
 				7D563FE416E456C000BDD2DB /* libxml2.dylib in Frameworks */,
 				7D75447C16A8C83B000AAB40 /* MobileCoreServices.framework in Frameworks */,
 				7D96C60D1426CC1B00A76F04 /* MessageUI.framework in Frameworks */,
@@ -768,6 +775,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				598ED48B16E6A9EA003A6BC2 /* PBXTargetDependency */,
 			);
 			name = newsyc;
 			productName = Orangey;
@@ -962,6 +970,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		598ED48B16E6A9EA003A6BC2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = HNKit;
+			targetProxy = 598ED48A16E6A9EA003A6BC2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		7D1F98B21320CF720059EBBB /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1020,6 +1036,10 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -1042,6 +1062,10 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
