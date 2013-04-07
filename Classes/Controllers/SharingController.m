@@ -62,7 +62,7 @@
         InstapaperActivity *instapaperActivity = [[InstapaperActivity alloc] init];
         OpenInSafariActivity *openInSafariActivity = [[OpenInSafariActivity alloc] init];
         
-        NSArray *activityItems = [NSArray arrayWithObject:url];
+        NSArray *activityItems = @[title, url];
         NSArray *applicationActivities = [NSArray arrayWithObjects:instapaperActivity, openInSafariActivity, nil];
 
         [instapaperActivity release];
