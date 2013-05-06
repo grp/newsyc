@@ -11,8 +11,7 @@
 @implementation PocketSubmission
 
 - (id)initWithURL:(NSURL *)url_ {
-    if (self = [super init])
-    {
+    if (self = [super init]) {
         url = [url_ copy];
     }
     
@@ -41,8 +40,7 @@
                                    [hud dismissAfterDelay:0.8f animated:YES];
                                    
                                    [self release];
-                               }
-                               else {
+                               } else {
                                    [hud setText:@"Saved!"];
                                    [hud setState:kProgressHUDStateCompleted];
                                    [hud dismissAfterDelay:0.8f animated:YES];
@@ -55,8 +53,7 @@
 - (UIViewController *)submitFromController:(UIViewController *)controller {
     if ([[PocketAPI sharedAPI] isLoggedIn]) {
         [self submitPocketRequest];
-    }
-    else {
+    } else {
         [[PocketAPI sharedAPI] loginWithHandler:^(PocketAPI *api, NSError *error) {
             [self submitPocketRequest];
         }];

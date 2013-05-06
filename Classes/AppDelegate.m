@@ -163,7 +163,7 @@
 
     [window makeKeyAndVisible];
 
-    #warning Change this to use pocket
+    #warning Change this to use pocket API
     [[PocketAPI sharedAPI] setConsumerKey:@""];
     
     [InstapaperSession logoutIfNecessary];
