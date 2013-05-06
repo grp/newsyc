@@ -163,9 +163,8 @@
 
     [window makeKeyAndVisible];
 
-    
     #warning Change this to use pocket
-    [[PocketAPI sharedAPI] setConsumerKey:@"13977-3e673b9b32f62baedf5f7085"];
+    [[PocketAPI sharedAPI] setConsumerKey:@""];
     
     [InstapaperSession logoutIfNecessary];
     
@@ -180,14 +179,11 @@
          
 #pragma mark - View Controllers
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-    if([[PocketAPI sharedAPI] handleOpenURL:url])
-    {
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    if([[PocketAPI sharedAPI] handleOpenURL:url]) {
         return YES;
     }
-    else
-    {
+    else {
         return NO;
     }
 }

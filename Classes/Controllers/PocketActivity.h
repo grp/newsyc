@@ -10,8 +10,7 @@
 #import "PocketAPI.h"
 #import "PocketSubmission.h"
 
-@interface PocketActivity : UIActivity
-{
+@interface PocketActivity : UIActivity {
     NSURL *pocketURL;
     PocketSubmission *submission;
 }

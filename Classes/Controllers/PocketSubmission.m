@@ -10,8 +10,7 @@
 
 @implementation PocketSubmission
 
-- (id)initWithURL:(NSURL *)url_
-{
+- (id)initWithURL:(NSURL *)url_ {
     if (self = [super init])
     {
         url = [url_ copy];
@@ -20,15 +19,13 @@
     return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [url release];
     
     [super dealloc];
 }
 
-- (void)submitPocketRequest
-{
+- (void)submitPocketRequest {
     ProgressHUD *hud = [[ProgressHUD alloc] init];
     hud.text = @"Saving";
     [hud showInWindow:[[UIApplication sharedApplication] keyWindow]];
@@ -38,16 +35,14 @@
     
     [[PocketAPI sharedAPI] saveURL:url
                            handler:^(PocketAPI *api, NSURL *url, NSError *error) {
-                               if (error)
-                               {
+                               if (error) {
                                    [hud setText:@"Error Saving"];
                                    [hud setState:kProgressHUDStateError];
                                    [hud dismissAfterDelay:0.8f animated:YES];
                                    
                                    [self release];
                                }
-                               else
-                               {
+                               else {
                                    [hud setText:@"Saved!"];
                                    [hud setState:kProgressHUDStateCompleted];
                                    [hud dismissAfterDelay:0.8f animated:YES];
@@ -57,14 +52,11 @@
                            }];
 }
 
-- (UIViewController *)submitFromController:(UIViewController *)controller
-{
-    if ([[PocketAPI sharedAPI] isLoggedIn])
-    {
+- (UIViewController *)submitFromController:(UIViewController *)controller {
+    if ([[PocketAPI sharedAPI] isLoggedIn]) {
         [self submitPocketRequest];
     }
-    else
-    {
+    else {
         [[PocketAPI sharedAPI] loginWithHandler:^(PocketAPI *api, NSError *error) {
             [self submitPocketRequest];
         }];

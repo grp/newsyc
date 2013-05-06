@@ -9,14 +9,10 @@
 #import "ProgressHUD.h"
 #import "PocketAPI.h"
 
-@interface PocketSubmission : NSObject
-{
+@interface PocketSubmission : NSObject {
     NSURL *url;
     BOOL presented;
-    void (^loginCompletion)(BOOL);
 }
-
-@property (nonatomic, copy) void (^loginCompletion)(BOOL);
 
 - (id)initWithURL:(NSURL *)url;
 - (UIViewController *)submitFromController:(UIViewController *)controller;

@@ -68,14 +68,12 @@
         NSArray *applicationActivities;
         
         NSString *chosenBookmarkingService = [[NSUserDefaults standardUserDefaults] valueForKey:@"chosen-bookmarking-service"];
-        if ([chosenBookmarkingService isEqualToString:@"Instapaper"] || !chosenBookmarkingService)
-        {
+        if ([chosenBookmarkingService isEqualToString:@"Instapaper"] || chosenBookmarkingService == nil) {
             InstapaperActivity *instapaperActivity = [[InstapaperActivity alloc] init];
             applicationActivities = [NSArray arrayWithObjects:instapaperActivity, openInSafariActivity, nil];
             [instapaperActivity release];
         }
-        else
-        {
+        else {
             PocketActivity *pocketActivity = [[PocketActivity alloc] init];
             applicationActivities = [NSArray arrayWithObjects:pocketActivity, openInSafariActivity, nil];
             [pocketActivity release];
@@ -198,11 +196,12 @@
     } else if ((canSendMail && buttonIndex == 2) || (!canSendMail && buttonIndex == 1)) {
         [self copyToPasteboard];
     } else if ((canSendMail && buttonIndex == 3) || (!canSendMail && buttonIndex == 2)) {
-        [self submitToInstapaper];
-    }
-    else if ((canSendMail && buttonIndex == 3) || (!canSendMail && buttonIndex == 3))
-    {
-        [self submitToPocket];
+        if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"chosen-bookmarking-service"] isEqualToString:@"Instapaper"] || [[NSUserDefaults standardUserDefaults] valueForKey:@"chosen-bookmarking-service"] == nil) {
+            [self submitToInstapaper];
+        }
+        else {
+            [self submitToPocket];
+        }
     }
 
     [self release];

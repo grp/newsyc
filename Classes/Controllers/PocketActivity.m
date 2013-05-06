@@ -11,46 +11,38 @@
 
 @implementation PocketActivity
 
-- (void)dealloc
-{
+- (void)dealloc {
     [super dealloc];
 }
 
-- (NSString *)activityType
-{
+- (NSString *)activityType {
     return @"com.pocket.pocket.save-url";
 }
 
-- (NSString *)activityTitle
-{
+- (NSString *)activityTitle {
     return @"Save to Pocket";
 }
 
-- (UIImage *)activityImage
-{
+- (UIImage *)activityImage {
     return [UIImage imageNamed:@"pocket.png"];
 }
 
-- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
-{
+- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
     return YES;
 }
 
-- (void)prepareWithActivityItems:(NSArray *)activityItems
-{
+- (void)prepareWithActivityItems:(NSArray *)activityItems {
     pocketURL = activityItems[0];
     submission = [[PocketSubmission alloc] initWithURL:activityItems[0]];
     
     [self activityDidFinish:YES];
 }
 
-- (UIViewController *)activityViewController
-{
+- (UIViewController *)activityViewController {
     return [submission submitFromController:nil];
 }
 
-- (void)performActivity
-{
+- (void)performActivity {
     [self activityDidFinish:YES];
 }
 
