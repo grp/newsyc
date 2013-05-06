@@ -23,7 +23,16 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
-	<array/>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>pocketapp13977</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.xuzzproductions.news-yc</string>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1.5.1</string>
 	<key>LSRequiresIPhoneOS</key>

@@ -14,6 +14,9 @@
 #import "InstapaperRequest.h"
 #import "InstapaperSession.h"
 
+#import "PocketActivity.h"
+#import "PocketSubmission.h"
+
 #import "InstapaperSubmission.h"
 #import "InstapaperActivity.h"
 
@@ -59,13 +62,25 @@
     }
 
     if ([[self class] useNativeSharing]) {
-        InstapaperActivity *instapaperActivity = [[InstapaperActivity alloc] init];
         OpenInSafariActivity *openInSafariActivity = [[OpenInSafariActivity alloc] init];
         
         NSArray *activityItems = [NSArray arrayWithObject:url];
-        NSArray *applicationActivities = [NSArray arrayWithObjects:instapaperActivity, openInSafariActivity, nil];
-
-        [instapaperActivity release];
+        NSArray *applicationActivities;
+        
+        NSString *chosenBookmarkingService = [[NSUserDefaults standardUserDefaults] valueForKey:@"chosen-bookmarking-service"];
+        if ([chosenBookmarkingService isEqualToString:@"Instapaper"] || !chosenBookmarkingService)
+        {
+            InstapaperActivity *instapaperActivity = [[InstapaperActivity alloc] init];
+            applicationActivities = [NSArray arrayWithObjects:instapaperActivity, openInSafariActivity, nil];
+            [instapaperActivity release];
+        }
+        else
+        {
+            PocketActivity *pocketActivity = [[PocketActivity alloc] init];
+            applicationActivities = [NSArray arrayWithObjects:pocketActivity, openInSafariActivity, nil];
+            [pocketActivity release];
+        }
+                
         [openInSafariActivity release];
 
         UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
@@ -161,6 +176,13 @@
     [submission release];
 }
 
+- (void)submitToPocket
+{
+    PocketSubmission *submission = [[PocketSubmission alloc] initWithURL:url];
+    [submission submitFromController:controller];
+    [submission release];
+}
+
 - (void)mailComposeController:(MFMailComposeViewController *)composeController didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
     [controller dismissViewControllerAnimated:YES completion:NULL];
     [self release];
@@ -177,6 +199,10 @@
         [self copyToPasteboard];
     } else if ((canSendMail && buttonIndex == 3) || (!canSendMail && buttonIndex == 2)) {
         [self submitToInstapaper];
+    }
+    else if ((canSendMail && buttonIndex == 3) || (!canSendMail && buttonIndex == 3))
+    {
+        [self submitToPocket];
     }
 
     [self release];

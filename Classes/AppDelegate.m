@@ -26,6 +26,8 @@
 #import <HNKit/HNNetworkActivityController.h>
 #import "InstapaperSession.h"
 
+#import "PocketAPI.h"
+
 #import "UIApplication+ActivityIndicator.h"
 #import "UINavigationItem+MultipleItems.h"
 
@@ -161,7 +163,12 @@
 
     [window makeKeyAndVisible];
 
+    
+    #warning Change this to use pocket
+    [[PocketAPI sharedAPI] setConsumerKey:@"13977-3e673b9b32f62baedf5f7085"];
+    
     [InstapaperSession logoutIfNecessary];
+    
     [sessionController refresh];
 
     pingController = [[PingController alloc] init];
@@ -172,6 +179,18 @@
 }
          
 #pragma mark - View Controllers
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    if([[PocketAPI sharedAPI] handleOpenURL:url])
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
 
 - (void)navigationController:(UINavigationController *)navigation willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
     [navigation willShowController:viewController animated:animated];
