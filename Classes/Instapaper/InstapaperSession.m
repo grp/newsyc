@@ -8,6 +8,8 @@
 
 #import "InstapaperSession.h"
 
+#import "PocketAPI.h"
+
 @implementation InstapaperSession
 @synthesize username, password;
 

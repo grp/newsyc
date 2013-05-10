@@ -32,11 +32,31 @@
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Enable this option to log out of Instapaper next time you launch news:yc.</string>
+			<string>Enable this option to log out of your selected bookmarking service next time you launch news:yc.</string>
 			<key>Title</key>
-			<string>Instapaper</string>
+			<string>Bookmarking Service</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Service</string>
+			<key>Key</key>
+			<string>chosen-bookmarking-service</string>
+			<key>DefaultValue</key>
+			<string>Instapaper</string>
+			<key>Titles</key>
+			<array>
+				<string>Instapaper</string>
+				<string>Pocket</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>Instapaper</string>
+				<string>Pocket</string>
+			</array>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
