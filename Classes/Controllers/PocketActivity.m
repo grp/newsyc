@@ -46,4 +46,14 @@
     [self activityDidFinish:YES];
 }
 
++ (void)logoutIfNecessary {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL logout = [[defaults objectForKey:@"instapaper-logout"] boolValue];
+    
+    if (logout) {
+        [defaults setObject:[NSNumber numberWithBool:NO] forKey:@"instapaper-logout"];
+        [[PocketAPI sharedAPI] logout];
+    }
+}
+
 @end

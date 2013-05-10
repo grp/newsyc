@@ -15,4 +15,6 @@
     PocketSubmission *submission;
 }
 
++ (void)logoutIfNecessary;
+
 @end

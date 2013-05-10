@@ -27,6 +27,7 @@
 #import "InstapaperSession.h"
 
 #import "PocketAPI.h"
+#import "PocketActivity.h"
 
 #import "UIApplication+ActivityIndicator.h"
 #import "UINavigationItem+MultipleItems.h"
@@ -164,9 +165,10 @@
     [window makeKeyAndVisible];
 
     #warning Change this to use pocket API
-    [[PocketAPI sharedAPI] setConsumerKey:@""];
+    [[PocketAPI sharedAPI] setConsumerKey:@"13977-3e673b9b32f62baedf5f7085"];
     
     [InstapaperSession logoutIfNecessary];
+    [PocketActivity logoutIfNecessary];
     
     [sessionController refresh];
 
@@ -307,6 +309,7 @@
     
     [[HNSessionController sessionController] refresh];
 
+    [PocketActivity logoutIfNecessary];
     [InstapaperSession logoutIfNecessary];
 }
 

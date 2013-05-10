@@ -39,7 +39,6 @@ static id currentSession = nil;
     
     if (logout) {
         [defaults setObject:[NSNumber numberWithBool:NO] forKey:@"instapaper-logout"];
-        [[PocketAPI sharedAPI] logout]; //dirty hack, but saves loads of refactoring
         [self setCurrentSession:nil];
     }
 }
