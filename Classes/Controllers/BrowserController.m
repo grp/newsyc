@@ -22,6 +22,7 @@
 
 - (id)initWithURL:(NSURL *)url {
     if ((self = [super init])) {
+        isFullscreen = NO;
         rootURL = url;
         [self setCurrentURL:url];
         [self setHidesBottomBarWhenPushed:YES];
@@ -64,6 +65,8 @@
     [refreshItem release];
     [loadingItem release];
     [spacerItem release];
+    [fullscreenItem release];
+    [fullscreenButton release];
     
     [super dealloc];
 }
@@ -92,6 +95,14 @@
     shareItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"action.png"] style:UIBarButtonItemStylePlain target:self action:@selector(share)];
     spacerItem = [[BarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
     loadingItem = [[ActivityIndicatorItem alloc] initWithSize:[[refreshItem image] size]];
+    UIImage *fullscreenImage = [UIImage imageNamed:@"11-arrows-out.png"];
+    fullscreenItem = [[UIBarButtonItem alloc] initWithImage:fullscreenImage style:UIBarButtonItemStylePlain target:self action:@selector(toggleFullscreen:)];
+    fullscreenButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+    fullscreenButton.alpha = 0.8f;
+    [fullscreenButton setImage:fullscreenImage forState:UIControlStateNormal];
+    CGFloat padding = 5.0f;
+    fullscreenButton.frame = CGRectMake(self.view.frame.size.width - fullscreenImage.size.width - padding, padding, fullscreenImage.size.width, fullscreenImage.size.height);
+    [fullscreenButton addTarget:self action:@selector(toggleFullscreen:) forControlEvents:UIControlEventTouchUpInside];
     [self updateToolbarItems];
     
     webview = [[UIWebView alloc] initWithFrame:[[self view] bounds]];
@@ -100,7 +111,30 @@
     [webview setScalesPageToFit:YES];
     [[self view] addSubview:webview];
 }
+
+- (void) toggleFullscreen:(id)sender {
+    [[UIApplication sharedApplication] setStatusBarHidden:!isFullscreen withAnimation:UIStatusBarAnimationSlide];
+    [self.navigationController setNavigationBarHidden:!isFullscreen animated:YES];
+    CGFloat toolbarHeight = toolbar.frame.size.height;
+    CGRect newFrame = toolbar.frame;
+    CGRect webviewFrame;
+    if (isFullscreen) {
+        newFrame.origin.y -= toolbarHeight;
+        [fullscreenButton removeFromSuperview];
+        webviewFrame = [self frameForWebview];
+    } else {
+        newFrame.origin.y += toolbarHeight;
+        [self.view addSubview:fullscreenButton];
+        webviewFrame = [[UIScreen mainScreen] bounds];
+    }
+    [UIView animateWithDuration:0.5 animations:^{
+        toolbar.frame = newFrame;
+        webview.frame = webviewFrame;
+    }];
     
+    isFullscreen = !isFullscreen;
+}
+
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
 }
@@ -120,6 +154,13 @@
     }
 }
 
+- (CGRect) frameForWebview {
+    CGRect toolbarFrame = [toolbar bounds];
+    CGRect webviewFrame = [[self view] bounds];
+    webviewFrame.size.height -= toolbarFrame.size.height;
+    return webviewFrame;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -131,9 +172,8 @@
         [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
         [[self view] addSubview:toolbar];
         
-        CGRect webviewFrame = [[self view] bounds];
-        webviewFrame.size.height -= toolbarFrame.size.height;
-        [webview setFrame:webviewFrame];
+        [webview setFrame:[self frameForWebview]];
+        self.navigationItem.rightBarButtonItem = fullscreenItem;
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         CGRect toolbarFrame = [toolbar bounds];
         toolbarFrame.size.width = 280.0f;
@@ -152,7 +192,7 @@
     [self releaseNetworkIndicatorCompletely];
     
     [[self navigationItem] removeRightBarButtonItem:toolbarItem];
-    
+        
     [webview release];
     webview = nil;
     [toolbar release];

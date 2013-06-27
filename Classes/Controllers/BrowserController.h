@@ -34,6 +34,9 @@
     BarButtonItem *shareItem;
     BarButtonItem *spacerItem;
     BarButtonItem *readabilityItem;
+    UIBarButtonItem *fullscreenItem;
+    UIButton *fullscreenButton;
+    BOOL isFullscreen;
     
     NSInteger networkRetainCount;
 }
