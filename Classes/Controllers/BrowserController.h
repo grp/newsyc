@@ -34,6 +34,10 @@
     BarButtonItem *shareItem;
     BarButtonItem *spacerItem;
     BarButtonItem *readabilityItem;
+    UIBarButtonItem *fullscreenItem;
+    UIButton *fullscreenButton;
+    BOOL isFullscreen;
+    CGRect originalWebViewFrame; // This is janky
     
     NSInteger networkRetainCount;
 }

@@ -139,6 +139,8 @@
 		7DF2C44414F8CBE600E01067 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF2C44214F8CBE600E01067 /* action@2x.png */; };
 		7DFFDF0B13325FF20082F55A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DFFDF0A13325FF20082F55A /* CoreText.framework */; };
 		CBFCE7AD1398712F007A5DDD /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFCE7AB1398712F007A5DDD /* SearchController.m */; };
+		D95B7C73177C19D900F21E15 /* 11-arrows-out.png in Resources */ = {isa = PBXBuildFile; fileRef = D95B7C71177C19D900F21E15 /* 11-arrows-out.png */; };
+		D95B7C74177C19D900F21E15 /* 11-arrows-out@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D95B7C72177C19D900F21E15 /* 11-arrows-out@2x.png */; };
 		FA5F796B134CE04F002EEBCA /* InstapaperLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5F796A134CE04F002EEBCA /* InstapaperLoginController.m */; };
 		FA85248E1357BA73004E5A72 /* NSArray+Strings.m in Sources */ = {isa = PBXBuildFile; fileRef = FA85248D1357BA73004E5A72 /* NSArray+Strings.m */; };
 		FAF07BF2134F6B13000743BE /* readability.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF07BF0134F6B13000743BE /* readability.png */; };
@@ -357,6 +359,8 @@
 		7DFFDF0A13325FF20082F55A /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		CBFCE7AA1398712F007A5DDD /* SearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchController.h; sourceTree = "<group>"; };
 		CBFCE7AB1398712F007A5DDD /* SearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchController.m; sourceTree = "<group>"; };
+		D95B7C71177C19D900F21E15 /* 11-arrows-out.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "11-arrows-out.png"; sourceTree = "<group>"; };
+		D95B7C72177C19D900F21E15 /* 11-arrows-out@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "11-arrows-out@2x.png"; sourceTree = "<group>"; };
 		FA5F7969134CE04F002EEBCA /* InstapaperLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstapaperLoginController.h; sourceTree = "<group>"; };
 		FA5F796A134CE04F002EEBCA /* InstapaperLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstapaperLoginController.m; sourceTree = "<group>"; };
 		FA85248C1357BA73004E5A72 /* NSArray+Strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Strings.h"; sourceTree = "<group>"; };
@@ -446,6 +450,8 @@
 		7D6B9E3B1347DF2E00CD923C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				D95B7C71177C19D900F21E15 /* 11-arrows-out.png */,
+				D95B7C72177C19D900F21E15 /* 11-arrows-out@2x.png */,
 				7DAD87D816A52E25003FF065 /* UIPlacardButtonBkgnd.png */,
 				7DAD87D916A52E25003FF065 /* UIPlacardButtonBkgnd@2x.png */,
 				7DAD87DA16A52E25003FF065 /* UIPlacardButtonPressedBkgnd.png */,
@@ -895,6 +901,8 @@
 				7DAD87DD16A52E25003FF065 /* UIPlacardButtonBkgnd@2x.png in Resources */,
 				7DAD87DE16A52E25003FF065 /* UIPlacardButtonPressedBkgnd.png in Resources */,
 				7DAD87DF16A52E25003FF065 /* UIPlacardButtonPressedBkgnd@2x.png in Resources */,
+				D95B7C73177C19D900F21E15 /* 11-arrows-out.png in Resources */,
+				D95B7C74177C19D900F21E15 /* 11-arrows-out@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
