@@ -11,6 +11,7 @@
 #import "LoginController.h"
 #import "UIColor+Orange.h"
 #import "HackerNewsLoginController.h"
+#import "BrowserController.h"
 
 @implementation NavigationController
 @synthesize loginDelegate;
@@ -87,6 +88,18 @@
     [loginDelegate navigationControllerRequestedSessions:self];
 }
 
-AUTOROTATION_FOR_PAD_ONLY
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+    if ([self.visibleViewController class] == [BrowserController class]) {
+        return YES;
+    }
+    return ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) || (toInterfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (NSUInteger)supportedInterfaceOrientations {
+    if ([self.visibleViewController class] == [BrowserController class]) {
+        return UIInterfaceOrientationMaskAll;
+    }
+    return ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskPortrait);
+}
 
 @end
