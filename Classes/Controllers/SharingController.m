@@ -32,7 +32,7 @@
 
 - (id)initWithURL:(NSURL *)url_ title:(NSString *)title_ fromController:(UIViewController *)controller_ {
     if ((self = [super init])) {
-        url = [url_ copy];
+        url = [url_.absoluteURL copy];
         title = [title_ copy];
         controller = controller_; // XXX: retain this?
     }
