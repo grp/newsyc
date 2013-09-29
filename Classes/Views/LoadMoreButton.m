@@ -24,6 +24,7 @@
         [moreLabel setTextAlignment:NSTextAlignmentCenter];
         [moreLabel setTextColor:[UIColor grayColor]];
         [moreLabel setFont:[UIFont systemFontOfSize:17.0f]];
+        [moreLabel setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:moreLabel];
     }
     

@@ -15,6 +15,8 @@
     CGFloat padding;
 }
 
++ (CGFloat)defaultHeight;
+
 @property (nonatomic, retain) HNUser *user;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *subtitle;

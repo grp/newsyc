@@ -38,7 +38,7 @@
     [tableView setDataSource:self];
     [[self view] addSubview:tableView];
 
-    header = [[ProfileHeaderView alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 65.0f)];
+    header = [[ProfileHeaderView alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, [ProfileHeaderView defaultHeight])];
     [header setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
     [tableView setTableHeaderView:header];
 
@@ -110,6 +110,10 @@
         return 10.0f;
     }
 
+    if ([UITableViewCell instancesRespondToSelector:@selector(separatorInset)]) {
+        return 10.0;
+    }
+
     if ([tableView bounds].size.width <= 320.0f) {
         return 10.0f;
     } else {
@@ -117,15 +121,22 @@
     }
 }
 
-- (CGFloat)aboutPadding {
-    return 10.0f;
+- (UIEdgeInsets)aboutPadding {
+    UIEdgeInsets padding = UIEdgeInsetsMake(10, 10, 10, 10);
+
+    if ([UITableViewCell instancesRespondToSelector:@selector(separatorInset)]) {
+        // We don't have a table cell yet, so guess at the padding.
+        padding.left += 5.0;
+    }
+
+    return padding;
 }
 
 - (CGSize)aboutSize {
     HNObjectBodyRenderer *renderer = [(HNUser *)source renderer];
 
     CGSize size;
-    size.width = [tableView bounds].size.width - ([self groupedTablePadding] * 2) - ([self aboutPadding] * 2);
+    size.width = [tableView bounds].size.width - ([self groupedTablePadding] * 2) - ([self aboutPadding].left + [self aboutPadding].right);
     size.height = [renderer sizeForWidth:size.width].height;
     
     return size;
@@ -133,7 +144,7 @@
 
 - (CGFloat)tableView:(UITableView *)table heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([indexPath section] == 0 && [indexPath row] == 0 && [self hasAbout]) {
-        return [self aboutSize].height + [self aboutPadding] * 2;
+        return [self aboutSize].height + [self aboutPadding].top + [self aboutPadding].bottom;
 	}
     
 	return 44.0;
@@ -151,7 +162,7 @@
             [textView setDelegate:self];
             
             CGSize aboutSize = [self aboutSize];
-            [textView setFrame:CGRectMake([self aboutPadding], [self aboutPadding], aboutSize.width, aboutSize.height)];
+            [textView setFrame:CGRectMake([self aboutPadding].left, [self aboutPadding].top, aboutSize.width, aboutSize.height)];
             
             [[cell contentView] addSubview:textView];
             [textView release];

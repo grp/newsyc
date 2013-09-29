@@ -91,16 +91,19 @@
         CGRect highlightedRect = CGRectIntegral([rect CGRectValue]);
 
         if (highlightedRect.size.width != 0 && highlightedRect.size.height != 0) {
-            CGRect rect = CGRectInset(highlightedRect, -4.0f, -4.0f);
+            CGFloat inset = [UIView instancesRespondToSelector:@selector(tintColor)] ? -2.0 : -4.0;
+            CGFloat radius = [UIView instancesRespondToSelector:@selector(tintColor)] ? 2.0 : 3.0;
+
+            CGRect rect = CGRectInset(highlightedRect, inset, inset);
             rect.origin.x += 10.0f;
             rect.origin.y += 10.0f;
 
-            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:3.0f];
+            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius];
             [highlightBezierPath appendPath:bezierPath];
         }
     }
     
-    [[UIColor colorWithWhite:0.5f alpha:0.5f] set];
+    [[UIColor colorWithWhite:0.0 alpha:0.27] set];
     [highlightBezierPath fill];
 }
 

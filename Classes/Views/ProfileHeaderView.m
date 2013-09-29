@@ -11,25 +11,39 @@
 @implementation ProfileHeaderView
 @synthesize user, padding;
 
++ (CGFloat)defaultHeight {
+    CGFloat height = 65.0;
+
+    if ([UIView instancesRespondToSelector:@selector(tintColor)]) {
+        height += 12.0;
+    }
+
+    return height;
+}
+
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         titleLabel = [[UILabel alloc] init];
-        [titleLabel setShadowColor:[UIColor whiteColor]];
         [titleLabel setTextAlignment:NSTextAlignmentLeft];
-        [titleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
         [titleLabel setTextColor:[UIColor blackColor]];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
         [titleLabel setFont:[UIFont boldSystemFontOfSize:19.0f]];
         [self addSubview:titleLabel];
         
         subtitleLabel = [[UILabel alloc] init];
-        [subtitleLabel setShadowColor:[UIColor whiteColor]];
         [subtitleLabel setTextAlignment:NSTextAlignmentLeft];
-        [subtitleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
         [subtitleLabel setTextColor:[UIColor darkGrayColor]];
         [subtitleLabel setBackgroundColor:[UIColor clearColor]];
         [subtitleLabel setFont:[UIFont systemFontOfSize:14.0f]];
         [self addSubview:subtitleLabel];
+
+        if (![UIView instancesRespondToSelector:@selector(tintColor)]) {
+            [titleLabel setShadowColor:[UIColor whiteColor]];
+            [titleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
+
+            [subtitleLabel setShadowColor:[UIColor whiteColor]];
+            [subtitleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
+        }
     }
     
     return self;
