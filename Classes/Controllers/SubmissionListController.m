@@ -10,6 +10,7 @@
 
 #import "SubmissionTableCell.h"
 #import "CommentListController.h"
+#import "BrowserController.h"
 
 #import "AppDelegate.h"
 
@@ -17,6 +18,29 @@
 
 + (Class)cellClass {
     return [SubmissionTableCell class];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRecognized:)];
+        swipeRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+        [self.view addGestureRecognizer:swipeRecognizer];
+    }
+}
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
+
+    [swipeRecognizer release];
+    swipeRecognizer = nil;
+}
+
+- (void)dealloc {
+    [swipeRecognizer release];
+
+    [super dealloc];
 }
 
 - (CGFloat)cellHeightForEntry:(HNEntry *)entry {
@@ -42,6 +66,26 @@
 
 - (NSString *)sourceTitle {
     return [self title];
+}
+
+- (void)swipeRecognized:(UISwipeGestureRecognizer *)recognizer {
+    CGPoint location = [recognizer locationInView:tableView];
+    NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:location];
+
+    HNEntry *entry = [self entryAtIndexPath:indexPath];
+
+    NSArray *viewControllers = [[self navigationController] viewControllers];
+
+    CommentListController *commentController = [[CommentListController alloc] initWithSource:entry];
+    viewControllers = [viewControllers arrayByAddingObject:commentController];
+    [commentController release];
+
+    BrowserController *browserController = [[BrowserController alloc] initWithURL:[entry destination]];
+    viewControllers = [viewControllers arrayByAddingObject:browserController];
+    [browserController release];
+
+    // This bypasses the normal navigation flow, so only works for phone idioms.
+    [[self navigationController] setViewControllers:viewControllers animated:YES];
 }
 
 AUTOROTATION_FOR_PAD_ONLY
