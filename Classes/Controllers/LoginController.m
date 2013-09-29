@@ -75,24 +75,35 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
 
-    UIGraphicsBeginImageContext([[self view] bounds].size);
-    
-	CGContextRef context = UIGraphicsGetCurrentContext();
-	CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
-    CGGradientRef gradient = CGGradientCreateWithColors(rgb, (CFArrayRef) [self gradientColors], NULL);
-    
-    CGFloat centerX = CGRectGetMidX([[self view] bounds]);
-    CGFloat centerY = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad ? 200.0f : 110.0f);
-    CGPoint center =  CGPointMake(centerX, centerY);
-    CGContextDrawRadialGradient(context, gradient, center, 5.0f, center, 1500.0f, kCGGradientDrawsBeforeStartLocation);
-    
-    CGGradientRelease(gradient);
-    CGColorSpaceRelease(rgb);
-    
-	UIImage *background = UIGraphicsGetImageFromCurrentImageContext();
-    [backgroundImageView setImage:background];
-    
-	UIGraphicsEndImageContext();
+    if (![self respondsToSelector:@selector(topLayoutGuide)]) {
+        UIGraphicsBeginImageContext([[self view] bounds].size);
+        
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
+        CGGradientRef gradient = CGGradientCreateWithColors(rgb, (CFArrayRef) [self gradientColors], NULL);
+        
+        CGFloat centerX = CGRectGetMidX([[self view] bounds]);
+        CGFloat centerY = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad ? 200.0f : 110.0f);
+        CGPoint center =  CGPointMake(centerX, centerY);
+        CGContextDrawRadialGradient(context, gradient, center, 5.0f, center, 1500.0f, kCGGradientDrawsBeforeStartLocation);
+        
+        CGGradientRelease(gradient);
+        CGColorSpaceRelease(rgb);
+        
+        UIImage *background = UIGraphicsGetImageFromCurrentImageContext();
+        [backgroundImageView setImage:background];
+        
+        UIGraphicsEndImageContext();
+    } else {
+        [backgroundImageView setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+    }
+
+    CGRect centeringAlignmentFrame = CGRectMake(0, 0, [[self view] bounds].size.width, [[self view] bounds].size.height - 80.0f);
+    if ([self respondsToSelector:@selector(topLayoutGuide)] && [self respondsToSelector:@selector(bottomLayoutGuide)]) {
+        centeringAlignmentFrame.origin.y += [[self topLayoutGuide] length];
+        centeringAlignmentFrame.size.height -= [[self topLayoutGuide] length] + [[self bottomLayoutGuide] length];
+    }
+    [centeringAlignmentView setFrame:centeringAlignmentFrame];
 }
 
 - (void)loadView {
@@ -102,8 +113,7 @@
     [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [[self view] addSubview:backgroundImageView];
 
-    CGRect centeringAlignmentFrame = CGRectMake(0, 0, [[self view] bounds].size.width, [[self view] bounds].size.height - 80.0f);
-    centeringAlignmentView = [[UIView alloc] initWithFrame:centeringAlignmentFrame];
+    centeringAlignmentView = [[UIView alloc] initWithFrame:[[self view] bounds]];
     [centeringAlignmentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [[self view] addSubview:centeringAlignmentView];
 
@@ -125,6 +135,11 @@
     CGRect fieldRect = CGRectMake(115, 12, -135, 30);
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         fieldRect = CGRectMake(135, 12, -175, 30);
+
+    if ([UITextField instancesRespondToSelector:@selector(defaultTextAttributes)]) {
+        // Hack: on iOS 7, needs to move up a bit.
+        fieldRect.origin.y -= 4.0;
+    }
     
     usernameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [[usernameCell textLabel] setText:@"Username"];
@@ -151,15 +166,12 @@
     [bottomLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
     [bottomLabel setTextAlignment:NSTextAlignmentCenter];
     [bottomLabel setBackgroundColor:[UIColor clearColor]];
-    [bottomLabel setFont:[UIFont systemFontOfSize:14.0f]];
-    
+
     topLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 40.0f)];
     [topLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
     [topLabel setTextAlignment:NSTextAlignmentCenter];
     [topLabel setBackgroundColor:[UIColor clearColor]];
     [topLabel setShadowColor:[UIColor clearColor]];
-    [topLabel setShadowOffset:CGSizeMake(0, 1.0f)];
-    [topLabel setFont:[UIFont boldSystemFontOfSize:30.0f]];
 
     [tableView layoutIfNeeded];
     CGFloat tableViewHeight = [tableView contentSize].height;

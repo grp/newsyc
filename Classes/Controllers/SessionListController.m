@@ -20,7 +20,7 @@
 
 - (id)init {
     if ((self = [super init])) {
-        [self setTitle:@"Sessions"];
+        [self setTitle:@"Accounts"];
     }
 
     return self;
@@ -91,6 +91,16 @@
     if ([tableView isEditing]) {
         [tableView setEditing:NO animated:NO];
         [[self navigationItem] setLeftBarButtonItem:editBarButtonItem];
+    }
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+
+    if ([self respondsToSelector:@selector(topLayoutGuide)] && [self respondsToSelector:@selector(bottomLayoutGuide)]) {
+        UIEdgeInsets insets = UIEdgeInsetsMake([[self topLayoutGuide] length], 0, [[self bottomLayoutGuide] length], 0);
+        [tableView setScrollIndicatorInsets:insets];
+        [tableView setContentInset:insets];
     }
 }
 

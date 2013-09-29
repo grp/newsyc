@@ -28,6 +28,7 @@
 
 #import "UIApplication+ActivityIndicator.h"
 #import "UINavigationItem+MultipleItems.h"
+#import "CustomLayoutGuide.h"
 
 @implementation UINavigationController (AppDelegate)
 

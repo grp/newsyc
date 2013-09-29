@@ -53,33 +53,22 @@
 @end
 
 @implementation TableViewCell
-@synthesize showsDivider;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
 		contentView = [[TableViewCellView alloc] initWithCell:self];
 		[contentView setOpaque:YES];
-		[self addSubview:contentView];
+		[self.contentView addSubview:contentView];
 		[contentView release];
-        
-        [self setShowsDivider:YES];
     }
+
     return self;
 }
 
-- (void)setShowsDivider:(BOOL)shows {
-    showsDivider = shows;
+- (void)layoutSubviews {
+	[super layoutSubviews];
     
-    // Update content view frame.
-    [self setFrame:[self frame]];
-}
-
-- (void)setFrame:(CGRect)frame {
-	[super setFrame:frame];
-    
-	CGRect bounds = [self bounds];
-	if (showsDivider) bounds.size.height -= 1; // leave room for the seperator line
-	[contentView setFrame:bounds];
+	[contentView setFrame:[[self contentView] bounds]];
 }
 
 - (void)setNeedsDisplay {

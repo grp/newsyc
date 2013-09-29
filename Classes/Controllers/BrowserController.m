@@ -16,6 +16,7 @@
 #import "UIColor+Orange.h"
 #import "UIApplication+ActivityIndicator.h"
 #import "UINavigationItem+MultipleItems.h"
+#import "CustomLayoutGuide.h"
 
 @implementation BrowserController
 @synthesize currentURL;
@@ -25,6 +26,10 @@
         rootURL = url;
         [self setCurrentURL:url];
         [self setHidesBottomBarWhenPushed:YES];
+
+        if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets:)]) {
+            [self setAutomaticallyAdjustsScrollViewInsets:NO];
+        }
     }
     
     return self;
@@ -82,7 +87,7 @@
 - (void)loadView {
     [super loadView];
     
-    toolbar = [[UIToolbar alloc] init];
+    toolbar = [[OrangeToolbar alloc] init];
     [toolbar sizeToFit];
     
     backItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
@@ -113,11 +118,7 @@
         [webview loadRequest:[request autorelease]];
     }
     
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-        [toolbar setTintColor:[UIColor mainOrangeColor]];
-    } else {
-        [toolbar setTintColor:nil];
-    }
+    [toolbar setOrange:![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]];
 }
 
 - (void)viewDidLoad {
@@ -130,10 +131,12 @@
         [toolbar setFrame:toolbarFrame];
         [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
         [[self view] addSubview:toolbar];
-        
-        CGRect webviewFrame = [[self view] bounds];
-        webviewFrame.size.height -= toolbarFrame.size.height;
-        [webview setFrame:webviewFrame];
+
+        if (![UIViewController instancesRespondToSelector:@selector(bottomLayoutGuide)]) {
+            CGRect webviewFrame = [[self view] bounds];
+            webviewFrame.size.height -= toolbarFrame.size.height;
+            [webview setFrame:webviewFrame];
+        }
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         CGRect toolbarFrame = [toolbar bounds];
         toolbarFrame.size.width = 280.0f;
@@ -142,6 +145,27 @@
         [toolbar setBackgroundImage:[UIImage imageNamed:@"clear.png"] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
         toolbarItem = [[BarButtonItem alloc] initWithCustomView:toolbar];
         [[self navigationItem] addRightBarButtonItem:toolbarItem atPosition:UINavigationItemPositionLeft];
+    }
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+
+    if ([UIViewController instancesRespondToSelector:@selector(topLayoutGuide)] && [UIViewController instancesRespondToSelector:@selector(bottomLayoutGuide)]) {
+        UIEdgeInsets insets = UIEdgeInsetsMake([[self topLayoutGuide] length], 0, [[self bottomLayoutGuide] length], 0);
+        [webview.scrollView setScrollIndicatorInsets:insets];
+        [webview.scrollView setContentInset:insets];
+    }
+}
+
+- (id<UILayoutSupport>)bottomLayoutGuide {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        id<UILayoutSupport> bottomGuide = [super bottomLayoutGuide];
+        CustomLayoutGuide *layoutGuide = [[CustomLayoutGuide alloc] init];
+        layoutGuide.length = [bottomGuide length] + [toolbar bounds].size.height;
+        return [layoutGuide autorelease];
+    } else {
+        return [super bottomLayoutGuide];
     }
 }
 

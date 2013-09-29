@@ -14,16 +14,19 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame style:UITableViewStyleGrouped])) {
-        [self setBackgroundColor:[UIColor clearColor]];
-        
-        orangeBackgroundView = [[UIView alloc] initWithFrame:[self bounds]];
-        [orangeBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        [orangeBackgroundView setBackgroundColor:[UIColor paleOrangeColor]];
-        
-        tableBackgroundView = [[UITableView alloc] initWithFrame:[self bounds] style:UITableViewStyleGrouped];
-        [tableBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        if (![self respondsToSelector:@selector(separatorInset)]) {
+            [self setBackgroundColor:[UIColor clearColor]];
+
+            orangeBackgroundView = [[UIView alloc] initWithFrame:[self bounds]];
+            [orangeBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+
+            [orangeBackgroundView setBackgroundColor:[UIColor paleOrangeColor]];
+
+            tableBackgroundView = [[UITableView alloc] initWithFrame:[self bounds] style:UITableViewStyleGrouped];
+            [tableBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        }
     }
-    
+
     return self;
 }
 

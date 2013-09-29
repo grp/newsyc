@@ -34,8 +34,6 @@
     BOOL showsDividing;
 }
 
-@property (nonatomic, assign) BOOL showsDivider;
-
 - (void)drawContentView:(CGRect)rect; // subclasses should implement
 
 @end

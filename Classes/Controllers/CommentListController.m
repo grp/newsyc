@@ -12,6 +12,8 @@
 
 #import "UIActionSheet+Context.h"
 #import "UINavigationItem+MultipleItems.h"
+#import "CustomLayoutGuide.h"
+#import "EmptyView.h"
 
 #import "CommentListController.h"
 #import "CommentTableCell.h"
@@ -47,7 +49,7 @@
 - (void)loadView {
     [super loadView];
     
-    [emptyLabel setText:@"No Comments"];
+    [emptyView setText:@"No Comments"];
     [statusView setBackgroundColor:[UIColor clearColor]];
     
     [self setupHeader];
@@ -63,15 +65,17 @@
         
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
             [entryActionsView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
-            
+
             CGRect actionsFrame = [entryActionsView frame];
             actionsFrame.origin.y = [[self view] frame].size.height - actionsFrame.size.height;
             actionsFrame.size.width = [[self view] frame].size.width;
             [entryActionsView setFrame:actionsFrame];
-            
-            CGRect tableFrame = [tableView frame];
-            tableFrame.size.height = [[self view] bounds].size.height - actionsFrame.size.height;
-            [tableView setFrame:tableFrame];
+
+            if (![self respondsToSelector:@selector(bottomLayoutGuide)]) {
+                CGRect tableFrame = [tableView frame];
+                tableFrame.size.height = [[self view] bounds].size.height - actionsFrame.size.height;
+                [tableView setFrame:tableFrame];
+            }
         } else {
             CGRect actionsFrame = [entryActionsView frame];
             actionsFrame.size.width = 280.0f;
@@ -81,6 +85,17 @@
 
     [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [tableView setSeparatorColor:[UIColor whiteColor]];
+}
+
+- (id<UILayoutSupport>)bottomLayoutGuide {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        id<UILayoutSupport> bottomGuide = [super bottomLayoutGuide];
+        CustomLayoutGuide *layoutGuide = [[CustomLayoutGuide alloc] init];
+        layoutGuide.length = [bottomGuide length] + [entryActionsView bounds].size.height;
+        return [layoutGuide autorelease];
+    } else {
+        return [super bottomLayoutGuide];
+    }
 }
 
 - (void)viewDidUnload {
@@ -139,7 +154,6 @@
     }
 
     [tableView setSeparatorColor:[UIColor whiteColor]];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {

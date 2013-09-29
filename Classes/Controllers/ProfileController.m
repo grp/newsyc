@@ -75,6 +75,12 @@
     [super viewDidLayoutSubviews];
 
     [header setPadding:([self groupedTablePadding] + 10.0f)];
+
+    if ([self respondsToSelector:@selector(topLayoutGuide)] && [self respondsToSelector:@selector(bottomLayoutGuide)]) {
+        UIEdgeInsets insets = UIEdgeInsetsMake([[self topLayoutGuide] length], 0, [[self bottomLayoutGuide] length], 0);
+        [tableView setScrollIndicatorInsets:insets];
+        [tableView setContentInset:insets];
+    }
 }
 
 - (void)finishedLoading {

@@ -10,6 +10,10 @@
 
 @implementation SplitViewController
 
+- (UIViewController *)childViewControllerForStatusBarStyle {
+    return [[self viewControllers] firstObject];
+}
+
 AUTOROTATION_FOR_PAD_ONLY;
 
 @end

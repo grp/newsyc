@@ -22,6 +22,7 @@
 #import "HackerNewsLoginController.h"
 #import "LoginController.h"
 #import "SearchController.h"
+#import "CustomLayoutGuide.h"
 
 #import "HNTimeline.h"
 
@@ -110,6 +111,27 @@
     [sheet release];
 }
 
+- (void)updateLayoutForViewController:(UIViewController *)viewController {
+    if ([self respondsToSelector:@selector(topLayoutGuide)] && [self respondsToSelector:@selector(bottomLayoutGuide)]) {
+        CustomLayoutGuide *topLayoutGuide = [[CustomLayoutGuide alloc] init];
+        [topLayoutGuide setLength:self.topLayoutGuide.length];
+        [viewController setValue:topLayoutGuide forKey:@"topLayoutGuide"];
+        [topLayoutGuide release];
+
+        CustomLayoutGuide *bottomLayoutGuide = [[CustomLayoutGuide alloc] init];
+        [bottomLayoutGuide setLength:(self.bottomLayoutGuide.length + self.tabBar.bounds.size.height)];
+        [viewController setValue:bottomLayoutGuide forKey:@"bottomLayoutGuide"];
+        [bottomLayoutGuide release];
+
+        [[viewController view] setNeedsLayout];
+    }
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    [self updateLayoutForViewController:viewController];
+}
+
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
     if (viewController == profile && [session isAnonymous]) {
         [[self navigationController] requestLogin];
@@ -143,9 +165,17 @@
     [[self selectedViewController] setWantsFullScreenLayout:YES];
 
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-      [[self tabBar] setSelectedImageTintColor:[UIColor mainOrangeColor]];
+        if ([[self tabBar] respondsToSelector:@selector(setBarTintColor:)]) {
+            [[self tabBar] setTintColor:[UIColor mainOrangeColor]];
+        } else {
+            [[self tabBar] setSelectedImageTintColor:[UIColor mainOrangeColor]];
+        }
     } else {
-      [[self tabBar] setSelectedImageTintColor:nil];
+        if ([[self tabBar] respondsToSelector:@selector(setBarTintColor:)]) {
+            [[self tabBar] setTintColor:nil];
+        }
+
+        [[self tabBar] setSelectedImageTintColor:nil];
     }
 }
 
@@ -168,6 +198,12 @@
     [super viewDidLoad];
     
     [[self navigationItem] setRightBarButtonItem:composeItem];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+
+    [self updateLayoutForViewController:self.selectedViewController];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

@@ -6,11 +6,12 @@
 //  Copyright (c) 2012 Xuzz Productions, LLC. All rights reserved.
 //
 
-#import "OrangeTableView.h"
+@class EmptyView;
+@class OrangeTableView;
 
 @interface EmptyController : UIViewController {
     OrangeTableView *tableView;    
-    UILabel *emptyLabel;
+    EmptyView *emptyView;
 }
 
 @end

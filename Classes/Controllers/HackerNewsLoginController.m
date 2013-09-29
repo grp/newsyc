@@ -17,10 +17,23 @@
     [super viewDidLoad];
     
     [topLabel setText:@"Hacker News"];
-    [topLabel setTextColor:[UIColor whiteColor]];
-    [topLabel setShadowColor:[UIColor blackColor]];
     [bottomLabel setText:@"Your info is only shared with Hacker News."];
-    [bottomLabel setTextColor:[UIColor whiteColor]];
+
+    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
+        [topLabel setTextColor:[UIColor blackColor]];
+        [bottomLabel setTextColor:[UIColor darkGrayColor]];
+
+        [topLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:34.0]];
+    } else {
+        [topLabel setTextColor:[UIColor whiteColor]];
+        [topLabel setShadowColor:[UIColor blackColor]];
+        [bottomLabel setTextColor:[UIColor whiteColor]];
+
+        [topLabel setFont:[UIFont boldSystemFontOfSize:30.0f]];
+        [topLabel setShadowOffset:CGSizeMake(0, 1.0f)];
+    }
+
+    [bottomLabel setFont:[UIFont systemFontOfSize:14.0f]];
 }
 
 - (BOOL)requiresPassword {

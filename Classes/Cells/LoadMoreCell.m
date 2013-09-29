@@ -21,6 +21,15 @@
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+
+    if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
+        // Hide the cell separator by giving it zero width.
+        [self setSeparatorInset:UIEdgeInsetsMake(0, self.bounds.size.width, 0, 0)];
+    }
+}
+
 - (void)dealloc {
     [button release];
     

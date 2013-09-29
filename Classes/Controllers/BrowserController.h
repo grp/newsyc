@@ -12,6 +12,7 @@
 #import "ProgressHUD.h"
 #import "ActivityIndicatorItem.h"
 #import "BarButtonItem.h"
+#import "OrangeToolbar.h"
 
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -24,7 +25,7 @@
     NSURL *currentURL;
     NSURL *externalURL;
     
-    UIToolbar *toolbar;
+    OrangeToolbar *toolbar;
     BarButtonItem *toolbarItem;
     
     BarButtonItem *backItem;

@@ -10,10 +10,12 @@
 #import "PullToRefreshView.h"
 #import "LoadMoreCell.h"
 
+@class EmptyView;
+
 @interface EntryListController : LoadingController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate> {
     UITableViewController *tableViewController;
     UITableView *tableView;
-    UILabel *emptyLabel;
+    EmptyView *emptyView;
     
     LoadMoreCell *moreCell;
     PullToRefreshView *pullToRefreshView;

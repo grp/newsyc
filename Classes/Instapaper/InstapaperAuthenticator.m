@@ -55,9 +55,16 @@
     
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSInteger status = [(NSHTTPURLResponse *) response statusCode];
-        if (status == 403) [self failWithErrorText:@"Invalid username or password."];
-        if (status == 500) [self failWithErrorText:@"Internal error, try again later."];
-        if (status == 201 || status == 200) [self succeed];
+
+        if (status == 201 || status == 200) {
+            [self succeed];
+        } else if (status == 403) {
+            [self failWithErrorText:@"Invalid username or password."];
+        } else if (status == 500) {
+            [self failWithErrorText:@"Internal error, try again later."];
+        } else {
+            [self failWithErrorText:@"Unknown error."];
+        }
     } else {
         [self failWithErrorText:@"Unknown error."];
     }

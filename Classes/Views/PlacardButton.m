@@ -22,10 +22,16 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-        [self setBackgroundImage:[[self class] _normalImage] forState:UIControlStateNormal];
-        [self setBackgroundImage:[[self class] _pressedImage] forState:UIControlStateHighlighted];
-        [self setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        [self setTitleColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
+        if (![UIView instancesRespondToSelector:@selector(tintColor)]) {
+            [self setBackgroundImage:[[self class] _normalImage] forState:UIControlStateNormal];
+            [self setBackgroundImage:[[self class] _pressedImage] forState:UIControlStateHighlighted];
+            [self setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+            [self setTitleColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
+        } else {
+            [self setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+            [self setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
+        }
+
         [[self titleLabel] setFont:[UIFont boldSystemFontOfSize:14.0f]];
     }
     

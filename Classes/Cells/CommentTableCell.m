@@ -21,7 +21,6 @@
 - (id)initWithReuseIdentifier:(NSString *)identifier {
     if ((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier])) {
         [contentView setBackgroundColor:[UIColor whiteColor]];
-        [self setShowsDivider:NO];
         
         CALayer *layer = [contentView layer];
         [layer setContentsGravity:kCAGravityBottomLeft];
@@ -363,15 +362,17 @@
         [[UIColor grayColor] set];
         [[self commentsText] drawInRect:[self commentsRect] withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingHead alignment:NSTextAlignmentRight];
     }
+
+    if (![self respondsToSelector:@selector(separatorInset)]) {
+        CGRect linerect;
+        linerect.size.width = bounds.size.width;
+        linerect.size.height = (1.0f / [[UIScreen mainScreen] scale]);
+        linerect.origin.x = 0;
+        linerect.origin.y = bounds.size.height - linerect.size.height;
     
-    CGRect linerect;
-    linerect.size.width = bounds.size.width;
-    linerect.size.height = (1.0f / [[UIScreen mainScreen] scale]);
-    linerect.origin.x = 0;
-    linerect.origin.y = bounds.size.height - linerect.size.height;
-    
-    [[UIColor colorWithWhite:0.85f alpha:1.0f] set];
-    UIRectFill(linerect);
+        [[UIColor colorWithWhite:0.85f alpha:1.0f] set];
+        UIRectFill(linerect);
+    }
 }
 
 #pragma mark - Tap Handlers

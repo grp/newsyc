@@ -26,13 +26,21 @@
     [super viewDidLoad];
     
     [topLabel setText:@"Instapaper"];
-    [topLabel setTextColor:[UIColor blackColor]];
-    [topLabel setShadowColor:[UIColor clearColor]];
-    [topLabel setFont:[UIFont fontWithName:@"Georgia" size:36.0f]];
     [bottomLabel setText:@"Enter your password if you have one."];
-    [bottomLabel setTextColor:[UIColor blackColor]];
-    
+
+
     [[usernameCell textLabel] setText:@"Email"];
+
+    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
+        [topLabel setTextColor:[UIColor blackColor]];
+        [bottomLabel setTextColor:[UIColor darkGrayColor]];
+    } else {
+        [topLabel setTextColor:[UIColor blackColor]];
+        [bottomLabel setTextColor:[UIColor blackColor]];
+    }
+
+    [topLabel setFont:[UIFont fontWithName:@"HoeflerText-Regular" size:34.0f]];
+    [bottomLabel setFont:[UIFont systemFontOfSize:14.0f]];
 }
 
 - (NSArray *)gradientColors {
