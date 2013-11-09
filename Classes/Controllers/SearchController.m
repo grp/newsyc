@@ -12,7 +12,6 @@
 #import "UIColor+Orange.h"
 #import "AppDelegate.h"
 #import "OrangeToolbar.h"
-#import "CustomLayoutGuide.h"
 #import "EmptyView.h"
 
 @implementation SearchController
@@ -20,10 +19,6 @@
 - (id)initWithSession:(HNSession *)session_ {
     if ((self = [super init])) {
         session = [session_ retain];
-
-        if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets:)]) {
-            [self setAutomaticallyAdjustsScrollViewInsets:NO];
-        }
     }
 
     return self;
@@ -131,21 +126,10 @@
 	[notificationCenter addObserver:self selector:@selector(receivedResults:) name:@"searchDone" object:nil];
 }
 
-- (id<UILayoutSupport>)topLayoutGuide {
-    id<UILayoutSupport> topGuide = [super topLayoutGuide];
-    CustomLayoutGuide *layoutGuide = [[CustomLayoutGuide alloc] init];
-    layoutGuide.length = [topGuide length] + [coloredView bounds].size.height;
-    return [layoutGuide autorelease];
-}
-
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
 
     if ([self respondsToSelector:@selector(topLayoutGuide)] && [self respondsToSelector:@selector(bottomLayoutGuide)]) {
-        UIEdgeInsets insets = UIEdgeInsetsMake([[self topLayoutGuide] length], 0, [[self bottomLayoutGuide] length], 0);
-        [tableView setScrollIndicatorInsets:insets];
-        [tableView setContentInset:insets];
-
         [tableView setFrame:[[self view] bounds]];
         [coloredView setFrame:CGRectMake(0, [[self topLayoutGuide] length] - [searchBar bounds].size.height, [[self view] bounds].size.width, [searchBar bounds].size.height)];
     } else {

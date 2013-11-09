@@ -56,8 +56,15 @@
 }
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width {
-    CGSize titlesize = [[entry title] sizeWithFont:[self titleFont] constrainedToSize:CGSizeMake(width - 16.0f, 200.0f) lineBreakMode:NSLineBreakByWordWrapping];
-    return titlesize.height + 45.0f;
+    CGFloat constrainedWidth = width - 16.0;
+
+    if ([self instancesRespondToSelector:@selector(separatorInset)]) {
+        // On iOS 7, the left inset is 17 - 8 = 7.
+        constrainedWidth -= 7.0;
+    }
+
+    CGSize titlesize = [[entry title] sizeWithFont:[self titleFont] constrainedToSize:CGSizeMake(constrainedWidth, 200.0f) lineBreakMode:NSLineBreakByWordWrapping];
+    return ceilf(titlesize.height) + 45.0f;
 }
 
 - (void)drawContentView:(CGRect)rect {

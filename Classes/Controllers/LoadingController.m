@@ -140,6 +140,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    [self viewDidLayoutSubviews];
+
     NSTimeInterval interval = [lastUpdatedOnAppearDate timeIntervalSinceNow];
     BOOL first = (lastUpdatedOnAppearDate == nil);
     BOOL later = (interval > (15 * 60));

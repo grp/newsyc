@@ -12,7 +12,6 @@
 
 #import "UIActionSheet+Context.h"
 #import "UINavigationItem+MultipleItems.h"
-#import "CustomLayoutGuide.h"
 #import "EmptyView.h"
 
 #import "CommentListController.h"
@@ -48,6 +47,8 @@
 
 - (void)loadView {
     [super loadView];
+
+    [[self view] setBackgroundColor:[UIColor whiteColor]];
     
     [emptyView setText:@"No Comments"];
     [statusView setBackgroundColor:[UIColor clearColor]];
@@ -71,11 +72,9 @@
             actionsFrame.size.width = [[self view] frame].size.width;
             [entryActionsView setFrame:actionsFrame];
 
-            if (![self respondsToSelector:@selector(bottomLayoutGuide)]) {
-                CGRect tableFrame = [tableView frame];
-                tableFrame.size.height = [[self view] bounds].size.height - actionsFrame.size.height;
-                [tableView setFrame:tableFrame];
-            }
+            CGRect tableFrame = [tableView frame];
+            tableFrame.size.height = [[self view] bounds].size.height - actionsFrame.size.height;
+            [tableView setFrame:tableFrame];
         } else {
             CGRect actionsFrame = [entryActionsView frame];
             actionsFrame.size.width = 280.0f;
@@ -85,17 +84,6 @@
 
     [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [tableView setSeparatorColor:[UIColor whiteColor]];
-}
-
-- (id<UILayoutSupport>)bottomLayoutGuide {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        id<UILayoutSupport> bottomGuide = [super bottomLayoutGuide];
-        CustomLayoutGuide *layoutGuide = [[CustomLayoutGuide alloc] init];
-        layoutGuide.length = [bottomGuide length] + [entryActionsView bounds].size.height;
-        return [layoutGuide autorelease];
-    } else {
-        return [super bottomLayoutGuide];
-    }
 }
 
 - (void)viewDidUnload {
@@ -292,6 +280,8 @@
 }
 
 - (void)setupHeader {
+    if (![self isViewLoaded]) return;
+
     // Only show it if the source is at least partially loaded.
     if (![source isKindOfClass:[HNEntry class]] || [(HNEntry *) source submitter] == nil) return;
     

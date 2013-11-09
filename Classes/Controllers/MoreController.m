@@ -22,10 +22,6 @@
 - (id)initWithSession:(HNSession *)session_ {
     if ((self = [super init])) {
         session = [session_ retain];
-
-        if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets:)]) {
-            [self setAutomaticallyAdjustsScrollViewInsets:NO];
-        }
     }
 
     return self;
@@ -57,11 +53,11 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
 
-    if ([self respondsToSelector:@selector(topLayoutGuide)] && [self respondsToSelector:@selector(bottomLayoutGuide)]) {
+    /*if ([self respondsToSelector:@selector(topLayoutGuide)] && [self respondsToSelector:@selector(bottomLayoutGuide)]) {
         UIEdgeInsets insets = UIEdgeInsetsMake([[self topLayoutGuide] length], 0, [[self bottomLayoutGuide] length], 0);
         [tableView setScrollIndicatorInsets:insets];
         [tableView setContentInset:insets];
-    }
+    }*/
 }
 
 - (void)viewDidUnload {

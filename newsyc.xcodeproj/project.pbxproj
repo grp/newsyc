@@ -11,7 +11,8 @@
 		188DE38017F7EA5000B498FC /* OrangeBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DE37F17F7EA5000B498FC /* OrangeBarView.m */; };
 		188DE38317F7EA6200B498FC /* OrangeToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DE38217F7EA6200B498FC /* OrangeToolbar.m */; };
 		188DE38617F7F7EA00B498FC /* EmptyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DE38517F7F7EA00B498FC /* EmptyView.m */; };
-		18AB27CC17C48B7B00AC16FE /* CustomLayoutGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AB27CB17C48B7B00AC16FE /* CustomLayoutGuide.m */; };
+		188DE38A1803DFAE00B498FC /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DE3891803DFAE00B498FC /* TabBarController.m */; };
+		18CA5DF8182ECD1100E54F4F /* ForceClearNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CA5DF7182ECD1100E54F4F /* ForceClearNavigationBar.m */; };
 		598ED48D16E6AAA4003A6BC2 /* libHNKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D563FF516E45AE000BDD2DB /* libHNKit.a */; };
 		7D17CA2F134AE22700763741 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D17CA2D134AE22700763741 /* Default.png */; };
 		7D17CA30134AE22700763741 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D17CA2E134AE22700763741 /* Default@2x.png */; };
@@ -176,8 +177,10 @@
 		188DE38217F7EA6200B498FC /* OrangeToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrangeToolbar.m; sourceTree = "<group>"; };
 		188DE38417F7F7EA00B498FC /* EmptyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmptyView.h; sourceTree = "<group>"; };
 		188DE38517F7F7EA00B498FC /* EmptyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmptyView.m; sourceTree = "<group>"; };
-		18AB27CA17C48B7B00AC16FE /* CustomLayoutGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomLayoutGuide.h; sourceTree = "<group>"; };
-		18AB27CB17C48B7B00AC16FE /* CustomLayoutGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomLayoutGuide.m; sourceTree = "<group>"; };
+		188DE3881803DFAE00B498FC /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
+		188DE3891803DFAE00B498FC /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
+		18CA5DF6182ECD1100E54F4F /* ForceClearNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForceClearNavigationBar.h; sourceTree = "<group>"; };
+		18CA5DF7182ECD1100E54F4F /* ForceClearNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForceClearNavigationBar.m; sourceTree = "<group>"; };
 		7D148E64132D68B5008FBF32 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		7D17CA2D134AE22700763741 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		7D17CA2E134AE22700763741 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -554,8 +557,6 @@
 				7D977ABE151D4ED000FD7360 /* UINavigationItem+MultipleItems.m */,
 				7DBD4CAF169FC4DA00938C54 /* UIColor+Orange.h */,
 				7DBD4CB1169FC52E00938C54 /* UIColor+Orange.m */,
-				18AB27CA17C48B7B00AC16FE /* CustomLayoutGuide.h */,
-				18AB27CB17C48B7B00AC16FE /* CustomLayoutGuide.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -628,6 +629,8 @@
 				188DE37C17F7E92A00B498FC /* OrangeNavigationBar.m */,
 				188DE38117F7EA6200B498FC /* OrangeToolbar.h */,
 				188DE38217F7EA6200B498FC /* OrangeToolbar.m */,
+				18CA5DF6182ECD1100E54F4F /* ForceClearNavigationBar.h */,
+				18CA5DF7182ECD1100E54F4F /* ForceClearNavigationBar.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -680,6 +683,8 @@
 				7D28FFE2151ADF4000BEBE1B /* SplitViewController.m */,
 				7DB9FC1D169D156A008674F4 /* SessionListController.h */,
 				7DB9FC1E169D156A008674F4 /* SessionListController.m */,
+				188DE3881803DFAE00B498FC /* TabBarController.h */,
+				188DE3891803DFAE00B498FC /* TabBarController.m */,
 				7D6B9E831347DF2E00CD923C /* MainTabBarController.h */,
 				7D6B9E841347DF2E00CD923C /* MainTabBarController.m */,
 			);
@@ -957,6 +962,7 @@
 				7D6B9F4F1347DF2E00CD923C /* PullToRefreshView.m in Sources */,
 				188DE38317F7EA6200B498FC /* OrangeToolbar.m in Sources */,
 				7D6B9F501347DF2E00CD923C /* EntryActionsView.m in Sources */,
+				188DE38A1803DFAE00B498FC /* TabBarController.m in Sources */,
 				7D6B9F521347DF2E00CD923C /* LoadingIndicatorView.m in Sources */,
 				7D6B9F531347DF2E00CD923C /* PlacardButton.m in Sources */,
 				7D6B9F541347DF2E00CD923C /* PlaceholderTextView.m in Sources */,
@@ -970,7 +976,6 @@
 				7D91AA9F135A27DD00247D34 /* ActivityIndicatorItem.m in Sources */,
 				FA85248E1357BA73004E5A72 /* NSArray+Strings.m in Sources */,
 				7D49183E1391E5DA00F05203 /* UIApplication+ActivityIndicator.m in Sources */,
-				18AB27CC17C48B7B00AC16FE /* CustomLayoutGuide.m in Sources */,
 				CBFCE7AD1398712F007A5DDD /* SearchController.m in Sources */,
 				7DDFA3B01401A8F300B8E69B /* HNTimeline.m in Sources */,
 				7DDFA3B31401A92400B8E69B /* HNSession+Following.m in Sources */,
@@ -983,6 +988,7 @@
 				7D34176C150AEF7B002E284F /* UIImage+Colorize.m in Sources */,
 				7D28FFE3151ADF4000BEBE1B /* SplitViewController.m in Sources */,
 				7D977AB9151C142700FD7360 /* EmptyController.m in Sources */,
+				18CA5DF8182ECD1100E54F4F /* ForceClearNavigationBar.m in Sources */,
 				7D977ABC151C26DD00FD7360 /* ModalNavigationController.m in Sources */,
 				7D977ABF151D4ED000FD7360 /* UINavigationItem+MultipleItems.m in Sources */,
 				7D977AC2151E8F6700FD7360 /* BarButtonItem.m in Sources */,

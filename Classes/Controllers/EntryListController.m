@@ -20,17 +20,6 @@
 
 #pragma mark - Lifecycle
 
-- (id)initWithSource:(HNObject *)source_
-{
-    if ((self = [super initWithSource:source_])) {
-        if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets:)]) {
-            [self setAutomaticallyAdjustsScrollViewInsets:NO];
-        }
-    }
-
-    return self;
-}
-
 - (void)loadView {
     [super loadView];
 
@@ -43,6 +32,7 @@
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
+    [tableView setClipsToBounds:NO];
     [[self view] addSubview:tableView];
     
     emptyView = [[EmptyView alloc] initWithFrame:CGRectZero];
@@ -51,23 +41,17 @@
     moreCell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [[moreCell button] addTarget:self action:@selector(loadMorePressed) forControlEvents:UIControlEventTouchUpInside];
 
-    if (![UIViewController instancesRespondToSelector:@selector(topLayoutGuide)]) {
-        if ([UIRefreshControl class] != nil) {
-            refreshControl = [[UIRefreshControl alloc] init];
-            [refreshControl addTarget:self action:@selector(refreshFromRefreshControl:) forControlEvents:UIControlEventValueChanged];
-            [tableViewController setRefreshControl:refreshControl];
-        } else {
-            pullToRefreshView = [[PullToRefreshView alloc] initWithScrollView:tableView];
-            [tableView addSubview:pullToRefreshView];
-            [pullToRefreshView setDelegate:self];
-        }
+    if ([UIRefreshControl class] != nil) {
+        refreshControl = [[UIRefreshControl alloc] init];
+        [refreshControl addTarget:self action:@selector(refreshFromRefreshControl:) forControlEvents:UIControlEventValueChanged];
+        [tableViewController setRefreshControl:refreshControl];
+    } else {
+        pullToRefreshView = [[PullToRefreshView alloc] initWithScrollView:tableView];
+        [tableView addSubview:pullToRefreshView];
+        [pullToRefreshView setDelegate:self];
     }
     
     [[self view] bringSubviewToFront:statusView];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
 }
 
 - (void)viewDidUnload {
@@ -117,16 +101,6 @@
     }
 
     [self deselectWithAnimation:YES];
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-
-    if ([UIViewController instancesRespondToSelector:@selector(topLayoutGuide)] && [UIViewController instancesRespondToSelector:@selector(bottomLayoutGuide)]) {
-        UIEdgeInsets insets = UIEdgeInsetsMake([[self topLayoutGuide] length], 0, [[self bottomLayoutGuide] length], 0);
-        [tableView setScrollIndicatorInsets:insets];
-        [tableView setContentInset:insets];
-    }
 }
 
 #pragma mark - Loading

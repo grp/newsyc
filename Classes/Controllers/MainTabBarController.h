@@ -9,6 +9,7 @@
 #import "BarButtonItem.h"
 
 #import "LoginController.h"
+#import "TabBarController.h"
 
 @class EntryListController, SessionProfileController, MoreController, SearchController, HNSession;
 

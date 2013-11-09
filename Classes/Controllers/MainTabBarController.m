@@ -10,6 +10,7 @@
 
 #import "UIActionSheet+Context.h"
 #import "UIColor+Orange.h"
+#import "ForceClearNavigationBar.h"
 
 #import "MainTabBarController.h"
 #import "SubmissionListController.h"
@@ -22,7 +23,6 @@
 #import "HackerNewsLoginController.h"
 #import "LoginController.h"
 #import "SearchController.h"
-#import "CustomLayoutGuide.h"
 
 #import "HNTimeline.h"
 
@@ -67,9 +67,19 @@
         [more setTitle:@"More"];
         [more setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:0] autorelease]];
 
-        NSMutableArray *items = [NSMutableArray arrayWithObjects:home, latest, profile, search, more, nil];
-        [self setViewControllers:items];
-        
+        NSMutableArray *viewControllers = [NSMutableArray arrayWithObjects:home, latest, profile, search, more, nil];
+
+        if ([self respondsToSelector:@selector(topLayoutGuide)]) {
+            for (NSUInteger i = 0; i < viewControllers.count; i++) {
+                // iOS 7 Hack: use a navigation controller to fix the children's layout guides, but force a clear navigation bar so it doesn't show up.
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithNavigationBarClass:[ForceClearNavigationBar class] toolbarClass:nil];
+                [navigationController pushViewController:[viewControllers objectAtIndex:i] animated:NO];
+                [viewControllers replaceObjectAtIndex:i withObject:navigationController];
+            }
+        }
+
+        [self setViewControllers:viewControllers];
+
         [self setDelegate:self];
     }
     
@@ -109,27 +119,6 @@
     
     [sheet showFromBarButtonItemInWindow:composeItem animated:YES];
     [sheet release];
-}
-
-- (void)updateLayoutForViewController:(UIViewController *)viewController {
-    if ([self respondsToSelector:@selector(topLayoutGuide)] && [self respondsToSelector:@selector(bottomLayoutGuide)]) {
-        CustomLayoutGuide *topLayoutGuide = [[CustomLayoutGuide alloc] init];
-        [topLayoutGuide setLength:self.topLayoutGuide.length];
-        [viewController setValue:topLayoutGuide forKey:@"topLayoutGuide"];
-        [topLayoutGuide release];
-
-        CustomLayoutGuide *bottomLayoutGuide = [[CustomLayoutGuide alloc] init];
-        [bottomLayoutGuide setLength:(self.bottomLayoutGuide.length + self.tabBar.bounds.size.height)];
-        [viewController setValue:bottomLayoutGuide forKey:@"bottomLayoutGuide"];
-        [bottomLayoutGuide release];
-
-        [[viewController view] setNeedsLayout];
-    }
-}
-
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
-{
-    [self updateLayoutForViewController:viewController];
 }
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
@@ -198,12 +187,6 @@
     [super viewDidLoad];
     
     [[self navigationItem] setRightBarButtonItem:composeItem];
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-
-    [self updateLayoutForViewController:self.selectedViewController];
 }
 
 AUTOROTATION_FOR_PAD_ONLY
