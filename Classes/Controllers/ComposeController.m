@@ -165,41 +165,12 @@
     return [NSArray array];
 }
 
-- (void)scrollToBottom {
-    [tableView setContentOffset:CGPointMake(0, [tableView contentSize].height - [tableView bounds].size.height) animated:NO];
-}
-
-- (void)updateTextViewHeight {
-    UITableViewCell *last = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:([entryCells count] - 1) inSection:0]];
-    CGFloat offset = [last frame].origin.y + [last bounds].size.height;
-    CGFloat minimum = [tableView bounds].size.height - offset;
-    
-    CGRect frame = [textView frame];
-    frame.size.height = [textView contentSize].height;
-    if (frame.size.height < minimum) frame.size.height = minimum;
-    [textView setFrame:frame];
-}
-
 - (void)textDidChange:(NSNotification *)notification {
     [completeItem setEnabled:[self ableToSubmit]];
 }
 
 - (void)textViewDidChange:(UITextView *)textView_ {
-    [self updateTextViewHeight];
-    
     [completeItem setEnabled:[self ableToSubmit]];
-    
-    // Since our UITextView isn't managing it's own scrolling,
-    // it doesn't know to scroll if you are typing at the end.
-    // Instead, we need to scroll the table view ourself.
-    NSRange selected = [textView selectedRange];
-    if (selected.location == [[textView text] length]) {
-        // XXX: find out why this needs to be done on the next runloop cycle to work
-        [self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.0f];
-        [self scrollToBottom];
-    }
-    
-    if ([self includeMultilineEditor]) [tableView setTableFooterView:textView];
 }
 
 - (BOOL)ableToSubmit {
@@ -216,30 +187,48 @@
     
     entryCells = [[self inputEntryCells] retain];
     
-    textView = [[PlaceholderTextView alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 0)];
+    textView = [[PlaceholderTextView alloc] initWithFrame:[[self view] bounds]];
     [textView setDelegate:self];
-    [textView setScrollEnabled:NO];
-    [textView setEditable:YES];
-    [textView setPlaceholder:[self multilinePlaceholder]];
     [textView setFont:[UIFont systemFontOfSize:16.0f]];
+    [textView setPlaceholder:[self multilinePlaceholder]];
+    [textView setEditable:[self includeMultilineEditor]];
+    [textView setScrollEnabled:[self includeMultilineEditor]];
+    [textView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [[self view] addSubview:textView];
     
     tableView = [[UITableView alloc] initWithFrame:[[self view] bounds] style:UITableViewStylePlain];
     [tableView setAllowsSelection:NO];
     [tableView setDelegate:self];
+    [tableView setScrollEnabled:NO];
     [tableView setDataSource:self];
-    if ([self includeMultilineEditor]) [tableView setTableFooterView:textView];
-    [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [[self view] addSubview:tableView];
-    
+    [textView addSubview:tableView];
+
+    // Make sure that the text view's height is setup properly.
+    // (Reloading is needed to force the cells to be initialized.)
+    [tableView reloadData];
+
+    CGSize tableSize = [tableView sizeThatFits:CGSizeMake([[self view] bounds].size.width, CGFLOAT_MAX)];
+    [tableView setFrame:CGRectMake(0, -tableSize.height, tableSize.width, tableSize.height)];
+
+    UIEdgeInsets textInset = [textView contentInset];
+    textInset.top += tableSize.height;
+    [textView setContentInset:textInset];
+
+    if ([textView respondsToSelector:@selector(textContainerInset)]) {
+        UITableViewCell *firstCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        if (firstCell != nil) {
+            if ([firstCell respondsToSelector:@selector(separatorInset)]) {
+                UIEdgeInsets containerInset = [textView textContainerInset];
+                containerInset.left += [firstCell separatorInset].left - 4.0;
+                [textView setTextContainerInset:containerInset];
+            }
+        }
+    }
+
     completeItem = [[BarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(send)];
     [completeItem setEnabled:NO];
     cancelItem = [[BarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     loadingItem = [[ActivityIndicatorItem alloc] initWithSize:kActivityIndicatorItemStandardSize];
-    
-    // Make sure that the text view's height is setup properly.
-    // (Reloading is needed to force the cells to be initialized.)
-    [tableView reloadData];
-    [self updateTextViewHeight];
 }
 
 - (NSString *)title {
@@ -306,7 +295,7 @@
     NSNumber *duration = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     CGSize keyboardSize = [boundsValue CGRectValue].size;
     
-    CGRect frame = [tableView frame];
+    CGRect frame = [textView frame];
     if (UIInterfaceOrientationIsPortrait([self interfaceOrientation])) {
         frame.size.height += keyboardSize.height;
     } else {
@@ -317,7 +306,7 @@
     [UIView setAnimationBeginsFromCurrentState:YES];
     [UIView setAnimationCurve:[curve intValue]];
     [UIView setAnimationDuration:[duration floatValue]];
-    [tableView setFrame:frame];
+    [textView setFrame:frame];
     [UIView commitAnimations];
     
     keyboardVisible = NO;
@@ -332,7 +321,7 @@
     NSNumber *duration = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     CGSize keyboardSize = [boundsValue CGRectValue].size;
     
-    CGRect frame = [tableView frame];
+    CGRect frame = [textView frame];
     if (UIInterfaceOrientationIsPortrait([self interfaceOrientation])) {
         frame.size.height -= keyboardSize.height;
     } else {
@@ -343,7 +332,7 @@
     [UIView setAnimationBeginsFromCurrentState:YES];
     [UIView setAnimationCurve:[curve intValue]];
     [UIView setAnimationDuration:[duration floatValue]];
-    [tableView setFrame:frame];
+    [textView setFrame:frame];
     [UIView commitAnimations];
     
     keyboardVisible = YES;
