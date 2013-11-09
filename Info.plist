@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>CFBundleDisplayName</key>
 	<string>news:yc</string>
 	<key>CFBundleExecutable</key>
@@ -39,7 +41,7 @@
 				<key>Blue</key>
 				<integer>0</integer>
 				<key>Green</key>
-				<real>0.40000000000000002</real>
+				<real>0.4</real>
 				<key>Red</key>
 				<integer>1</integer>
 			</dict>
