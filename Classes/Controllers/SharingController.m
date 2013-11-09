@@ -69,7 +69,24 @@
         [openInSafariActivity release];
 
         UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
-        [activityController setExcludedActivityTypes:[NSArray arrayWithObjects:UIActivityTypePrint, UIActivityTypeSaveToCameraRoll, UIActivityTypeMessage, nil]];
+
+        NSMutableArray *excludedActivityTypes = [NSMutableArray array];
+        [excludedActivityTypes addObject:UIActivityTypePrint];
+        [excludedActivityTypes addObject:UIActivityTypeSaveToCameraRoll];
+        [excludedActivityTypes addObject:UIActivityTypeMessage];
+        if (UIActivityTypePostToFlickr != nil) {
+            [excludedActivityTypes addObject:UIActivityTypePostToFlickr];
+        }
+        if (UIActivityTypePostToVimeo != nil) {
+            [excludedActivityTypes addObject:UIActivityTypePostToVimeo];
+        }
+        if (UIActivityTypeAirDrop != nil) {
+            [excludedActivityTypes addObject:UIActivityTypeAirDrop];
+        }
+        if (UIActivityTypeAddToReadingList != nil) {
+            [excludedActivityTypes addObject:UIActivityTypeAddToReadingList];
+        }
+        [activityController setExcludedActivityTypes:excludedActivityTypes];
 
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:activityController];
