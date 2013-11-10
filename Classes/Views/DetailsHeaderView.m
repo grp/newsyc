@@ -19,8 +19,7 @@
 
 - (id)initWithEntry:(HNEntry *)entry_ widthWidth:(CGFloat)width {
     if ((self = [super init])) {
-        CALayer *layer = [self layer];
-        [layer setNeedsDisplayOnBoundsChange:YES];
+        [[self layer] setNeedsDisplayOnBoundsChange:YES];
                 
         [self setEntry:entry_];
         [self setBackgroundColor:[UIColor whiteColor]];
@@ -28,13 +27,35 @@
         bodyTextView = [[BodyTextView alloc] init];
         [bodyTextView setRenderer:[entry renderer]];
         [bodyTextView setDelegate:self];
-        [self addSubview:bodyTextView];
-        
+
         CGRect frame;
         frame.origin = CGPointZero;
         frame.size.width = width;
         frame.size.height = [self suggestedHeightWithWidth:width];
         [self setFrame:frame];
+
+        detailsHeaderContainer = [[UIView alloc] initWithFrame:[self bounds]];
+        [detailsHeaderContainer addSubview:bodyTextView];
+        [detailsHeaderContainer setClipsToBounds:YES];
+        [detailsHeaderContainer setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
+        [[detailsHeaderContainer layer] setContentsGravity:kCAGravityTopLeft];
+
+        UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [self bounds].size.height, width + 100.0f, 1.0f)];
+        CALayer *layer = [shadow layer];
+        [layer setShadowOffset:CGSizeMake(0, -2.0f)];
+        [layer setShadowRadius:5.0f];
+        [layer setShadowColor:[[UIColor blackColor] CGColor]];
+        [layer setShadowOpacity:1.0f];
+        [shadow setBackgroundColor:[UIColor grayColor]];
+        [shadow setClipsToBounds:NO];
+        [shadow setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+
+        containerContainer = [[UIView alloc] initWithFrame:[self bounds]];
+        [containerContainer setBackgroundColor:[UIColor clearColor]];
+        [containerContainer addSubview:detailsHeaderContainer];
+        [containerContainer addSubview:[shadow autorelease]];
+        [containerContainer setClipsToBounds:NO];
+        [self addSubview:containerContainer];
     }
     
     return self;
@@ -53,6 +74,8 @@
 - (void)dealloc {
     [entry release];
     [bodyTextView release];
+    [detailsHeaderContainer release];
+    [containerContainer release];
     
     [super dealloc];
 }

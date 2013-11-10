@@ -15,6 +15,8 @@
     HNEntry *entry;
     __weak id<DetailsHeaderViewDelegate> delegate;
 
+    UIView *detailsHeaderContainer;
+    UIView *containerContainer;
     BodyTextView *bodyTextView;
     
     BOOL highlighted;

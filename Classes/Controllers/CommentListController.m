@@ -95,16 +95,12 @@
     }
     
     expandedCell = nil;
-    [containerContainer release];
-    containerContainer = nil;
     [entryActionsView release];
     entryActionsView = nil;
     [entryActionsViewItem release];
     entryActionsViewItem = nil;
     [detailsHeaderView release];
     detailsHeaderView = nil;
-    [detailsHeaderContainer release];
-    detailsHeaderContainer = nil;
 }
 
 - (void)viewDidLoad {
@@ -175,12 +171,10 @@
     [self clearSavedAction];
     [self clearSavedCompletion];
     
-    [containerContainer release];
     [detailsHeaderView release];
     [entryActionsView release];
     [entryActionsViewItem release];
-    [detailsHeaderContainer release];
-    
+
     [super dealloc];
 }
 
@@ -289,40 +283,13 @@
     [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
     [pullToRefreshView setTextShadowColor:[UIColor whiteColor]];
     
-    [detailsHeaderContainer release];
-    detailsHeaderContainer = nil;
-    [containerContainer release];
-    containerContainer = nil;
     [detailsHeaderView release];
     detailsHeaderView = nil;
     
     detailsHeaderView = [[DetailsHeaderView alloc] initWithEntry:(HNEntry *) source widthWidth:[[self view] bounds].size.width];
-    [detailsHeaderView setClipsToBounds:YES];
     [detailsHeaderView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
     [detailsHeaderView setDelegate:self];
-    
-    detailsHeaderContainer = [[UIView alloc] initWithFrame:[detailsHeaderView bounds]];
-    [detailsHeaderContainer addSubview:detailsHeaderView];
-    [detailsHeaderContainer setClipsToBounds:YES];
-    [detailsHeaderContainer setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
-    [[detailsHeaderContainer layer] setContentsGravity:kCAGravityTopLeft];
-    
-    UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [detailsHeaderView bounds].size.height, [[self view] bounds].size.width + 100.0f, 1.0f)];
-    CALayer *layer = [shadow layer];
-    [layer setShadowOffset:CGSizeMake(0, -2.0f)];
-    [layer setShadowRadius:5.0f];
-    [layer setShadowColor:[[UIColor blackColor] CGColor]];
-    [layer setShadowOpacity:1.0f];
-    [shadow setBackgroundColor:[UIColor grayColor]];
-    [shadow setClipsToBounds:NO];
-    [shadow setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    
-    containerContainer = [[UIView alloc] initWithFrame:[detailsHeaderView bounds]];
-    [containerContainer setBackgroundColor:[UIColor clearColor]];
-    [containerContainer addSubview:detailsHeaderContainer];
-    [containerContainer addSubview:[shadow autorelease]];
-    [containerContainer setClipsToBounds:NO];
-    [tableView setTableHeaderView:containerContainer];
+    [tableView setTableHeaderView:detailsHeaderView];
     
     suggestedHeaderHeight = [detailsHeaderView bounds].size.height;
 }

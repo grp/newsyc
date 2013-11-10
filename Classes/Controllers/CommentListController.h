@@ -15,12 +15,11 @@
 #import "BarButtonItem.h"
 
 @interface CommentListController : EntryListController <EntryActionsViewDelegate, DetailsHeaderViewDelegate, LoginControllerDelegate, ComposeControllerDelegate, CommentTableCellDelegate> {
-    UIView *detailsHeaderContainer;
+    CGFloat suggestedHeaderHeight;
     DetailsHeaderView *detailsHeaderView;
+
     EntryActionsView *entryActionsView;
     BarButtonItem *entryActionsViewItem;
-    UIView *containerContainer;
-    CGFloat suggestedHeaderHeight;
 
     void (^savedAction)();
     void (^savedCompletion)(int);
