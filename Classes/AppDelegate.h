@@ -32,6 +32,9 @@
 - (void)setLeafViewController:(UIViewController *)leafController animated:(BOOL)animated;
 - (void)clearLeafViewControllerAnimated:(BOOL)animated;
 
+- (NSArray *)branchControllers;
+- (void)setBranchControllers:(NSArray *)branchControllers animated:(BOOL)animated;
+
 - (void)popBranchToViewController:(UIViewController *)branchController animated:(BOOL)animated;
 - (void)popLeafToViewController:(UIViewController *)leafController animated:(BOOL)animated;
 
@@ -42,5 +45,7 @@
 - (void)pushController:(UIViewController *)controller animated:(BOOL)animated;
 - (void)popToController:(UIViewController *)controller animated:(BOOL)animated;
 - (void)willShowController:(UIViewController *)controller animated:(BOOL)animated;
+- (void)setControllers:(NSArray *)controllers animated:(BOOL)animated;
+- (NSArray *)controllers;
 
 @end

@@ -102,6 +102,26 @@
     }
 }
 
+- (NSArray *)controllers {
+    AppDelegate *delegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Not supported on iPad." userInfo:nil];
+    } else {
+        return [delegate branchControllers];
+    }
+}
+
+- (void)setControllers:(NSArray *)controllers animated:(BOOL)animated {
+    AppDelegate *delegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Not supported on iPad." userInfo:nil];
+    } else {
+        [delegate setBranchControllers:controllers animated:animated];
+    }
+}
+
 @end
 
 @implementation AppDelegate
@@ -215,13 +235,26 @@
     [[viewController view] setFrame:frame];
 }
 
-- (void)pushBranchViewController:(UIViewController *)branchController animated:(BOOL)animated {
-    [navigationController pushViewController:branchController animated:animated];
-    
+- (void)updateForBranchController:(UIViewController *)branchController {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [[branchController navigationItem] setRightBarButtonItems:[[branchController navigationItem] leftBarButtonItems]];
         [[branchController navigationItem] setLeftBarButtonItems:nil];
     }
+}
+
+- (void)pushBranchViewController:(UIViewController *)branchController animated:(BOOL)animated {
+    [navigationController pushViewController:branchController animated:animated];
+
+    [self updateForBranchController:branchController];
+}
+
+- (NSArray *)branchControllers {
+    return [navigationController viewControllers];
+}
+
+- (void)setBranchControllers:(NSArray *)branchControllers animated:(BOOL)animated {
+    [navigationController setViewControllers:branchControllers animated:animated];
+    [self updateForBranchController:[branchControllers lastObject]];
 }
 
 - (void)pushLeafViewController:(UIViewController *)leafController animated:(BOOL)animated {

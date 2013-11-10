@@ -74,7 +74,7 @@
 
     HNEntry *entry = [self entryAtIndexPath:indexPath];
 
-    NSArray *viewControllers = [[self navigationController] viewControllers];
+    NSArray *viewControllers = [[self navigationController] controllers];
 
     CommentListController *commentController = [[CommentListController alloc] initWithSource:entry];
     viewControllers = [viewControllers arrayByAddingObject:commentController];
@@ -85,7 +85,7 @@
     [browserController release];
 
     // This bypasses the normal navigation flow, so only works for phone idioms.
-    [[self navigationController] setViewControllers:viewControllers animated:YES];
+    [[self navigationController] setControllers:viewControllers animated:YES];
 }
 
 AUTOROTATION_FOR_PAD_ONLY
