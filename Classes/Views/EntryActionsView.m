@@ -79,8 +79,10 @@
         [self setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
         [self setTintColor:nil];
     } else if (style == kEntryActionsViewStyleOrange) {
-        [self setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-        [self setTintColor:[UIColor mainOrangeColor]];
+        UIImage *clearImage = [UIImage imageNamed:@"clear.png"];
+        [self setBackgroundImage:clearImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+        [self setTintColor:[UIColor whiteColor]];
+        [self setBackgroundColor:[UIColor orangeColor]];
     } else if (style == kEntryActionsViewStyleLight) {
         UIImage *backgroundImage = [[UIImage imageNamed:@"toolbar-expanded.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
         [self setBackgroundImage:backgroundImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];

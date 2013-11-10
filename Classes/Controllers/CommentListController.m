@@ -303,11 +303,6 @@
     [[detailsHeaderContainer layer] setContentsGravity:kCAGravityTopLeft];
     
     UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [detailsHeaderView bounds].size.height, [[self view] bounds].size.width + 100.0f, 1.0f)];
-    CALayer *layer = [shadow layer];
-    [layer setShadowOffset:CGSizeMake(0, -2.0f)];
-    [layer setShadowRadius:5.0f];
-    [layer setShadowColor:[[UIColor blackColor] CGColor]];
-    [layer setShadowOpacity:1.0f];
     [shadow setBackgroundColor:[UIColor grayColor]];
     [shadow setClipsToBounds:NO];
     [shadow setAutoresizingMask:UIViewAutoresizingFlexibleWidth];

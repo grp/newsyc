@@ -160,6 +160,8 @@
     }
 
     [window makeKeyAndVisible];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 
     [InstapaperSession logoutIfNecessary];
     [sessionController refresh];
