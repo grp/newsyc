@@ -49,6 +49,7 @@
     [super loadView];
 
     [[self view] setBackgroundColor:[UIColor whiteColor]];
+    [[self view] setClipsToBounds:YES];
     
     [emptyView setText:@"No Comments"];
     [statusView setBackgroundColor:[UIColor clearColor]];

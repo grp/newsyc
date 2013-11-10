@@ -74,13 +74,18 @@
 
 - (void)setStyle:(EntryActionsViewStyle)style_ {
     style = style_;
+
+    [self setOrange:(style == kEntryActionsViewStyleOrange)];
     
     if (style == kEntryActionsViewStyleDefault) {
         [self setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
         [self setTintColor:nil];
     } else if (style == kEntryActionsViewStyleOrange) {
         [self setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-        [self setTintColor:[UIColor mainOrangeColor]];
+
+        if (![self respondsToSelector:@selector(setBarTintColor:)]) {
+            [self setTintColor:[UIColor mainOrangeColor]];
+        }
     } else if (style == kEntryActionsViewStyleLight) {
         UIImage *backgroundImage = [[UIImage imageNamed:@"toolbar-expanded.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
         [self setBackgroundImage:backgroundImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
