@@ -60,6 +60,8 @@
 	</array>
 	<key>UTExportedTypeDeclarations</key>
 	<array/>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 	<key>UTImportedTypeDeclarations</key>
 	<array/>
 </dict>

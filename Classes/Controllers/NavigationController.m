@@ -42,7 +42,12 @@
     [super viewWillAppear:animated];
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]) {
-        [[self navigationBar] setTintColor:[UIColor mainOrangeColor]];
+        [[self navigationBar] setTintColor:[UIColor whiteColor]];
+        NSDictionary *normalAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          [UIColor whiteColor], UITextAttributeTextColor,
+                                          nil];
+        [[self navigationBar] setTitleTextAttributes:normalAttributes];
+        [[self navigationBar] setBarTintColor:[UIColor mainOrangeColor]];
     } else {
         [[self navigationBar] setTintColor:nil];
     }
