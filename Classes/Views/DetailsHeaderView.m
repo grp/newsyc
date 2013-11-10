@@ -40,22 +40,24 @@
         [detailsHeaderContainer setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin];
         [[detailsHeaderContainer layer] setContentsGravity:kCAGravityTopLeft];
 
-        UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [self bounds].size.height, width + 100.0f, 1.0f)];
-        CALayer *layer = [shadow layer];
-        [layer setShadowOffset:CGSizeMake(0, -2.0f)];
-        [layer setShadowRadius:5.0f];
-        [layer setShadowColor:[[UIColor blackColor] CGColor]];
-        [layer setShadowOpacity:1.0f];
-        [shadow setBackgroundColor:[UIColor grayColor]];
-        [shadow setClipsToBounds:NO];
-        [shadow setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-
         containerContainer = [[UIView alloc] initWithFrame:[self bounds]];
         [containerContainer setBackgroundColor:[UIColor clearColor]];
         [containerContainer addSubview:detailsHeaderContainer];
-        [containerContainer addSubview:[shadow autorelease]];
         [containerContainer setClipsToBounds:NO];
         [self addSubview:containerContainer];
+
+        if (![self respondsToSelector:@selector(tintColor)]) {
+            UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(-50.0f, [self bounds].size.height, width + 100.0f, 1.0f)];
+            CALayer *layer = [shadow layer];
+            [layer setShadowOffset:CGSizeMake(0, -2.0f)];
+            [layer setShadowRadius:5.0f];
+            [layer setShadowColor:[[UIColor blackColor] CGColor]];
+            [layer setShadowOpacity:1.0f];
+            [shadow setBackgroundColor:[UIColor grayColor]];
+            [shadow setClipsToBounds:NO];
+            [shadow setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+            [containerContainer addSubview:[shadow autorelease]];
+        }
     }
     
     return self;
@@ -82,9 +84,17 @@
 
 + (UIEdgeInsets)margins {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return UIEdgeInsetsMake(20.0f, 30.0f, 20.0f, 30.0f);
+        if ([self instancesRespondToSelector:@selector(tintColor)]) {
+            return UIEdgeInsetsMake(32.0f, 32.0f, 32.0f, 32.0f);
+        } else {
+            return UIEdgeInsetsMake(20.0f, 30.0f, 20.0f, 30.0f);
+        }
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return UIEdgeInsetsMake(10.0f, 8.0f, 4.0f, 8.0f);
+        if ([self instancesRespondToSelector:@selector(tintColor)]) {
+            return UIEdgeInsetsMake(16.0f, 16.0f, 12.0f, 12.0f);
+        } else {
+            return UIEdgeInsetsMake(10.0f, 8.0f, 4.0f, 8.0f);
+        }
     }
 
     return UIEdgeInsetsZero;
@@ -92,9 +102,17 @@
 
 + (CGSize)offsets {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return CGSizeMake(12.0f, 12.0f);
+        if ([self instancesRespondToSelector:@selector(tintColor)]) {
+            return CGSizeMake(12.0f, 12.0f);
+        } else {
+            return CGSizeMake(12.0f, 12.0f);
+        }
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return CGSizeMake(8.0f, 8.0f);
+        if ([self instancesRespondToSelector:@selector(tintColor)]) {
+            return CGSizeMake(10.0f, 10.0f);
+        } else {
+            return CGSizeMake(8.0f, 8.0f);
+        }
     }
 
     return CGSizeZero;
@@ -102,9 +120,17 @@
 
 + (UIFont *)titleFont {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return [UIFont boldSystemFontOfSize:19.0f];
+        if ([self instancesRespondToSelector:@selector(tintColor)]) {
+            return [UIFont systemFontOfSize:28.0f];
+        } else {
+            return [UIFont boldSystemFontOfSize:19.0f];
+        }
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return [UIFont boldSystemFontOfSize:16.0f];
+        if ([self instancesRespondToSelector:@selector(tintColor)]) {
+            return [UIFont systemFontOfSize:20.0f];
+        } else {
+            return [UIFont boldSystemFontOfSize:16.0f];
+        }
     }
 
     return nil;
@@ -189,7 +215,7 @@
     UIEdgeInsets margins = [[self class] margins];
     CGRect titlerect = [self titleRect];
     
-    if ([self hasDestination]) {
+    if ([self hasDestination] && ![self respondsToSelector:@selector(tintColor)]) {
         CGRect disclosurerect;
         
         disclosurerect.size = [[[self class] disclosureImage] size];
