@@ -147,7 +147,7 @@
     BOOL hideBackButton = [session isAnonymous] || ([sessions count] == 1);
     [[tabBarController navigationItem] setHidesBackButton:hideBackButton];
     
-    [[self navigationController] pushController:tabBarController animated:animated];
+    [[self navigation] pushController:tabBarController animated:animated];
     [tabBarController release];
 }
 
@@ -184,18 +184,18 @@
 - (void)navigationController:(NavigationController *)navigationController didLoginWithSession:(HNSession *)session {
     if ([navigationController topViewController] != self) {
         [self setAutomaticDisplaySession:session];
-        [[self navigationController] popToController:self animated:YES];
+        [[self navigation] popToController:self animated:YES];
     } else {
         [self pushMainControllerForSession:session animated:YES];
     }
 }
 
 - (void)navigationControllerRequestedSessions:(NavigationController *)navigationController {
-    [[self navigationController] popToController:self animated:YES];
+    [[self navigation] popToController:self animated:YES];
 }
 
 - (void)addSessionFromBarButtonItem:(BarButtonItem *)barButtonItem {
-    [[self navigationController] requestLogin];
+    [[self navigation] requestLogin];
 }
 
 #pragma mark - Table View

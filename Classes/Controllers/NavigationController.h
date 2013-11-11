@@ -23,11 +23,9 @@
 
 @end
 
-@interface UINavigationController (DefinedPropertyAdditionsSupport)
+@interface UIViewController (NavigationController)
 
-@property (nonatomic, assign) id<NavigationControllerLoginDelegate> loginDelegate;
-- (void)requestLogin;
-- (void)requestSessions;
+- (NavigationController *)navigation;
 
 @end
 

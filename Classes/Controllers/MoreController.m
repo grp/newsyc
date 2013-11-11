@@ -181,15 +181,15 @@
     } else if ([indexPath section] == 2) {
         if ([indexPath row] == 0) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:kHNFAQURL];
-            [[self navigationController] pushController:[controller autorelease] animated:YES];
+            [[self navigation] pushController:[controller autorelease] animated:YES];
             return;
         } else if ([indexPath row] == 1) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"http://newsyc.me/"]];
-            [[self navigationController] pushController:[controller autorelease] animated:YES];
+            [[self navigation] pushController:[controller autorelease] animated:YES];
             return;
         } else if ([indexPath row] == 2) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"https://twitter.com/newsyc_"]];
-            [[self navigationController] pushController:[controller autorelease] animated:YES];
+            [[self navigation] pushController:[controller autorelease] animated:YES];
             return;
         }
     }
@@ -199,9 +199,9 @@
     [controller setTitle:title];
     
     if (controllerClass == [SubmissionListController class]) {
-        [[self navigationController] pushController:[controller autorelease] animated:YES];
+        [[self navigation] pushController:[controller autorelease] animated:YES];
     } else {
-        [[self navigationController] pushController:[controller autorelease] animated:YES];
+        [[self navigation] pushController:[controller autorelease] animated:YES];
     }
 }
 

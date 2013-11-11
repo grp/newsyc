@@ -54,7 +54,7 @@
 
 - (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [[self navigationController] pushController:controller animated:YES];
+    [[self navigation] pushController:controller animated:YES];
     [controller release];
 }
 
@@ -74,7 +74,7 @@
 
     HNEntry *entry = [self entryAtIndexPath:indexPath];
 
-    NSArray *viewControllers = [[self navigationController] controllers];
+    NSArray *viewControllers = [[self navigation] controllers];
 
     CommentListController *commentController = [[CommentListController alloc] initWithSource:entry];
     viewControllers = [viewControllers arrayByAddingObject:commentController];
@@ -85,7 +85,7 @@
     [browserController release];
 
     // This bypasses the normal navigation flow, so only works for phone idioms.
-    [[self navigationController] setControllers:viewControllers animated:YES];
+    [[self navigation] setControllers:viewControllers animated:YES];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

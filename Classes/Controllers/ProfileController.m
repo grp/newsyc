@@ -213,7 +213,7 @@
         
         UIViewController *controller = [[controllerClass alloc] initWithSource:list];
         [controller setTitle:title];
-        [[self navigationController] pushController:[controller autorelease] animated:YES];
+        [[self navigation] pushController:[controller autorelease] animated:YES];
     }
 }
 
@@ -223,7 +223,7 @@
 
 - (void)bodyTextView:(BodyTextView *)header selectedURL:(NSURL *)url {
     BrowserController *controller = [[BrowserController alloc] initWithURL:url];
-    [[self navigationController] pushController:[controller autorelease] animated:YES];
+    [[self navigation] pushController:[controller autorelease] animated:YES];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

@@ -123,7 +123,7 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
     if (viewController == profile && [session isAnonymous]) {
-        [[self navigationController] requestLogin];
+        [[self navigation] requestLogin];
 
         return NO;
 	}
@@ -135,7 +135,7 @@
     if (![session isAnonymous]) {
         [self requestSubmissionType];
     } else {
-        [[self navigationController] requestLogin];
+        [[self navigation] requestLogin];
     }
 }
 

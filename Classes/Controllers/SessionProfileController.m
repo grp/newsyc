@@ -64,9 +64,9 @@
         
         SubmissionListController *controller = [[SubmissionListController alloc] initWithSource:list];
         [controller setTitle:@"Saved"];
-        [[self navigationController] pushController:[controller autorelease] animated:YES];
+        [[self navigation] pushController:[controller autorelease] animated:YES];
     } else if ([indexPath section] == 2) {
-        [[self navigationController] requestSessions];
+        [[self navigation] requestSessions];
     } else {
         [super tableView:table didSelectRowAtIndexPath:indexPath];
     }

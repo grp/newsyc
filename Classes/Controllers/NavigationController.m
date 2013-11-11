@@ -118,3 +118,21 @@
 AUTOROTATION_FOR_PAD_ONLY
 
 @end
+
+@implementation UIViewController (NavigationController)
+
+- (NavigationController *)navigation {
+    UIViewController *parentViewController = [self parentViewController];
+
+    while (parentViewController != nil) {
+        if ([parentViewController isKindOfClass:[NavigationController class]]) {
+            return (NavigationController *)parentViewController;
+        }
+
+        parentViewController = [parentViewController parentViewController];
+    }
+
+    return nil;
+}
+
+@end

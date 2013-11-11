@@ -298,12 +298,12 @@
 
 - (void)detailsHeaderView:(DetailsHeaderView *)header selectedURL:(NSURL *)url {
     BrowserController *controller = [[BrowserController alloc] initWithURL:url];
-    [[self navigationController] pushController:[controller autorelease] animated:YES];
+    [[self navigation] pushController:[controller autorelease] animated:YES];
 }
 
 - (void)commentTableCell:(CommentTableCell *)cell selectedURL:(NSURL *)url {
     BrowserController *controller = [[BrowserController alloc] initWithURL:url];
-    [[self navigationController] pushController:[controller autorelease] animated:YES];
+    [[self navigation] pushController:[controller autorelease] animated:YES];
 }
 
 - (void)commentTableCellTapped:(CommentTableCell *)cell {
@@ -321,7 +321,7 @@
 - (void)commentTableCellDoubleTapped:(CommentTableCell *)cell {
     HNEntry *entry = [self entryAtIndexPath:[tableView indexPathForCell:cell]];
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [[self navigationController] pushController:[controller autorelease] animated:YES];
+    [[self navigation] pushController:[controller autorelease] animated:YES];
 }
 
 #pragma mark - Actions
@@ -431,7 +431,7 @@
     [controller autorelease];
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [[self navigationController] pushController:controller animated:YES];
+        [[self navigation] pushController:controller animated:YES];
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         ModalNavigationController *navigation = [[ModalNavigationController alloc] initWithRootViewController:controller];
         [self presentViewController:navigation animated:YES completion:NULL];
@@ -570,7 +570,7 @@
     if (![[source session] isAnonymous] || item == kEntryActionsViewItemActions) {
         savedAction();
     } else {
-        [[self navigationController] requestLogin];
+        [[self navigation] requestLogin];
     }
 }
 

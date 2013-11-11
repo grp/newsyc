@@ -193,7 +193,7 @@
     HNEntry *entry = [entries objectAtIndex:[indexPath row]];
     
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [[self navigationController] pushController:[controller autorelease] animated:YES];
+    [[self navigation] pushController:[controller autorelease] animated:YES];
 }
 
 - (void)viewDidUnload {
@@ -218,7 +218,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
     
-    UIViewController *parentController = [[self navigationController] topViewController];
+    UIViewController *parentController = [[self navigation] topViewController];
     UINavigationItem *navigationItem = [parentController navigationItem];
 	[navigationItem setTitleView:searchBar];
     
@@ -249,7 +249,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 
-    UIViewController *parentController = [[self navigationController] topViewController];
+    UIViewController *parentController = [[self navigation] topViewController];
     UINavigationItem *navigationItem = [parentController navigationItem];
 	[navigationItem setTitleView:nil];
 }
