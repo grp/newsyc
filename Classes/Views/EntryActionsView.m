@@ -33,6 +33,17 @@
     return self;
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+
+    // Remove the iOS 7 shadow line by adjusting our bounds origin.
+    if ([self respondsToSelector:@selector(setBarTintColor:)]) {
+        [self setClipsToBounds:YES];
+        [self setBounds:CGRectMake(0, 1, [self bounds].size.width, [self bounds].size.height)];
+    }
+}
+
 - (void)dealloc {
     [entry release];
     [super dealloc];
@@ -75,29 +86,52 @@
 - (void)setStyle:(EntryActionsViewStyle)style_ {
     style = style_;
 
-    [self setOrange:(style == kEntryActionsViewStyleOrange)];
-    
-    if (style == kEntryActionsViewStyleDefault) {
-        [self setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-        [self setTintColor:nil];
-    } else if (style == kEntryActionsViewStyleOrange) {
-        [self setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    BOOL orange = NO;
+    BOOL transparent = NO;
 
-        if (![self respondsToSelector:@selector(setBarTintColor:)]) {
-            [self setTintColor:[UIColor mainOrangeColor]];
-        }
+    if (style == kEntryActionsViewStyleDefault) {
+        orange = NO;
+        transparent = NO;
+    } else if (style == kEntryActionsViewStyleOrange) {
+        orange = YES;
+        transparent = NO;
+    } else if (style == kEntryActionsViewStyleTransparentLight) {
+        orange = NO;
+        transparent = YES;
+    } else if (style == kEntryActionsViewStyleTransparentDark) {
+        orange = NO;
+        transparent = YES;
     } else if (style == kEntryActionsViewStyleLight) {
+        if ([self respondsToSelector:@selector(setBarTintColor:)]) {
+            orange = NO;
+            transparent = YES;
+        } else {
+            orange = NO;
+            transparent = NO;
+        }
+    }
+
+    [self setOrange:orange];
+
+    if (transparent) {
+        UIImage *clearImage = [UIImage imageNamed:@"clear.png"];
+
+        [self setBackgroundImage:clearImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+        if ([self respondsToSelector:@selector(setShadowImage:forToolbarPosition:)]) {
+            [self setShadowImage:clearImage forToolbarPosition:UIToolbarPositionAny];
+        }
+    } else {
+        [self setBackgroundImage:nil forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+        if ([self respondsToSelector:@selector(setShadowImage:forToolbarPosition:)]) {
+            [self setShadowImage:nil forToolbarPosition:UIToolbarPositionAny];
+        }
+    }
+
+    if (style == kEntryActionsViewStyleLight && ![self respondsToSelector:@selector(setBarTintColor:)]) {
         UIImage *backgroundImage = [[UIImage imageNamed:@"toolbar-expanded.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
         [self setBackgroundImage:backgroundImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+
         [self setTintColor:[UIColor whiteColor]];
-    } else if (style == kEntryActionsViewStyleTransparentLight) {
-        UIImage *clearImage = [UIImage imageNamed:@"clear.png"];
-        [self setBackgroundImage:clearImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-        [self setTintColor:[UIColor blackColor]];
-    } else if (style == kEntryActionsViewStyleTransparentDark) {
-        UIImage *clearImage = [UIImage imageNamed:@"clear.png"];
-        [self setBackgroundImage:clearImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-        [self setTintColor:nil];
     }
 }
 
