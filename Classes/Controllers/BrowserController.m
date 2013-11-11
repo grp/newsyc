@@ -116,8 +116,21 @@
         NSURLRequest *request = [[NSURLRequest alloc] initWithURL:rootURL];
         [webview loadRequest:[request autorelease]];
     }
-    
-    [toolbar setOrange:![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]];
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad && [toolbar respondsToSelector:@selector(setBarTintColor:)]) {
+        // On iOS 7, toolbars are transparent, so showing orange on top of orange looks wrong.
+        [toolbar setOrange:NO];
+    } else {
+        [toolbar setOrange:![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]];
+    }
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [[loadingItem spinner] setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+    } else if ([[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"] && [toolbar respondsToSelector:@selector(setBarTintColor:)]) {
+        [[loadingItem spinner] setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+    } else {
+        [[loadingItem spinner] setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
+    }
 }
 
 - (void)viewDidLoad {
@@ -142,6 +155,12 @@
         [toolbar setBackgroundImage:[UIImage imageNamed:@"clear.png"] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
         toolbarItem = [[BarButtonItem alloc] initWithCustomView:toolbar];
         [[self navigationItem] addRightBarButtonItem:toolbarItem atPosition:UINavigationItemPositionLeft];
+
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad && [toolbar respondsToSelector:@selector(setBarTintColor:)]) {
+            // Hide the top border line.
+            [toolbar setClipsToBounds:YES];
+            [toolbar setBounds:CGRectMake(0, 1, [toolbar bounds].size.width, [toolbar bounds].size.height)];
+        }
     }
 }
 
