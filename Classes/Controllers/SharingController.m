@@ -83,9 +83,6 @@
         if (UIActivityTypeAirDrop != nil) {
             [excludedActivityTypes addObject:UIActivityTypeAirDrop];
         }
-        if (UIActivityTypeAddToReadingList != nil) {
-            [excludedActivityTypes addObject:UIActivityTypeAddToReadingList];
-        }
         [activityController setExcludedActivityTypes:excludedActivityTypes];
 
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
