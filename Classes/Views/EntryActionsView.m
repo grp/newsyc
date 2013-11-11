@@ -37,10 +37,12 @@
 {
     [super layoutSubviews];
 
-    // Remove the iOS 7 shadow line by adjusting our bounds origin.
-    if ([self respondsToSelector:@selector(setBarTintColor:)]) {
-        [self setClipsToBounds:YES];
-        [self setBounds:CGRectMake(0, 1, [self bounds].size.width, [self bounds].size.height)];
+    if (style == kEntryActionsViewStyleTransparentDark || style == kEntryActionsViewStyleTransparentLight) {
+        // Remove the iOS 7 shadow line by adjusting our bounds origin.
+        if ([self respondsToSelector:@selector(setBarTintColor:)]) {
+            [self setClipsToBounds:YES];
+            [self setBounds:CGRectMake(0, 1, [self bounds].size.width, [self bounds].size.height)];
+        }
     }
 }
 
