@@ -231,7 +231,7 @@
     // XXX: workaround Apple bug causing the controller to stretch to fill
     // the entire screen after it unloads the view from a memory warning
     CGRect frame = [[viewController view] frame];
-    frame.size.width = 320.0f;
+    frame.size.width = 324.0f;
     [[viewController view] setFrame:frame];
 }
 
