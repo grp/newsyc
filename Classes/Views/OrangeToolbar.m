@@ -41,7 +41,7 @@
 
     if (orange) {
         if ([self respondsToSelector:@selector(setBarTintColor:)]) {
-            [self setBarTintColor:[UIColor mainOrangeColor]];
+            [self setBarTintColor:[OrangeBarView barOrangeColor]];
             [self setTintColor:[UIColor whiteColor]];
         } else {
             [self setTintColor:[UIColor mainOrangeColor]];

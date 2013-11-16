@@ -10,6 +10,8 @@
 
 @interface OrangeBarView : UIView
 
++ (UIColor *)barOrangeColor;
+
 - (void)layoutInsideBar:(UIView *)barView;
 
 @end
