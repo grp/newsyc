@@ -92,25 +92,37 @@
     BOOL transparent = NO;
 
     if (style == kEntryActionsViewStyleDefault) {
-        orange = NO;
-        transparent = NO;
+        if ([self respondsToSelector:@selector(setBarTintColor:)]) {
+            orange = NO;
+            transparent = NO;
+            indicatorStyle = UIActivityIndicatorViewStyleGray;
+        } else {
+            orange = NO;
+            transparent = NO;
+            indicatorStyle = UIActivityIndicatorViewStyleWhite;
+        }
     } else if (style == kEntryActionsViewStyleOrange) {
         orange = YES;
         transparent = NO;
-    } else if (style == kEntryActionsViewStyleTransparentLight) {
-        orange = NO;
-        transparent = YES;
-    } else if (style == kEntryActionsViewStyleTransparentDark) {
-        orange = NO;
-        transparent = YES;
+        indicatorStyle = UIActivityIndicatorViewStyleWhite;
     } else if (style == kEntryActionsViewStyleLight) {
         if ([self respondsToSelector:@selector(setBarTintColor:)]) {
             orange = NO;
             transparent = YES;
+            indicatorStyle = UIActivityIndicatorViewStyleGray;
         } else {
             orange = NO;
             transparent = NO;
+            indicatorStyle = UIActivityIndicatorViewStyleWhite;
         }
+    } else if (style == kEntryActionsViewStyleTransparentLight) {
+        orange = NO;
+        transparent = YES;
+        indicatorStyle = UIActivityIndicatorViewStyleGray;
+    } else if (style == kEntryActionsViewStyleTransparentDark) {
+        orange = NO;
+        transparent = YES;
+        indicatorStyle = UIActivityIndicatorViewStyleWhite;
     }
 
     [self setOrange:orange];
@@ -135,6 +147,8 @@
 
         [self setTintColor:[UIColor whiteColor]];
     }
+
+    [self updateItems];
 }
 
 // XXX: this is just one giant hack; we should store references to these objects
@@ -224,7 +238,10 @@
     UIImage *itemImage = [self imageForItem:item];
     
     if ([self itemIsLoading:item]) {
-        barButtonItem = [[[ActivityIndicatorItem alloc] initWithSize:[itemImage size]] autorelease];
+        ActivityIndicatorItem *activityIndicatorItem = [[ActivityIndicatorItem alloc] initWithSize:[itemImage size]];
+        [[activityIndicatorItem spinner] setActivityIndicatorViewStyle:indicatorStyle];
+
+        barButtonItem = [activityIndicatorItem autorelease];
     } else {
         SEL action = NULL;
 

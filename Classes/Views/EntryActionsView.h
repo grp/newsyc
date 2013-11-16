@@ -44,6 +44,7 @@ typedef enum {
     BOOL actionsDisabled;
     
     EntryActionsViewStyle style;
+    UIActivityIndicatorViewStyle indicatorStyle;
 }
 
 @property (nonatomic, retain) HNEntry *entry;

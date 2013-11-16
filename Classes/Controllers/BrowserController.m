@@ -124,9 +124,7 @@
         [toolbar setOrange:![[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"]];
     }
 
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        [[loadingItem spinner] setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
-    } else if ([[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"] && [toolbar respondsToSelector:@selector(setBarTintColor:)]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"disable-orange"] && ([toolbar respondsToSelector:@selector(setBarTintColor:)] || [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)) {
         [[loadingItem spinner] setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
     } else {
         [[loadingItem spinner] setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
