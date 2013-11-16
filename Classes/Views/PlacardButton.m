@@ -27,12 +27,12 @@
             [self setBackgroundImage:[[self class] _pressedImage] forState:UIControlStateHighlighted];
             [self setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
             [self setTitleColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
+            [[self titleLabel] setFont:[UIFont boldSystemFontOfSize:14.0f]];
         } else {
             [self setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
             [self setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
+            [[self titleLabel] setFont:[UIFont systemFontOfSize:20.0f]];
         }
-
-        [[self titleLabel] setFont:[UIFont boldSystemFontOfSize:14.0f]];
     }
     
     return self;
