@@ -28,6 +28,21 @@
 
 @implementation MainTabBarController
 
+- (UITabBarItem *)_tabBarItemWithTitle:(NSString *)title imageName:(NSString *)imageName {
+    UITabBarItem *item = nil;
+
+    if ([UITabBarItem instancesRespondToSelector:@selector(initWithTitle:image:selectedImage:)]) {
+        UIImage *image = [UIImage imageNamed:[imageName stringByAppendingString:@"7.png"]];
+        UIImage *selectedImage = [UIImage imageNamed:[imageName stringByAppendingString:@"7-selected.png"]];
+        item = [[UITabBarItem alloc] initWithTitle:title image:image selectedImage:selectedImage];
+    } else {
+        UIImage *image = [UIImage imageNamed:[imageName stringByAppendingString:@".png"]];
+        item = [[UITabBarItem alloc] initWithTitle:title image:image tag:0];
+    }
+
+    return [item autorelease];
+}
+
 - (id)initWithSession:(HNSession *)session_ {
     if ((self = [super init])) {
         session = [session_ retain];
@@ -46,18 +61,18 @@
         HNEntryList *newList = [HNEntryList session:session entryListWithIdentifier:kHNEntryListIdentifierNewSubmissions];
         latest = [[[SubmissionListController alloc] initWithSource:newList] autorelease];
         [latest setTitle:@"New Submissions"];
-        [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"New" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
-    
+        [latest setTabBarItem:[self _tabBarItemWithTitle:@"New" imageName:@"new"]];
+
 #ifdef ENABLE_TIMELINE
         HNEntryList *newList = [HNTimeline timelineForSession:session];
         latest = [[[CommentListController alloc] initWithSource:newList] autorelease];
         [latest setTitle:@"Timeline"];
-        [latest setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Timeline" image:[UIImage imageNamed:@"new.png"] tag:0] autorelease]];
+        [latest setTabBarItem:[self _tabBarItemWithTitle:[latest title] imageName:@"new"]];
 #endif
 
         profile = [[[SessionProfileController alloc] initWithSource:[session user]] autorelease];
         [profile setTitle:@"Profile"];
-        [profile setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Profile" image:[UIImage imageNamed:@"person.png"] tag:0] autorelease]];
+        [profile setTabBarItem:[self _tabBarItemWithTitle:@"Profile" imageName:@"person"]];
 
         search = [[[SearchController alloc] initWithSession:session] autorelease];
         [search setTitle:@"Search"];

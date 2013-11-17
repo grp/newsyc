@@ -212,18 +212,28 @@
     }
 }
 
+- (UIImage *)_modernImageWithName:(NSString *)name {
+    if ([self respondsToSelector:@selector(barTintColor)]) {
+        name = [name stringByAppendingString:@"7"];
+    }
+
+    name = [name stringByAppendingString:@".png"];
+
+    return [UIImage imageNamed:name];
+}
+
 - (UIImage *)imageForItem:(EntryActionsViewItem)item {
     switch (item) {
         case kEntryActionsViewItemReply:
-            return [UIImage imageNamed:@"reply.png"];
+            return [self _modernImageWithName:@"reply"];
         case kEntryActionsViewItemUpvote:
-            return [UIImage imageNamed:@"upvote.png"];
+            return [self _modernImageWithName:@"upvote"];
         case kEntryActionsViewItemFlag:
             return [UIImage imageNamed:@"flag.png"];
         case kEntryActionsViewItemDownvote:
-            return [UIImage imageNamed:@"downvote.png"];
+            return [self _modernImageWithName:@"downvote"];
         case kEntryActionsViewItemActions:
-            return [UIImage imageNamed:@"action.png"];
+            return [self _modernImageWithName:@"action"];
         default:
             return nil;
     }

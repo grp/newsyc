@@ -79,6 +79,16 @@
     [toolbar setItems:[NSArray arrayWithObjects:spacerItem, backItem, spacerItem, spacerItem, forwardItem, spacerItem, spacerItem, spacerItem, readabilityItem, spacerItem, spacerItem, changableItem, spacerItem, spacerItem, shareItem, spacerItem, nil]];
 }
 
+- (UIImage *)_modernImageWithName:(NSString *)name {
+    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
+        name = [name stringByAppendingString:@"7"];
+    }
+
+    name = [name stringByAppendingString:@".png"];
+
+    return [UIImage imageNamed:name];
+}
+
 - (void)loadView {
     [super loadView];
 
@@ -87,11 +97,11 @@
     toolbar = [[OrangeToolbar alloc] init];
     [toolbar sizeToFit];
     
-    backItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
-    forwardItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"forward.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goForward)];
+    backItem = [[BarButtonItem alloc] initWithImage:[self _modernImageWithName:@"back"] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
+    forwardItem = [[BarButtonItem alloc] initWithImage:[self _modernImageWithName:@"forward"] style:UIBarButtonItemStylePlain target:self action:@selector(goForward)];
     readabilityItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"readability.png"] style:UIBarButtonItemStylePlain target:self action:@selector(readability)];
-    refreshItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh.png"] style:UIBarButtonItemStylePlain target:self action:@selector(reload)];
-    shareItem = [[BarButtonItem alloc] initWithImage:[UIImage imageNamed:@"action.png"] style:UIBarButtonItemStylePlain target:self action:@selector(share)];
+    refreshItem = [[BarButtonItem alloc] initWithImage:[self _modernImageWithName:@"refresh"] style:UIBarButtonItemStylePlain target:self action:@selector(reload)];
+    shareItem = [[BarButtonItem alloc] initWithImage:[self _modernImageWithName:@"action"] style:UIBarButtonItemStylePlain target:self action:@selector(share)];
     spacerItem = [[BarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
     loadingItem = [[ActivityIndicatorItem alloc] initWithSize:[[refreshItem image] size]];
     [self updateToolbarItems];
