@@ -31,7 +31,7 @@
         } else {
             [self setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
             [self setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
-            [[self titleLabel] setFont:[UIFont systemFontOfSize:20.0f]];
+            [[self titleLabel] setFont:[UIFont systemFontOfSize:22.0f]];
         }
     }
     

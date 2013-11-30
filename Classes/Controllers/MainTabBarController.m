@@ -137,7 +137,9 @@
 }
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
-    if (viewController == profile && [session isAnonymous]) {
+    BOOL isProfile = viewController == profile || ([viewController isKindOfClass:[UINavigationController class]] && [[(UINavigationController *) viewController viewControllers] objectAtIndex:0] == profile);
+
+    if (isProfile && [session isAnonymous]) {
         [[self navigation] requestLogin];
 
         return NO;
