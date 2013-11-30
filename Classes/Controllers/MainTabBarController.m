@@ -56,7 +56,7 @@
         HNEntryList *homeList = [HNEntryList session:session entryListWithIdentifier:kHNEntryListIdentifierSubmissions];
         home = [[[SubmissionListController alloc] initWithSource:homeList] autorelease];
         [home setTitle:@"Hacker News"];
-        [home setTabBarItem:[[[UITabBarItem alloc] initWithTitle:@"Home" image:[UIImage imageNamed:@"home.png"] tag:0] autorelease]];
+        [home setTabBarItem:[self _tabBarItemWithTitle:@"Home" imageName:@"home"]];
         
         HNEntryList *newList = [HNEntryList session:session entryListWithIdentifier:kHNEntryListIdentifierNewSubmissions];
         latest = [[[SubmissionListController alloc] initWithSource:newList] autorelease];
