@@ -118,11 +118,11 @@
     } else if (style == kEntryActionsViewStyleTransparentLight) {
         orange = NO;
         transparent = YES;
-        indicatorStyle = UIActivityIndicatorViewStyleGray;
+        indicatorStyle = UIActivityIndicatorViewStyleWhite;
     } else if (style == kEntryActionsViewStyleTransparentDark) {
         orange = NO;
         transparent = YES;
-        indicatorStyle = UIActivityIndicatorViewStyleWhite;
+        indicatorStyle = UIActivityIndicatorViewStyleGray;
     }
 
     [self setOrange:orange];
