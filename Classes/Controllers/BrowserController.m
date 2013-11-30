@@ -92,6 +92,7 @@
 - (void)loadView {
     [super loadView];
 
+    [[self view] setClipsToBounds:YES];
     [[self view] setBackgroundColor:[UIColor whiteColor]];
 
     toolbar = [[OrangeToolbar alloc] init];
