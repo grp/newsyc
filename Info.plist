@@ -2,59 +2,132 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
-	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
+    <key>CFBundleIdentifier</key>
+	<string>com.xuzzproductions.news-yc</string>
+
+    <key>CFBundleName</key>
+    <string>${PRODUCT_NAME}</string>
 	<key>CFBundleDisplayName</key>
 	<string>news:yc</string>
+
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.xuzzproductions.news-yc</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>${PRODUCT_NAME}</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>2.0 alpha 1</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>2.0</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>UIPrerenderedIcon</key>
-	<true/>
-	<key>UIRequiresPersistentWiFi</key>
-	<true/>
-	<key>UIStatusBarTintParameters</key>
+
+    <key>CFBundleVersion</key>
+    <string>2.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>2.0 alpha 1</string>
+
+	<key>CFBundleIcons</key>
 	<dict>
-		<key>UINavigationBar</key>
+		<key>CFBundlePrimaryIcon</key>
 		<dict>
-			<key>Style</key>
-			<string>UIBarStyleDefault</string>
-			<key>TintColor</key>
-			<dict>
-				<key>Blue</key>
-				<integer>0</integer>
-				<key>Green</key>
-				<real>0.4</real>
-				<key>Red</key>
-				<integer>1</integer>
-			</dict>
-			<key>Translucent</key>
-			<false/>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>Modern-Icon</string>
+				<string>Modern-Icon-Pad</string>
+                <string>Modern-Icon-Settings</string>
+				<string>Modern-Icon-Spotlight</string>
+                <string>Legacy-Icon</string>
+				<string>Legacy-Icon-Pad</string>
+                <string>Legacy-Icon-Settings</string>
+				<string>Legacy-Icon-Spotlight</string>
+			</array>
 		</dict>
 	</dict>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
+    <key>UIPrerenderedIcon</key>
+	<true/>
+
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UIRequiresPersistentWiFi</key>
+    <true/>
+
+    <key>UILaunchImageFile</key>
+    <string>Legacy-Default</string>
+    <key>UILaunchImages</key>
+    <array>
+        <dict>
+            <key>UILaunchImageMinimumOSVersion</key>
+            <string>7.0</string>
+            <key>UILaunchImageName</key>
+            <string>Modern-Default</string>
+            <key>UILaunchImageSize</key>
+            <string>{320, 480}</string>
+            <key>UILaunchImageOrientation</key>
+            <string>Portrait</string>
+        </dict>
+        <dict>
+            <key>UILaunchImageMinimumOSVersion</key>
+            <string>7.0</string>
+            <key>UILaunchImageName</key>
+            <string>Modern-Default-568h</string>
+            <key>UILaunchImageSize</key>
+            <string>{320, 568}</string>
+            <key>UILaunchImageOrientation</key>
+            <string>Portrait</string>
+        </dict>
+    </array>
+    <key>UILaunchImages~ipad</key>
+    <array>
+        <dict>
+            <key>UILaunchImageMinimumOSVersion</key>
+            <string>7.0</string>
+            <key>UILaunchImageName</key>
+            <string>Modern-Default-Portrait</string>
+            <key>UILaunchImageSize</key>
+            <string>{768, 1024}</string>
+            <key>UILaunchImageOrientation</key>
+            <string>Portrait</string>
+        </dict>
+        <dict>
+            <key>UILaunchImageMinimumOSVersion</key>
+            <string>7.0</string>
+            <key>UILaunchImageName</key>
+            <string>Modern-Default-Landscape</string>
+            <key>UILaunchImageSize</key>
+            <string>{768, 1024}</string>
+            <key>UILaunchImageOrientation</key>
+            <string>Landscape</string>
+        </dict>
+    </array>
+
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleLightContent</string>
+    <key>UIStatusBarTintParameters</key>
+    <dict>
+        <key>UINavigationBar</key>
+        <dict>
+            <key>Style</key>
+            <string>UIBarStyleDefault</string>
+            <key>TintColor</key>
+            <dict>
+                <key>Blue</key>
+                <real>0.0</real>
+                <key>Green</key>
+                <real>0.4</real>
+                <key>Red</key>
+                <real>1.0</real>
+            </dict>
+            <key>Translucent</key>
+            <false/>
+        </dict>
+    </dict>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
 </dict>
 </plist>

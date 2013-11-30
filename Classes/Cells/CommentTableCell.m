@@ -212,7 +212,7 @@
     height += margins.bottom;
     if (expanded) height += 44.0f;
     
-    return height;
+    return ceilf(height);
 }
 
 #pragma mark - Drawing

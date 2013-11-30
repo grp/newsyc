@@ -183,7 +183,7 @@
     // Add padding between the title and the body if we have both. 
     CGFloat titleBodyPadding = ([[entry body] length] > 0 && [[entry title] length] > 0 ? offsets.height : 0);
     
-    return margins.top + title + titleBodyPadding + body + offsets.height + date + margins.bottom;
+    return ceilf(margins.top + title + titleBodyPadding + body + offsets.height + date + margins.bottom);
 }
 
 - (NSString *)titleText {
