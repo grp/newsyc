@@ -229,7 +229,7 @@
         case kEntryActionsViewItemUpvote:
             return [self _modernImageWithName:@"upvote"];
         case kEntryActionsViewItemFlag:
-            return [UIImage imageNamed:@"flag.png"];
+            return [self _modernImageWithName:@"flag"];
         case kEntryActionsViewItemDownvote:
             return [self _modernImageWithName:@"downvote"];
         case kEntryActionsViewItemActions:
