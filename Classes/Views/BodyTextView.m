@@ -23,6 +23,7 @@
 - (id)initWithBodyTextView:(BodyTextView *)bodyTextView_ {
     if ((self = [super init])) {
         bodyTextView = bodyTextView_;
+        [[self layer] setNeedsDisplayOnBoundsChange:YES];
     }
 
     return self;
