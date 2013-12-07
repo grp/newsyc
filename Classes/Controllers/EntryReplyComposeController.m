@@ -79,14 +79,14 @@
     [replyLabel setFont:[UIFont systemFontOfSize:12.0f]];
     [replyLabel setTextColor:[UIColor darkGrayColor]];
     [replyLabel setNumberOfLines:0];
-    [tableView addSubview:replyLabel];
+    [textView addSubview:replyLabel];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     if ([entry body] != nil && ![[entry body] isEqualToString:@""]) {
-        CGFloat replyPadding = 8.0f;
+        CGFloat replyPadding = 8.0;
         
         NSString *bodyText = [entry body];
         bodyText = [bodyText stringByReplacingOccurrencesOfString:@"<p>" withString:@"\n\n"];
@@ -97,9 +97,13 @@
         NSString *replyText = [NSString stringWithFormat:@"%@: %@", [[entry submitter] identifier], bodyText];
         [replyLabel setText:replyText];
         
-        CGRect replyFrame = CGRectMake(replyPadding, -replyPadding, [tableView bounds].size.width - replyPadding - replyPadding, [tableView bounds].size.height / 3.0f);
-        replyFrame.size.height = [[replyLabel text] sizeWithFont:[replyLabel font] constrainedToSize:replyFrame.size lineBreakMode:[replyLabel lineBreakMode]].height;
-        replyFrame.origin.y -= replyFrame.size.height;
+        CGSize replySize = CGSizeMake([textView bounds].size.width - replyPadding - replyPadding, [textView bounds].size.height / 3.0f);
+        replySize.height = ceilf([[replyLabel text] sizeWithFont:[replyLabel font] constrainedToSize:replySize lineBreakMode:[replyLabel lineBreakMode]].height);
+
+        CGRect replyFrame;
+        replyFrame.size = replySize;
+        replyFrame.origin.x = replyPadding;
+        replyFrame.origin.y = textView.contentInset.top - replyPadding - replyFrame.size.height;
         [replyLabel setFrame:replyFrame];
     }
 }

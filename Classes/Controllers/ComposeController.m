@@ -189,6 +189,7 @@
     
     textView = [[PlaceholderTextView alloc] initWithFrame:[[self view] bounds]];
     [textView setDelegate:self];
+    [textView setAlwaysBounceVertical:YES];
     [textView setFont:[UIFont systemFontOfSize:16.0f]];
     [textView setPlaceholder:[self multilinePlaceholder]];
     [textView setEditable:[self includeMultilineEditor]];
