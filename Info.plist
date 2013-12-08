@@ -33,10 +33,10 @@
                 <string>Legacy-Icon-Settings</string>
 				<string>Legacy-Icon-Spotlight</string>
 			</array>
+            <key>UIPrerenderedIcon</key>
+            <true/>
 		</dict>
 	</dict>
-    <key>UIPrerenderedIcon</key>
-	<true/>
 
     <key>LSRequiresIPhoneOS</key>
     <true/>
