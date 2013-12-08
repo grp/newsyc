@@ -74,13 +74,9 @@
         [excludedActivityTypes addObject:UIActivityTypePrint];
         [excludedActivityTypes addObject:UIActivityTypeSaveToCameraRoll];
         [excludedActivityTypes addObject:UIActivityTypeMessage];
-        if (UIActivityTypePostToFlickr != nil) {
+        if ([UIActivityViewController instancesRespondToSelector:@selector(topLayoutGuide)]) {
             [excludedActivityTypes addObject:UIActivityTypePostToFlickr];
-        }
-        if (UIActivityTypePostToVimeo != nil) {
             [excludedActivityTypes addObject:UIActivityTypePostToVimeo];
-        }
-        if (UIActivityTypeAirDrop != nil) {
             [excludedActivityTypes addObject:UIActivityTypeAirDrop];
         }
         [activityController setExcludedActivityTypes:excludedActivityTypes];
