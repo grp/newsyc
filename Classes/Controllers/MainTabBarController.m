@@ -166,6 +166,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    [[self navigationItem] setRightBarButtonItem:composeItem];
+
     // XXX: Fix iOS 6 bug with a tab bar controller in a navigation controller.
     [self setViewControllers:[self viewControllers]];
     [[self selectedViewController] setWantsFullScreenLayout:YES];
