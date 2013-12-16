@@ -23,6 +23,8 @@
                                                                                                          action:@selector(startTheParty:)];
             tripleTapGestureRecognizer.numberOfTapsRequired = 3;
             [self addGestureRecognizer:tripleTapGestureRecognizer];
+            
+            self.shouldParty = [[NSUserDefaults standardUserDefaults] boolForKey:@"PartyStarted"];
         }
     }
 
@@ -80,6 +82,10 @@
 - (void)startTheParty:(UIGestureRecognizer *)sender {
     BOOL isPartying = self.shouldParty;
     self.shouldParty = !isPartying;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:!isPartying forKey:@"PartyStarted"];
+    [userDefaults synchronize];
 }
 
 - (void)setShouldParty:(BOOL)shouldParty {
