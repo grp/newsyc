@@ -12,8 +12,13 @@
 
 @interface OrangeNavigationBar : UINavigationBar {
     OrangeBarView *barView;
+    
+    NSTimer *_partyTimer;
+    float partyHue;
 }
 
 @property (nonatomic, assign) BOOL orange;
+
+@property (nonatomic, assign) BOOL shouldParty;
 
 @end
