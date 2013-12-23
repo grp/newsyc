@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18257DAB1867BCD100874CCE /* flag7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18257DA81867BCD100874CCE /* flag7@2x.png */; };
+		18257DAC1867BCD100874CCE /* home7-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18257DA91867BCD100874CCE /* home7-selected@2x.png */; };
+		18257DAD1867BCD100874CCE /* home7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18257DAA1867BCD100874CCE /* home7@2x.png */; };
 		188DE37D17F7E92A00B498FC /* OrangeNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DE37C17F7E92A00B498FC /* OrangeNavigationBar.m */; };
 		188DE38017F7EA5000B498FC /* OrangeBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DE37F17F7EA5000B498FC /* OrangeBarView.m */; };
 		188DE38317F7EA6200B498FC /* OrangeToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DE38217F7EA6200B498FC /* OrangeToolbar.m */; };
@@ -199,6 +202,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		18257DA81867BCD100874CCE /* flag7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flag7@2x.png"; sourceTree = "<group>"; };
+		18257DA91867BCD100874CCE /* home7-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home7-selected@2x.png"; sourceTree = "<group>"; };
+		18257DAA1867BCD100874CCE /* home7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home7@2x.png"; sourceTree = "<group>"; };
 		188DE37B17F7E92A00B498FC /* OrangeNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrangeNavigationBar.h; sourceTree = "<group>"; };
 		188DE37C17F7E92A00B498FC /* OrangeNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrangeNavigationBar.m; sourceTree = "<group>"; };
 		188DE37E17F7EA5000B498FC /* OrangeBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrangeBarView.h; sourceTree = "<group>"; };
@@ -530,11 +536,14 @@
 				18B7E68D1849752600D30E4E /* downvote@2x.png */,
 				18B7E68E1849752600D30E4E /* flag.png */,
 				18B7E68F1849752600D30E4E /* flag@2x.png */,
+				18257DA81867BCD100874CCE /* flag7@2x.png */,
 				18B7E6901849752600D30E4E /* forward.png */,
 				18B7E6911849752600D30E4E /* forward7@2x.png */,
 				18B7E6921849752600D30E4E /* forward@2x.png */,
 				18B7E6931849752600D30E4E /* home.png */,
 				18B7E6941849752600D30E4E /* home@2x.png */,
+				18257DAA1867BCD100874CCE /* home7@2x.png */,
+				18257DA91867BCD100874CCE /* home7-selected@2x.png */,
 				18B7E6951849752600D30E4E /* instapaper.png */,
 				18B7E6961849752600D30E4E /* instapaper@2x.png */,
 				18B7E6971849752600D30E4E /* instapaper@2x~ipad.png */,
@@ -977,6 +986,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18257DAC1867BCD100874CCE /* home7-selected@2x.png in Resources */,
 				18B7E74918497DCA00D30E4E /* Legacy-Default-Portrait@2x.png in Resources */,
 				18B7E74118497DCA00D30E4E /* Modern-Default-Portrait@2x.png in Resources */,
 				18B7E6DD1849752600D30E4E /* Legacy-Icon.png in Resources */,
@@ -1065,12 +1075,14 @@
 				18B7E6E01849752600D30E4E /* Legacy-iTunesArtwork@2x.png in Resources */,
 				18B7E6DB1849752600D30E4E /* Legacy-Icon-Spotlight.png in Resources */,
 				18B7E70C1849752600D30E4E /* readability@2x.png in Resources */,
+				18257DAD1867BCD100874CCE /* home7@2x.png in Resources */,
 				18B7E6CF1849752600D30E4E /* Modern-Icon-Settings.png in Resources */,
 				18B7E6EC1849752600D30E4E /* disclosure.png in Resources */,
 				18B7E7091849752600D30E4E /* person7@2x.png in Resources */,
 				18B7E70F1849752600D30E4E /* refresh@2x.png in Resources */,
 				18B7E7131849752600D30E4E /* toolbar-expanded.png in Resources */,
 				18B7E7101849752600D30E4E /* reply.png in Resources */,
+				18257DAB1867BCD100874CCE /* flag7@2x.png in Resources */,
 				18B7E6F91849752600D30E4E /* instapaper@2x.png in Resources */,
 				18B7E7071849752600D30E4E /* person.png in Resources */,
 				18B7E6DC1849752600D30E4E /* Legacy-Icon-Spotlight@2x.png in Resources */,
