@@ -7,6 +7,7 @@
 //
 
 #import "SharingController.h"
+#import "CommentListController.h"
 
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -20,6 +21,10 @@
 #import "OpenInSafariActivity.h"
 
 #import "BarButtonItem.h"
+
+@interface SharingController ()
+    - (NSString *) getSubject;
+@end
 
 @implementation SharingController
 
@@ -61,6 +66,7 @@
     [openInSafariActivity release];
 
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
+    [activityController setValue:[self getSubject] forKey:@"subject"];
 
     NSMutableArray *excludedActivityTypes = [NSMutableArray array];
     [excludedActivityTypes addObject:UIActivityTypePrint];
@@ -103,6 +109,14 @@
 
 - (void)showFromBarButtonItem:(BarButtonItem *)item {
     [self showFromView:nil barButtonItem:item atRect:CGRectNull];
+}
+
+- (NSString *) getSubject {
+    if ([controller isKindOfClass:[CommentListController class]]) {
+        return [title stringByAppendingString:@" | Hacker News"];
+    } else {
+        return title;
+    }
 }
 
 @end
