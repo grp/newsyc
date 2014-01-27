@@ -22,6 +22,8 @@
 
 #import "BarButtonItem.h"
 
+#import "LinkUIActivityItemSource.h"
+
 @interface SharingController ()
     - (NSString *) getSubject;
 @end
@@ -59,14 +61,13 @@
     InstapaperActivity *instapaperActivity = [[InstapaperActivity alloc] init];
     OpenInSafariActivity *openInSafariActivity = [[OpenInSafariActivity alloc] init];
     
-    NSArray *activityItems = [NSArray arrayWithObject:url];
+    NSArray *activityItems = [NSArray arrayWithObject:[[LinkUIActivityItemSource alloc] initWithURL:url andSubject:[self getSubject]]];
     NSArray *applicationActivities = [NSArray arrayWithObjects:instapaperActivity, openInSafariActivity, nil];
 
     [instapaperActivity release];
     [openInSafariActivity release];
 
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
-    [activityController setValue:[self getSubject] forKey:@"subject"];
 
     NSMutableArray *excludedActivityTypes = [NSMutableArray array];
     [excludedActivityTypes addObject:UIActivityTypePrint];

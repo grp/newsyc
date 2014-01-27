@@ -110,6 +110,7 @@
 		18B7E74A18497DCA00D30E4E /* Legacy-Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 18B7E73A18497DCA00D30E4E /* Legacy-Default.png */; };
 		18B7E74B18497DCA00D30E4E /* Legacy-Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18B7E73B18497DCA00D30E4E /* Legacy-Default@2x.png */; };
 		18CA5DF8182ECD1100E54F4F /* ForceClearNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CA5DF7182ECD1100E54F4F /* ForceClearNavigationBar.m */; };
+		2785D6831896F023001969AF /* LinkUIActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2785D6821896F023001969AF /* LinkUIActivityItemSource.m */; };
 		598ED48D16E6AAA4003A6BC2 /* libHNKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D563FF516E45AE000BDD2DB /* libHNKit.a */; };
 		7D1F98921320CF720059EBBB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98911320CF720059EBBB /* UIKit.framework */; };
 		7D1F98941320CF720059EBBB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98931320CF720059EBBB /* Foundation.framework */; };
@@ -315,6 +316,8 @@
 		18B7E73B18497DCA00D30E4E /* Legacy-Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Legacy-Default@2x.png"; sourceTree = "<group>"; };
 		18CA5DF6182ECD1100E54F4F /* ForceClearNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForceClearNavigationBar.h; sourceTree = "<group>"; };
 		18CA5DF7182ECD1100E54F4F /* ForceClearNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForceClearNavigationBar.m; sourceTree = "<group>"; };
+		2785D6811896F023001969AF /* LinkUIActivityItemSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinkUIActivityItemSource.h; sourceTree = "<group>"; };
+		2785D6821896F023001969AF /* LinkUIActivityItemSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinkUIActivityItemSource.m; sourceTree = "<group>"; };
 		7D148E64132D68B5008FBF32 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		7D1F988D1320CF720059EBBB /* newsyc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newsyc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1F98911320CF720059EBBB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -797,6 +800,8 @@
 				7D56C3BD164CBD1500A18E7E /* OpenInSafariActivity.m */,
 				7DB809B814F8ACEE009668E6 /* SharingController.h */,
 				7DB809B914F8ACEF009668E6 /* SharingController.m */,
+				2785D6811896F023001969AF /* LinkUIActivityItemSource.h */,
+				2785D6821896F023001969AF /* LinkUIActivityItemSource.m */,
 			);
 			name = Sharing;
 			path = Controllers;
@@ -1121,6 +1126,7 @@
 				7DCB8115134ED75400B521F2 /* InstapaperAuthenticator.m in Sources */,
 				7DCB8116134ED75400B521F2 /* InstapaperRequest.m in Sources */,
 				7DCB8117134ED75400B521F2 /* InstapaperSession.m in Sources */,
+				2785D6831896F023001969AF /* LinkUIActivityItemSource.m in Sources */,
 				7D36ADCA13553935000613B2 /* ProgressHUD.m in Sources */,
 				7D91AA9F135A27DD00247D34 /* ActivityIndicatorItem.m in Sources */,
 				FA85248E1357BA73004E5A72 /* NSArray+Strings.m in Sources */,
