@@ -110,6 +110,9 @@
 		18B7E74A18497DCA00D30E4E /* Legacy-Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 18B7E73A18497DCA00D30E4E /* Legacy-Default.png */; };
 		18B7E74B18497DCA00D30E4E /* Legacy-Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18B7E73B18497DCA00D30E4E /* Legacy-Default@2x.png */; };
 		18CA5DF8182ECD1100E54F4F /* ForceClearNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CA5DF7182ECD1100E54F4F /* ForceClearNavigationBar.m */; };
+		2EC7EC3C18BBFFB800BC6DE9 /* Fleksy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EC7EC3B18BBFFB800BC6DE9 /* Fleksy.framework */; };
+		2EC7EC3E18BC014E00BC6DE9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EC7EC3D18BC014E00BC6DE9 /* AudioToolbox.framework */; };
+		2EC7EC4018BC016B00BC6DE9 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EC7EC3F18BC016B00BC6DE9 /* libc++.dylib */; };
 		598ED48D16E6AAA4003A6BC2 /* libHNKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D563FF516E45AE000BDD2DB /* libHNKit.a */; };
 		7D1F98921320CF720059EBBB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98911320CF720059EBBB /* UIKit.framework */; };
 		7D1F98941320CF720059EBBB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1F98931320CF720059EBBB /* Foundation.framework */; };
@@ -315,6 +318,9 @@
 		18B7E73B18497DCA00D30E4E /* Legacy-Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Legacy-Default@2x.png"; sourceTree = "<group>"; };
 		18CA5DF6182ECD1100E54F4F /* ForceClearNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForceClearNavigationBar.h; sourceTree = "<group>"; };
 		18CA5DF7182ECD1100E54F4F /* ForceClearNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForceClearNavigationBar.m; sourceTree = "<group>"; };
+		2EC7EC3B18BBFFB800BC6DE9 /* Fleksy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fleksy.framework; path = Fleksy/Fleksy.framework; sourceTree = "<group>"; };
+		2EC7EC3D18BC014E00BC6DE9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		2EC7EC3F18BC016B00BC6DE9 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		7D148E64132D68B5008FBF32 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		7D1F988D1320CF720059EBBB /* newsyc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newsyc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1F98911320CF720059EBBB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -463,6 +469,9 @@
 				7D1F98961320CF720059EBBB /* CoreGraphics.framework in Frameworks */,
 				7DFFDF0B13325FF20082F55A /* CoreText.framework in Frameworks */,
 				7D8A660813333A72002012AA /* QuartzCore.framework in Frameworks */,
+				2EC7EC3C18BBFFB800BC6DE9 /* Fleksy.framework in Frameworks */,
+				2EC7EC3E18BC014E00BC6DE9 /* AudioToolbox.framework in Frameworks */,
+				2EC7EC4018BC016B00BC6DE9 /* libc++.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,6 +648,9 @@
 		7D1F98901320CF720059EBBB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2EC7EC3F18BC016B00BC6DE9 /* libc++.dylib */,
+				2EC7EC3D18BC014E00BC6DE9 /* AudioToolbox.framework */,
+				2EC7EC3B18BBFFB800BC6DE9 /* Fleksy.framework */,
 				7D75447B16A8C83B000AAB40 /* MobileCoreServices.framework */,
 				7D148E64132D68B5008FBF32 /* libxml2.dylib */,
 				7D96C60C1426CC1B00A76F04 /* MessageUI.framework */,
@@ -1197,6 +1209,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"${SRCROOT}/Fleksy",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Classes/Prefix.pch;
@@ -1223,6 +1239,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"${SRCROOT}/Fleksy",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Classes/Prefix.pch;
 				GCC_THUMB_SUPPORT = NO;

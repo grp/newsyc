@@ -38,6 +38,20 @@
 		</dict>
 	</dict>
 
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLName</key>
+            <string>com.fleksy.sdk</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>FleksyKBClient-com.xuzzproductions.news-yc</string>
+            </array>
+        </dict>
+    </array>
+
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>UIRequiresPersistentWiFi</key>
