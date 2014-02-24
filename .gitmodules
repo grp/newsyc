@@ -1,3 +1,6 @@
 [submodule "HNKit"]
 	path = HNKit
 	url = git://github.com/Xuzz/HNKit.git
+[submodule "Fleksy"]
+	path = Fleksy
+	url = https://github.com/Fleksy/FleksySDK
