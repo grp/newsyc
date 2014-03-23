@@ -19,6 +19,10 @@
 
 #import "OpenInSafariActivity.h"
 
+#import "OpenInChromeActivity.h"
+#import "OpenInChromeController.h"
+
+
 #import "BarButtonItem.h"
 
 @implementation SharingController
@@ -55,8 +59,17 @@
     OpenInSafariActivity *openInSafariActivity = [[OpenInSafariActivity alloc] init];
     
     NSArray *activityItems = [NSArray arrayWithObject:url];
-    NSArray *applicationActivities = [NSArray arrayWithObjects:instapaperActivity, openInSafariActivity, nil];
-
+    NSMutableArray *applicationActivities = [NSMutableArray arrayWithObjects:instapaperActivity, openInSafariActivity, nil];
+    
+    OpenInChromeController *chromeController = [[OpenInChromeController alloc] init];
+    
+    // Display chrome activity only if it's installed.
+    if ([chromeController isChromeInstalled]) {
+        OpenInChromeActivity *openInChromeActivity = [[OpenInChromeActivity alloc] init];
+        [applicationActivities addObject:openInChromeActivity];
+        [openInChromeActivity release];
+    }
+        
     [instapaperActivity release];
     [openInSafariActivity release];
 
