@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0000550218DF03A900BBF5A3 /* OpenInChromeActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 0000550118DF03A900BBF5A3 /* OpenInChromeActivity.m */; };
+		0040549E18DF142100F76EA2 /* OpenInChromeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0040549D18DF142100F76EA2 /* OpenInChromeController.m */; };
 		188DE37D17F7E92A00B498FC /* OrangeNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DE37C17F7E92A00B498FC /* OrangeNavigationBar.m */; };
 		188DE38017F7EA5000B498FC /* OrangeBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DE37F17F7EA5000B498FC /* OrangeBarView.m */; };
 		188DE38317F7EA6200B498FC /* OrangeToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DE38217F7EA6200B498FC /* OrangeToolbar.m */; };
@@ -199,6 +201,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0000550018DF03A900BBF5A3 /* OpenInChromeActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInChromeActivity.h; sourceTree = "<group>"; };
+		0000550118DF03A900BBF5A3 /* OpenInChromeActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenInChromeActivity.m; sourceTree = "<group>"; };
+		0040549C18DF142100F76EA2 /* OpenInChromeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInChromeController.h; sourceTree = "<group>"; };
+		0040549D18DF142100F76EA2 /* OpenInChromeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenInChromeController.m; sourceTree = "<group>"; };
 		188DE37B17F7E92A00B498FC /* OrangeNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrangeNavigationBar.h; sourceTree = "<group>"; };
 		188DE37C17F7E92A00B498FC /* OrangeNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrangeNavigationBar.m; sourceTree = "<group>"; };
 		188DE37E17F7EA5000B498FC /* OrangeBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrangeBarView.h; sourceTree = "<group>"; };
@@ -672,6 +678,8 @@
 				7D6B9ED01347DF2E00CD923C /* Prefix.pch */,
 				7D2B8B8616ADCEF50072D730 /* PingController.h */,
 				7D2B8B8716ADCEF50072D730 /* PingController.m */,
+				0040549C18DF142100F76EA2 /* OpenInChromeController.h */,
+				0040549D18DF142100F76EA2 /* OpenInChromeController.m */,
 				7D6B9ED11347DF2E00CD923C /* AppDelegate.h */,
 				7D6B9ED21347DF2E00CD923C /* AppDelegate.m */,
 				7D6B9ECF1347DF2E00CD923C /* main.m */,
@@ -795,6 +803,8 @@
 				7D8541211640A09000C68F84 /* InstapaperActivity.m */,
 				7D56C3BC164CBD1500A18E7E /* OpenInSafariActivity.h */,
 				7D56C3BD164CBD1500A18E7E /* OpenInSafariActivity.m */,
+				0000550018DF03A900BBF5A3 /* OpenInChromeActivity.h */,
+				0000550118DF03A900BBF5A3 /* OpenInChromeActivity.m */,
 				7DB809B814F8ACEE009668E6 /* SharingController.h */,
 				7DB809B914F8ACEF009668E6 /* SharingController.m */,
 			);
@@ -935,7 +945,7 @@
 				LastUpgradeCheck = 0500;
 				TargetAttributes = {
 					7D1F988C1320CF720059EBBB = {
-						DevelopmentTeam = 6LV823278R;
+						DevelopmentTeam = 2BBVGHVRPQ;
 					};
 				};
 			};
@@ -1108,11 +1118,13 @@
 				7D6B9F4B1347DF2E00CD923C /* main.m in Sources */,
 				7D6B9F4C1347DF2E00CD923C /* AppDelegate.m in Sources */,
 				7D6B9F4E1347DF2E00CD923C /* DetailsHeaderView.m in Sources */,
+				0000550218DF03A900BBF5A3 /* OpenInChromeActivity.m in Sources */,
 				7D6B9F4F1347DF2E00CD923C /* PullToRefreshView.m in Sources */,
 				188DE38317F7EA6200B498FC /* OrangeToolbar.m in Sources */,
 				7D6B9F501347DF2E00CD923C /* EntryActionsView.m in Sources */,
 				188DE38A1803DFAE00B498FC /* TabBarController.m in Sources */,
 				7D6B9F521347DF2E00CD923C /* LoadingIndicatorView.m in Sources */,
+				0040549E18DF142100F76EA2 /* OpenInChromeController.m in Sources */,
 				7D6B9F531347DF2E00CD923C /* PlacardButton.m in Sources */,
 				7D6B9F541347DF2E00CD923C /* PlaceholderTextView.m in Sources */,
 				7D6B9F551347DF2E00CD923C /* ProfileHeaderView.m in Sources */,
