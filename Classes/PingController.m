@@ -16,11 +16,11 @@
 @synthesize delegate, locked;
 
 - (NSString *)version {
-    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    return [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] ?: [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
 }
 
 - (NSString *)bundleIdentifier {
-    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+    return [[NSBundle mainBundle] infoDictionary][@"CFBundleIdentifier"];
 }
 
 - (NSString *) platform {
@@ -30,7 +30,7 @@
     char *machine = malloc(size);
     sysctlbyname("hw.machine", machine, &size, NULL, 0);
 
-    NSString *platform = [NSString stringWithUTF8String:machine];
+    NSString *platform = @(machine);
     free(machine);
 
     return platform;
@@ -71,13 +71,13 @@
     id representation = [NSJSONSerialization JSONObjectWithData:received options:0 error:NULL];
 
     if ([representation isKindOfClass:[NSDictionary class]]) {
-        NSString *message = [representation objectForKey:@"message"];
-        NSString *title = [representation objectForKey:@"title"];
-        NSString *button = [representation objectForKey:@"button"];
-        NSString *moreButton = [representation objectForKey:@"more-button"];
-        NSString *moreURL = [representation objectForKey:@"more-url"];
+        NSString *message = representation[@"message"];
+        NSString *title = representation[@"title"];
+        NSString *button = representation[@"button"];
+        NSString *moreButton = representation[@"more-button"];
+        NSString *moreURL = representation[@"more-url"];
 
-        locked = [[representation objectForKey:@"locked"] boolValue];
+        locked = [representation[@"locked"] boolValue];
 
         if (locked) {
             UIWindow *lockedWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

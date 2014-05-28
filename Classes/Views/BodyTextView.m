@@ -184,22 +184,16 @@
     NSString *htmlString = [renderer HTMLString];
     NSString *string = [renderer string];
 
-    NSDictionary *htmlItem = [NSDictionary dictionaryWithObjectsAndKeys:
-        [attributedString string], (NSString *) kUTTypeText,
-        [NSDictionary dictionaryWithObjectsAndKeys:
-            [NSDictionary dictionaryWithObjectsAndKeys:
-                [htmlString dataUsingEncoding:NSUTF8StringEncoding], @"WebResourceData",
-                @"", @"WebResourceFrameName",
-                @"text/html", @"WebResourceMIMEType",
-                @"UTF-8", @"WebResourceTextEncodingName",
-                @"about:blank", @"WebResourceURL",
-            nil], @"WebMainResource",
-        nil], @"Apple Web Archive pasteboard type",
-    nil];
+    NSDictionary *htmlItem = @{(NSString *) kUTTypeText: [attributedString string],
+        @"Apple Web Archive pasteboard type": @{@"WebMainResource": @{@"WebResourceData": [htmlString dataUsingEncoding:NSUTF8StringEncoding],
+                @"WebResourceFrameName": @"",
+                @"WebResourceMIMEType": @"text/html",
+                @"WebResourceTextEncodingName": @"UTF-8",
+                @"WebResourceURL": @"about:blank"}}};
 
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     [pasteboard setString:string];
-    [pasteboard setItems:[NSArray arrayWithObject:htmlItem]];
+    [pasteboard setItems:@[htmlItem]];
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {

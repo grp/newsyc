@@ -15,10 +15,10 @@
     
     NSArray *current = [self leftBarButtonItems];
     NSArray *added = nil;
-    if (current == nil) current = [NSArray array];
+    if (current == nil) current = @[];
     
     if (position == UINavigationItemPositionLeft) {
-        added = [[NSArray arrayWithObject:item] arrayByAddingObjectsFromArray:current];
+        added = [@[item] arrayByAddingObjectsFromArray:current];
     } else if (position == UINavigationItemPositionRight) {
         added = [current arrayByAddingObject:item];
     }
@@ -33,12 +33,12 @@
     
     NSArray *current = [self rightBarButtonItems];
     NSArray *added = nil;
-    if (current == nil) current = [NSArray array];
+    if (current == nil) current = @[];
     
     if (position == UINavigationItemPositionLeft) {
         added = [current arrayByAddingObject:item];
     } else if (position == UINavigationItemPositionRight) {
-        added = [[NSArray arrayWithObject:item] arrayByAddingObjectsFromArray:current];
+        added = [@[item] arrayByAddingObjectsFromArray:current];
     }
     
     [self setRightBarButtonItems:added];

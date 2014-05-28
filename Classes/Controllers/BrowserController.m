@@ -76,7 +76,7 @@
     if ([webview isLoading]) changableItem = loadingItem;
     else changableItem = refreshItem;
     
-    [toolbar setItems:[NSArray arrayWithObjects:spacerItem, backItem, spacerItem, spacerItem, forwardItem, spacerItem, spacerItem, spacerItem, readabilityItem, spacerItem, spacerItem, changableItem, spacerItem, spacerItem, shareItem, spacerItem, nil]];
+    [toolbar setItems:@[spacerItem, backItem, spacerItem, spacerItem, forwardItem, spacerItem, spacerItem, spacerItem, readabilityItem, spacerItem, spacerItem, changableItem, spacerItem, spacerItem, shareItem, spacerItem]];
 }
 
 - (UIImage *)_modernImageWithName:(NSString *)name {
@@ -288,7 +288,7 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     [self updateToolbarItems];
     
-    NSArray *hosts = [NSArray arrayWithObjects:@"itunes.apple.com", @"phobos.apple.com", @"youtube.com", @"maps.google.com", nil];
+    NSArray *hosts = @[@"itunes.apple.com", @"phobos.apple.com", @"youtube.com", @"maps.google.com"];
     NSURL *url = [request URL];
     if (navigationType == UIWebViewNavigationTypeLinkClicked && [hosts containsString:[url host]]) {
         [self openExternalURL:url];

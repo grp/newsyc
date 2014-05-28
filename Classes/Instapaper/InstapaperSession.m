@@ -36,7 +36,7 @@ static id currentSession = nil;
     BOOL logout = [[defaults objectForKey:@"instapaper-logout"] boolValue];
     
     if (logout) {
-        [defaults setObject:[NSNumber numberWithBool:NO] forKey:@"instapaper-logout"];
+        [defaults setObject:@NO forKey:@"instapaper-logout"];
         [self setCurrentSession:nil];
     }
 }

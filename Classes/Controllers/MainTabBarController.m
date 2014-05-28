@@ -88,8 +88,8 @@
             for (NSUInteger i = 0; i < viewControllers.count; i++) {
                 // iOS 7 Hack: use a navigation controller to fix the children's layout guides, but force a clear navigation bar so it doesn't show up.
                 UINavigationController *navigationController = [[UINavigationController alloc] initWithNavigationBarClass:[ForceClearNavigationBar class] toolbarClass:nil];
-                [navigationController pushViewController:[viewControllers objectAtIndex:i] animated:NO];
-                [viewControllers replaceObjectAtIndex:i withObject:navigationController];
+                [navigationController pushViewController:viewControllers[i] animated:NO];
+                viewControllers[i] = navigationController;
             }
         }
 
@@ -114,7 +114,7 @@
             compose = [[SubmissionTextComposeController alloc] initWithSession:session];
         }
         
-        [navigation setViewControllers:[NSArray arrayWithObject:compose]];
+        [navigation setViewControllers:@[compose]];
         [self presentViewController:navigation animated:YES completion:NULL];
 
         [navigation release];
@@ -137,7 +137,7 @@
 }
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
-    BOOL isProfile = viewController == profile || ([viewController isKindOfClass:[UINavigationController class]] && [[(UINavigationController *) viewController viewControllers] objectAtIndex:0] == profile);
+    BOOL isProfile = viewController == profile || ([viewController isKindOfClass:[UINavigationController class]] && [(UINavigationController *) viewController viewControllers][0] == profile);
 
     if (isProfile && [session isAnonymous]) {
         [[self navigation] requestLogin];

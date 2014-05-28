@@ -167,7 +167,7 @@
         [self clearLeafViewControllerAnimated:NO];
 
         splitController = [[SplitViewController alloc] init];
-        [splitController setViewControllers:[NSArray arrayWithObjects:navigationController, rightNavigationController, nil]];
+        [splitController setViewControllers:@[navigationController, rightNavigationController]];
         if ([splitController respondsToSelector:@selector(setPresentsWithGesture:)]) [splitController setPresentsWithGesture:YES];
         [splitController setDelegate:self];
         [splitController autorelease];
@@ -209,7 +209,7 @@
     
     NSArray *controllers = [rightNavigationController viewControllers];
     if ([controllers count] > 0) {
-        UIViewController *root = [controllers objectAtIndex:0];
+        UIViewController *root = controllers[0];
         [[root navigationItem] addLeftBarButtonItem:popoverItem atPosition:UINavigationItemPositionLeft];
     }
 }
@@ -217,7 +217,7 @@
 - (void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)button {
     NSArray *controllers = [rightNavigationController viewControllers];
     if ([controllers count] > 0) {
-        UIViewController *root = [controllers objectAtIndex:0];
+        UIViewController *root = controllers[0];
         [[root navigationItem] removeLeftBarButtonItem:popoverItem];
     }
     
@@ -266,7 +266,7 @@
 }
 
 - (void)setLeafViewController:(UIViewController *)leafController animated:(BOOL)animated {
-    [rightNavigationController setViewControllers:[NSArray arrayWithObject:leafController]];
+    [rightNavigationController setViewControllers:@[leafController]];
     
     if (popoverItem != nil) [[leafController navigationItem] addLeftBarButtonItem:popoverItem atPosition:UINavigationItemPositionLeft];
     if (popover != nil) [popover dismissPopoverAnimated:animated];
@@ -276,7 +276,7 @@
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         EmptyController *emptyController = [[EmptyController alloc] init];
         if (popoverItem != nil) [[emptyController navigationItem] addLeftBarButtonItem:popoverItem atPosition:UINavigationItemPositionLeft];
-        [rightNavigationController setViewControllers:[NSArray arrayWithObject:emptyController]];
+        [rightNavigationController setViewControllers:@[emptyController]];
         [emptyController release];
     }
 }

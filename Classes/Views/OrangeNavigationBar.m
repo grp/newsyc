@@ -51,7 +51,7 @@
             [self setBarTintColor:[OrangeBarView barOrangeColor]];
             [self setTintColor:[UIColor whiteColor]];
 
-            NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
+            NSDictionary *titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
             [self setTitleTextAttributes:titleTextAttributes];
         } else {
             [self setTintColor:[UIColor mainOrangeColor]];
@@ -119,7 +119,7 @@
         [self setBarTintColor:partyColor];
         [self setTintColor:[UIColor whiteColor]];
         
-        NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
+        NSDictionary *titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
         [self setTitleTextAttributes:titleTextAttributes];
     } else {
         [self setTintColor:partyColor ];

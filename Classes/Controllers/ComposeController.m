@@ -111,7 +111,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [entryCells objectAtIndex:[indexPath row]];
+    return entryCells[[indexPath row]];
 }
 
 - (UITableViewCell *)generateTextFieldCell {
@@ -162,7 +162,7 @@
 }
 
 - (NSArray *)inputEntryCells {
-    return [NSArray array];
+    return @[];
 }
 
 - (void)textDidChange:(NSNotification *)notification {
@@ -291,9 +291,9 @@
     if (!keyboardVisible) return;
     
     NSDictionary *info = [notification userInfo];
-    NSValue *boundsValue = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
-    NSNumber *curve = [info objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    NSNumber *duration = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSValue *boundsValue = info[UIKeyboardFrameEndUserInfoKey];
+    NSNumber *curve = info[UIKeyboardAnimationCurveUserInfoKey];
+    NSNumber *duration = info[UIKeyboardAnimationDurationUserInfoKey];
     CGSize keyboardSize = [boundsValue CGRectValue].size;
     
     CGRect frame = [textView frame];
@@ -317,9 +317,9 @@
     if (keyboardVisible) return;
     
     NSDictionary *info = [notification userInfo];
-    NSValue *boundsValue = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
-    NSNumber *curve = [info objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    NSNumber *duration = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSValue *boundsValue = info[UIKeyboardFrameEndUserInfoKey];
+    NSNumber *curve = info[UIKeyboardAnimationCurveUserInfoKey];
+    NSNumber *duration = info[UIKeyboardAnimationDurationUserInfoKey];
     CGSize keyboardSize = [boundsValue CGRectValue].size;
     
     CGRect frame = [textView frame];

@@ -201,7 +201,7 @@
 #pragma mark - Table View
 
 - (HNSession *)sessionAtIndexPath:(NSIndexPath *)indexPath {
-    return [sessions objectAtIndex:[indexPath row]];
+    return sessions[[indexPath row]];
 }
 
 - (NSIndexPath *)indexPathForSession:(HNSession *)session {
@@ -265,7 +265,7 @@
         [[HNSessionController sessionController] removeSession:session];
         [self reloadSessions];
         
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 
         [tableView endUpdates];
 

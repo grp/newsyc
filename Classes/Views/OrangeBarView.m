@@ -49,7 +49,7 @@
 
 - (void)layoutInsideBar:(UIView *)barView {
     // Hack to deepen the bar's color.
-    self.frame = [[[[barView layer] sublayers] objectAtIndex:0] frame];
+    self.frame = [[[barView layer] sublayers][0] frame];
     [[barView layer] insertSublayer:[self layer] atIndex:1];
 }
 

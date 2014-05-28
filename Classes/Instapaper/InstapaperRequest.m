@@ -33,11 +33,11 @@
 }
 
 - (void)failWithError:(NSError *)error {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kInstapaperRequestFailedNotification object:self userInfo:[NSDictionary dictionaryWithObject:error forKey:@"error"]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kInstapaperRequestFailedNotification object:self userInfo:@{@"error": error}];
 }
 
 - (void)failWithErrorText:(NSString *)text {
-    NSError *error = [NSError errorWithDomain:@"instapaper" code:0 userInfo:[NSDictionary dictionaryWithObject:text forKey:NSLocalizedDescriptionKey]];
+    NSError *error = [NSError errorWithDomain:@"instapaper" code:0 userInfo:@{NSLocalizedDescriptionKey: text}];
     
     [self failWithError:error];
 }

@@ -171,7 +171,7 @@
 }
 
 - (void)dismissWithAnimation:(BOOL)animated {
-    [self _dismissWithAnimation:[NSNumber numberWithBool:animated]];
+    [self _dismissWithAnimation:@(animated)];
 }
 
 - (void)dismiss {
@@ -179,7 +179,7 @@
 }
 
 - (void)dismissAfterDelay:(NSTimeInterval)delay animated:(BOOL)animated {
-    [self performSelector:@selector(_dismissWithAnimation:) withObject:[NSNumber numberWithBool:animated] afterDelay:delay];
+    [self performSelector:@selector(_dismissWithAnimation:) withObject:@(animated) afterDelay:delay];
 }
 
 - (void)dismissAfterDelay:(NSTimeInterval)delay {

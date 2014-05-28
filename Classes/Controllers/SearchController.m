@@ -42,7 +42,7 @@
     coloredView = [[OrangeToolbar alloc] initWithFrame:[searchBar bounds]];
     [[self view] addSubview:coloredView];
     
-    facetControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Interesting", @"Recent", nil]];
+    facetControl = [[UISegmentedControl alloc] initWithItems:@[@"Interesting", @"Recent"]];
     [facetControl setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth];
     [facetControl addTarget:self action:@selector(facetSelected:) forControlEvents:UIControlEventValueChanged];
     [facetControl setSegmentedControlStyle:UISegmentedControlStyleBar];
@@ -154,7 +154,7 @@
 	} else {
 		NSDictionary *dict = [notification userInfo];
         [entries release];
-		entries = [[dict objectForKey:@"array"] retain];
+		entries = [dict[@"array"] retain];
         
 		if ([entries count] != 0) {
 			[emptyView setHidden:YES];
@@ -177,20 +177,20 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    HNEntry *entry = [entries objectAtIndex:[indexPath row]];
+    HNEntry *entry = entries[[indexPath row]];
     return [SubmissionTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SubmissionTableCell *cell = (SubmissionTableCell *) [tableView dequeueReusableCellWithIdentifier:@"submission"];
     if (cell == nil) cell = [[[SubmissionTableCell alloc] initWithReuseIdentifier:@"submission"] autorelease];
-    HNEntry *entry = [entries objectAtIndex:[indexPath row]];
+    HNEntry *entry = entries[[indexPath row]];
     [cell setSubmission:entry];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    HNEntry *entry = [entries objectAtIndex:[indexPath row]];
+    HNEntry *entry = entries[[indexPath row]];
     
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
     [[self navigation] pushController:[controller autorelease] animated:YES];

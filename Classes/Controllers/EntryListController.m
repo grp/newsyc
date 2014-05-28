@@ -172,7 +172,7 @@
 }
 
 - (HNEntry *)entryAtIndexPath:(NSIndexPath *)indexPath {
-    return [entries objectAtIndex:[indexPath row]];
+    return entries[[indexPath row]];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {

@@ -353,10 +353,10 @@
 - (void)updateForKeyboardNotification:(NSNotification *)notification {
     NSDictionary *userInfo = [notification userInfo];
 
-    UIViewAnimationCurve curve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
-    NSTimeInterval duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] intValue];
+    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
-    CGRect endingFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect endingFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect windowEndingFrame = [[centeringAlignmentView window] convertRect:endingFrame fromWindow:nil];
     CGRect viewEndingFrame = [centeringAlignmentView convertRect:windowEndingFrame fromView:nil];
 

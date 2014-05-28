@@ -80,7 +80,7 @@
     BarButtonItem *downvoteItem = [self createBarButtonItemForItem:kEntryActionsViewItemDownvote];
     BarButtonItem *actionsItem = [self createBarButtonItemForItem:kEntryActionsViewItemActions];
     
-    [self setItems:[NSArray arrayWithObjects:replyItem, flexibleSpace, upvoteItem, flexibleSpace, flagItem, flexibleSpace, downvoteItem, flexibleSpace, actionsItem, nil]];
+    [self setItems:@[replyItem, flexibleSpace, upvoteItem, flexibleSpace, flagItem, flexibleSpace, downvoteItem, flexibleSpace, actionsItem]];
      
     [flexibleSpace release];
 }
@@ -157,15 +157,15 @@
     
     switch (item) {
         case kEntryActionsViewItemReply:
-            return [items objectAtIndex:0];
+            return items[0];
         case kEntryActionsViewItemUpvote:
-            return [items objectAtIndex:2];
+            return items[2];
         case kEntryActionsViewItemFlag:
-            return [items objectAtIndex:4];
+            return items[4];
         case kEntryActionsViewItemDownvote:
-            return [items objectAtIndex:6];
+            return items[6];
         case kEntryActionsViewItemActions:
-            return [items objectAtIndex:8];
+            return items[8];
         default:
             return nil;
     }

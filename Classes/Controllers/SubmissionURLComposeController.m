@@ -19,7 +19,7 @@
         NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
         NSArray *matches = [detector matchesInString:pasteboard.string options:0 range:NSMakeRange(0, [pasteboard.string length])];
         if ([matches count] > 0) {            
-            textView.text = [[[matches objectAtIndex:0] URL] absoluteString];
+            textView.text = [[matches[0] URL] absoluteString];
         }
     }
 
@@ -45,7 +45,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     [cell addSubview:titleField];
     
-    return [NSArray arrayWithObject:cell];
+    return @[cell];
 }
 
 - (UIResponder *)initialFirstResponder {

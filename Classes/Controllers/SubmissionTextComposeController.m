@@ -30,7 +30,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     [cell addSubview:titleField];
     
-    return [NSArray arrayWithObject:cell];
+    return @[cell];
 }
 
 - (UIResponder *)initialFirstResponder {

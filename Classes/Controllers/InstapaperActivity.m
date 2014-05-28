@@ -36,7 +36,7 @@
 - (void)prepareWithActivityItems:(NSArray *)activityItems {
     [submission release];
     
-    submission = [[InstapaperSubmission alloc] initWithURL:[activityItems objectAtIndex:0]];
+    submission = [[InstapaperSubmission alloc] initWithURL:activityItems[0]];
     
     [submission setLoginCompletion:^(BOOL loggedIn) {
         [self activityDidFinish:YES];

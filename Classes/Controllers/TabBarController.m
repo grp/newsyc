@@ -54,7 +54,7 @@
         [tabBar setItems:tabBarItems];
 
         if ([viewControllers count] > 0) {
-            [self setSelectedViewController:[viewControllers objectAtIndex:0]];
+            [self setSelectedViewController:viewControllers[0]];
         }
     }
 }
@@ -73,7 +73,7 @@
 
 - (void)tabBar:(UITabBar *)tabBar_ didSelectItem:(UITabBarItem *)item {
     NSInteger index = [[tabBar items] indexOfObject:item];
-    [self setSelectedViewController:[viewControllers objectAtIndex:index]];
+    [self setSelectedViewController:viewControllers[index]];
 }
 
 @end

@@ -15,7 +15,7 @@
     NSMutableArray *parameters = [NSMutableArray array];
     for (NSString *key in [self allKeys]) {
         NSString *escapedk = [key stringByURLEncodingString];
-        NSString *v = [[self objectForKey:key] isKindOfClass:[NSString class]] ? [self objectForKey:key] : [[self objectForKey:key] stringValue];
+        NSString *v = [self[key] isKindOfClass:[NSString class]] ? self[key] : [self[key] stringValue];
         NSString *escapedv = [v stringByURLEncodingString];
         [parameters addObject:[NSString stringWithFormat:@"%@=%@", escapedk, escapedv]];
     }

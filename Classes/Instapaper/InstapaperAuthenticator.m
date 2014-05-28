@@ -39,7 +39,7 @@
 }
 
 - (void)failWithErrorText:(NSString *)text {
-    NSError *error = [NSError errorWithDomain:@"instapaper" code:0 userInfo:[NSDictionary dictionaryWithObject:text forKey:NSLocalizedDescriptionKey]];
+    NSError *error = [NSError errorWithDomain:@"instapaper" code:0 userInfo:@{NSLocalizedDescriptionKey: text}];
     
     [self failWithError:error];
 }
