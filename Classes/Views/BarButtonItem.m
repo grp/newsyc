@@ -54,7 +54,8 @@
     if ([realTarget respondsToSelector:realAction]) {
         NSMethodSignature *signature = [realTarget methodSignatureForSelector:realAction];
         NSInteger args = [signature numberOfArguments] - 2; // remove self, _cmd
-        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         if (args == 0) {
             [realTarget performSelector:realAction];
         } else if (args == 1) {
@@ -62,6 +63,8 @@
         } else if (args == 2) {
             [realTarget performSelector:realAction withObject:item withObject:event];
         }
+#pragma clang diagnostic pop
+
     }
 }
 

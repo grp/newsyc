@@ -86,8 +86,8 @@
     NSString *date = [submission posted];
     NSString *site = [[submission destination] host];
     if ([submission body] != nil) site = @""; // don't show URLs for self posts
-    NSString *point = [submission points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [submission points]];
-    NSString *comment = [submission children] == 0 ? @"no comments" : [submission children] == 1 ? @"1 comment" : [NSString stringWithFormat:@"%d comments", [submission children]];
+    NSString *point = [submission points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%ld points", (long)[submission points]];
+    NSString *comment = [submission children] == 0 ? @"no comments" : [submission children] == 1 ? @"1 comment" : [NSString stringWithFormat:@"%ld comments", (long)[submission children]];
     NSString *points = [NSString stringWithFormat:@"%@ • %@", point, comment];
     NSString *title = [[submission title] stringByDecodingHTMLEntities];
     

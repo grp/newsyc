@@ -221,7 +221,7 @@
 
 - (NSString *)pointsText {
     NSString *date = [entry posted];
-    NSString *points = [entry points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [entry points]];
+    NSString *points = [entry points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%ld points", (long)[entry points]];
 
     // Re-enable this for everyone if comment score viewing is re-enabled.
     if ([entry submitter] == [[entry session] user] || [entry isSubmission]) {

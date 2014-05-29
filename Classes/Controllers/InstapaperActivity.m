@@ -31,9 +31,9 @@
 - (void)prepareWithActivityItems:(NSArray *)activityItems {
     
     submission = [[InstapaperSubmission alloc] initWithURL:activityItems[0]];
-    
+    __weak InstapaperActivity *weakSelf = self;
     [submission setLoginCompletion:^(BOOL loggedIn) {
-        [self activityDidFinish:YES];
+        [weakSelf activityDidFinish:YES];
     }];
 }
 

@@ -294,7 +294,7 @@
 }
 
 - (NSString *)pointsText {
-    NSString *points = [comment points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%d points", [comment points]];
+    NSString *points = [comment points] == 1 ? @"1 point" : [NSString stringWithFormat:@"%ld points", (long)[comment points]];
     return points;
 }
 
@@ -318,7 +318,7 @@
 }
 
 - (NSString *)commentsText {
-    NSString *comments = [comment children] == 0 ? @"" : [comment children] == 1 ? @"1 reply" : [NSString stringWithFormat:@"%d replies", [comment children]];
+    NSString *comments = [comment children] == 0 ? @"" : [comment children] == 1 ? @"1 reply" : [NSString stringWithFormat:@"%ld replies", (long)[comment children]];
     return comments;
 }
 

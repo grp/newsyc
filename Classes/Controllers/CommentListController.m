@@ -444,7 +444,7 @@
         if (index != [sheet cancelButtonIndex]) {
             // The 2 is subtracted to cancel out the cancel button, and then
             // to account for the zero-indexed buttons, but the count from one.
-            savedCompletion([sheet numberOfButtons] - 1 - index - 1);
+            savedCompletion((int)([sheet numberOfButtons] - 1 - index - 1));
         } else {
             [self clearSavedCompletion];
         }
@@ -471,7 +471,7 @@
 - (void)entryActionsView:(EntryActionsView *)eav didSelectItem:(EntryActionsViewItem)item {
     HNEntry *entry = [eav entry];
     
-    __block __typeof__(self) this = self;
+    __weak __typeof__(self) this = self;
     
     savedCompletion = [^(NSInteger index) {
         if (item == kEntryActionsViewItemReply) {
@@ -488,7 +488,7 @@
             [this performDownvoteForEntry:entry fromEntryActionsView:eav];            
         } else if (item == kEntryActionsViewItemActions) {
             if (index == 0) {
-                [self showProfileForEntry:entry];
+                [this showProfileForEntry:entry];
             } else if (index == 1) {
                 CommentListController *controller = [[CommentListController alloc] initWithSource:[entry parent]];
                 [[this navigationController] pushController:controller animated:YES];
@@ -501,7 +501,9 @@
         [this clearSavedCompletion];
     } copy];
     
+    
     savedAction = [^{
+        __strong typeof(self) strongSelf = this;
         if (item == kEntryActionsViewItemUpvote || item == kEntryActionsViewItemDownvote) {
             NSNumber *confirm = [[NSUserDefaults standardUserDefaults] objectForKey:@"interface-confirm-votes"];
             
@@ -515,7 +517,7 @@
                 
                 [sheet showFromBarButtonItemInWindow:[eav barButtonItemForItem:item] animated:YES];
             } else {
-                savedCompletion(0);
+                strongSelf->savedCompletion(0);
             }
         } else if (item == kEntryActionsViewItemFlag) {
             UIActionSheet *sheet = [[UIActionSheet alloc] init];
@@ -539,7 +541,7 @@
             
             [sheet showFromBarButtonItemInWindow:[eav barButtonItemForItem:item] animated:YES];
         } else if (item == kEntryActionsViewItemReply) {
-            savedCompletion(0);
+            strongSelf->savedCompletion(0);
         }
         
         [this clearSavedAction];
