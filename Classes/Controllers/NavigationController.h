@@ -14,10 +14,10 @@
 @protocol NavigationControllerLoginDelegate;
 
 @interface NavigationController : UINavigationController <LoginControllerDelegate> {
-    id<NavigationControllerLoginDelegate> loginDelegate;
+    id<NavigationControllerLoginDelegate> __weak loginDelegate;
 }
 
-@property (nonatomic, assign) id<NavigationControllerLoginDelegate> loginDelegate;
+@property (nonatomic, weak) id<NavigationControllerLoginDelegate> loginDelegate;
 - (void)requestLogin;
 - (void)requestSessions;
 

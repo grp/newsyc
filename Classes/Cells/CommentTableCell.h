@@ -29,8 +29,8 @@
     UITapGestureRecognizer *doubleTapRecognizer;
 }
 
-@property (nonatomic, assign) id<CommentTableCellDelegate> delegate;
-@property (nonatomic, retain) HNEntry *comment;
+@property (nonatomic, weak) id<CommentTableCellDelegate> delegate;
+@property (nonatomic, strong) HNEntry *comment;
 @property (nonatomic, assign) NSInteger indentationLevel;
 @property (nonatomic, assign) BOOL expanded;
 

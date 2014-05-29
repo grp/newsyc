@@ -59,7 +59,6 @@
 }
 
 - (void)connection:(NSURLConnection *)connection_ didFailWithError:(NSError *)error {
-    [received release];
     received = nil;
 
     if ([delegate respondsToSelector:@selector(pingController:failedWithError:)]) {
@@ -103,23 +102,20 @@
                 if (moreButton != nil && moreURL != nil) {
                     [alert addButtonWithTitle:moreButton];
 
-                    moreInfoURL = [[NSURL URLWithString:moreURL] retain];
+                    moreInfoURL = [NSURL URLWithString:moreURL];
                 }
             }
             [alert show];
-            [alert release];
         }
     }
 
     [[NSUserDefaults standardUserDefaults] setObject:[self version] forKey:@"current-version"];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"initial-install-seen"];
 
-    [received release];
     received = nil;
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [moreInfoURL autorelease];
     moreInfoURL = nil;
 
     if (buttonIndex == 1) {

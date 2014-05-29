@@ -13,11 +13,6 @@
 @implementation InstapaperAuthenticator
 @synthesize delegate;
 
-- (void)dealloc {
-    [username release];
-    [password release];
-    [super dealloc];
-}
 
 - (id)initWithUsername:(NSString *)username_ password:(NSString *)password_ {
     if ((self = [super init])) {
@@ -75,7 +70,7 @@
     query = [query stringByAppendingFormat:@"username=%@&", [username stringByURLEncodingString]];
     if (password != nil && [password length] > 0) query = [query stringByAppendingFormat:@"password=%@&", [password stringByURLEncodingString]];
     
-    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] initWithURL:kInstapaperAPIAuthenticationURL] autorelease];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:kInstapaperAPIAuthenticationURL];
     NSData *data = [query dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPMethod: @"POST"];
     [request setHTTPBody:data];
@@ -84,7 +79,6 @@
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];
-    [connection autorelease];
     
     [[UIApplication sharedApplication] retainNetworkActivityIndicator];
 }

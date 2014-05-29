@@ -12,19 +12,11 @@
 
 @implementation EmptyController
 
-- (void)dealloc {
-    [tableView release];
-    [emptyView release];
-    
-    [super dealloc];
-}
 
 - (void)viewDidUnload {
     [super viewDidUnload];
     
-    [tableView release];
     tableView = nil;
-    [emptyView release];
     emptyView = nil;
 }
 

@@ -70,7 +70,6 @@
         [session performSubmission:submission];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionSucceededWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(submissionFailedWithNotification:) name:kHNSubmissionFailureNotification object:submission];
-        [submission release];
     }
 }
 
@@ -83,7 +82,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionSuccessNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionFailureNotification object:nil];
     
-    [super dealloc];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

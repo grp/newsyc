@@ -41,7 +41,6 @@
 }
 
 - (void)sessionAuthenticatorDidRecieveFailure:(HNSessionAuthenticator *)authenticator {
-    [authenticator autorelease];
     [self finish];
     [self fail];
 }
@@ -49,17 +48,11 @@
 - (void)sessionAuthenticator:(HNSessionAuthenticator *)authenticator didRecieveToken:(HNSessionToken)token {
     session = [[HNSession alloc] initWithUsername:[usernameField text] password:[passwordField text] token:token];
     [[HNSessionController sessionController] addSession:session];
-    [authenticator autorelease];
     
     [self finish];
     [self succeed];
 }
 
-- (void)dealloc {
-    [session release];
-    
-    [super dealloc];
-}
 
 - (NSArray *)gradientColors {
     NSMutableArray *array = [NSMutableArray array];

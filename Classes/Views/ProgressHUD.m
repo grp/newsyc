@@ -123,7 +123,6 @@
 }
 
 - (void)setState:(ProgressHUDState)state_ {
-    [state autorelease];
     state = [state_ copy];
     
     if ([state isEqual:kProgressHUDStateLoading]) {
@@ -145,7 +144,6 @@
 }
 
 - (void)setText:(NSString *)text_ {
-    [text autorelease];
     text = [text_ copy];
     
     [label setText:text];
@@ -187,14 +185,9 @@
 }
 
 - (void)dealloc {
-    [spinner release];
-    [label release];
-    [overlay release];
-    [image release];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     
-    [super dealloc];
 }
 
 @end

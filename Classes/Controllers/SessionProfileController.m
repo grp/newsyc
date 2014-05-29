@@ -44,7 +44,7 @@
         
         [[cell textLabel] setText:@"Saved"];
         
-        return [cell autorelease];
+        return cell;
     } else if ([indexPath section] == 2) {
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
         
@@ -52,7 +52,7 @@
         [[cell textLabel] setTextAlignment:NSTextAlignmentCenter];
         [[cell textLabel] setText:@"Accounts"];
         
-        return [cell autorelease];
+        return cell;
     } else {
         return [super tableView:table cellForRowAtIndexPath:indexPath];
     }
@@ -64,7 +64,7 @@
         
         SubmissionListController *controller = [[SubmissionListController alloc] initWithSource:list];
         [controller setTitle:@"Saved"];
-        [[self navigation] pushController:[controller autorelease] animated:YES];
+        [[self navigation] pushController:controller animated:YES];
     } else if ([indexPath section] == 2) {
         [[self navigation] requestSessions];
     } else {

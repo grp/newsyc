@@ -56,7 +56,7 @@
             [shadow setBackgroundColor:[UIColor grayColor]];
             [shadow setClipsToBounds:NO];
             [shadow setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-            [containerContainer addSubview:[shadow autorelease]];
+            [containerContainer addSubview:shadow];
         }
     }
     
@@ -73,14 +73,6 @@
     return [entry destination] != nil;
 }
 
-- (void)dealloc {
-    [entry release];
-    [bodyTextView release];
-    [detailsHeaderContainer release];
-    [containerContainer release];
-    
-    [super dealloc];
-}
 
 + (UIEdgeInsets)margins {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
@@ -157,8 +149,7 @@
 }
 
 - (void)setEntry:(HNEntry *)entry_ {
-    [entry release];
-    entry = [entry_ retain];
+    entry = entry_;
     
     [self setNeedsDisplay];
 }

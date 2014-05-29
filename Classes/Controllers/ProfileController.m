@@ -22,12 +22,6 @@
 
 @implementation ProfileController
 
-- (void)dealloc {
-    [tableView release];
-    [header release];
-    
-    [super dealloc];
-}
 
 - (void)loadView {
     [super loadView];
@@ -58,9 +52,7 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
     
-    [tableView release];
     tableView = nil;
-    [header release];
     header = nil;
 }
 
@@ -165,7 +157,6 @@
             [textView setFrame:CGRectMake([self aboutPadding].left, [self aboutPadding].top, aboutSize.width, aboutSize.height)];
             
             [[cell contentView] addSubview:textView];
-            [textView release];
         } else {
             NSInteger row = [indexPath row] - ([self hasAbout] ? 1 : 0);
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:nil];
@@ -188,7 +179,7 @@
             [[cell textLabel] setText:@"Comments"];
         }
     }
-    return [cell autorelease];
+    return cell;
 }
 
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -213,7 +204,7 @@
         
         UIViewController *controller = [[controllerClass alloc] initWithSource:list];
         [controller setTitle:title];
-        [[self navigation] pushController:[controller autorelease] animated:YES];
+        [[self navigation] pushController:controller animated:YES];
     }
 }
 
@@ -223,7 +214,7 @@
 
 - (void)bodyTextView:(BodyTextView *)header selectedURL:(NSURL *)url {
     BrowserController *controller = [[BrowserController alloc] initWithURL:url];
-    [[self navigation] pushController:[controller autorelease] animated:YES];
+    [[self navigation] pushController:controller animated:YES];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

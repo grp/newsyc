@@ -12,11 +12,6 @@
 @implementation InstapaperLoginController
 @synthesize pendingURL;
 
-- (void)dealloc {
-    [pendingURL release];
-    
-    [super dealloc];
-}
 
 - (BOOL)requiresPassword {
     return NO;
@@ -52,7 +47,6 @@
 
 - (void)instapaperAuthenticator:(InstapaperAuthenticator *)auth didFailWithError:(NSError *)error {
     [bottomLabel setText:[NSString stringWithFormat:@"Error: %@", [error localizedDescription]]];
-    [auth release];
     
     [self finish];
     [self fail];
@@ -63,8 +57,6 @@
     [session setUsername:[usernameField text]];
     [session setPassword:[passwordField text]];
     [InstapaperSession setCurrentSession:session];
-    [auth release];
-    [session release];
     
     [self finish];
     [self succeed];

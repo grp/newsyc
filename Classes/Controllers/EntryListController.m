@@ -27,7 +27,7 @@
     [tableViewController setClearsSelectionOnViewWillAppear:NO];
     [self addChildViewController:tableViewController];
 
-    tableView = [[tableViewController tableView] retain];
+    tableView = [tableViewController tableView];
     [tableView setFrame:[[self view] bounds]];
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [tableView setDelegate:self];
@@ -57,33 +57,19 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
 
-    [emptyView release];
     emptyView = nil;
-    [pullToRefreshView release];
     pullToRefreshView = nil;
-    [refreshControl release];
     refreshControl = nil;
-    [moreCell release];
     moreCell = nil;
-    [tableView release];
     tableView = nil;
     [tableViewController removeFromParentViewController];
-    [tableViewController release];
     tableViewController = nil;
 }
 
 - (void)dealloc {
-    [pullToRefreshView release];
     [refreshControl endRefreshing];
-    [refreshControl release];
-    [emptyView release];
-    [moreCell release];
-    [tableView release];
     [tableViewController removeFromParentViewController];
-    [tableViewController release];
-    [entries release];
 
-    [super dealloc];
 }
 
 - (void)deselectWithAnimation:(BOOL)animated {
@@ -137,7 +123,6 @@
 }
 
 - (void)loadEntries {
-    [entries release];
     entries = [[(HNEntry *) source entries] copy];
 }
 
@@ -224,7 +209,7 @@
 
         Class cellClass = [[self class] cellClass];
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(cellClass)];
-        if (cell == nil) cell = [[[cellClass alloc] initWithReuseIdentifier:NSStringFromClass(cellClass)] autorelease];
+        if (cell == nil) cell = [[cellClass alloc] initWithReuseIdentifier:NSStringFromClass(cellClass)];
 
         [self configureCell:cell forEntry:entry];
     

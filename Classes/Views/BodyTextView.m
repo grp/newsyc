@@ -61,12 +61,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [renderer release];
-    [bodyTextRenderView release];
-
-    [super dealloc];
-}
 
 - (void)setNeedsDisplay {
     [super setNeedsDisplay];
@@ -74,11 +68,10 @@
 }
 
 - (void)setRenderer:(HNObjectBodyRenderer *)renderer_ {
-    [renderer autorelease];
 
     [self clearHighlights];
 
-    renderer = [renderer_ retain];
+    renderer = renderer_;
     [self setNeedsDisplay];
 }
 
@@ -116,7 +109,6 @@
 
 - (void)clearHighlights {
     if (highlightedRects != nil) {
-        [highlightedRects release];
         highlightedRects = nil;
         
         [self setNeedsDisplay];
@@ -128,10 +120,11 @@
 
     UITouch *touch = [touches anyObject];
     CGPoint bodyPoint = [touch locationInView:self];
-    [renderer linkURLAtPoint:bodyPoint forWidth:[self bounds].size.width rects:&highlightedRects];
+    NSSet *rects;
+    [renderer linkURLAtPoint:bodyPoint forWidth:[self bounds].size.width rects:&rects];
 
-    if (highlightedRects != nil) {
-        [highlightedRects retain];
+    if (rects != nil) {
+        highlightedRects = rects;
 
         [self setNeedsDisplay];
     }
@@ -168,7 +161,6 @@
         if (url != nil && [rects count] > 0) {
             SharingController *sharingController = [[SharingController alloc] initWithURL:url title:nil fromController:nil];
             [sharingController showFromView:self atRect:CGRectInset(CGRectMake(point.x, point.y, 0, 0), -4.0f, -4.0f)];
-            [sharingController release];
         } else if ([self becomeFirstResponder]) {
             UIMenuController *menuController = [UIMenuController sharedMenuController];
             [menuController setTargetRect:[self bounds] inView:self];

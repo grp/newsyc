@@ -40,12 +40,12 @@
         item = [[UITabBarItem alloc] initWithTitle:title image:image tag:0];
     }
 
-    return [item autorelease];
+    return item;
 }
 
 - (id)initWithSession:(HNSession *)session_ {
     if ((self = [super init])) {
-        session = [session_ retain];
+        session = session_;
 
         if (![session isAnonymous] && [[HNSessionController sessionController] numberOfSessions] != 1) {
             [self setTitle:[[session user] identifier]];
@@ -54,12 +54,12 @@
         }
 
         HNEntryList *homeList = [HNEntryList session:session entryListWithIdentifier:kHNEntryListIdentifierSubmissions];
-        home = [[[SubmissionListController alloc] initWithSource:homeList] autorelease];
+        home = [[SubmissionListController alloc] initWithSource:homeList];
         [home setTitle:@"Hacker News"];
         [home setTabBarItem:[self _tabBarItemWithTitle:@"Home" imageName:@"home"]];
         
         HNEntryList *newList = [HNEntryList session:session entryListWithIdentifier:kHNEntryListIdentifierNewSubmissions];
-        latest = [[[SubmissionListController alloc] initWithSource:newList] autorelease];
+        latest = [[SubmissionListController alloc] initWithSource:newList];
         [latest setTitle:@"New Submissions"];
         [latest setTabBarItem:[self _tabBarItemWithTitle:@"New" imageName:@"new"]];
 
@@ -70,17 +70,17 @@
         [latest setTabBarItem:[self _tabBarItemWithTitle:[latest title] imageName:@"new"]];
 #endif
 
-        profile = [[[SessionProfileController alloc] initWithSource:[session user]] autorelease];
+        profile = [[SessionProfileController alloc] initWithSource:[session user]];
         [profile setTitle:@"Profile"];
         [profile setTabBarItem:[self _tabBarItemWithTitle:@"Profile" imageName:@"person"]];
 
-        search = [[[SearchController alloc] initWithSession:session] autorelease];
+        search = [[SearchController alloc] initWithSession:session];
         [search setTitle:@"Search"];
-        [search setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:0] autorelease]];
+        [search setTabBarItem:[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:0]];
 
-        more = [[[MoreController alloc] initWithSession:session] autorelease];
+        more = [[MoreController alloc] initWithSession:session];
         [more setTitle:@"More"];
-        [more setTabBarItem:[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:0] autorelease]];
+        [more setTabBarItem:[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:0]];
 
         NSMutableArray *viewControllers = [NSMutableArray arrayWithObjects:home, latest, profile, search, more, nil];
 
@@ -117,8 +117,6 @@
         [navigation setViewControllers:@[compose]];
         [self presentViewController:navigation animated:YES completion:NULL];
 
-        [navigation release];
-        [compose release];
     }
 }
 
@@ -133,7 +131,6 @@
     [sheet setDelegate:self];
     
     [sheet showFromBarButtonItemInWindow:composeItem animated:YES];
-    [sheet release];
 }
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
@@ -156,12 +153,6 @@
     }
 }
 
-- (void)dealloc {
-    [composeItem release];
-    [session release];
-    
-    [super dealloc];
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -198,7 +189,6 @@
     
     [[self navigationItem] setRightBarButtonItem:nil];
     
-    [composeItem release];
     composeItem = nil;
 }
 

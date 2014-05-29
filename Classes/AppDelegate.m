@@ -147,12 +147,10 @@
 
     SessionListController *sessionListController = [[SessionListController alloc] init];
     [sessionListController setAutomaticDisplaySession:recentSession];
-    [sessionListController autorelease];
     
     navigationController = [[NavigationController alloc] initWithRootViewController:sessionListController];
     [navigationController setLoginDelegate:sessionListController];
     [navigationController setDelegate:self];
-    [navigationController autorelease];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [window setRootViewController:navigationController];
@@ -162,7 +160,6 @@
         rightNavigationController = [[NavigationController alloc] init];
         [rightNavigationController setLoginDelegate:sessionListController];
         [rightNavigationController setDelegate:self];
-        [rightNavigationController autorelease];
 
         [self clearLeafViewControllerAnimated:NO];
 
@@ -170,7 +167,6 @@
         [splitController setViewControllers:@[navigationController, rightNavigationController]];
         if ([splitController respondsToSelector:@selector(setPresentsWithGesture:)]) [splitController setPresentsWithGesture:YES];
         [splitController setDelegate:self];
-        [splitController autorelease];
         
         [window setRootViewController:splitController];
 
@@ -202,10 +198,10 @@
 }
 
 - (void)splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)pc {
-    popoverItem = [barButtonItem retain];
+    popoverItem = barButtonItem;
     // XXX: work around navigation bar shrinking this button
     [popoverItem setTitle:@"HN"];
-    popover = [pc retain];
+    popover = pc;
     
     NSArray *controllers = [rightNavigationController viewControllers];
     if ([controllers count] > 0) {
@@ -221,9 +217,7 @@
         [[root navigationItem] removeLeftBarButtonItem:popoverItem];
     }
     
-    [popoverItem release];
     popoverItem = nil;
-    [popover release];
     popover = nil;
 }
 
@@ -277,7 +271,6 @@
         EmptyController *emptyController = [[EmptyController alloc] init];
         if (popoverItem != nil) [[emptyController navigationItem] addLeftBarButtonItem:popoverItem atPosition:UINavigationItemPositionLeft];
         [rightNavigationController setViewControllers:@[emptyController]];
-        [emptyController release];
     }
 }
 
@@ -294,19 +287,15 @@
 - (void)pingController:(PingController *)ping completedAcceptingURL:(NSURL *)url {
     BrowserController *browserController = [[BrowserController alloc] initWithURL:url];
     [navigationController pushController:browserController animated:YES];
-    [browserController release];
 
-    [pingController release];
     pingController = nil;
 }
 
 - (void)pingController:(PingController *)ping failedWithError:(NSError *)error {
-    [pingController release];
     pingController = nil;
 }
 
 - (void)pingControllerCompletedWithoutAction:(PingController *)ping {
-    [pingController release];
     pingController = nil;
 }
 
@@ -336,13 +325,5 @@
 
 }
 
-- (void)dealloc {
-    [window release];
-    [navigationController release];
-    [rightNavigationController release];
-    [splitController release];
-
-    [super dealloc];
-}
 
 @end

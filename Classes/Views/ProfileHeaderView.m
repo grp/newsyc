@@ -79,12 +79,4 @@
     [subtitleLabel setText:subtitle];
 }
 
-- (void)dealloc {
-    [user release];
-    [subtitleLabel release];
-    [titleLabel release];
-    
-    [super dealloc];
-}
-
 @end

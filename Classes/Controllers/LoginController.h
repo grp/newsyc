@@ -35,7 +35,7 @@
 	BOOL isAuthenticating;
 }
 
-@property (nonatomic, assign) id<LoginControllerDelegate> delegate;
+@property (nonatomic, weak) id<LoginControllerDelegate> delegate;
 
 - (void)finish;
 - (void)authenticate;

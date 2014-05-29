@@ -12,7 +12,7 @@
     UIView *container_;
 }
 
-@property (readonly, nonatomic) UILabel *label;
-@property (readonly, nonatomic) UIActivityIndicatorView *activityIndicatorView;
+@property (weak, readonly, nonatomic) UILabel *label;
+@property (weak, readonly, nonatomic) UIActivityIndicatorView *activityIndicatorView;
 
 @end

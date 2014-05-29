@@ -70,16 +70,10 @@
 }
 
 - (void)dealloc {
-    [comment release];
-    [toolbarView release];
-    [doubleTapRecognizer release];
-    [bodyTextView release];
-    [tapRecognizer release];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIMenuControllerWillShowMenuNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIMenuControllerDidHideMenuNotification object:nil];
 
-    [super dealloc];
 }
 
 #pragma mark - Setters
@@ -107,8 +101,7 @@
 }
 
 - (void)setComment:(HNEntry *)comment_ {
-    [comment autorelease];
-    comment = [comment_ retain];
+    comment = comment_;
     
     [toolbarView setEntry:comment];
     [bodyTextView setRenderer:[comment renderer]];

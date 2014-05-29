@@ -37,11 +37,6 @@
     [barView layoutInsideBar:self];
 }
 
-- (void)dealloc {
-    [barView release];
-
-    [super dealloc];
-}
 
 - (void)setOrange:(BOOL)orange_ {
     orange = orange_;

@@ -9,12 +9,12 @@
 @interface TabBarController : UIViewController <UITabBarDelegate> {
     UITabBar *tabBar;
     NSArray *viewControllers;
-    UIViewController *selectedViewController;
+    UIViewController *__weak selectedViewController;
 }
 
 @property (nonatomic, readonly) UITabBar *tabBar;
 
 @property (nonatomic, copy) NSArray *viewControllers;
-@property (nonatomic, assign) UIViewController *selectedViewController;
+@property (nonatomic, weak) UIViewController *selectedViewController;
 
 @end

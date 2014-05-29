@@ -33,12 +33,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [url release];
-    [title release];
-
-    [super dealloc];
-}
 
 - (void)showFromView:(UIView *)view barButtonItem:(BarButtonItem *)item atRect:(CGRect)rect {
     if (CGRectIsNull(rect)) {
@@ -57,8 +51,6 @@
     NSArray *activityItems = @[url];
     NSArray *applicationActivities = @[instapaperActivity, openInSafariActivity];
 
-    [instapaperActivity release];
-    [openInSafariActivity release];
 
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
 
@@ -86,7 +78,6 @@
 
         [activityController setCompletionHandler:^(NSString *activityType, BOOL completed) {
             [popover dismissPopoverAnimated:YES];
-            [popover release];
         }];
     } else {
         [controller presentViewController:activityController animated:YES completion:NULL];

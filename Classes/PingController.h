@@ -13,10 +13,10 @@
     NSURL *moreInfoURL;
     BOOL locked;
 
-    id<PingControllerDelegate> delegate;
+    id<PingControllerDelegate> __weak delegate;
 }
 
-@property (nonatomic, assign) id<PingControllerDelegate> delegate;
+@property (nonatomic, weak) id<PingControllerDelegate> delegate;
 @property (nonatomic, assign) BOOL locked;
 
 - (void)ping;

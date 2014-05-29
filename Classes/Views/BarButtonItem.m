@@ -49,7 +49,7 @@
 }
 
 - (void)itemSelected:(UIBarButtonItem *)item event:(UIEvent *)event {
-    buttonView = [[[[event allTouches] anyObject] view] retain];
+    buttonView = [[[event allTouches] anyObject] view];
     
     if ([realTarget respondsToSelector:realAction]) {
         NSMethodSignature *signature = [realTarget methodSignatureForSelector:realAction];
@@ -65,11 +65,6 @@
     }
 }
 
-- (void)dealloc {
-    [buttonView release];
-    
-    [super dealloc];
-}
 
 @end
 

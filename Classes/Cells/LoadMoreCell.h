@@ -13,6 +13,6 @@
     LoadMoreButton *button;
 }
 
-@property (nonatomic, readonly, retain) LoadMoreButton *button;
+@property (nonatomic, readonly, strong) LoadMoreButton *button;
 
 @end

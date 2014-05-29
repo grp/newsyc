@@ -28,11 +28,6 @@
     // object for the lifetime of this navigation controller (for removal).
 }
 
-- (void)dealloc {
-    [doneItem release];
-    
-    [super dealloc];
-}
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
     [[currentController navigationItem] removeRightBarButtonItem:doneItem];

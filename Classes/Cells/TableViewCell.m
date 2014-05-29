@@ -59,7 +59,6 @@
 		contentView = [[TableViewCellView alloc] initWithCell:self];
 		[contentView setOpaque:YES];
 		[self.contentView addSubview:contentView];
-		[contentView release];
     }
 
     return self;

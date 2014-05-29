@@ -14,15 +14,10 @@
 @implementation InstapaperRequest
 @synthesize session; 
 
-- (void)dealloc {
-    [session release];
-    
-    [super dealloc];
-}
 
 - (id)initWithSession:(InstapaperSession *)session_ {
     if ((self = [super init])) {
-        session = [session_ retain];
+        session = session_;
     }
     
     return self;
@@ -79,7 +74,7 @@
     if (selection != nil && [selection length] > 0) query = [query stringByAppendingFormat:@"&title=%@&", [selection stringByURLEncodingString]];
     query = [query stringByAppendingFormat:@"url=%@&", [[url absoluteString] stringByURLEncodingString]];
     
-    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] initWithURL:kInstapaperAPIAddItemURL] autorelease];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:kInstapaperAPIAddItemURL];
     NSData *data = [query dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPMethod: @"POST"];
     [request setHTTPBody:data];
@@ -88,7 +83,6 @@
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection start];
-    [connection autorelease];
     
     [[UIApplication sharedApplication] retainNetworkActivityIndicator];
 }

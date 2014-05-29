@@ -27,7 +27,7 @@
     __weak id<ComposeControllerDelegate> delegate;
 }
 
-@property (nonatomic, assign) id<ComposeControllerDelegate> delegate;
+@property (nonatomic, weak) id<ComposeControllerDelegate> delegate;
 
 - (id)initWithSession:(HNSession *)session_;
 

@@ -95,11 +95,8 @@
     }
     
     expandedCell = nil;
-    [entryActionsView release];
     entryActionsView = nil;
-    [entryActionsViewItem release];
     entryActionsViewItem = nil;
-    [detailsHeaderView release];
     detailsHeaderView = nil;
 }
 
@@ -171,11 +168,7 @@
     [self clearSavedAction];
     [self clearSavedCompletion];
     
-    [detailsHeaderView release];
-    [entryActionsView release];
-    [entryActionsViewItem release];
 
-    [super dealloc];
 }
 
 #pragma mark - Table Cells
@@ -197,7 +190,6 @@
     NSMutableArray *children = [NSMutableArray array];
     [self addChildrenOfEntry:(HNEntry *) source toEntryArray:children includeChildren:YES]; 
     
-    [entries release];
     entries = [children copy];
 }
 
@@ -283,7 +275,6 @@
     [pullToRefreshView setBackgroundColor:[UIColor whiteColor]];
     [pullToRefreshView setTextShadowColor:[UIColor whiteColor]];
     
-    [detailsHeaderView release];
     detailsHeaderView = nil;
     
     detailsHeaderView = [[DetailsHeaderView alloc] initWithEntry:(HNEntry *) source widthWidth:[[self view] bounds].size.width];
@@ -298,12 +289,12 @@
 
 - (void)detailsHeaderView:(DetailsHeaderView *)header selectedURL:(NSURL *)url {
     BrowserController *controller = [[BrowserController alloc] initWithURL:url];
-    [[self navigation] pushController:[controller autorelease] animated:YES];
+    [[self navigation] pushController:controller animated:YES];
 }
 
 - (void)commentTableCell:(CommentTableCell *)cell selectedURL:(NSURL *)url {
     BrowserController *controller = [[BrowserController alloc] initWithURL:url];
-    [[self navigation] pushController:[controller autorelease] animated:YES];
+    [[self navigation] pushController:controller animated:YES];
 }
 
 - (void)commentTableCellTapped:(CommentTableCell *)cell {
@@ -321,7 +312,7 @@
 - (void)commentTableCellDoubleTapped:(CommentTableCell *)cell {
     HNEntry *entry = [self entryAtIndexPath:[tableView indexPathForCell:cell]];
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [[self navigation] pushController:[controller autorelease] animated:YES];
+    [[self navigation] pushController:controller animated:YES];
 }
 
 #pragma mark - Actions
@@ -332,7 +323,6 @@
     [alert setMessage:@"Unable to submit your vote. Make sure you can flag items and haven't already."];
     [alert addButtonWithTitle:@"Continue"];
     [alert show];
-    [alert release];
 }
 
 - (void)voteFailed {
@@ -341,7 +331,6 @@
     [alert setMessage:@"Unable to submit your vote. Make sure you can vote and haven't already."];
     [alert addButtonWithTitle:@"Continue"];
     [alert show];
-    [alert release];
 }
 
 - (void)performUpvoteForEntry:(HNEntry *)entry fromEntryActionsView:(EntryActionsView *)eav {
@@ -349,7 +338,7 @@
     [submission setDirection:kHNVoteDirectionUp];
     [submission setTarget:entry];
     
-    __block id successToken = nil;
+    __weak id successToken = nil;
     successToken = [[NSNotificationCenter defaultCenter] addObserverForName:kHNSubmissionSuccessNotification object:submission queue:nil usingBlock:^(NSNotification *block) {
         [entry beginLoading];
         [eav stopLoadingItem:kEntryActionsViewItemUpvote];
@@ -357,7 +346,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:successToken];        
     }];
     
-    __block id failureToken = nil;
+    __weak id failureToken = nil;
     failureToken = [[NSNotificationCenter defaultCenter] addObserverForName:kHNSubmissionFailureNotification object:submission queue:nil usingBlock:^(NSNotification *block) {
         [self voteFailed];
         [eav stopLoadingItem:kEntryActionsViewItemUpvote];
@@ -366,7 +355,6 @@
     }];
     
     [[source session] performSubmission:submission];
-    [submission release];
 
     [eav beginLoadingItem:kEntryActionsViewItemUpvote];
 }
@@ -376,7 +364,7 @@
     [submission setDirection:kHNVoteDirectionDown];
     [submission setTarget:entry];
     
-    __block id successToken = nil;
+    __weak id successToken = nil;
     successToken = [[NSNotificationCenter defaultCenter] addObserverForName:kHNSubmissionSuccessNotification object:submission queue:nil usingBlock:^(NSNotification *block) {
         [entry beginLoading];
         [eav stopLoadingItem:kEntryActionsViewItemDownvote];
@@ -384,7 +372,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:successToken];        
     }];
                                              
-    __block id failureToken = nil;
+    __weak id failureToken = nil;
     failureToken = [[NSNotificationCenter defaultCenter] addObserverForName:kHNSubmissionFailureNotification object:submission queue:nil usingBlock:^(NSNotification *block) {
         [self voteFailed];
         [eav stopLoadingItem:kEntryActionsViewItemDownvote];
@@ -393,7 +381,6 @@
     }];
     
     [[source session] performSubmission:submission];
-    [submission release];
     
     [eav beginLoadingItem:kEntryActionsViewItemDownvote];
 }
@@ -402,7 +389,7 @@
     HNSubmission *submission = [[HNSubmission alloc] initWithSubmissionType:kHNSubmissionTypeFlag];
     [submission setTarget:entry];
     
-    __block id successToken = nil;
+    __weak id successToken = nil;
     successToken = [[NSNotificationCenter defaultCenter] addObserverForName:kHNSubmissionSuccessNotification object:submission queue:nil usingBlock:^(NSNotification *block) {
         [entry beginLoading];
         [eav stopLoadingItem:kEntryActionsViewItemFlag];
@@ -410,7 +397,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:successToken];        
     }];
     
-    __block id failureToken = nil;
+    __weak id failureToken = nil;
     failureToken = [[NSNotificationCenter defaultCenter] addObserverForName:kHNSubmissionFailureNotification object:submission queue:nil usingBlock:^(NSNotification *block) {
         [self flagFailed];
         [eav stopLoadingItem:kEntryActionsViewItemFlag];
@@ -420,7 +407,6 @@
     
     [[source session] performSubmission:submission];
 
-    [submission release];
     
     [eav beginLoadingItem:kEntryActionsViewItemFlag];
 }
@@ -428,14 +414,12 @@
 - (void)showProfileForEntry:(HNEntry *)entry {
     ProfileController *controller = [[ProfileController alloc] initWithSource:[entry submitter]];
     [controller setTitle:@"Profile"];
-    [controller autorelease];
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [[self navigation] pushController:controller animated:YES];
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         ModalNavigationController *navigation = [[ModalNavigationController alloc] initWithRootViewController:controller];
         [self presentViewController:navigation animated:YES completion:NULL];
-        [navigation release];
     }
 }
 
@@ -448,12 +432,10 @@
 }
 
 - (void)clearSavedCompletion {
-    [savedCompletion release];
     savedCompletion = nil;
 }
 
 - (void)clearSavedAction {
-    [savedAction release];
     savedAction = nil;
 }
 
@@ -498,7 +480,6 @@
             
             NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:compose];
             [[this navigationController] presentViewController:navigation animated:YES completion:NULL];
-            [navigation release];
         } else if (item == kEntryActionsViewItemUpvote) {
             [this performUpvoteForEntry:entry fromEntryActionsView:eav];
         } else if (item == kEntryActionsViewItemFlag) {
@@ -510,10 +491,10 @@
                 [self showProfileForEntry:entry];
             } else if (index == 1) {
                 CommentListController *controller = [[CommentListController alloc] initWithSource:[entry parent]];
-                [[this navigationController] pushController:[controller autorelease] animated:YES];
+                [[this navigationController] pushController:controller animated:YES];
             } else if (index == 2) {
                 CommentListController *controller = [[CommentListController alloc] initWithSource:[entry submission]];
-                [[this navigationController] pushController:[controller autorelease] animated:YES];
+                [[this navigationController] pushController:controller animated:YES];
             }
         }
         
@@ -533,7 +514,6 @@
                 [sheet setSheetContext:@"entry-action"];
                 
                 [sheet showFromBarButtonItemInWindow:[eav barButtonItemForItem:item] animated:YES];
-                [sheet release];
             } else {
                 savedCompletion(0);
             }
@@ -547,7 +527,6 @@
             [sheet setSheetContext:@"entry-action"];
             
             [sheet showFromBarButtonItemInWindow:[eav barButtonItemForItem:item] animated:YES];
-            [sheet release];
         } else if (item == kEntryActionsViewItemActions) {
             UIActionSheet *sheet = [[UIActionSheet alloc] init];
             if ([entry submission]) [sheet addButtonWithTitle:@"Submission"];
@@ -559,7 +538,6 @@
             [sheet setSheetContext:@"entry-action"];
             
             [sheet showFromBarButtonItemInWindow:[eav barButtonItemForItem:item] animated:YES];
-            [sheet release];
         } else if (item == kEntryActionsViewItemReply) {
             savedCompletion(0);
         }

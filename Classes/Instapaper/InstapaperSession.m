@@ -18,8 +18,7 @@ static id currentSession = nil;
 }
 
 + (void)setCurrentSession:(id)session {
-    [currentSession autorelease];
-    currentSession = [session retain];
+    currentSession = session;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (session != nil) {
@@ -51,7 +50,7 @@ static id currentSession = nil;
         InstapaperSession *session = [[InstapaperSession alloc] init];
         [session setUsername:username];
         [session setPassword:password];
-        [self setCurrentSession:[session autorelease]];
+        [self setCurrentSession:session];
     }
     
     [self logoutIfNecessary];

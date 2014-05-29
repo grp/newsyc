@@ -107,31 +107,18 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
 
-    [tableView release];
     tableView = nil;
-    [sessions release];
     sessions = nil;
-    [editBarButtonItem release];
     editBarButtonItem = nil;
-    [doneBarButtonItem release];
     doneBarButtonItem = nil;
-    [addBarButtonItem release];
     addBarButtonItem = nil;
 }
 
-- (void)dealloc {
-    [tableView release];
-    [sessions release];
-    [automaticDisplaySession release];
-
-    [super dealloc];
-}
 
 #pragma mark - Sessions
 
 - (void)reloadSessions {
-    [sessions release];
-    sessions = [[[HNSessionController sessionController] sessions] retain];
+    sessions = [[HNSessionController sessionController] sessions];
 }
 
 - (void)pushMainControllerForSession:(HNSession *)session animated:(BOOL)animated {
@@ -148,21 +135,18 @@
     [[tabBarController navigationItem] setHidesBackButton:hideBackButton];
     
     [[self navigation] pushController:tabBarController animated:animated];
-    [tabBarController release];
 }
 
 - (void)pushAnonymousSessionIfNecessaryAnimated:(BOOL)animated {
     if ([sessions count] == 0) {
         HNAnonymousSession *anonymousSession = [[HNAnonymousSession alloc] init];
         [self pushMainControllerForSession:anonymousSession animated:animated];
-        [anonymousSession release];
     }
 }
 
 - (void)pushAutomaticDisplaySesssionAnimated:(BOOL)animated {
     if (automaticDisplaySession != nil) {
         [self pushMainControllerForSession:automaticDisplaySession animated:animated];
-        [automaticDisplaySession release];
         automaticDisplaySession = nil;
     } else {
         [self pushAnonymousSessionIfNecessaryAnimated:animated];
@@ -224,7 +208,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView_ cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellIdentifier"];
-    if (cell == nil) cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CellIdentifier"] autorelease];
+    if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CellIdentifier"];
 
     HNSession *session = [self sessionAtIndexPath:indexPath];
     [[cell textLabel] setText:[[session user] identifier]];

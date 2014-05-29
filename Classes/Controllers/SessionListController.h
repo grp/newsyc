@@ -20,6 +20,6 @@
     BarButtonItem *addBarButtonItem;
 }
 
-@property (nonatomic, retain) HNSession *automaticDisplaySession;
+@property (nonatomic, strong) HNSession *automaticDisplaySession;
 
 @end

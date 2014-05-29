@@ -18,7 +18,6 @@
 }
 
 - (void)setPlaceholder:(NSString *)placeholder_ {
-    [placeholder_ autorelease];
     placeholder = [placeholder_ copy];
     
     [placeholderLabel setText:placeholder];
@@ -32,10 +31,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [placeholderLabel release];
-    [placeholder release];
     
-    [super dealloc];
 }
 
 - (UIEdgeInsets)effectiveTextInset {

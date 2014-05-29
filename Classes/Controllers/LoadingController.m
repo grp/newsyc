@@ -24,7 +24,6 @@
 #pragma mark - Source Management
 
 - (void)applicationDidBecomeActiveWithNotification:(NSNotification *)notification {
-    [lastUpdatedOnAppearDate release];
     lastUpdatedOnAppearDate = nil;
 }
 
@@ -33,8 +32,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNObjectFinishedLoadingNotification object:source];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNObjectFailedLoadingNotification object:source];
     
-    [source autorelease];
-    source = [source_ retain];
+    source = source_;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceStartedLoading) name:kHNObjectStartedLoadingNotification object:source];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceFinishedLoading) name:kHNObjectFinishedLoadingNotification object:source];
@@ -111,13 +109,9 @@
     
     [[self navigationItem] removeBarButtonItem:actionItem];
     
-    [indicator release];
     indicator = nil;
-    [actionItem release];
     actionItem = nil;
-    [retryButton release];
     retryButton = nil;
-    [statusView release];
     statusView = nil;
 }
 
@@ -126,15 +120,7 @@
     
     if ([source isLoading]) [source cancelLoading];
     
-    [indicator release];
-    [source release];
-    [actionItem release];
-    [retryButton release];
-    [statusView release];
-    [statusViews release];
-    [lastUpdatedOnAppearDate release];
     
-    [super dealloc];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -150,8 +136,7 @@
         [source beginLoading];
     }
 
-    [lastUpdatedOnAppearDate release];
-    lastUpdatedOnAppearDate = [[NSDate date] retain];
+    lastUpdatedOnAppearDate = [NSDate date];
 
     if ([source isLoaded]) {
         // Fake a finished loading event even if it's loaded (to show content).
@@ -229,7 +214,6 @@
         [hud setState:kProgressHUDStateError];
         [hud showInWindow:[[self view] window]];
         [hud dismissAfterDelay:0.8f animated:YES];
-        [hud release];
     }
     
     [self updateStatusDisplay];
@@ -254,7 +238,6 @@
 - (void)actionTapped {
     SharingController *sharingController = [[SharingController alloc] initWithURL:[source URL] title:[self sourceTitle] fromController:self];
     [sharingController showFromBarButtonItem:actionItem];
-    [sharingController release];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

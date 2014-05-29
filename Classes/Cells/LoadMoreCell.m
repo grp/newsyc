@@ -30,10 +30,5 @@
     }
 }
 
-- (void)dealloc {
-    [button release];
-    
-    [super dealloc];
-}
 
 @end

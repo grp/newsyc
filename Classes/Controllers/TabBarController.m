@@ -38,7 +38,6 @@
             [viewController removeFromParentViewController];
         }
 
-        [viewControllers release];
         viewControllers = [viewControllers_ copy];
 
         NSMutableArray *tabBarItems = [NSMutableArray array];

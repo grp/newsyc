@@ -16,7 +16,7 @@
 
 - (id)initWithSession:(HNSession *)session_ {
     if ((self = [super init])) {
-        session = [session_ retain];
+        session = session_;
 
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             [self setModalPresentationStyle:UIModalPresentationPageSheet];
@@ -61,7 +61,6 @@
         [sheet setSheetContext:@"cancel"];
         [sheet setDelegate:self];
         [sheet showFromBarButtonItemInWindow:cancelItem animated:YES];
-        [sheet release];
     }
 }
 
@@ -88,7 +87,6 @@
     [alert setMessage:@"Unable to post. Ensure you have a data connection and can perform this post."];
     [alert addButtonWithTitle:@"Continue"];
     [alert show];
-    [alert release];
 }
 
 - (void)performSubmission {
@@ -121,7 +119,7 @@
     [cell setFrame:cellFrame];
     [[cell textLabel] setTextColor:[UIColor darkGrayColor]];
     [[cell textLabel] setFont:[UIFont systemFontOfSize:16.0f]];
-    return [cell autorelease];
+    return cell;
 }
 
 - (UITextField *)generateTextFieldForCell:(UITableViewCell *)cell {
@@ -142,7 +140,7 @@
     frame.size.width -= label.width + 10.0f;
     [field setFrame:frame];
     
-    return [field autorelease];
+    return field;
 }
 
 - (UITableViewCell *)entryInputCellWithTitle:(NSString *)title {
@@ -185,7 +183,7 @@
     // background behind the keyboard.
     [[self view] setBackgroundColor:[UIColor whiteColor]];
     
-    entryCells = [[self inputEntryCells] retain];
+    entryCells = [self inputEntryCells];
     
     textView = [[PlaceholderTextView alloc] initWithFrame:[[self view] bounds]];
     [textView setDelegate:self];
@@ -257,17 +255,11 @@
     [[self navigationItem] setLeftBarButtonItem:nil];
     [[self navigationItem] setRightBarButtonItem:nil];
     
-    [tableView release];
     tableView = nil;
-    [textView release];
     textView = nil;
-    [loadingItem release];
     loadingItem = nil;
-    [cancelItem release];
     cancelItem = nil;
-    [completeItem release];
     completeItem = nil;
-    [entryCells release];
     entryCells = nil;
 }
 
@@ -275,16 +267,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:[[self view] window]];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:[[self view] window]];
     
-    [tableView release];
-    [completeItem release];
-    [cancelItem release];
-    [textView release];
-    [loadingItem release];
-    [entryCells release];
 
-    [session release];
     
-    [super dealloc];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {

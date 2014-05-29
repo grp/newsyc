@@ -47,7 +47,6 @@
 - (void)removeLeftBarButtonItem:(UIBarButtonItem *)item {
     NSMutableArray *current = [[self leftBarButtonItems] mutableCopy];
     [current removeObject:item];
-    [current autorelease];
     
     [self setLeftBarButtonItems:current];
 }
@@ -55,7 +54,6 @@
 - (void)removeRightBarButtonItem:(UIBarButtonItem *)item {
     NSMutableArray *current = [[self rightBarButtonItems] mutableCopy];
     [current removeObject:item];
-    [current autorelease];
     
     [self setRightBarButtonItems:current];
 }

@@ -45,7 +45,6 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
 
-    [super dealloc];
 }
 
 - (void)enteredForeground {
@@ -107,8 +106,6 @@
     NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:login];
     [self presentViewController:navigation animated:YES completion:NULL];
 
-    [navigation release];
-    [login release];
 }
 
 - (void)requestSessions {

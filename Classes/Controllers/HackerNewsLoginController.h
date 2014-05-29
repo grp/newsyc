@@ -13,6 +13,6 @@
     HNSession *session;
 }
 
-@property (nonatomic, retain, readonly) HNSession *session;
+@property (nonatomic, strong, readonly) HNSession *session;
 
 @end

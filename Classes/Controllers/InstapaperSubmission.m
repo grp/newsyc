@@ -30,12 +30,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [url release];
-    [loginCompletion release];
-
-    [super dealloc];
-}
 
 - (void)submitInstapaperRequest {
     InstapaperRequest *request = [[InstapaperRequest alloc] initWithSession:[InstapaperSession currentSession]];
@@ -43,33 +37,28 @@
     ProgressHUD *hud = [[ProgressHUD alloc] init];
     [hud setText:@"Saving"];
     [hud showInWindow:[[UIApplication sharedApplication] keyWindow]];
-    [hud release];
 
     // Yes, really: this allows callers to fire-and-forget, and then we disappear on completion.
-    [self retain];
 
-    __block id succeededObserver = nil;
+    __weak id succeededObserver = nil;
     [[NSNotificationCenter defaultCenter] addObserverForName:kInstapaperRequestSucceededNotification object:request queue:nil usingBlock:^(NSNotification *notification) {
         [hud setText:@"Saved!"];
         [hud setState:kProgressHUDStateCompleted];
         [hud dismissAfterDelay:0.8f animated:YES];
 
         [[NSNotificationCenter defaultCenter] removeObserver:succeededObserver];
-        [self release];
     }];
 
-    __block id failedObserver = nil;
+    __weak id failedObserver = nil;
     failedObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kInstapaperRequestFailedNotification object:request queue:nil usingBlock:^(NSNotification *notification) {
         [hud setText:@"Error Saving"];
         [hud setState:kProgressHUDStateError];
         [hud dismissAfterDelay:0.8f animated:YES];
 
         [[NSNotificationCenter defaultCenter] removeObserver:failedObserver];
-        [self release];
     }];
 
     [request addItemWithURL:url];
-    [request autorelease];
 }
 
 - (UIViewController *)submitFromController:(UIViewController *)controller {
@@ -84,11 +73,9 @@
         NavigationController *navigation = [[NavigationController alloc] initWithRootViewController:login];
         if (controller != nil) {
             presented = YES;
-            [self retain];
 
             [controller presentViewController:navigation animated:YES completion:NULL];
         }
-        [navigation autorelease];
 
         return navigation;
     }
@@ -96,7 +83,6 @@
 
 - (void)dismissLoginController:(InstapaperLoginController *)controller loggedIn:(BOOL)loggedIn {
     if (presented) {
-        [self release];
         presented = NO;
 
         [controller dismissViewControllerAnimated:YES completion:NULL];
@@ -105,7 +91,6 @@
     if (loginCompletion != NULL) {
         loginCompletion(loggedIn);
 
-        [loginCompletion release];
         loginCompletion = nil;
     }
 }

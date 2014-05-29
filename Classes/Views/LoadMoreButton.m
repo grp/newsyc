@@ -41,11 +41,5 @@
     [moreLabel setHidden:NO];
 }
 
-- (void)dealloc {
-    [indicatorView release];
-    [moreLabel release];
-    
-    [super dealloc];
-}
 
 @end

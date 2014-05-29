@@ -17,7 +17,7 @@
 
 - (id)initWithEntry:(HNEntry *)entry_ {
     if ((self = [super initWithSession:[entry_ session]])) {
-        entry = [entry_ retain];
+        entry = entry_;
     }
     
     return self;
@@ -65,7 +65,6 @@
         [session performSubmission:submission];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replySucceededWithNotification:) name:kHNSubmissionSuccessNotification object:submission];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyFailedWithNotification:) name:kHNSubmissionFailureNotification object:submission];
-        [submission release];
     }
 }
 
@@ -111,7 +110,6 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
     
-    [replyLabel release];
     replyLabel = nil;
 }
 
@@ -123,10 +121,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionSuccessNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kHNSubmissionFailureNotification object:nil];
     
-    [replyLabel release];
-    [entry release];
     
-    [super dealloc];
 }
 
 AUTOROTATION_FOR_PAD_ONLY

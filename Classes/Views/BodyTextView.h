@@ -20,8 +20,8 @@
     NSSet *highlightedRects;
 }
 
-@property (nonatomic, retain) HNObjectBodyRenderer *renderer;
-@property (nonatomic, assign) id<BodyTextViewDelegate> delegate;
+@property (nonatomic, strong) HNObjectBodyRenderer *renderer;
+@property (nonatomic, weak) id<BodyTextViewDelegate> delegate;
 
 - (BOOL)linkHighlighted;
 

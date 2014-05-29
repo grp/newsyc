@@ -33,15 +33,9 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
 
-    [swipeRecognizer release];
     swipeRecognizer = nil;
 }
 
-- (void)dealloc {
-    [swipeRecognizer release];
-
-    [super dealloc];
-}
 
 - (CGFloat)cellHeightForEntry:(HNEntry *)entry {
     return [SubmissionTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width];
@@ -55,7 +49,6 @@
 - (void)cellSelected:(UITableViewCell *)cell forEntry:(HNEntry *)entry {
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
     [[self navigation] pushController:controller animated:YES];
-    [controller release];
 }
 
 - (void)deselectWithAnimation:(BOOL)animated {
@@ -78,11 +71,9 @@
 
     CommentListController *commentController = [[CommentListController alloc] initWithSource:entry];
     viewControllers = [viewControllers arrayByAddingObject:commentController];
-    [commentController release];
 
     BrowserController *browserController = [[BrowserController alloc] initWithURL:[entry destination]];
     viewControllers = [viewControllers arrayByAddingObject:browserController];
-    [browserController release];
 
     // This bypasses the normal navigation flow, so only works for phone idioms.
     [[self navigation] setControllers:viewControllers animated:YES];

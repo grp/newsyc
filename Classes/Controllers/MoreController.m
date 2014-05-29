@@ -21,18 +21,12 @@
 
 - (id)initWithSession:(HNSession *)session_ {
     if ((self = [super init])) {
-        session = [session_ retain];
+        session = session_;
     }
 
     return self;
 }
 
-- (void)dealloc {
-    [tableView release];
-    [session release];
-    
-    [super dealloc];
-}
 
 - (void)loadView {
     [super loadView];
@@ -63,7 +57,6 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
     
-    [tableView release];
     tableView = nil;
 }
 
@@ -122,7 +115,7 @@
         }
     }
     
-    return [cell autorelease];
+    return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -181,15 +174,15 @@
     } else if ([indexPath section] == 2) {
         if ([indexPath row] == 0) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:kHNFAQURL];
-            [[self navigation] pushController:[controller autorelease] animated:YES];
+            [[self navigation] pushController:controller animated:YES];
             return;
         } else if ([indexPath row] == 1) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"http://newsyc.me/"]];
-            [[self navigation] pushController:[controller autorelease] animated:YES];
+            [[self navigation] pushController:controller animated:YES];
             return;
         } else if ([indexPath row] == 2) {
             BrowserController *controller = [[BrowserController alloc] initWithURL:[NSURL URLWithString:@"https://twitter.com/newsyc_"]];
-            [[self navigation] pushController:[controller autorelease] animated:YES];
+            [[self navigation] pushController:controller animated:YES];
             return;
         }
     }
@@ -199,9 +192,9 @@
     [controller setTitle:title];
     
     if (controllerClass == [SubmissionListController class]) {
-        [[self navigation] pushController:[controller autorelease] animated:YES];
+        [[self navigation] pushController:controller animated:YES];
     } else {
-        [[self navigation] pushController:[controller autorelease] animated:YES];
+        [[self navigation] pushController:controller animated:YES];
     }
 }
 

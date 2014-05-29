@@ -15,22 +15,11 @@
 @synthesize delegate;
 
 - (void)dealloc {
-    [tableView release];
-	[loadingCell release];
-    [usernameCell release];
-    [passwordCell release];
-    [backgroundImageView release];
-    [topLabel release];
-    [bottomLabel release];
-    [cancelItem release];
-    [completeItem release];
-    [loadingItem release];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 
-    [super dealloc];
 }
 
 - (id)init {
@@ -65,7 +54,7 @@
     [field setTextAlignment:NSTextAlignmentLeft];
     [field setEnabled:YES];
     [field setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    return [field autorelease];
+    return field;
 }
 
 - (NSArray *)gradientColors {
@@ -123,7 +112,7 @@
 
     tableView = [[UITableView alloc] initWithFrame:[tableContainerView bounds] style:UITableViewStyleGrouped];
     [tableView setBackgroundColor:[UIColor clearColor]];
-    [tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
+    [tableView setBackgroundView:[[UIView alloc] init]];
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
@@ -160,7 +149,7 @@
     LoadingIndicatorView *loadingIndicatorView = [[LoadingIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
     [loadingIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
     [loadingIndicatorView setCenter:[loadingCell center]];
-	[loadingCell addSubview:[loadingIndicatorView autorelease]];
+	[loadingCell addSubview:loadingIndicatorView];
 		
     bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [tableView bounds].size.width, 15.0f)];
     [bottomLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin];
@@ -200,25 +189,15 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
 	
-    [loadingCell release];
 	loadingCell = nil;
-    [passwordCell release];
     passwordCell = nil;
-    [usernameCell release];
     usernameCell = nil;
-    [loadingItem release];
     loadingItem = nil;
-    [cancelItem release];
     cancelItem = nil;
-    [completeItem release];
     completeItem = nil;
-    [topLabel release];
     topLabel = nil;
-    [bottomLabel release];
     bottomLabel = nil;
-    [backgroundImageView release];
     backgroundImageView = nil;
-    [tableView release];
     tableView = nil;
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
@@ -243,7 +222,6 @@
     [alert addButtonWithTitle:@"Continue"];
     [alert setCancelButtonIndex:0];
     [alert show];
-    [alert release];    	
 	
 	isAuthenticating = NO;
 	[tableView reloadData];

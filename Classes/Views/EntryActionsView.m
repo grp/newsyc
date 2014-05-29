@@ -46,10 +46,6 @@
     }
 }
 
-- (void)dealloc {
-    [entry release];
-    [super dealloc];
-}
 
 - (void)upvoteTapped:(UIButton *)button {
     [delegate entryActionsView:self didSelectItem:kEntryActionsViewItemUpvote];
@@ -82,7 +78,6 @@
     
     [self setItems:@[replyItem, flexibleSpace, upvoteItem, flexibleSpace, flagItem, flexibleSpace, downvoteItem, flexibleSpace, actionsItem]];
      
-    [flexibleSpace release];
 }
 
 - (void)setStyle:(EntryActionsViewStyle)style_ {
@@ -240,7 +235,7 @@
 }
 
 - (BarButtonItem *)barButtonItemWithImage:(UIImage *)image target:(id)target action:(SEL)action {
-    return [[[BarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:target action:action] autorelease];
+    return [[BarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:target action:action];
 }
 
 - (BarButtonItem *)createBarButtonItemForItem:(EntryActionsViewItem)item {
@@ -251,7 +246,7 @@
         ActivityIndicatorItem *activityIndicatorItem = [[ActivityIndicatorItem alloc] initWithSize:[itemImage size]];
         [[activityIndicatorItem spinner] setActivityIndicatorViewStyle:indicatorStyle];
 
-        barButtonItem = [activityIndicatorItem autorelease];
+        barButtonItem = activityIndicatorItem;
     } else {
         SEL action = NULL;
 
@@ -348,8 +343,7 @@
 }
 
 - (void)setEntry:(HNEntry *)entry_ {
-    [entry autorelease];
-    entry = [entry_ retain];
+    entry = entry_;
 }
 
 @end

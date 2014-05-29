@@ -33,8 +33,7 @@
 }
 
 - (void)setSubmission:(HNEntry *)submission_ {
-    [submission autorelease];
-    submission = [submission_ retain];
+    submission = submission_;
     
     [self setNeedsDisplay];
 }
@@ -121,10 +120,5 @@
     [site drawInRect:siterect withFont:[[self class] subtleFont] lineBreakMode:NSLineBreakByTruncatingHead alignment:NSTextAlignmentRight];
 }
 
-- (void)dealloc {
-    [submission release];
-    
-    [super dealloc];
-}
 
 @end

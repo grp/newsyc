@@ -55,17 +55,7 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [webview release];
-    [toolbar release];
-    [toolbarItem release];
-    [backItem release];
-    [forwardItem release];
-    [shareItem release];
-    [refreshItem release];
-    [loadingItem release];
-    [spacerItem release];
     
-    [super dealloc];
 }
 
 - (void)updateToolbarItems {
@@ -125,7 +115,7 @@
     
     if (![webview request]) {
         NSURLRequest *request = [[NSURLRequest alloc] initWithURL:rootURL];
-        [webview loadRequest:[request autorelease]];
+        [webview loadRequest:request];
     }
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad && [toolbar respondsToSelector:@selector(setBarTintColor:)]) {
@@ -181,25 +171,15 @@
     
     [[self navigationItem] removeRightBarButtonItem:toolbarItem];
     
-    [webview release];
     webview = nil;
-    [toolbar release];
     toolbar = nil;
-    [toolbarItem release];
     toolbarItem = nil;
-    [backItem release];
     backItem = nil;
-    [forwardItem release];
     forwardItem = nil;
-    [readabilityItem release];
     readabilityItem = nil;
-    [refreshItem release];
     refreshItem = nil;
-    [shareItem release];
     shareItem = nil;
-    [loadingItem release];
     loadingItem = nil;
-    [spacerItem release];
     spacerItem = nil;
 }
 
@@ -230,7 +210,6 @@
 - (void)share {
     SharingController *sharingController = [[SharingController alloc] initWithURL:currentURL title:[self pageTitle] fromController:self];
     [sharingController showFromBarButtonItem:shareItem];
-    [sharingController release];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
@@ -255,21 +234,19 @@
 
 // These 3 methods from Apple tech doc: http://developer.apple.com/library/ios/#qa/qa1629/_index.html
 - (void)openExternalURL:(NSURL *)external {
-    externalURL = [external retain];
+    externalURL = external;
     
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:external] delegate:self startImmediately:YES];
-    [conn release];
 }
 
 - (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response {
-    if (response) externalURL = [[response URL] retain];
+    if (response) externalURL = [response URL];
     return request;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Opening Link" message:@"Are you sure you want to leave news:yc to open this link?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Open Link", nil];
     [alert show];
-    [alert release];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -277,12 +254,10 @@
         [[UIApplication sharedApplication] openURL:externalURL];
     }
     
-    [externalURL release];
     externalURL = nil;
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    [alertView release];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {

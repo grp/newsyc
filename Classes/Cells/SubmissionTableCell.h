@@ -13,7 +13,7 @@
     HNEntry *submission;
 }
 
-@property (nonatomic, retain) HNEntry *submission;
+@property (nonatomic, strong) HNEntry *submission;
 
 + (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width;
 - (id)initWithReuseIdentifier:(NSString *)identifier;

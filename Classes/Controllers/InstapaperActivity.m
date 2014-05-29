@@ -11,11 +11,6 @@
 
 @implementation InstapaperActivity
 
-- (void)dealloc {
-    [submission release];
-
-    [super dealloc];
-}
 
 - (NSString *)activityType {
     return @"com.instapaper.instapaper.read-later";
@@ -34,7 +29,6 @@
 }
 
 - (void)prepareWithActivityItems:(NSArray *)activityItems {
-    [submission release];
     
     submission = [[InstapaperSubmission alloc] initWithURL:activityItems[0]];
     

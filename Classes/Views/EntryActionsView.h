@@ -47,8 +47,8 @@ typedef enum {
     UIActivityIndicatorViewStyle indicatorStyle;
 }
 
-@property (nonatomic, retain) HNEntry *entry;
-@property (nonatomic, assign) id<EntryActionsViewDelegate> delegate;
+@property (nonatomic, strong) HNEntry *entry;
+@property (nonatomic, weak) id<EntryActionsViewDelegate> delegate;
 @property (nonatomic, assign) EntryActionsViewStyle style;
 
 - (void)setEnabled:(BOOL)enabled forItem:(EntryActionsViewItem)item;

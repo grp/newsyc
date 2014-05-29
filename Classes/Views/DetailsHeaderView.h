@@ -23,8 +23,8 @@
     BOOL navigationCancelled;
 }
 
-@property (nonatomic, assign) id<DetailsHeaderViewDelegate> delegate;
-@property (nonatomic, retain) HNEntry *entry;
+@property (nonatomic, weak) id<DetailsHeaderViewDelegate> delegate;
+@property (nonatomic, strong) HNEntry *entry;
 @property (nonatomic, assign, getter = isHighlighted) BOOL highlighted;
 
 - (id)initWithEntry:(HNEntry *)entry_ widthWidth:(CGFloat)width;

@@ -16,7 +16,7 @@
     __weak id<InstapaperAuthenticatorDelegate> delegate;
 }
 
-@property (nonatomic, assign) id<InstapaperAuthenticatorDelegate> delegate;
+@property (nonatomic, weak) id<InstapaperAuthenticatorDelegate> delegate;
 
 - (id)initWithUsername:(NSString *)username_ password:(NSString *)password_;
 - (void)beginAuthentication;

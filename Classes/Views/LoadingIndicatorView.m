@@ -53,13 +53,6 @@
     } return self;
 }
 
-- (void)dealloc {
-    [spinner_ release];
-    [label_ release];
-    [container_ release];
-    
-    [super dealloc];
-}
 
 - (UILabel *)label {
     return label_;

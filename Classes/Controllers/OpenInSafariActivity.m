@@ -10,11 +10,6 @@
 
 @implementation OpenInSafariActivity
 
-- (void)dealloc {
-    [url release];
-    
-    [super dealloc];
-}
 
 - (NSString *)activityType {
     return @"com.apple.safari.open-in";
@@ -37,7 +32,6 @@
 }
 
 - (void)prepareWithActivityItems:(NSArray *)activityItems {
-    [url release];
     
     url = [[activityItems lastObject] copy];
 }

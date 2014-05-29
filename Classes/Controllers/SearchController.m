@@ -18,7 +18,7 @@
 
 - (id)initWithSession:(HNSession *)session_ {
     if ((self = [super init])) {
-        session = [session_ retain];
+        session = session_;
     }
 
     return self;
@@ -150,11 +150,9 @@
 							  cancelButtonTitle:@"Continue"
 							  otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	} else {
 		NSDictionary *dict = [notification userInfo];
-        [entries release];
-		entries = [dict[@"array"] retain];
+		entries = dict[@"array"];
         
 		if ([entries count] != 0) {
 			[emptyView setHidden:YES];
@@ -183,7 +181,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SubmissionTableCell *cell = (SubmissionTableCell *) [tableView dequeueReusableCellWithIdentifier:@"submission"];
-    if (cell == nil) cell = [[[SubmissionTableCell alloc] initWithReuseIdentifier:@"submission"] autorelease];
+    if (cell == nil) cell = [[SubmissionTableCell alloc] initWithReuseIdentifier:@"submission"];
     HNEntry *entry = entries[[indexPath row]];
     [cell setSubmission:entry];
     return cell;
@@ -193,25 +191,18 @@
     HNEntry *entry = entries[[indexPath row]];
     
     CommentListController *controller = [[CommentListController alloc] initWithSource:entry];
-    [[self navigation] pushController:[controller autorelease] animated:YES];
+    [[self navigation] pushController:controller animated:YES];
 }
 
 - (void)viewDidUnload {
     [super viewDidUnload];
     
-    [entries release];
     entries = nil;
-    [searchBar release];
     searchBar = nil;
-    [tableView release];
     tableView = nil;
-    [facetControl release];
     facetControl = nil;
-    [emptyView release];
     emptyView = nil;
-    [coloredView release];
     coloredView = nil;
-    [indicator release];
     indicator = nil;
 }
 
@@ -254,19 +245,6 @@
 	[navigationItem setTitleView:nil];
 }
 
-- (void)dealloc {
-    [entries release];
-    [searchBar release];
-    [tableView release];
-    [facetControl release];
-    [emptyView release];
-    [coloredView release];
-    [searchAPI release];
-    [indicator release];
-    [session release];
-
-    [super dealloc];
-}
 
 AUTOROTATION_FOR_PAD_ONLY
 

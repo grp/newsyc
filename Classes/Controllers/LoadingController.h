@@ -35,7 +35,7 @@
     NSInteger readLaterIndex;
 }
 
-@property (nonatomic, retain) HNObject *source;
+@property (nonatomic, strong) HNObject *source;
 
 - (id)initWithSource:(HNObject *)source_;
 - (NSString *)sourceTitle;
