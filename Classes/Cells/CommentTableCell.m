@@ -15,6 +15,9 @@
 
 #import "SharingController.h"
 
+#define TRIANGLE_RECT_WIDTH 8
+#define TRIANGLE_RECT_TOUCH_WIDTH 44
+
 @implementation CommentTableCell
 @synthesize comment, indentationLevel, delegate, expanded;
 
@@ -210,16 +213,22 @@
     return size.height;
 }
 
-+ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width expanded:(BOOL)expanded indentationLevel:(NSInteger)indentationLevel {
++ (CGFloat)heightForEntry:(HNEntry *)entry
+                withWidth:(CGFloat)width
+                 expanded:(BOOL)expanded
+                 showBody:(BOOL)showBody
+         indentationLevel:(NSInteger)indentationLevel {
     UIEdgeInsets margins = [self margins];
     CGSize offsets = [self offsets];
 
     CGFloat height = margins.top;
     height += [[self userFont] lineHeight];
-    height += [self bodyHeightForComment:entry withWidth:width indentationLevel:indentationLevel];
-    if ([self entryShowsPoints:entry]) height += offsets.height + [[self subtleFont] lineHeight];
-    height += margins.bottom;
-    if (expanded) height += 44.0f;
+    if (showBody) {
+        height += [self bodyHeightForComment:entry withWidth:width indentationLevel:indentationLevel];
+        if ([self entryShowsPoints:entry]) height += offsets.height + [[self subtleFont] lineHeight];
+        height += margins.bottom;
+        if (expanded) height += 44.0f;
+    }
     
     return ceilf(height);
 }
@@ -238,16 +247,42 @@
     return [[comment submitter] identifier];
 }
 
+- (CGSize)userSize
+{
+    return [[self userText] sizeWithFont:[[self class] userFont]];
+}
+
 - (CGRect)userRect {
     CGRect bounds = [self drawingBounds];
     UIEdgeInsets margins = [[self class] margins];
 
     CGRect userrect;
-    userrect.origin.x = bounds.origin.x + margins.left;
+    userrect.origin.x = CGRectGetMaxX([self expanderRect]) + margins.left / 2.0;
     userrect.origin.y = margins.top;
-    userrect.size = [[self userText] sizeWithFont:[[self class] userFont]];
+    userrect.size = [self userSize];
 
     return userrect;
+}
+
+
+- (CGRect)expanderRect {
+    CGRect bounds = [self drawingBounds];
+    UIEdgeInsets margins = [[self class] margins];
+    CGFloat userHeight = [self userSize].height;
+    
+    CGRect expanderRect;
+    expanderRect.size = CGSizeMake(TRIANGLE_RECT_WIDTH, TRIANGLE_RECT_WIDTH);
+    expanderRect.origin.x = bounds.origin.x + margins.left;
+    expanderRect.origin.y = margins.top + (userHeight - expanderRect.size.height) / 2.0;
+    return expanderRect;
+}
+
+- (CGRect)expanderTouchRect
+{
+    CGRect expanderRect = [self expanderRect];
+    CGFloat dX = -(TRIANGLE_RECT_TOUCH_WIDTH - CGRectGetWidth(expanderRect))/2;
+    CGFloat dY = dX;
+    return CGRectInset(expanderRect, dX, dY);
 }
 
 - (NSString *)dateText {
@@ -348,9 +383,37 @@
     [bodyTextView setHidden:![self bodyVisible]];
 }
 
+- (void)drawExpander
+{
+    [[UIColor lightGrayColor] set];
+    UIBezierPath *expander = [UIBezierPath bezierPath];
+    CGRect expanderRect = [self expanderRect];
+    CGPoint startPoint, secondPoint, thirdPoint;
+    if (self.collapsedChildren)
+    {
+        startPoint = CGPointMake(CGRectGetMinX(expanderRect), CGRectGetMinY(expanderRect));
+        secondPoint = CGPointMake(CGRectGetMaxX(expanderRect), CGRectGetMidY(expanderRect));
+        thirdPoint = CGPointMake(CGRectGetMinX(expanderRect), CGRectGetMaxY(expanderRect));
+    }
+    else
+    {
+        startPoint = CGPointMake(CGRectGetMinX(expanderRect), CGRectGetMinY(expanderRect));
+        secondPoint = CGPointMake(CGRectGetMaxX(expanderRect), CGRectGetMinY(expanderRect));
+        thirdPoint = CGPointMake(CGRectGetMidX(expanderRect), CGRectGetMaxY(expanderRect));
+        
+    }
+    [expander moveToPoint:startPoint];
+    [expander addLineToPoint:secondPoint];
+    [expander addLineToPoint:thirdPoint];
+    [expander closePath];
+    [expander fill];
+}
+
 - (void)drawContentView:(CGRect)rect {
     CGRect bounds = [self drawingBounds];
 
+    [self drawExpander];
+    
     [[UIColor blackColor] set];
     [[self userText] drawInRect:[self userRect] withFont:[[self class] userFont]];
 
@@ -412,16 +475,21 @@
     }
 }
 
-- (void)clearHighlights {
+- (void)clearTouchesStartState {
     if (userHighlighted) {
         userHighlighted = NO;
     
         [self setNeedsDisplay];
     }
+    if (expanderHighlighted) {
+        expanderHighlighted = NO;
+        
+        [self setNeedsDisplay];
+    }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self clearHighlights];
+    [self clearTouchesStartState];
 
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInView:self];
@@ -429,6 +497,10 @@
     if (CGRectContainsPoint([self userRect], location)) {
         userHighlighted = YES;
 
+        [self setNeedsDisplay];
+    } else if (CGRectContainsPoint([self expanderTouchRect], location)) {
+        expanderHighlighted = YES;
+        
         [self setNeedsDisplay];
     }
 }
@@ -438,21 +510,25 @@
         if ([delegate respondsToSelector:@selector(commentTableCellTappedUser:)]) {
             [delegate commentTableCellTappedUser:self];
         }
+    } else if (expanderHighlighted) {
+        if ([delegate respondsToSelector:@selector(commentTableCellTappedExpander:)]) {
+            [delegate commentTableCellTappedExpander:self];
+        }
     }
 
-    [self clearHighlights];
+    [self clearTouchesStartState];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self clearHighlights];
+    [self clearTouchesStartState];
 }
 
 - (void)tapFromRecognizer:(UITapGestureRecognizer *)gesture {
     BOOL menuControllerVisible = [[UIMenuController sharedMenuController] isMenuVisible];
-
-    if (![bodyTextView linkHighlighted] && !userHighlighted && !menuControllerVisible) {
-        CGPoint location = [gesture locationInView:self];
-
+    CGPoint location = [gesture locationInView:self];
+    BOOL insideBody = CGRectContainsPoint([self bodyRect], location);
+    BOOL insideExpander = CGRectContainsPoint([self expanderTouchRect], location);
+    if (![bodyTextView linkHighlighted] && !userHighlighted && !menuControllerVisible && insideBody && !insideExpander) {
         if (!expanded || location.y < [toolbarView frame].origin.y) {
             [self singleTapped];
         }

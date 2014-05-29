@@ -136,6 +136,8 @@
     }
 
     [tableView setSeparatorColor:[UIColor whiteColor]];
+    
+    collapsedEntries = [NSMutableSet set];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -190,6 +192,14 @@
     NSMutableArray *children = [NSMutableArray array];
     [self addChildrenOfEntry:(HNEntry *) source toEntryArray:children includeChildren:YES]; 
     
+    NSMutableArray *collapsedChildren = [NSMutableArray array];
+    for (HNEntry *collapsedParent in collapsedEntries)
+    {
+        [self addChildrenOfEntry:collapsedParent
+                    toEntryArray:collapsedChildren
+                 includeChildren:YES];
+    }
+    [children removeObjectsInArray:collapsedChildren];
     entries = [children copy];
 }
 
@@ -215,7 +225,11 @@
 }
 
 - (CGFloat)cellHeightForEntry:(HNEntry *)entry {
-    CGFloat height = [CommentTableCell heightForEntry:entry withWidth:[[self view] bounds].size.width expanded:(entry == expandedEntry) indentationLevel:[self depthOfEntry:entry]];
+    CGFloat height = [CommentTableCell heightForEntry:entry
+                                            withWidth:[[self view] bounds].size.width
+                                             expanded:(entry == expandedEntry)
+                                             showBody:![collapsedEntries containsObject:entry]
+                                     indentationLevel:[self depthOfEntry:entry]];
 
     return height;
 }
@@ -231,6 +245,7 @@
     [cell setIndentationLevel:[self depthOfEntry:entry]];
     [cell setComment:entry];
     [cell setExpanded:(entry == expandedEntry)];
+    [cell setCollapsedChildren:[collapsedEntries containsObject:entry]];
 }
 
 - (void)setExpandedEntry:(HNEntry *)entry cell:(CommentTableCell *)cell {
@@ -242,6 +257,27 @@
     [tableView endUpdates];
 }
 
+- (void)hideChildrenOfEntry:(HNEntry *)entry
+{
+    NSMutableArray *childrenOfEntry = [NSMutableArray array];
+    [self addChildrenOfEntry:entry toEntryArray:childrenOfEntry includeChildren:YES];
+    NSMutableArray *newEntries = [NSMutableArray arrayWithArray:entries];
+    [newEntries removeObjectsInArray:childrenOfEntry];
+    entries = newEntries;
+    [tableView reloadData];
+}
+
+- (void)showChildrenOfEntry:(HNEntry *)entry
+{
+    NSMutableArray *childrenOfEntry = [NSMutableArray array];
+    [self addChildrenOfEntry:entry toEntryArray:childrenOfEntry includeChildren:YES];
+    NSMutableArray *newEntries = [NSMutableArray arrayWithArray:entries];
+    NSUInteger parentIndex = [entries indexOfObject:entry];
+    NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(parentIndex + 1, childrenOfEntry.count)];
+    [newEntries insertObjects:childrenOfEntry atIndexes:indexes];
+    entries = newEntries;
+    [tableView reloadData];
+}
 #pragma mark - View Layout
 
 - (void)addStatusView:(UIView *)view {
@@ -307,6 +343,21 @@
 
 - (void)commentTableCellTappedUser:(CommentTableCell *)cell {
     [self showProfileForEntry:[cell comment]];
+}
+
+- (void)commentTableCellTappedExpander:(CommentTableCell *)cell {
+    if (cell.collapsedChildren)
+    {
+        [collapsedEntries removeObject:[cell comment]];
+        cell.collapsedChildren = !cell.collapsedChildren;
+        [self showChildrenOfEntry:[cell comment]];
+    }
+    else
+    {
+        [collapsedEntries addObject:[cell comment]];
+        cell.collapsedChildren = !cell.collapsedChildren;
+        [self hideChildrenOfEntry:[cell comment]];
+    }
 }
 
 - (void)commentTableCellDoubleTapped:(CommentTableCell *)cell {

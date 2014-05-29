@@ -26,7 +26,9 @@
     BOOL shouldCompleteOnAppear;
     
     HNEntry *expandedEntry;
+    NSMutableSet *collapsedEntries;
     CommentTableCell *expandedCell;
+
 }
 
 @end

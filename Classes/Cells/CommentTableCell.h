@@ -18,6 +18,7 @@
     NSInteger indentationLevel;
 
     BOOL userHighlighted;
+    BOOL expanderHighlighted;
     BodyTextView *bodyTextView;
     
     __weak id<CommentTableCellDelegate> delegate;
@@ -33,8 +34,13 @@
 @property (nonatomic, strong) HNEntry *comment;
 @property (nonatomic, assign) NSInteger indentationLevel;
 @property (nonatomic, assign) BOOL expanded;
+@property (nonatomic, assign) BOOL collapsedChildren;
 
-+ (CGFloat)heightForEntry:(HNEntry *)entry withWidth:(CGFloat)width expanded:(BOOL)expanded indentationLevel:(NSInteger)indentationLevel;
++ (CGFloat)heightForEntry:(HNEntry *)entry
+                withWidth:(CGFloat)width
+                 expanded:(BOOL)expanded
+                 showBody:(BOOL)showBody
+         indentationLevel:(NSInteger)indentationLevel;
 
 - (id)initWithReuseIdentifier:(NSString *)identifier;
 
@@ -45,6 +51,7 @@
 
 - (void)commentTableCellTapped:(CommentTableCell *)cell;
 - (void)commentTableCellTappedUser:(CommentTableCell *)cell;
+- (void)commentTableCellTappedExpander:(CommentTableCell *)cell;
 - (void)commentTableCellDoubleTapped:(CommentTableCell *)cell;
 - (void)commentTableCell:(CommentTableCell *)cell selectedURL:(NSURL *)url;
 
