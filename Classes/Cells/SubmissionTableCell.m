@@ -32,6 +32,12 @@
     [self setNeedsDisplay];
 }
 
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [super setHighlighted:highlighted animated:animated];
+
+    [self setNeedsDisplay];
+}
+
 - (void)setSubmission:(HNEntry *)submission_ {
     [submission autorelease];
     submission = [submission_ retain];
