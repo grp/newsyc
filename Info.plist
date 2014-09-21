@@ -45,6 +45,26 @@
 			<key>UILaunchImageMinimumOSVersion</key>
 			<string>7.0</string>
 			<key>UILaunchImageName</key>
+			<string>Modern-Default-736h</string>
+			<key>UILaunchImageSize</key>
+			<string>{414, 736}</string>
+			<key>UILaunchImageOrientation</key>
+			<string>Portrait</string>
+		</dict>
+		<dict>
+			<key>UILaunchImageMinimumOSVersion</key>
+			<string>7.0</string>
+			<key>UILaunchImageName</key>
+			<string>Modern-Default-667h</string>
+			<key>UILaunchImageSize</key>
+			<string>{375, 667}</string>
+			<key>UILaunchImageOrientation</key>
+			<string>Portrait</string>
+		</dict>
+		<dict>
+			<key>UILaunchImageMinimumOSVersion</key>
+			<string>7.0</string>
+			<key>UILaunchImageName</key>
 			<string>Modern-Default</string>
 			<key>UILaunchImageSize</key>
 			<string>{320, 480}</string>
