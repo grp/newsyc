@@ -128,6 +128,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    window.backgroundColor = [UIColor whiteColor];
 
     [HNNetworkActivityController setNetworkActivityBeganBlock:^{
         [[UIApplication sharedApplication] retainNetworkActivityIndicator];
