@@ -108,6 +108,7 @@
     [self updateToolbarItems];
     
     webview = [[UIWebView alloc] initWithFrame:[[self view] bounds]];
+    webview.backgroundColor = [UIColor whiteColor];
     [webview setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [webview setDelegate:self];
     [webview setScalesPageToFit:YES];
@@ -152,10 +153,6 @@
         [toolbar setFrame:toolbarFrame];
         [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
         [[self view] addSubview:toolbar];
-
-        CGRect webviewFrame = [[self view] bounds];
-        webviewFrame.size.height -= toolbarFrame.size.height;
-        [webview setFrame:webviewFrame];
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         CGRect toolbarFrame = [toolbar bounds];
         toolbarFrame.size.width = 280.0f;
@@ -245,6 +242,16 @@
     [[self navigationItem] setTitle:[self pageTitle]];
     
     [self releaseNetworkIndicator];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        // Update the webview insets.
+        // We do this after loading the content due to a bug in iOS7+ that will render
+        // the area outside of the insets as black
+        UIEdgeInsets webviewInsets = webview.scrollView.contentInset;
+        webviewInsets.bottom = toolbar.frame.size.height;
+        webview.scrollView.contentInset = webviewInsets;
+        webview.scrollView.scrollIndicatorInsets = webview.scrollView.contentInset;
+    }
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
