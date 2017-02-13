@@ -27,6 +27,8 @@
 #import "AppDelegate.h"
 #import "ModalNavigationController.h"
 
+#import "NSString+Tags.h"
+
 @interface CommentListController ()
 
 - (void)setupHeader;
@@ -514,6 +516,11 @@
             } else if (index == 2) {
                 CommentListController *controller = [[CommentListController alloc] initWithSource:[entry submission]];
                 [[this navigationController] pushController:[controller autorelease] animated:YES];
+            } else if (index == 3) {
+                NSString *commentStringWithHTML = [[expandedCell comment] body];
+                NSString *commentStringWithoutHTML = [commentStringWithHTML stringByRemovingHTMLTags];
+                UIPasteboard *pb = [UIPasteboard generalPasteboard];
+                [pb setString:commentStringWithoutHTML];
             }
         }
         
@@ -550,6 +557,7 @@
             [sheet release];
         } else if (item == kEntryActionsViewItemActions) {
             UIActionSheet *sheet = [[UIActionSheet alloc] init];
+            if ([entry submission]) [sheet addButtonWithTitle:@"Copy Comment"];
             if ([entry submission]) [sheet addButtonWithTitle:@"Submission"];
             if ([entry parent]) [sheet addButtonWithTitle:@"Parent"];
             [sheet addButtonWithTitle:@"Submitter"];
